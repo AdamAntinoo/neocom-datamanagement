@@ -18,7 +18,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'org.dimensinfin'
-            version = '0.17.0'
+            version = '0.16.2'
             artifactId = 'NeoCom.DataManagement'
             artifact(sourcesJar)
             artifact(javadocJar)
