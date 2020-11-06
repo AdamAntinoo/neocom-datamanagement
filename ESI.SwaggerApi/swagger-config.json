@@ -1,9 +1,0 @@
-{
-    "apiPackage": "org.dimensinfin.eveonline.neocom.esiswagger.api",
-    "modelPackage": "org.dimensinfin.eveonline.neocom.esiswagger.model",
-    "invokerPackage": "org.dimensinfin.eveonline.neocom.esiswagger.client",
-    "groupId": "org.dimensinfin.eveonline.neocom",
-    "artifactId": "esi.swaggerapi",
-    "artifactVersion": "1.7.2",
-    "library": "retrofit2"
-}
