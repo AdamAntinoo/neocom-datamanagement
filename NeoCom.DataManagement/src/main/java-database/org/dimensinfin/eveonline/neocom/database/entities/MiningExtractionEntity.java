@@ -36,8 +36,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.19.0
  */
-@Entity(name = "MiningExtractions")
-@DatabaseTable(tableName = "MiningExtractions")
+@DatabaseTable(tableName = "neocom.MiningExtractions")
 public class MiningExtractionEntity extends UpdatableEntity {
 	public static final String EXTRACTION_DATE_FORMAT = "YYYY-MM-dd";
 	private static final long serialVersionUID = -3786687847087826269L;
@@ -47,17 +46,21 @@ public class MiningExtractionEntity extends UpdatableEntity {
 	@Column(name = "id", updatable = false, nullable = false)
 	private String id = "YYYY-MM-DD:HH-SYSTEMID-TYPEID-OWNERID";
 	@DatabaseField(dataType = DataType.INTEGER, canBeNull = false)
+	@Column(name = "typeId", nullable = false)
 	private int typeId; // The eve type identifier for the resource being extracted
 	@DatabaseField
+	@Column(name = "solarSystemId", nullable = false)
 	private int solarSystemId; // The solar system where the extraction is recorded.
 	@DatabaseField
+	@Column(name = "quantity", nullable = false)
 	private long quantity = 0;
 	@DatabaseField(dataType = DataType.STRING, canBeNull = false, index = true)
+	@Column(name = "extractionDateName", nullable = false)
 	private String extractionDateName;
 	@DatabaseField
 	private int extractionHour = 24; // The hour of the day for this extraction delta or 24 if this is the date aggregated value.
 	@DatabaseField(dataType = DataType.INTEGER, canBeNull = false, index = true)
-	@Column(name = "ownerId")
+	@Column(name = "ownerId", nullable = false)
 	private int ownerId; // The credential identifier of the pilot's extraction.
 
 	private MiningExtractionEntity() {}
