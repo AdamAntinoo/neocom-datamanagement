@@ -38,6 +38,7 @@ sourceSets {
         srcDirs += 'src/main/java-adapter'
         srcDirs += 'src/main/java-database'
         srcDirs += 'src/main/java-android'
+        srcDirs += 'src/main/java-industry'
     }
     test.java {
         srcDirs += 'src/test/java'

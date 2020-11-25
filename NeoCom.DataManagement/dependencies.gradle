@@ -1,5 +1,6 @@
 // - P R O D U C T   V E R S I O N S
 ext {
+    slf4jVersion='1.7.30'
     jacksonVersion = '2.9.4'
     ormliteVersion = '4.48'
     retrofitVersion = '2.3.0'
@@ -9,13 +10,13 @@ ext {
 
 // - C O R E
 dependencies {
-    compileOnly 'org.slf4j:slf4j-api:1.7.30'
-    compileOnly 'org.slf4j:slf4j-log4j12:1.7.30'
-    implementation "joda-time:joda-time:$jodaTimeVersion"
+    compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
+    compileOnly "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    implementation "joda-time:joda-time:$jodaTimeVersion" // Use this library for support on Android systems
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'com.annimon:stream:1.1.9' // Android compatible streams
     runtimeOnly 'org.aspectj:aspectjrt:1.6.12'
-    implementation 'com.jcabi:jcabi-aspects:0.22.6' // Other injection library on testing
+    implementation  'com.google.inject:guice:4.2.3' // Google injection library compatible with Android
 }
 
 // - D I M E N S I N F I N
@@ -44,7 +45,7 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-json-org:$jacksonVersion"
-    // - H T T P C L I E N T
+    // H T T P C L I E N T
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion" // HTTP encapsulation and swagger support
     implementation "com.squareup.retrofit2:converter-gson:2.3.0"
     implementation 'com.github.scribejava:scribejava-core:5.4.0'
