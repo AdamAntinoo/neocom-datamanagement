@@ -39,6 +39,9 @@ dependencies {
     implementation "com.nytimes.android:filesystem3:$cacheVersion"
     implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
     implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation 'com.jcabi:jcabi-aspects:0.22.6' // Useful annotations for methods
+    implementation 'org.modelmapper:modelmapper:1.1.0' // Help mapping ESI Get200Ok classes to similar classes on the app model
+
     // P A R S E R
     implementation "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion" // JSON converter
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
