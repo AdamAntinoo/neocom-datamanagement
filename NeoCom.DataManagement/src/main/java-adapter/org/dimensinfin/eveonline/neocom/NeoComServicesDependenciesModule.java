@@ -3,6 +3,7 @@ package org.dimensinfin.eveonline.neocom;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
+import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
 
@@ -22,5 +23,8 @@ public class NeoComServicesDependenciesModule extends AbstractModule {
 		bind( RetrofitFactory.class )
 				.annotatedWith( Names.named( "RetrofitFactory" ) )
 				.to( RetrofitFactory.class );
+		bind( LocationCatalogService.class )
+				.annotatedWith( Names.named( "LocationCatalogService" ) )
+				.to( LocationCatalogService.class );
 	}
 }
