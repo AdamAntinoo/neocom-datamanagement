@@ -18,8 +18,8 @@ public class SpaceRegionImplementation extends NeoComNode implements SpaceRegion
 	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}
 
-	@Override
-	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
+//	@Override
+//	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
 
 	@Override
 	public String getRegionName() {return spaceLocation.getRegionName();}

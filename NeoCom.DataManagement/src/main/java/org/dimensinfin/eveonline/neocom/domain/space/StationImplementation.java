@@ -21,8 +21,8 @@ public class StationImplementation extends NeoComNode implements Station {
 	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}
 
-	@Override
-	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
+//	@Override
+//	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
 
 	@Override
 	public String getRegionName() {return spaceLocation.getRegionName();}
@@ -30,8 +30,8 @@ public class StationImplementation extends NeoComNode implements Station {
 	@Override
 	public Integer getConstellationId() {return spaceLocation.getConstellationId();}
 
-	@Override
-	public GetUniverseConstellationsConstellationIdOk getConstellation() {return spaceLocation.getConstellation();}
+//	@Override
+//	public GetUniverseConstellationsConstellationIdOk getConstellation() {return spaceLocation.getConstellation();}
 
 	@Override
 	public String getConstellationName() {return spaceLocation.getConstellationName();}
@@ -39,8 +39,8 @@ public class StationImplementation extends NeoComNode implements Station {
 	@Override
 	public Integer getSolarSystemId() {return spaceLocation.getSolarSystemId();}
 
-	@Override
-	public GetUniverseSystemsSystemIdOk getSolarSystem() {return spaceLocation.getSolarSystem();}
+//	@Override
+//	public GetUniverseSystemsSystemIdOk getSolarSystem() {return spaceLocation.getSolarSystem();}
 
 	@Override
 	public String getSolarSystemName() {return spaceLocation.getSolarSystemName();}
@@ -48,13 +48,14 @@ public class StationImplementation extends NeoComNode implements Station {
 	@Override
 	public Integer getStationId() {return spaceLocation.getStationId();}
 
-	@Override
-	public GetUniverseStationsStationIdOk getStation() {return spaceLocation.getStation();}
+//	@Override
+//	public GetUniverseStationsStationIdOk getStation() {return spaceLocation.getStation();}
 
 	@Override
 	public String getStationName() {return spaceLocation.getStationName();}
 
 	// - B U I L D E R
+	@Deprecated
 	public static class Builder {
 		private StationImplementation onConstruction;
 		private GetUniverseRegionsRegionIdOk region;

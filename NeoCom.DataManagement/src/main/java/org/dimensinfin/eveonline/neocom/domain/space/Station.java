@@ -5,7 +5,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStat
 public interface Station extends SpaceSystem {
 	Integer getStationId();
 
-	GetUniverseStationsStationIdOk getStation();
+//	GetUniverseStationsStationIdOk getStation();
 
 	String getStationName();
 }

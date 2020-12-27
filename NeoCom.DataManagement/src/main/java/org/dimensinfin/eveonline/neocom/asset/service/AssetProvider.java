@@ -19,8 +19,8 @@ import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
 import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
 import org.dimensinfin.eveonline.neocom.domain.container.FacetedExpandableContainer;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
+import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceRegion;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceRegionImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystem;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.Station;
@@ -76,8 +76,10 @@ public class AssetProvider {
 	private LocationCatalogService locationCatalogService;
 	private IAssetSource assetSource = new DatabaseAssetSource.Builder().build();
 
+// - C O N S T R U C T O R S
 	private AssetProvider() {}
 
+// - G E T T E R S   &   S E T T E R S
 	@Deprecated
 	public List<FacetedExpandableContainer> getRegionList() {
 		final Map<Integer, FacetedExpandableContainer<SpaceRegion, SpaceSystem>> regions = new HashMap<>();
@@ -86,8 +88,8 @@ public class AssetProvider {
 				final Integer regionId = ((SpaceRegion) spaceLocation.getSpaceLocation()).getRegionId();
 				FacetedExpandableContainer hit = regions.get( regionId );
 				if (null == hit) {
-					final SpaceRegion region = new SpaceRegionImplementation.Builder()
-							.withRegion( ((SpaceRegion) spaceLocation.getSpaceLocation()).getRegion() ).build();
+					final SpaceRegion region = (SpaceRegion) new SpaceLocationImplementation.Builder()
+							.fromSpaceLocation( spaceLocation.getSpaceLocation() );
 					hit = new FacetedExpandableContainer.Builder<SpaceRegion, SpaceSystem>()
 							.withFacet( region ).build();
 					regions.put( regionId, hit );
@@ -351,6 +353,7 @@ public class AssetProvider {
 	public static class Builder {
 		private AssetProvider onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new AssetProvider();
 		}

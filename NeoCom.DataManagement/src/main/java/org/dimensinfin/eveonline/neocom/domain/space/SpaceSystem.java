@@ -5,7 +5,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSyste
 public interface SpaceSystem extends SpaceConstellation {
 	Integer getSolarSystemId();
 
-	GetUniverseSystemsSystemIdOk getSolarSystem();
+//	GetUniverseSystemsSystemIdOk getSolarSystem();
 
 	String getSolarSystemName();
 }

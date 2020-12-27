@@ -1,9 +1,10 @@
-package org.dimensinfin.eveonline.neocom.domain.space;
+package org.dimensinfin.eveonline.neocom.domain.container;
 
 import java.util.Objects;
 
 import org.dimensinfin.eveonline.neocom.asset.domain.LocationAssetContainer;
 import org.dimensinfin.eveonline.neocom.domain.ExpandableContainer;
+import org.dimensinfin.eveonline.neocom.domain.space.SpaceRegion;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 
 public class Region extends ExpandableContainer<LocationAssetContainer> implements SpaceRegion {
@@ -22,10 +23,10 @@ public class Region extends ExpandableContainer<LocationAssetContainer> implemen
 		return this.regionId;
 	}
 
-	@Override
-	public GetUniverseRegionsRegionIdOk getRegion() {
-		return this.region;
-	}
+//	@Override
+//	public GetUniverseRegionsRegionIdOk getRegion() {
+//		return this.region;
+//	}
 
 	@Override
 	public String getRegionName() {

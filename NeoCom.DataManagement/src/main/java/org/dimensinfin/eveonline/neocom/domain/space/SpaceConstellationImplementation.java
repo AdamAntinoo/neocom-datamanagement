@@ -19,8 +19,8 @@ public class SpaceConstellationImplementation extends NeoComNode implements Spac
 	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}
 
-	@Override
-	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
+//	@Override
+//	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
 
 	@Override
 	public String getRegionName() {return spaceLocation.getRegionName();}
@@ -28,8 +28,8 @@ public class SpaceConstellationImplementation extends NeoComNode implements Spac
 	@Override
 	public Integer getConstellationId() {return spaceLocation.getConstellationId();}
 
-	@Override
-	public GetUniverseConstellationsConstellationIdOk getConstellation() {return spaceLocation.getConstellation();}
+//	@Override
+//	public GetUniverseConstellationsConstellationIdOk getConstellation() {return spaceLocation.getConstellation();}
 
 	@Override
 	public String getConstellationName() {return spaceLocation.getConstellationName();}

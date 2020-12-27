@@ -5,7 +5,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegio
 public interface SpaceRegion extends SpaceLocation {
 	Integer getRegionId();
 
-	GetUniverseRegionsRegionIdOk getRegion();
+//	GetUniverseRegionsRegionIdOk getRegion();
 
 	String getRegionName();
 }

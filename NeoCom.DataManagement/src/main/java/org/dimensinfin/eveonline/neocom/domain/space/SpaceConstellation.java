@@ -5,7 +5,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellatio
 public interface SpaceConstellation extends SpaceRegion {
 	Integer getConstellationId();
 
-	GetUniverseConstellationsConstellationIdOk getConstellation();
+//	GetUniverseConstellationsConstellationIdOk getConstellation();
 
 	String getConstellationName();
 }
