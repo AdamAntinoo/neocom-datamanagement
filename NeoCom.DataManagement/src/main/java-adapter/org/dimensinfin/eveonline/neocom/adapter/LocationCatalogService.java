@@ -14,11 +14,8 @@ import org.dimensinfin.eveonline.neocom.annotation.NeoComAdapter;
 import org.dimensinfin.eveonline.neocom.core.AccessStatistics;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceConstellationImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceRegionImplementation;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
-import org.dimensinfin.eveonline.neocom.domain.space.StationImplementation;
+import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.StructureImplementation;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
@@ -65,10 +62,10 @@ public class LocationCatalogService extends Job {
 	private boolean dirtyCache = false;
 	private LocationCacheAccessType lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 
-// - C O N S T R U C T O R S
+	// - C O N S T R U C T O R S
 	protected LocationCatalogService() { }
 
-// - G E T T E R S   &   S E T T E R S
+	// - G E T T E R S   &   S E T T E R S
 	public Map<String, Integer> getLocationTypeCounters() {
 		return this.locationTypeCounters;
 	}
@@ -155,55 +152,46 @@ public class LocationCatalogService extends Job {
 	private SpaceLocation buildUpLocation( final Long locationId ) {
 		if (locationId < 20000000) { // Can be a Region
 			return this.storeOnCacheLocation(
-					new SpaceRegionImplementation.Builder()
-							.withRegion( this.esiUniverseDataProvider.getUniverseRegionById( locationId.intValue() ) )
+					new SpaceLocationImplementation.Builder()
+							.withRegion( Objects.requireNonNull( this.esiUniverseDataProvider.getUniverseRegionById( locationId.intValue() ) ) )
 							.build() );
 		}
 		if (locationId < 30000000) { // Can be a Constellation
-			final GetUniverseConstellationsConstellationIdOk constellation = this.esiUniverseDataProvider
-					.getUniverseConstellationById( locationId.intValue() );
-			Objects.requireNonNull( constellation );
-			final GetUniverseRegionsRegionIdOk region = this.esiUniverseDataProvider
-					.getUniverseRegionById( constellation.getRegionId() );
-			Objects.requireNonNull( region );
+			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseConstellationById( locationId.intValue() ) );
+			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseRegionById( constellation.getRegionId() ) );
 			return this.storeOnCacheLocation(
-					new SpaceConstellationImplementation.Builder()
+					new SpaceLocationImplementation.Builder()
 							.withRegion( region )
 							.withConstellation( constellation )
 							.build() );
 		}
 		if (locationId < 40000000) { // Can be a system
-			final GetUniverseSystemsSystemIdOk solarSystem = this.esiUniverseDataProvider
-					.getUniverseSystemById( locationId.intValue() );
-			Objects.requireNonNull( solarSystem );
-			final GetUniverseConstellationsConstellationIdOk constellation = this.esiUniverseDataProvider
-					.getUniverseConstellationById( solarSystem.getConstellationId() );
-			Objects.requireNonNull( constellation );
-			final GetUniverseRegionsRegionIdOk region = this.esiUniverseDataProvider
-					.getUniverseRegionById( constellation.getRegionId() );
-			Objects.requireNonNull( region );
+			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseSystemById( locationId.intValue() ) );
+			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
+			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseRegionById( constellation.getRegionId() ) );
 			return this.storeOnCacheLocation(
-					new SpaceSystemImplementation.Builder()
+					new SpaceLocationImplementation.Builder()
 							.withRegion( region )
 							.withConstellation( constellation )
 							.withSolarSystem( solarSystem )
 							.build() );
 		}
 		if (locationId < 61000000) { // Can be a game station
-			final GetUniverseStationsStationIdOk station = this.esiUniverseDataProvider
-					.getUniverseStationById( locationId.intValue() );
-			Objects.requireNonNull( station );
-			final GetUniverseSystemsSystemIdOk solarSystem = this.esiUniverseDataProvider
-					.getUniverseSystemById( station.getSystemId() );
-			Objects.requireNonNull( solarSystem );
-			final GetUniverseConstellationsConstellationIdOk constellation = this.esiUniverseDataProvider
-					.getUniverseConstellationById( solarSystem.getConstellationId() );
-			Objects.requireNonNull( constellation );
-			final GetUniverseRegionsRegionIdOk region = this.esiUniverseDataProvider
-					.getUniverseRegionById( constellation.getRegionId() );
-			Objects.requireNonNull( region );
+			final GetUniverseStationsStationIdOk station = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseStationById( locationId.intValue() ) );
+			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseSystemById( station.getSystemId()) );
+			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
+			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+					.getUniverseRegionById( constellation.getRegionId() ) );
 			return this.storeOnCacheLocation(
-					new StationImplementation.Builder()
+					new SpaceLocationImplementation.Builder()
 							.withRegion( region )
 							.withConstellation( constellation )
 							.withSolarSystem( solarSystem )
@@ -214,17 +202,13 @@ public class LocationCatalogService extends Job {
 	}
 
 	private SpaceLocation buildUpStructure( final Long locationId, final Credential credential ) {
-		final GetUniverseStructuresStructureIdOk structure = this.search200OkStructureById( locationId, credential );
-		Objects.requireNonNull( structure );
-		final GetUniverseSystemsSystemIdOk solarSystem = this.esiUniverseDataProvider
-				.searchSolarSystem4Id( structure.getSolarSystemId() );
-		Objects.requireNonNull( solarSystem );
-		final GetUniverseConstellationsConstellationIdOk constellation = this.esiUniverseDataProvider
-				.getUniverseConstellationById( solarSystem.getConstellationId() );
-		Objects.requireNonNull( constellation );
-		final GetUniverseRegionsRegionIdOk region = this.esiUniverseDataProvider
-				.getUniverseRegionById( constellation.getRegionId() );
-		Objects.requireNonNull( region );
+		final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull( this.search200OkStructureById( locationId, credential ) );
+		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.esiUniverseDataProvider
+				.getUniverseSystemById( locationId.intValue() ) );
+		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+				.getUniverseConstellationById( solarSystem.getConstellationId() ) );
+		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+				.getUniverseRegionById( constellation.getRegionId() ) );
 		return this.storeOnCacheLocation(
 				new StructureImplementation.Builder()
 						.withRegion( region )
@@ -285,7 +269,7 @@ public class LocationCatalogService extends Job {
 	public static class Builder {
 		private LocationCatalogService onConstruction;
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new LocationCatalogService();
 		}

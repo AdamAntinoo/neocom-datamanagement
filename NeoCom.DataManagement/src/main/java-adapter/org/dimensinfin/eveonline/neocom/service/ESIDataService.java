@@ -39,6 +39,7 @@ public class ESIDataService extends ESIDataProvider {
 
 	static {
 		regionMarketHubReferenceTable.put( 10000043, 60008494L ); // Make the Amarr VIII (Oris) the hub for Domain
+		regionMarketHubReferenceTable.put( 10000020, 60008494L ); // Make the Amarr VIII (Oris) the hub for Tash-Murkon
 	}
 
 	// - C O N S T R U C T O R S
@@ -119,12 +120,12 @@ public class ESIDataService extends ESIDataProvider {
 		Long hit = regionMarketHubReferenceTable.get( regionId );
 		if (null == hit) hit = PREDEFINED_MARKET_HUB_STATION_ID;
 		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
-		if (location instanceof Station) return (Station) location;
-		else {
-			LogWrapper.info( MessageFormat.format(
-					"Configured region [{0}] market hub identifier does not point to an Station", regionId )
-			);
-			return (Station) this.locationCatalogService.searchLocation4Id( PREDEFINED_MARKET_HUB_STATION_ID );
-		}
+		/*if (location instanceof Station)*/ return (Station) location;
+//		else {
+//			LogWrapper.info( MessageFormat.format(
+//					"Configured region [{0}] market hub identifier does not point to an Station", regionId )
+//			);
+//			return (Station) this.locationCatalogService.searchLocation4Id( PREDEFINED_MARKET_HUB_STATION_ID );
+//		}
 	}
 }

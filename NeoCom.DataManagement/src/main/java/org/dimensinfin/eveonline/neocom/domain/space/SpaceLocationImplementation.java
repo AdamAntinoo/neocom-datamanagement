@@ -11,25 +11,25 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresSt
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
 
-public class SpaceLocationImplementation extends NeoComNode implements SpaceLocation {
+public class SpaceLocationImplementation extends NeoComNode implements Station {
 	private static final long serialVersionUID = -9028958348146320642L;
 
 	private Integer regionId;
 	private String regionName;
-	//	private GetUniverseRegionsRegionIdOk region;
 	private Integer constellationId;
 	private String constellationName;
-	//	private GetUniverseConstellationsConstellationIdOk constellation;
 	private Integer solarSystemId;
 	private String solarSystemName;
-	//	private GetUniverseSystemsSystemIdOk solarSystem;
 	private Integer stationId;
 	private String stationName;
-	//	private GetUniverseStationsStationIdOk station;
 	private Double security;
+	@Deprecated
 	private Integer corporationId;
+	@Deprecated
 	private GetCorporationsCorporationIdOk corporation;
+	@Deprecated
 	private Long structureId;
+	@Deprecated
 	private GetUniverseStructuresStructureIdOk structure;
 
 	// - C O N S T R U C T O R S
