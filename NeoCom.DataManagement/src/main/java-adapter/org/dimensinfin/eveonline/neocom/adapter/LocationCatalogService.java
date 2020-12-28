@@ -16,6 +16,7 @@ import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
+import org.dimensinfin.eveonline.neocom.domain.space.Structure;
 import org.dimensinfin.eveonline.neocom.domain.space.StructureImplementation;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
@@ -210,7 +211,7 @@ public class LocationCatalogService extends Job {
 		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
 				.getUniverseRegionById( constellation.getRegionId() ) );
 		return this.storeOnCacheLocation(
-				new StructureImplementation.Builder()
+				new Structure.Builder()
 						.withRegion( region )
 						.withConstellation( constellation )
 						.withSolarSystem( solarSystem )

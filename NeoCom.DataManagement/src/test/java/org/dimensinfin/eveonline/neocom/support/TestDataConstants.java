@@ -39,4 +39,21 @@ public class TestDataConstants {
 			TEST_ESI_CHARACTER_DATA.setSecurityStatus( TEST_ESI_CHARACTER_SECURITY_STATUS );
 		}
 	}
+
+	public static class SpaceLocationConstants {
+		public static final Integer REGION_ID = 1000043;
+		public static final String REGION_NAME = "Domain";
+		public static final Integer CONSTELLATION_ID = 20000322;
+		public static final String CONSTELLATION_NAME = "Throne Worlds";
+		public static final Integer SOLAR_SYSTEM_ID = 30002187;
+		public static final String SOLAR_SYSTEM_NAME = "Amarr";
+		public static final String SOLAR_SYSTEM_SECURITY_CLASS = "E1";
+		public static final Float SOLAR_SYSTEM_SECURITY_STATUS = 0.5623334F;
+		public static final Integer STATION_ID = 60008494;
+		public static final String STATION_NAME = "Amarr VIII (Oris) - Emperor Family Academy";
+		public static final Integer STRUCTURE_ID = 60008494;
+		public static final String STRUCTURE_NAME = "Amarr VIII (Oris) - Emperor Family Academy";
+		public static final Integer CORPORATION_ID = 98384726;
+		public static final String CORPORATION_NAME = "Industrias Machaque";
+	}
 }

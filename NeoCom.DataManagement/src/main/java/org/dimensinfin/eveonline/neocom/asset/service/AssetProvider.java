@@ -322,7 +322,7 @@ public class AssetProvider {
 			}
 		}
 		switch (asset.getLocationId().getType()) {
-			case SPACE:
+			case SOLAR_SYSTEM:
 			case STATION:
 			case STRUCTURE:
 				this.add2SpaceLocation( asset );

@@ -60,29 +60,6 @@ public class ESIUniverseDataProvider {
 	protected ESIUniverseDataProvider() {}
 
 	// - G E T T E R S   &   S E T T E R S
-
-	/**
-	 * Go to the ESI api to get the list of market prices. This method does not use other server than the Tranquility
-	 * because probably there is not valid market price information at other servers.
-	 * To access the public data it will use the current unauthorized retrofit connection.
-	 */
-	@TimeElapsed
-	private List<GetMarketsPrices200Ok> getUniverseMarketsPrices() {
-		try {
-			// Create the request to be returned so it can be called.
-			final Response<List<GetMarketsPrices200Ok>> marketApiResponse = this.retrofitFactory
-					.accessUniverseConnector()
-					.create( MarketApi.class )
-					.getMarketsPrices( DEFAULT_ESI_SERVER.toLowerCase(), null )
-					.execute();
-			if (marketApiResponse.isSuccessful())
-				return marketApiResponse.body();
-		} catch (final IOException | RuntimeException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return new ArrayList<>();
-	}
-
 	// - A L L I A N C E   P U B L I C   I N F O R M A T I O N
 	public GetAlliancesAllianceIdOk getAlliancesAllianceId( final int identifier ) {
 		try {
@@ -163,6 +140,9 @@ public class ESIUniverseDataProvider {
 		return null;
 	}
 
+	/**
+	 * On new implementation if there are no more pages of data the response is a 404 instead of an empty list. Detect also this case.
+	 */
 	@TimeElapsed
 	public List<GetMarketsRegionIdOrders200Ok> getUniverseMarketOrdersForId( final Integer regionId, final Integer typeId ) {
 		LogWrapper.enter( MessageFormat.format( "regionId: {0} - typeId: {1}", regionId, typeId ) );
@@ -186,17 +166,17 @@ public class ESIUniverseDataProvider {
 							returnMarketOrderList.addAll( Objects.requireNonNull( marketOrdersResponse.body() ) );
 							pageCounter++;
 						}
-					}
+					} else morePages = false;
 				} catch (final RuntimeException rtex) {
 					LogWrapper.error( rtex );
 				}
 			}
 		} catch (final IOException ioe) {
-			LogWrapper.error( "IOException during ESI data access.", ioe );
+			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
-			return returnMarketOrderList;
 		}
+		return returnMarketOrderList;
 	}
 
 	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
@@ -371,6 +351,28 @@ public class ESIUniverseDataProvider {
 			NeoComLogger.error( ioe );
 		} finally {
 			//			NeoComLogger.exit();
+		}
+		return new ArrayList<>();
+	}
+
+	/**
+	 * Go to the ESI api to get the list of market prices. This method does not use other server than the Tranquility
+	 * because probably there is not valid market price information at other servers.
+	 * To access the public data it will use the current unauthorized retrofit connection.
+	 */
+	@TimeElapsed
+	private List<GetMarketsPrices200Ok> getUniverseMarketsPrices() {
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<List<GetMarketsPrices200Ok>> marketApiResponse = this.retrofitFactory
+					.accessUniverseConnector()
+					.create( MarketApi.class )
+					.getMarketsPrices( DEFAULT_ESI_SERVER.toLowerCase(), null )
+					.execute();
+			if (marketApiResponse.isSuccessful())
+				return marketApiResponse.body();
+		} catch (final IOException | RuntimeException ioe) {
+			LogWrapper.error( ioe );
 		}
 		return new ArrayList<>();
 	}

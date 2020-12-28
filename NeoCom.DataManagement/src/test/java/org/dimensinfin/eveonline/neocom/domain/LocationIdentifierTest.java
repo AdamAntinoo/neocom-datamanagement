@@ -95,7 +95,7 @@ public class LocationIdentifierTest {
 		final LocationIdentifier identifier = new LocationIdentifier.Builder()
 				.withSpaceIdentifier( spaceIdentifier )
 				.build();
-		Assertions.assertEquals( LocationIdentifierType.SPACE, identifier.getType() );
+		Assertions.assertEquals( LocationIdentifierType.SOLAR_SYSTEM, identifier.getType() );
 	}
 
 	@Test
