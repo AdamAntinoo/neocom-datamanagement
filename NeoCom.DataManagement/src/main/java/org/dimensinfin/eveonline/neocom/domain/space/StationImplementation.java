@@ -7,7 +7,9 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellatio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 
+@Deprecated
 public class StationImplementation extends NeoComNode implements Station {
 	private static final long serialVersionUID = -646550210810227292L;
 	private SpaceLocationImplementation spaceLocation;
@@ -17,6 +19,11 @@ public class StationImplementation extends NeoComNode implements Station {
 	// - D E L E G A T E S
 	@Override
 	public Long getLocationId() {return spaceLocation.getLocationId();}
+
+	@Override
+	public LocationIdentifierType getLocationType() {
+		return null;
+	}
 
 	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}
@@ -37,6 +44,16 @@ public class StationImplementation extends NeoComNode implements Station {
 	public String getConstellationName() {return spaceLocation.getConstellationName();}
 
 	@Override
+	public Float getSecurityStatus() {
+		return null;
+	}
+
+	@Override
+	public String getSecurityClass() {
+		return null;
+	}
+
+	@Override
 	public Integer getSolarSystemId() {return spaceLocation.getSolarSystemId();}
 
 //	@Override
@@ -46,7 +63,7 @@ public class StationImplementation extends NeoComNode implements Station {
 	public String getSolarSystemName() {return spaceLocation.getSolarSystemName();}
 
 	@Override
-	public Integer getStationId() {return spaceLocation.getStationId();}
+	public Long getStationId() {return spaceLocation.getStationId();}
 
 //	@Override
 //	public GetUniverseStationsStationIdOk getStation() {return spaceLocation.getStation();}

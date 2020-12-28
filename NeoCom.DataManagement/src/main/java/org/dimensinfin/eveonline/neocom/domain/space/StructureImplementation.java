@@ -7,52 +7,52 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellatio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
-
-public class StructureImplementation extends NeoComNode implements Structure {
+@Deprecated
+public class StructureImplementation extends NeoComNode /* implements Structure */{
 	private static final long serialVersionUID = -646550210810227292L;
 	private SpaceLocationImplementation spaceLocation;
 
 	private StructureImplementation() {super();}
 
 	// - D E L E G A T E S
-	@Override
+//	@Override
 	public Long getLocationId() {return spaceLocation.getLocationId();}
 
-	@Override
+//	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}
 
 //	@Override
 //	public GetUniverseRegionsRegionIdOk getRegion() {return spaceLocation.getRegion();}
 
-	@Override
+//	@Override
 	public String getRegionName() {return spaceLocation.getRegionName();}
 
-	@Override
+//	@Override
 	public Integer getConstellationId() {return spaceLocation.getConstellationId();}
 
 //	@Override
 //	public GetUniverseConstellationsConstellationIdOk getConstellation() {return spaceLocation.getConstellation();}
 
-	@Override
+//	@Override
 	public String getConstellationName() {return spaceLocation.getConstellationName();}
 
-	@Override
+//	@Override
 	public Integer getSolarSystemId() {return spaceLocation.getSolarSystemId();}
 
 //	@Override
 //	public GetUniverseSystemsSystemIdOk getSolarSystem() {return spaceLocation.getSolarSystem();}
 
-	@Override
+//	@Override
 	public String getSolarSystemName() {return this.spaceLocation.getSolarSystemName();}
 
-	@Override
-	public Long getStructureId() {return this.spaceLocation.getStructureId();}
+//	@Override
+//	public Long getStructureId() {return this.spaceLocation.getStructureId();}
 
-	@Override
-	public GetUniverseStructuresStructureIdOk getStructure() {return this.spaceLocation.getStructure();}
+//	@Override
+//	public GetUniverseStructuresStructureIdOk getStructure() {return this.spaceLocation.getStructure();}
 
-	@Override
-	public String getStructureName() {return spaceLocation.getStructureName();}
+//	@Override
+//	public String getStructureName() {return spaceLocation.getStructureName();}
 
 	// - B U I L D E R
 	public static class Builder {
@@ -94,7 +94,7 @@ public class StructureImplementation extends NeoComNode implements Structure {
 			return this;
 		}
 
-		public Structure build() {
+		public StructureImplementation build() {
 			Objects.requireNonNull( this.region );
 			Objects.requireNonNull( this.constellation );
 			Objects.requireNonNull( this.solarSystem );
@@ -104,7 +104,7 @@ public class StructureImplementation extends NeoComNode implements Structure {
 					.withRegion( this.region )
 					.withConstellation( this.constellation )
 					.withSolarSystem( this.solarSystem )
-					.withStructure( this.structureId, this.structure )
+//					.withStructure( this.structureId, this.structure )
 					.build();
 			return this.onConstruction;
 		}

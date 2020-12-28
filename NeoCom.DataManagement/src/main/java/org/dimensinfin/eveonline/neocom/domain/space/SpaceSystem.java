@@ -1,11 +1,11 @@
 package org.dimensinfin.eveonline.neocom.domain.space;
 
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
-
 public interface SpaceSystem extends SpaceConstellation {
-	Integer getSolarSystemId();
+	Float getSecurityStatus();
 
-//	GetUniverseSystemsSystemIdOk getSolarSystem();
+	String getSecurityClass();
+
+	Integer getSolarSystemId();
 
 	String getSolarSystemName();
 }

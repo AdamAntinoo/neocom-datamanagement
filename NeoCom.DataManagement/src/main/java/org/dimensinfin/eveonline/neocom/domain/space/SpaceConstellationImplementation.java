@@ -5,7 +5,9 @@ import java.util.Objects;
 import org.dimensinfin.eveonline.neocom.domain.NeoComNode;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
+import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 
+@Deprecated
 public class SpaceConstellationImplementation extends NeoComNode implements SpaceConstellation {
 	private static final long serialVersionUID = -9105742282576579945L;
 	private SpaceLocationImplementation spaceLocation;
@@ -15,6 +17,11 @@ public class SpaceConstellationImplementation extends NeoComNode implements Spac
 	// - D E L E G A T E S
 	@Override
 	public Long getLocationId() {return spaceLocation.getLocationId();}
+
+	@Override
+	public LocationIdentifierType getLocationType() {
+		return null;
+	}
 
 	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}

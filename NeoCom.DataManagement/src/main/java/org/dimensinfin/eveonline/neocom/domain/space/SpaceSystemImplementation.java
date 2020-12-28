@@ -6,7 +6,9 @@ import org.dimensinfin.eveonline.neocom.domain.NeoComNode;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 
+@Deprecated
 public class SpaceSystemImplementation extends NeoComNode implements SpaceSystem {
 	private static final long serialVersionUID = -7621919707515211155L;
 	private SpaceLocationImplementation spaceLocation;
@@ -16,6 +18,11 @@ public class SpaceSystemImplementation extends NeoComNode implements SpaceSystem
 	// - D E L E G A T E S
 	@Override
 	public Long getLocationId() {return spaceLocation.getLocationId();}
+
+	@Override
+	public LocationIdentifierType getLocationType() {
+		return null;
+	}
 
 	@Override
 	public Integer getRegionId() {return spaceLocation.getRegionId();}
@@ -34,6 +41,16 @@ public class SpaceSystemImplementation extends NeoComNode implements SpaceSystem
 
 	@Override
 	public String getConstellationName() {return spaceLocation.getConstellationName();}
+
+	@Override
+	public Float getSecurityStatus() {
+		return null;
+	}
+
+	@Override
+	public String getSecurityClass() {
+		return null;
+	}
 
 	@Override
 	public Integer getSolarSystemId() {return spaceLocation.getSolarSystemId();}

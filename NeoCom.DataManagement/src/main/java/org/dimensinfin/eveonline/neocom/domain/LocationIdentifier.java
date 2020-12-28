@@ -72,7 +72,7 @@ public class LocationIdentifier {
 			return;
 		}
 		if (this.spaceIdentifier < 40E6) {
-			this.type = LocationIdentifierType.SPACE;
+			this.type = LocationIdentifierType.SOLAR_SYSTEM;
 			return;
 		}
 		if (this.spaceIdentifier < 61E6) {
@@ -81,7 +81,7 @@ public class LocationIdentifier {
 		}
 		if (null == this.locationType) this.locationType = EsiAssets200Ok.LocationTypeEnum.OTHER;
 		if (this.locationType == EsiAssets200Ok.LocationTypeEnum.SOLAR_SYSTEM)
-			this.type = LocationIdentifierType.SPACE;
+			this.type = LocationIdentifierType.SOLAR_SYSTEM;
 		if (this.locationType == EsiAssets200Ok.LocationTypeEnum.STATION)
 			this.type = LocationIdentifierType.STATION;
 		// Other types of locations. Use the id to extract the range
