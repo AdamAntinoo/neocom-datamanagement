@@ -58,4 +58,10 @@ public class TestDataConstants {
 		public static final String TEST_CORPORATION_NAME = "Industrias Machaque";
 		public static final Integer TEST_CORPORATION_OWNER_ID = 98384726;
 	}
+	public static class PilotPreferencesConstants{
+		public static final Integer TEST_PILOT_PREFERENCE_PILOT_ID =98384726;
+		public static final String TEST_PILOT_PREFERENCE_NAME = "-PREFERENCE-";
+		public static final String TEST_PILOT_PREFERENCE_STRING_VALUE = "Amarr VIII (Oris) - Emperor Family Academy";
+		public static final Double TEST_PILOT_PREFERENCE_NUMERIC_VALUE =87642.5623334;
+	}
 }
