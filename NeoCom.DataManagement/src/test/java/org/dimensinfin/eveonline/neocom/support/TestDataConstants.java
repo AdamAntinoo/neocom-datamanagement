@@ -41,19 +41,21 @@ public class TestDataConstants {
 	}
 
 	public static class SpaceLocationConstants {
-		public static final Integer REGION_ID = 1000043;
-		public static final String REGION_NAME = "Domain";
-		public static final Integer CONSTELLATION_ID = 20000322;
-		public static final String CONSTELLATION_NAME = "Throne Worlds";
-		public static final Integer SOLAR_SYSTEM_ID = 30002187;
-		public static final String SOLAR_SYSTEM_NAME = "Amarr";
-		public static final String SOLAR_SYSTEM_SECURITY_CLASS = "E1";
-		public static final Float SOLAR_SYSTEM_SECURITY_STATUS = 0.5623334F;
-		public static final Integer STATION_ID = 60008494;
-		public static final String STATION_NAME = "Amarr VIII (Oris) - Emperor Family Academy";
-		public static final Integer STRUCTURE_ID = 60008494;
-		public static final String STRUCTURE_NAME = "Amarr VIII (Oris) - Emperor Family Academy";
-		public static final Integer CORPORATION_ID = 98384726;
-		public static final String CORPORATION_NAME = "Industrias Machaque";
+		public static final Integer TEST_REGION_ID = 1000043;
+		public static final String TEST_REGION_NAME = "Domain";
+		public static final Integer TEST_CONSTELLATION_ID = 20000322;
+		public static final String TEST_CONSTELLATION_NAME = "Throne Worlds";
+		public static final Integer TEST_SOLAR_SYSTEM_ID = 30002187;
+		public static final String TEST_SOLAR_SYSTEM_NAME = "Amarr";
+		public static final String TEST_SOLAR_SYSTEM_SECURITY_CLASS = "E1";
+		public static final Float TEST_SOLAR_SYSTEM_SECURITY_STATUS = 0.5623334F;
+		public static final Integer TEST_STATION_ID = 60008494;
+		public static final String TEST_STATION_NAME = "Amarr VIII (Oris) - Emperor Family Academy";
+		public static final Long TEST_STRUCTURE_ID = 60008494L;
+		public static final Integer TEST_STRUCTURE_TYPE_ID = 60008494;
+		public static final String TEST_STRUCTURE_NAME = "Amarr VIII (Oris) - Emperor Family Academy";
+		public static final Integer TEST_CORPORATION_ID = 98384726;
+		public static final String TEST_CORPORATION_NAME = "Industrias Machaque";
+		public static final Integer TEST_CORPORATION_OWNER_ID = 98384726;
 	}
 }

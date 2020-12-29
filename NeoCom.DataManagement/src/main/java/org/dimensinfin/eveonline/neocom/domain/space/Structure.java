@@ -2,10 +2,16 @@ package org.dimensinfin.eveonline.neocom.domain.space;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 
 public class Structure extends SpaceLocationImplementation implements SpaceSystem {
 	private Long structureId;
@@ -27,8 +33,8 @@ public class Structure extends SpaceLocationImplementation implements SpaceSyste
 		return this.corporationName;
 	}
 
-	public Integer getOwnerId() {
-		return this.ownerId;
+	public LocationIdentifierType getLocationType() {
+		return LocationIdentifierType.STRUCTURE;
 	}
 
 	public Long getStationId() {
@@ -36,6 +42,51 @@ public class Structure extends SpaceLocationImplementation implements SpaceSyste
 	}
 
 	public String getStationName() {return this.structureName;}
+
+	// - C O R E
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 )
+				.appendSuper( super.hashCode() )
+				.append( this.structureId )
+				.append( this.structureName )
+				.append( this.ownerId )
+				.append( this.structureTypeId )
+				.append( this.corporationId )
+				.append( this.corporationName ).toHashCode();
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof Structure)) return false;
+		final Structure structure = (Structure) o;
+		return new EqualsBuilder()
+				.appendSuper( super.equals( o ) )
+				.append( this.structureId, structure.structureId )
+				.append( this.structureName, structure.structureName )
+				.append( this.ownerId, structure.ownerId )
+				.append( this.structureTypeId, structure.structureTypeId )
+				.append( this.corporationId, structure.corporationId )
+				.append( this.corporationName, structure.corporationName ).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "structureId", this.structureId )
+				.append( "structureName", this.structureName )
+				.append( "ownerId", this.ownerId )
+				.append( "structureTypeId", this.structureTypeId )
+				.append( "corporationId", this.corporationId )
+				.append( "corporationName", this.corporationName )
+				.append( "spaceLocation", super.toString() )
+				.toString();
+	}
+
+	public Integer getOwnerId() {
+		return this.ownerId;
+	}
 
 	public Long getStructureId() {
 		return this.structureId;

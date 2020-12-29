@@ -11,16 +11,16 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStat
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.CONSTELLATION_ID;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.CONSTELLATION_NAME;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.REGION_ID;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.REGION_NAME;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.SOLAR_SYSTEM_ID;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.SOLAR_SYSTEM_NAME;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.SOLAR_SYSTEM_SECURITY_CLASS;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.SOLAR_SYSTEM_SECURITY_STATUS;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.STATION_ID;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.STATION_NAME;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_CONSTELLATION_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_CONSTELLATION_NAME;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_REGION_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_REGION_NAME;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_SOLAR_SYSTEM_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_SOLAR_SYSTEM_NAME;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_SOLAR_SYSTEM_SECURITY_CLASS;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_SOLAR_SYSTEM_SECURITY_STATUS;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_STATION_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_STATION_NAME;
 
 public class SpaceLocationImplementationTest {
 	@Test
@@ -65,16 +65,16 @@ public class SpaceLocationImplementationTest {
 		final GetUniverseSystemsSystemIdOk solarSystem = Mockito.mock( GetUniverseSystemsSystemIdOk.class );
 		final GetUniverseStationsStationIdOk station = Mockito.mock( GetUniverseStationsStationIdOk.class );
 		// When
-		Mockito.when( region.getRegionId() ).thenReturn( REGION_ID );
-		Mockito.when( region.getName() ).thenReturn( REGION_NAME );
-		Mockito.when( constellation.getConstellationId() ).thenReturn( CONSTELLATION_ID );
-		Mockito.when( constellation.getName() ).thenReturn( CONSTELLATION_NAME );
-		Mockito.when( solarSystem.getSystemId() ).thenReturn( SOLAR_SYSTEM_ID );
-		Mockito.when( solarSystem.getName() ).thenReturn( SOLAR_SYSTEM_NAME );
-		Mockito.when( solarSystem.getSecurityClass() ).thenReturn( SOLAR_SYSTEM_SECURITY_CLASS );
-		Mockito.when( solarSystem.getSecurityStatus() ).thenReturn( SOLAR_SYSTEM_SECURITY_STATUS );
-		Mockito.when( station.getStationId() ).thenReturn( STATION_ID );
-		Mockito.when( station.getName() ).thenReturn( STATION_NAME );
+		Mockito.when( region.getRegionId() ).thenReturn( TEST_REGION_ID );
+		Mockito.when( region.getName() ).thenReturn( TEST_REGION_NAME );
+		Mockito.when( constellation.getConstellationId() ).thenReturn( TEST_CONSTELLATION_ID );
+		Mockito.when( constellation.getName() ).thenReturn( TEST_CONSTELLATION_NAME );
+		Mockito.when( solarSystem.getSystemId() ).thenReturn( TEST_SOLAR_SYSTEM_ID );
+		Mockito.when( solarSystem.getName() ).thenReturn( TEST_SOLAR_SYSTEM_NAME );
+		Mockito.when( solarSystem.getSecurityClass() ).thenReturn( TEST_SOLAR_SYSTEM_SECURITY_CLASS );
+		Mockito.when( solarSystem.getSecurityStatus() ).thenReturn( TEST_SOLAR_SYSTEM_SECURITY_STATUS );
+		Mockito.when( station.getStationId() ).thenReturn( TEST_STATION_ID );
+		Mockito.when( station.getName() ).thenReturn( TEST_STATION_NAME );
 		// Test
 		final SpaceLocation locationOrigin = new SpaceLocationImplementation.Builder()
 				.withRegion( region )
@@ -85,16 +85,16 @@ public class SpaceLocationImplementationTest {
 		final SpaceLocation location = new SpaceLocationImplementation.Builder().fromSpaceLocation( locationOrigin );
 		// Assertions
 		Assert.assertNotNull( location );
-		Assertions.assertEquals( REGION_ID, ((SpaceRegion) location).getRegionId() );
-		Assertions.assertEquals( REGION_NAME, ((SpaceRegion) location).getRegionName() );
-		Assertions.assertEquals( CONSTELLATION_ID, ((SpaceConstellation) location).getConstellationId() );
-		Assertions.assertEquals( CONSTELLATION_NAME, ((SpaceConstellation) location).getConstellationName() );
-		Assertions.assertEquals( SOLAR_SYSTEM_ID, ((SpaceSystem) location).getSolarSystemId() );
-		Assertions.assertEquals( SOLAR_SYSTEM_NAME, ((SpaceSystem) location).getSolarSystemName() );
-		Assertions.assertEquals( SOLAR_SYSTEM_SECURITY_CLASS, ((SpaceSystem) location).getSecurityClass() );
-		Assertions.assertEquals( SOLAR_SYSTEM_SECURITY_STATUS, ((SpaceSystem) location).getSecurityStatus() );
-		Assertions.assertEquals( STATION_ID, ((Station) location).getStationId() );
-		Assertions.assertEquals( STATION_NAME, ((Station) location).getStationName() );
+		Assertions.assertEquals( TEST_REGION_ID, ((SpaceRegion) location).getRegionId() );
+		Assertions.assertEquals( TEST_REGION_NAME, ((SpaceRegion) location).getRegionName() );
+		Assertions.assertEquals( TEST_CONSTELLATION_ID, ((SpaceConstellation) location).getConstellationId() );
+		Assertions.assertEquals( TEST_CONSTELLATION_NAME, ((SpaceConstellation) location).getConstellationName() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_ID, ((SpaceSystem) location).getSolarSystemId() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_NAME, ((SpaceSystem) location).getSolarSystemName() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_CLASS, ((SpaceSystem) location).getSecurityClass() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_STATUS, ((SpaceSystem) location).getSecurityStatus() );
+		Assertions.assertEquals( TEST_STATION_ID, ((Station) location).getStationId() );
+		Assertions.assertEquals( TEST_STATION_NAME, ((Station) location).getStationName() );
 	}
 
 	@Test
@@ -104,14 +104,14 @@ public class SpaceLocationImplementationTest {
 		final GetUniverseConstellationsConstellationIdOk constellation =
 				Mockito.mock( GetUniverseConstellationsConstellationIdOk.class );
 		// When
-		Mockito.when( region.getRegionId() ).thenReturn( REGION_ID );
-		Mockito.when( constellation.getConstellationId() ).thenReturn( CONSTELLATION_ID );
+		Mockito.when( region.getRegionId() ).thenReturn( TEST_REGION_ID );
+		Mockito.when( constellation.getConstellationId() ).thenReturn( TEST_CONSTELLATION_ID );
 		// Test
 		final SpaceLocation location = new SpaceLocationImplementation.Builder()
 				.withRegion( region )
 				.withConstellation( constellation )
 				.build();
-		final long expected = (long) CONSTELLATION_ID;
+		final long expected = (long) TEST_CONSTELLATION_ID;
 		final long obtained = location.getLocationId();
 		// Assertions
 		Assertions.assertEquals( expected, obtained );
@@ -123,12 +123,12 @@ public class SpaceLocationImplementationTest {
 		// Given
 		final GetUniverseRegionsRegionIdOk region = Mockito.mock( GetUniverseRegionsRegionIdOk.class );
 		// When
-		Mockito.when( region.getRegionId() ).thenReturn( REGION_ID );
+		Mockito.when( region.getRegionId() ).thenReturn( TEST_REGION_ID );
 		// Test
 		final SpaceLocation location = new SpaceLocationImplementation.Builder()
 				.withRegion( region )
 				.build();
-		final long expected = (long) REGION_ID;
+		final long expected = (long) TEST_REGION_ID;
 		final long obtained = location.getLocationId();
 		// Assertions
 		Assertions.assertEquals( expected, obtained );
@@ -144,10 +144,10 @@ public class SpaceLocationImplementationTest {
 		final GetUniverseSystemsSystemIdOk solarSystem = Mockito.mock( GetUniverseSystemsSystemIdOk.class );
 		final GetUniverseStationsStationIdOk station = Mockito.mock( GetUniverseStationsStationIdOk.class );
 		// When
-		Mockito.when( region.getRegionId() ).thenReturn( REGION_ID );
-		Mockito.when( constellation.getConstellationId() ).thenReturn( CONSTELLATION_ID );
-		Mockito.when( solarSystem.getSystemId() ).thenReturn( SOLAR_SYSTEM_ID );
-		Mockito.when( station.getStationId() ).thenReturn( STATION_ID );
+		Mockito.when( region.getRegionId() ).thenReturn( TEST_REGION_ID );
+		Mockito.when( constellation.getConstellationId() ).thenReturn( TEST_CONSTELLATION_ID );
+		Mockito.when( solarSystem.getSystemId() ).thenReturn( TEST_SOLAR_SYSTEM_ID );
+		Mockito.when( station.getStationId() ).thenReturn( TEST_STATION_ID );
 		// Test
 		final SpaceLocation location = new SpaceLocationImplementation.Builder()
 				.withRegion( region )
@@ -155,7 +155,7 @@ public class SpaceLocationImplementationTest {
 				.withSolarSystem( solarSystem )
 				.withStation( station )
 				.build();
-		final long expected = (long) STATION_ID;
+		final long expected = (long) TEST_STATION_ID;
 		final long obtained = location.getLocationId();
 		// Assertions
 		Assertions.assertEquals( expected, obtained );
@@ -170,16 +170,16 @@ public class SpaceLocationImplementationTest {
 				Mockito.mock( GetUniverseConstellationsConstellationIdOk.class );
 		final GetUniverseSystemsSystemIdOk solarSystem = Mockito.mock( GetUniverseSystemsSystemIdOk.class );
 		// When
-		Mockito.when( region.getRegionId() ).thenReturn( REGION_ID );
-		Mockito.when( constellation.getConstellationId() ).thenReturn( CONSTELLATION_ID );
-		Mockito.when( solarSystem.getSystemId() ).thenReturn( SOLAR_SYSTEM_ID );
+		Mockito.when( region.getRegionId() ).thenReturn( TEST_REGION_ID );
+		Mockito.when( constellation.getConstellationId() ).thenReturn( TEST_CONSTELLATION_ID );
+		Mockito.when( solarSystem.getSystemId() ).thenReturn( TEST_SOLAR_SYSTEM_ID );
 		// Test
 		final SpaceLocation location = new SpaceLocationImplementation.Builder()
 				.withRegion( region )
 				.withConstellation( constellation )
 				.withSolarSystem( solarSystem )
 				.build();
-		final long expected = (long) SOLAR_SYSTEM_ID;
+		final long expected = (long) TEST_SOLAR_SYSTEM_ID;
 		final long obtained = location.getLocationId();
 		// Assertions
 		Assertions.assertEquals( expected, obtained );
@@ -195,16 +195,16 @@ public class SpaceLocationImplementationTest {
 		final GetUniverseSystemsSystemIdOk solarSystem = Mockito.mock( GetUniverseSystemsSystemIdOk.class );
 		final GetUniverseStationsStationIdOk station = Mockito.mock( GetUniverseStationsStationIdOk.class );
 		// When
-		Mockito.when( region.getRegionId() ).thenReturn( REGION_ID );
-		Mockito.when( region.getName() ).thenReturn( REGION_NAME );
-		Mockito.when( constellation.getConstellationId() ).thenReturn( CONSTELLATION_ID );
-		Mockito.when( constellation.getName() ).thenReturn( CONSTELLATION_NAME );
-		Mockito.when( solarSystem.getSystemId() ).thenReturn( SOLAR_SYSTEM_ID );
-		Mockito.when( solarSystem.getName() ).thenReturn( SOLAR_SYSTEM_NAME );
-		Mockito.when( solarSystem.getSecurityClass() ).thenReturn( SOLAR_SYSTEM_SECURITY_CLASS );
-		Mockito.when( solarSystem.getSecurityStatus() ).thenReturn( SOLAR_SYSTEM_SECURITY_STATUS );
-		Mockito.when( station.getStationId() ).thenReturn( STATION_ID );
-		Mockito.when( station.getName() ).thenReturn( STATION_NAME );
+		Mockito.when( region.getRegionId() ).thenReturn( TEST_REGION_ID );
+		Mockito.when( region.getName() ).thenReturn( TEST_REGION_NAME );
+		Mockito.when( constellation.getConstellationId() ).thenReturn( TEST_CONSTELLATION_ID );
+		Mockito.when( constellation.getName() ).thenReturn( TEST_CONSTELLATION_NAME );
+		Mockito.when( solarSystem.getSystemId() ).thenReturn( TEST_SOLAR_SYSTEM_ID );
+		Mockito.when( solarSystem.getName() ).thenReturn( TEST_SOLAR_SYSTEM_NAME );
+		Mockito.when( solarSystem.getSecurityClass() ).thenReturn( TEST_SOLAR_SYSTEM_SECURITY_CLASS );
+		Mockito.when( solarSystem.getSecurityStatus() ).thenReturn( TEST_SOLAR_SYSTEM_SECURITY_STATUS );
+		Mockito.when( station.getStationId() ).thenReturn( TEST_STATION_ID );
+		Mockito.when( station.getName() ).thenReturn( TEST_STATION_NAME );
 		// Test
 		final SpaceLocation location = new SpaceLocationImplementation.Builder()
 				.withRegion( region )
@@ -215,15 +215,15 @@ public class SpaceLocationImplementationTest {
 		Assert.assertNotNull( location );
 
 		// Assertions
-		Assertions.assertEquals( REGION_ID, ((SpaceRegion) location).getRegionId() );
-		Assertions.assertEquals( REGION_NAME, ((SpaceRegion) location).getRegionName() );
-		Assertions.assertEquals( CONSTELLATION_ID, ((SpaceConstellation) location).getConstellationId() );
-		Assertions.assertEquals( CONSTELLATION_NAME, ((SpaceConstellation) location).getConstellationName() );
-		Assertions.assertEquals( SOLAR_SYSTEM_ID, ((SpaceSystem) location).getSolarSystemId() );
-		Assertions.assertEquals( SOLAR_SYSTEM_NAME, ((SpaceSystem) location).getSolarSystemName() );
-		Assertions.assertEquals( SOLAR_SYSTEM_SECURITY_CLASS, ((SpaceSystem) location).getSecurityClass() );
-		Assertions.assertEquals( SOLAR_SYSTEM_SECURITY_STATUS, ((SpaceSystem) location).getSecurityStatus() );
-		Assertions.assertEquals( STATION_ID, ((Station) location).getStationId() );
-		Assertions.assertEquals( STATION_NAME, ((Station) location).getStationName() );
+		Assertions.assertEquals( TEST_REGION_ID, ((SpaceRegion) location).getRegionId() );
+		Assertions.assertEquals( TEST_REGION_NAME, ((SpaceRegion) location).getRegionName() );
+		Assertions.assertEquals( TEST_CONSTELLATION_ID, ((SpaceConstellation) location).getConstellationId() );
+		Assertions.assertEquals( TEST_CONSTELLATION_NAME, ((SpaceConstellation) location).getConstellationName() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_ID, ((SpaceSystem) location).getSolarSystemId() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_NAME, ((SpaceSystem) location).getSolarSystemName() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_CLASS, ((SpaceSystem) location).getSecurityClass() );
+		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_STATUS, ((SpaceSystem) location).getSecurityStatus() );
+		Assertions.assertEquals( TEST_STATION_ID, ((Station) location).getStationId() );
+		Assertions.assertEquals( TEST_STATION_NAME, ((Station) location).getStationName() );
 	}
 }
