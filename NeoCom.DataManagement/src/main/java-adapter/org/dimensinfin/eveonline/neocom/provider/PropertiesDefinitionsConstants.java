@@ -19,22 +19,19 @@ public class PropertiesDefinitionsConstants {
 	public static final String UNIVERSE_RETROFIT_SERVER_LOCATION = "P.universe.retrofit.server.location";
 	public static final String UNIVERSE_RETROFIT_SERVER_AGENT = "P.universe.retrofit.server.agent";
 	public static final String UNIVERSE_RETROFIT_SERVER_TIMEOUT = "P.universe.retrofit.server.timeout";
+	public static final String UNIVERSE_RETROFIT_CACHE_STATE = "P.universe.retrofit.cache.state";
 	public static final String UNIVERSE_RETROFIT_CACHE_NAME = "P.universe.retrofit.cache.directory.name";
 	public static final String UNIVERSE_RETROFIT_CACHE_SIZE = "P.universe.retrofit.cache.size.gb";
 	// - E S I   A U T H E N T I C A T E D   A P I
 	public static final String AUTHENTICATED_RETROFIT_SERVER_LOCATION = "P.authenticated.retrofit.server.location";
 	public static final String AUTHENTICATED_RETROFIT_SERVER_AGENT = "P.authenticated.retrofit.server.agent";
 	public static final String AUTHENTICATED_RETROFIT_SERVER_TIMEOUT = "P.authenticated.retrofit.server.timeout";
+	public static final String AUTHENTICATED_RETROFIT_CACHE_STATE = "P.authenticated.retrofit.cache.state";
 	public static final String AUTHENTICATED_RETROFIT_CACHE_NAME = "P.authenticated.retrofit.cache.directory.name";
 	public static final String AUTHENTICATED_RETROFIT_CACHE_SIZE = "P.authenticated.retrofit.cache.size.gb";
 	// - B A C K E N D   A P I
 	public static final String BACKEND_RETROFIT_SERVER_LOCATION = "P.backend.retrofit.server.location";
 	public static final String BACKEND_RETROFIT_CACHE_FILE_NAME = "P.backend.retrofit.cache.directory.name";
-	// - E S I A P I
-//	@Deprecated
-//	public static final String ESI_SWAGGER_API_DATA_SERVER_LOCATION = "P.esi.api.data.server.location"; // Not in use
-//	@Deprecated
-//	public static final String ESI_DATA_SERVER_LOCATION = "P.esi.data.server.location";
 	// - E S I   O A U T H   A U T H O R I Z A T I O N
 	public static final String ESI_OAUTH_AUTHORIZATION_SERVER_NAME = "P.esi.authorization.server";
 	public static final String ESI_OAUTH_AUTHORIZATION_CONTENT_TYPE = "P.esi.authorization.content.type";

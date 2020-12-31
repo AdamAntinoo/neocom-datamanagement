@@ -2,6 +2,8 @@ package org.dimensinfin.eveonline.neocom.support;
 
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 
+import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
+
 public class TestDataConstants {
 	public static class ESIDataServiceConstants {
 		public static final Integer TEST_CHARACTER_IDENTIFIER = 92223647;
@@ -9,6 +11,8 @@ public class TestDataConstants {
 
 	public static class CredentialConstants {
 		public static final Integer TEST_CREDENTIAL_ACCOUNT_ID = 92223647;
+		public static final String TEST_CREDENTIAL_UNIQUE_ID = DEFAULT_ESI_SERVER.toLowerCase() + "." + TEST_CREDENTIAL_ACCOUNT_ID;
+		public static final String TEST_CREDENTIAL_SCOPE = "publicData";
 	}
 
 	public static class RetrofitFactoryConstants {
@@ -58,10 +62,11 @@ public class TestDataConstants {
 		public static final String TEST_CORPORATION_NAME = "Industrias Machaque";
 		public static final Integer TEST_CORPORATION_OWNER_ID = 98384726;
 	}
-	public static class PilotPreferencesConstants{
-		public static final Integer TEST_PILOT_PREFERENCE_PILOT_ID =98384726;
+
+	public static class PilotPreferencesConstants {
+		public static final Integer TEST_PILOT_PREFERENCE_PILOT_ID = 98384726;
 		public static final String TEST_PILOT_PREFERENCE_NAME = "-PREFERENCE-";
 		public static final String TEST_PILOT_PREFERENCE_STRING_VALUE = "Amarr VIII (Oris) - Emperor Family Academy";
-		public static final Double TEST_PILOT_PREFERENCE_NUMERIC_VALUE =87642.5623334;
+		public static final Double TEST_PILOT_PREFERENCE_NUMERIC_VALUE = 87642.5623334;
 	}
 }

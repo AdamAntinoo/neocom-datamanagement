@@ -1,7 +1,6 @@
 package org.dimensinfin.eveonline.neocom.service;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,6 @@ import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.aspects.Loggable;
 
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
-import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
 import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
@@ -46,14 +43,14 @@ public class ESIDataService extends ESIDataProvider {
 	@Inject
 	public ESIDataService( final @NotNull @Named("IConfigurationService") IConfigurationService configurationService,
 	                       final @NotNull @Named("IFileSystem") IFileSystem fileSystem,
-	                       final @NotNull @Named("StoreCacheManager") StoreCacheManager storeCacheManager,
-	                       final @NotNull @Named("RetrofitFactory") RetrofitFactory retrofitFactory ,
-	                       final @NotNull @Named("LocationCatalogService") LocationCatalogService locationCatalogService) {
+			//	                       final @NotNull @Named("StoreCacheManager") StoreCacheManager storeCacheManager,
+			               final @NotNull @Named("RetrofitFactory") RetrofitFactory retrofitFactory/* ,
+	                       final @NotNull @Named("LocationCatalogService") LocationCatalogService locationCatalogService*/ ) {
 		this.configurationProvider = configurationService;
 		this.fileSystemAdapter = fileSystem;
-		this.storeCacheManager = storeCacheManager;
+		//		this.storeCacheManager = storeCacheManager;
 		this.retrofitFactory = retrofitFactory;
-		this.locationCatalogService=locationCatalogService;
+		//		this.locationCatalogService=locationCatalogService;
 	}
 
 	// - I N D U S T R Y
@@ -65,7 +62,7 @@ public class ESIDataService extends ESIDataProvider {
 		LogWrapper.enter();
 		try {
 			final Response<List<GetCharactersCharacterIdIndustryJobs200Ok>> industryJobsResponse = this.retrofitFactory
-					.accessUniverseConnector()
+					.accessAuthenticatedConnector( credential )
 					.create( IndustryApi.class )
 					.getCharactersCharacterIdIndustryJobs(
 							credential.getAccountId(),
@@ -120,12 +117,13 @@ public class ESIDataService extends ESIDataProvider {
 		Long hit = regionMarketHubReferenceTable.get( regionId );
 		if (null == hit) hit = PREDEFINED_MARKET_HUB_STATION_ID;
 		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
-		/*if (location instanceof Station)*/ return (Station) location;
-//		else {
-//			LogWrapper.info( MessageFormat.format(
-//					"Configured region [{0}] market hub identifier does not point to an Station", regionId )
-//			);
-//			return (Station) this.locationCatalogService.searchLocation4Id( PREDEFINED_MARKET_HUB_STATION_ID );
-//		}
+		/*if (location instanceof Station)*/
+		return (Station) location;
+		//		else {
+		//			LogWrapper.info( MessageFormat.format(
+		//					"Configured region [{0}] market hub identifier does not point to an Station", regionId )
+		//			);
+		//			return (Station) this.locationCatalogService.searchLocation4Id( PREDEFINED_MARKET_HUB_STATION_ID );
+		//		}
 	}
 }

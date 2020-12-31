@@ -1,0 +1,37 @@
+version: '3'
+services:
+  postgres-dev:
+    container_name: postgres
+    image: "postgres:11.2"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=neocom
+      - POSTGRES_PASSWORD=01.Alpha
+
+  apisimulator-esioauth:
+    container_name: apisimulator-esioauth
+    image: apimastery/apisimulator
+    ports:
+      - "6090:6090"
+    environment:
+      - APISIMULATOR_JAVA=/java-11
+    volumes:
+      - /usr/lib/jvm/java-11-oracle:/java-11
+#      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/apisimulator-http-1.4:/apisimulator-http
+      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/resources/esioauth-simulation:/esioauth-development
+    command: "bin/apisimulator start /esioauth-development -p 6090"
+
+  apisimulator-esi:
+    container_name: apisimulator-esi
+    image: apimastery/apisimulator
+    ports:
+      - "6091:6090"
+    environment:
+      - APISIMULATOR_JAVA=/java-11
+    volumes:
+      - /usr/lib/jvm/java-11-oracle:/java-11
+#      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/apisimulator-http-1.4:/apisimulator-http
+      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/resources/esi-simulation:/esi-development
+    command: "bin/apisimulator start /esi-development -p 6090"

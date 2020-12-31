@@ -100,6 +100,7 @@ public class Credential extends UpdatableEntity {
 	}
 
 	public String getUniqueCredential() {
+		this.uniqueCredential = Credential.createUniqueIdentifier( this.dataSource, this.accountId );
 		return this.uniqueCredential;
 	}
 
