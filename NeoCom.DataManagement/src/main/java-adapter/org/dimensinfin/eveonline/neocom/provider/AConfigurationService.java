@@ -27,9 +27,53 @@ public abstract class AConfigurationService implements IConfigurationService {
 	protected final Properties configurationProperties = new Properties(); // The list of defined properties
 	protected String configuredPropertiesDirectory = DEFAULT_PROPERTIES_FOLDER; // The place where to search for properties.
 
-	protected String getResourceLocation() {
-		return this.configuredPropertiesDirectory;
+	// - I C O N F I G U R A T I O N P R O V I D E R   I N T E R F A C E
+	public int contentCount() {
+		return this.configurationProperties.size();
 	}
+
+	public boolean getResourceBoolean( final String key ) {
+		final String value = this.getResourceString( key, "false" );
+		if (value.equalsIgnoreCase( "true" )) return true;
+		if (value.equalsIgnoreCase( "on" )) return true;
+		if (value.equalsIgnoreCase( "1" )) return true;
+		return false;
+	}
+
+	public Integer getResourceInteger( final String key ) {
+		final String value = this.configurationProperties.getProperty( key );
+		if (null == value) return 0;
+		else return Integer.valueOf( value );
+	}
+
+	public Integer getResourceInteger( final String key, final Integer defaultValue ) {
+		final String value = this.configurationProperties.getProperty( key );
+		if (null == value) return defaultValue;
+		else return Integer.valueOf( value );
+	}
+
+	public String getResourceString( final String key ) {
+		final String value = this.configurationProperties.getProperty( key );
+		if (null == value) return this.generateMissing( key );
+		else return value;
+	}
+
+	public String getResourceString( final String key, final String defaultValue ) {
+		final String value = this.configurationProperties.getProperty( key, defaultValue );
+		if (null == value) return this.generateMissing( key );
+		else return value;
+	}
+
+	public boolean getResourceBoolean( final String key, final Boolean defaultValue ) {
+		final String value = this.getResourceString( key, defaultValue.toString() );
+		if (value.equalsIgnoreCase( "true" )) return true;
+		if (value.equalsIgnoreCase( "on" )) return true;
+		if (value.equalsIgnoreCase( "1" )) return true;
+		return false;
+	}
+
+	// - P L A T F O R M   S P E C I F I C   S E C T I O N
+	public abstract void readAllProperties();
 
 	/**
 	 * This way to configure the properties directory is not allowed anymore.
@@ -45,47 +89,11 @@ public abstract class AConfigurationService implements IConfigurationService {
 		return this;
 	}
 
-	// - I C O N F I G U R A T I O N P R O V I D E R   I N T E R F A C E
-	public int contentCount() {
-		return this.configurationProperties.size();
-	}
-
-	public String getResourceString( final String key ) {
-		final String value = this.configurationProperties.getProperty( key );
-		if (null == value) return this.generateMissing( key );
-		else return value;
-	}
-
-	public String getResourceString( final String key, final String defaultValue ) {
-		final String value = this.configurationProperties.getProperty( key, defaultValue );
-		if (null == value) return this.generateMissing( key );
-		else return value;
-	}
-
-	public Integer getResourceInteger( final String key ) {
-		final String value = this.configurationProperties.getProperty( key );
-		if (null == value) return 0;
-		else return Integer.valueOf( value );
-	}
-
-	public Integer getResourceInteger( final String key, final Integer defaultValue ) {
-		final String value = this.configurationProperties.getProperty( key );
-		if (null == value) return defaultValue;
-		else return Integer.valueOf( value );
-	}
-
-	public boolean getResourceBoolean( final String key ) {
-		final String value = this.getResourceString( key, "false" );
-		if (value.equalsIgnoreCase( "true" )) return true;
-		if (value.equalsIgnoreCase( "on" )) return true;
-		if (value.equalsIgnoreCase( "1" )) return true;
-		return false;
-	}
-
 	protected abstract List<String> getResourceFiles( String path ) throws IOException;
 
-	// - P L A T F O R M   S P E C I F I C   S E C T I O N
-	public abstract void readAllProperties();
+	protected String getResourceLocation() {
+		return this.configuredPropertiesDirectory;
+	}
 
 	private String generateMissing( final String key ) {
 		return '!' + key + '!';
@@ -95,13 +103,10 @@ public abstract class AConfigurationService implements IConfigurationService {
 	protected abstract static class Builder<T extends AConfigurationService, B extends AConfigurationService.Builder> {
 		protected B actualClassBuilder;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.actualClassBuilder = this.getActualBuilder();
 		}
-
-		protected abstract T getActual();
-
-		protected abstract B getActualBuilder();
 
 		public T build() {
 			Objects.requireNonNull( this.getActual().configuredPropertiesDirectory );
@@ -113,5 +118,9 @@ public abstract class AConfigurationService implements IConfigurationService {
 			if (null != propertiesDirectory) this.getActual().configuredPropertiesDirectory = propertiesDirectory;
 			return this.getActualBuilder();
 		}
+
+		protected abstract T getActual();
+
+		protected abstract B getActualBuilder();
 	}
 }
