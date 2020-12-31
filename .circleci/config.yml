@@ -30,9 +30,8 @@ jobs:
       - checkout
       - run:
           name: DATAMANAGEMENT - Compile the current library code
-          working_directory: NeoCom.DataManagement
           command: |
-            ../gradlew classes
+            ./gradlew classes
 
   test-datamanagement-job:
     docker:
@@ -44,14 +43,22 @@ jobs:
       - checkout
       - run:
           name: BACKEND - Unit Testing application
-          working_directory: NeoCom.DataManagement
-          environment:
-            PORT: 5140
-            JDBC_DATABASE_URL: "jdbc:postgresql://0.0.0.0:5432/postgres"
-            DB_USER: inno-user
-            DB_PASSWORD: inno-password
           command: |
-            ../gradlew test
+            ./gradlew test
+      - run:
+          name: BACKEND - Waiting for simulations start
+          environment:
+            PORT: 5320
+          working_directory: Printer3D-backend
+          command: |
+            dockerize -wait tcp://localhost:${PORT}/universe/races/ -timeout 3m
+      - run:
+          name: BACKEND - Integration Testing application
+          environment:
+            PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
+            APPLICATION_DIRECTORY: "appDirectory"
+          command: |
+            ./gradlew integrationTest
       - store_test_results:
           path: ~/project/NeoCom.DataManagement/build/test-results
       - store_artifacts:  
@@ -67,14 +74,13 @@ jobs:
       - checkout
       - run:
           name: BACKEND - Build the library to be deployed from JitPack
-          working_directory: NeoCom.DataManagement
           environment:
             PORT: 5140
             JDBC_DATABASE_URL: "jdbc:postgresql://0.0.0.0:5432/postgres"
             DB_USER: inno-user
             DB_PASSWORD: inno-password
           command: |
-            ../gradlew build
+            ./gradlew integrationTest build
 
 workflows:
   version: 2

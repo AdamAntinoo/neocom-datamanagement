@@ -12,10 +12,9 @@
 .idea/gradle.xml
 .idea/modules.xml
 .idea/sonarIssues.xml
+.idea/sonarlint-state.xml
 
 # - Build ignorable files
 .gradle
 build/
-NeoCom.DataManagement.Support/out/
-
-.idea/sonarlint-state.xml
+coverage/
