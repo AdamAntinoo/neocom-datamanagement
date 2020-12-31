@@ -35,6 +35,7 @@ repositories {
 // - S O U R C E S
 sourceSets {
     main.java {
+        srcDirs += 'src/main/java'
         srcDirs += 'src/main/java-adapter'
         srcDirs += 'src/main/java-database'
         srcDirs += 'src/main/java-android'
@@ -44,8 +45,18 @@ sourceSets {
         srcDirs += 'src/test/java'
         srcDirs += 'src/test/java-support'
     }
+//    integration.java {
+////        srcDirs += 'src/main/java-adapter'
+////        srcDirs += 'src/main/java-database'
+////        srcDirs += 'src/main/java-android'
+////        srcDirs += 'src/main/java-industry'
+////        srcDirs += 'src/integration/java'
+//    }
 }
-
+// - C O N F I G U R A T I O N S
+//configurations {
+//    integrationImplementation.extendsFrom testImplementation
+//}
 // - D E P E N D E N C I E S
 apply from: './dependencies.gradle'
 // - C O V E R A G E
@@ -65,5 +76,20 @@ sonarqube {
         property "sonar.sourceEncoding","UTF-8"
 
         property "sonar.login", "0aba8345fa52a3a9500132cd200b62eecf55199f"
+    }
+}
+
+task printSourceSetInformation(){
+    doLast{
+        sourceSets.each { srcSet ->
+            println "["+srcSet.name+"]"
+            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
+            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
+            print "-->Compile classpath:\n"
+            srcSet.compileClasspath.files.each {
+                print "  "+it.path+"\n"
+            }
+            println ""
+        }
     }
 }

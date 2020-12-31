@@ -1,6 +1,6 @@
 // - P R O D U C T   V E R S I O N S
 ext {
-    slf4jVersion='1.7.30'
+    slf4jVersion = '1.7.30'
     jacksonVersion = '2.9.4'
     ormliteVersion = '4.48'
     retrofitVersion = '2.3.0'
@@ -16,7 +16,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'com.annimon:stream:1.1.9' // Android compatible streams
     runtimeOnly 'org.aspectj:aspectjrt:1.6.12'
-    implementation  'com.google.inject:guice:4.2.3' // Google injection library compatible with Android
+    implementation 'com.google.inject:guice:4.2.3' // Google injection library compatible with Android
 }
 
 // - D I M E N S I N F I N
@@ -87,4 +87,18 @@ dependencies {
 }
 test {
     useJUnitPlatform()
+//    filter {
+//        includeTestsMatching "org.dimensinfin.eveonline.neocom.*"
+//    }
+}
+
+// - I N T E G R A T I O N   T E S T I N G
+dependencies {
+    // C O R E
+//    integrationImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+//    integrationImplementation 'org.mockito:mockito-core:2.23.4'
+    // N E O C O M
+//    integrationImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
+
+//    integrationImplementation project(':NeoCom.DataManagement')
 }

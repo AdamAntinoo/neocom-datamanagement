@@ -44,14 +44,14 @@ public class ESIDataService extends ESIDataProvider {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public ESIDataService( final @NotNull @Named("IConfigurationService") IConfigurationService configurationService,
+	public ESIDataService( /*final @NotNull @Named("IConfigurationService") IConfigurationService configurationService,
 	                       final @NotNull @Named("IFileSystem") IFileSystem fileSystem,
-	                       final @NotNull @Named("StoreCacheManager") StoreCacheManager storeCacheManager,
+	                       final @NotNull @Named("StoreCacheManager") StoreCacheManager storeCacheManager,*/
 	                       final @NotNull @Named("RetrofitFactory") RetrofitFactory retrofitFactory ,
 	                       final @NotNull @Named("LocationCatalogService") LocationCatalogService locationCatalogService) {
-		this.configurationProvider = configurationService;
-		this.fileSystemAdapter = fileSystem;
-		this.storeCacheManager = storeCacheManager;
+//		this.configurationProvider = configurationService;
+//		this.fileSystemAdapter = fileSystem;
+//		this.storeCacheManager = storeCacheManager;
 		this.retrofitFactory = retrofitFactory;
 		this.locationCatalogService=locationCatalogService;
 	}

@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="NeoCom.DataManagement Integration" type="JUnit" factoryName="JUnit">
+    <module name="NeoCom-DataManagement.NeoCom.DataManagement.test" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="directory" />
+    <envs>
+      <env name="PROPERTIES_DIRECTORY" value="./properties-integration" />
+      <env name="APPLICATION_DIRECTORY" value="./NeoCom.Integration" />
+    </envs>
+    <dir value="$PROJECT_DIR$/NeoCom.DataManagement/src/test/java/org/dimensinfin/eveonline/neocom/integration" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
