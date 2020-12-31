@@ -5,7 +5,7 @@ ext {
     ormliteVersion = '4.48'
     retrofitVersion = '2.3.0'
     cacheVersion = '3.1.1'
-    jodaTimeversion = '2.10.5'
+    jodaTimeVersion = '2.10.5'
 }
 
 // - C O R E
@@ -65,7 +65,7 @@ dependencies {
 dependencies {
     // C O R E
     testImplementation 'org.slf4j:slf4j-simple:1.7.26'
-    testImplementation "joda-time:joda-time:$jodaTimeversion"
+    testImplementation "joda-time:joda-time:$jodaTimeVersion"
     testImplementation 'junit:junit:4.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     testImplementation 'org.junit.vintage:junit-vintage-engine:5.4.2'
