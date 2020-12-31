@@ -1,0 +1,56 @@
+[
+  {
+    "is_singleton": true,
+    "item_id": 1032555195108,
+    "location_flag": "OfficeFolder",
+    "location_id": 60008914,
+    "location_type": "station",
+    "quantity": 1,
+    "type_id": 27
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1030723122040,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 100,
+    "type_id": 44265
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896858,
+    "location_flag": "HiSlot0",
+    "location_id": 1024922896856,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3636
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896856,
+    "location_flag": "CorpSAG3",
+    "location_id": 1027777234727,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 588
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1027777234727,
+    "location_flag": "Impounded",
+    "location_id": 60006526,
+    "location_type": "station",
+    "quantity": 1,
+    "type_id": 27
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896860,
+    "location_flag": "MedSlot0",
+    "location_id": 1024922896856,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 21857
+  }
+]

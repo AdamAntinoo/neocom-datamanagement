@@ -1,0 +1,748 @@
+simlet: market-prices
+
+request:
+  - method: GET
+  - uriPath: /markets/prices/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/markets.prices.json"
+
+---
+
+simlet: universe-races
+
+request:
+  - method: GET
+  - uriPath: /universe/races/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/universe.races.json"
+
+---
+
+simlet: universe-ancestries
+
+request:
+  - method: GET
+  - uriPath: /universe/ancestries/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/universe.ancestries.json"
+
+---
+
+simlet: universe-bloodlines
+
+request:
+  - method: GET
+  - uriPath: /universe/bloodlines/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/universe.bloodlines.json"
+
+---
+
+simlet: universe-groups-10
+
+request:
+  - method: GET
+  - uriPath: /universe/groups/10/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "category_id": 2,
+      "group_id": 10,
+      "name": "Stargate",
+      "published": false,
+      "types": [
+        16,
+        17,
+        3873,
+        3874,
+        3875,
+        3876,
+        3877,
+        12292,
+        29624,
+        29625,
+        29626,
+        29627,
+        29628,
+        29629,
+        29630,
+        29631,
+        29632,
+        29633,
+        29634,
+        29635
+      ]
+    }
+
+---
+
+simlet: universe-categories-20
+
+request:
+  - method: GET
+  - uriPath: /universe/categories/20/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "category_id": 20,
+      "groups": [
+        300,
+        303,
+        304,
+        721,
+        738,
+        739,
+        740,
+        741,
+        742,
+        743,
+        744,
+        745,
+        746,
+        747,
+        748,
+        749,
+        750,
+        751,
+        783,
+        1228,
+        1229,
+        1230,
+        1231,
+        1730
+      ],
+      "name": "Implant",
+      "published": true
+    }
+
+---
+
+simlet: universe-types-34
+
+request:
+  - method: GET
+  - uriPath: /universe/types/34/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "capacity": 0,
+      "description": "The main building block in space structures. A very hard, yet bendable metal. Cannot be used in human habitats due to its instability at atmospheric temperatures. Very common throughout the universe.\r\n\r\nMay be obtained by reprocessing the following ores:\r\n\r\n<color='0xFFFF0000'>0.0</color> security status solar system or lower:\r\n<a href=showinfo:22>Arkonor</a>, <a href=showinfo:17425>Crimson Arkonor</a>, <a href=showinfo:17426>Prime Arkonor</a>\r\n<a href=showinfo:1225>Crokite</a>, <a href=showinfo:17432>Sharp Crokite</a>, <a href=showinfo:17433>Crystalline Crokite</a>\r\n<a href=showinfo:1232>Dark Ochre</a>, <a href=showinfo:17436>Onyx Ochre</a>, <a href=showinfo:17437>Obsidian Ochre</a>\r\n<a href=showinfo:19>Spodumain</a>, <a href=showinfo:17466>Bright Spodumain</a>, <a href=showinfo:17467>Gleaming Spodumain</a>\r\n\r\n<color='0xFFFF4D00'>0.2</color> security status solar system or lower:\r\n<a href=showinfo:1231>Hemorphite</a>, <a href=showinfo:17444>Vivid Hemorphite</a>, <a href=showinfo:17445>Radiant Hemorphite</a>\r\n\r\n<color='0xFF00FF00'>0.7</color> security status solar system or lower:\r\n<a href=showinfo:20>Kernite</a>, <a href=showinfo:17452>Luminous Kernite</a>, <a href=showinfo:17453>Fiery Kernite</a>\r\n<a href=showinfo:1227>Omber</a>, <a href=showinfo:17867>Silvery Omber</a>, <a href=showinfo:17868>Golden Omber</a>\r\n\r\n<color='0xFF4DFFCC'>0.9</color> security status solar system or lower:\r\n<a href=showinfo:18>Plagioclase</a>, <a href=showinfo:17455>Azure Plagioclase</a>, <a href=showinfo:17456>Rich Plagioclase</a>\r\n<a href=showinfo:1224>Pyroxeres</a>, <a href=showinfo:17459>Solid Pyroxeres</a>, <a href=showinfo:17460>Viscous Pyroxeres</a>\r\n\r\n<color='0xFF33FFFF'>1.0</color> security status solar system or lower:\r\n<a href=showinfo:1228>Scordite</a>, <a href=showinfo:17463>Condensed Scordite</a>, <a href=showinfo:17464>Massive Scordite</a>\r\n<a href=showinfo:1230>Veldspar</a>, <a href=showinfo:17470>Concentrated Veldspar</a>, <a href=showinfo:17471>Dense Veldspar</a>",
+      "group_id": 18,
+      "icon_id": 22,
+      "market_group_id": 1857,
+      "mass": 0,
+      "name": "Tritanium",
+      "packaged_volume": 0.01,
+      "portion_size": 1,
+      "published": true,
+      "radius": 1,
+      "type_id": 34,
+      "volume": 0.01
+    }
+
+---
+
+simlet: universe-schematics
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/schematics/{schematic_id}/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "cycle_time": 1800,
+      "schematic_name": "Precious Metals"
+    }
+
+---
+
+simlet: universe-structure
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/structures/{structure_id}/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/universe.structure.json"
+
+---
+
+simlet: status
+
+request:
+  - method: GET
+  - uriPath: /status/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "players": 25003,
+      "server_version": "1589237",
+      "start_time": "2019-10-22T11:04:50Z"
+    }
+
+---
+
+simlet: character-publicdata
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{character_id}/"
+
+response:
+  from: stub
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "ancestry_id": 22,
+      "birthday": "2012-07-05T21:53:15Z",
+      "bloodline_id": 4,
+      "corporation_id": 98384726,
+      "description": "",
+      "gender": "female",
+      "name": "Beth Ripley",
+      "race_id": 2,
+      "security_status": 0
+    }
+
+---
+
+simlet: character-assets-page1
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/assets/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.assets.page1.json"
+
+---
+
+simlet: character-assets-page2
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/assets/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 2
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    []
+
+---
+
+simlet: character-blueprints-page1
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/blueprints/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.blueprints.page1.json"
+
+---
+
+simlet: character-blueprints-page2
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/blueprints/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 2
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    []
+
+---
+
+simlet: character-mining-extractions-page1
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/92223647/mining/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.miningextractions.page1.json"
+
+---
+
+simlet: character-planets
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/planets/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.planets.json"
+
+---
+
+simlet: character-fittings
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/fittings/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.fittings.json"
+
+---
+simlet: character-fittings
+
+request:
+  - method: GET
+  - uriPathPattern: "/api/v2/neocom/pilots/93813310/fittings"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.fittings.json"
+
+---
+
+simlet: character-wallet
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{character_id}/wallet/"
+
+response:
+  from: stub
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: "2765866375.96"
+
+---
+
+simlet: alliances-silent-infinity
+
+request:
+  - method: GET
+  - uriPathPattern: "/alliances/{alliance_id}/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/alliances.json"
+
+---
+
+simlet: character-planet-data
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{character_id}/planets/{planet_id}/"
+
+response:
+  from: stub
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/character.planet.data.json"
+
+---
+
+simlet: corporation-asset-names
+
+request:
+  - method: POST
+  - uriPathPattern: "/corporations/{corporation_id}/assets/names/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/corporation.assets.names.json"
+
+---
+
+simlet: corporation-divisions
+
+request:
+  - method: GET
+  - uriPathPattern: "/corporations/{corporation_id}/divisions/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/corporation.divisions.json"
+
+---
+
+simlet: corporation-assets-page1-98384726
+
+request:
+  - method: GET
+  - uriPathPattern: /corporations/98384726/assets/
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/corporation.assets.page1.json"
+
+---
+
+simlet: corporation-assets-page1-98300000
+
+request:
+  - method: GET
+  - uriPathPattern: /corporations/98300000/assets/
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/corporation.assets.minimal.page1.json"
+
+---
+
+simlet: corporation-assets-page1-98310000
+
+request:
+  - method: GET
+  - uriPathPattern: /corporations/98310000/assets/
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/corporation.assets.deep.page1.json"
+
+---
+
+simlet: corporation-assets-page2
+
+request:
+  - method: GET
+  - uriPathPattern: "/corporations/{corporationId}/assets/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 2
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    []
+
+---
+
+simlet: corporations-machaque
+
+request:
+  - method: GET
+  - uriPathPattern: "/corporations/{corporation_id}/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/corporations.machaque.json"
+
+---
+
+simlet: character-ripley
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{character_id}/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.ripley.json"
+
+---
+
+simlet: character-mining-extractions-today-page1
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/93813310/mining/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.miningextractions.today.page1.json"
+
+---
+
+simlet: character-mining-extractions-any-page1
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{ownerId}/mining/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.miningextractions.today.page1.json"
+
+---
+
+simlet: character-mining-extractions-page2
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/mining/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 2
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    []
+
+---
+
+simlet: market-domain-11535-page1
+
+request:
+  - method: GET
+  - uriPathPattern: "/markets/10000043/orders/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+  - where: uriQueryParameter
+    named: "type_id"
+    equals: 11535
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "access-control-allow-credentials: true
+        access-control-allow-headers: Content-Type,Authorization,If-None-Match,X-User-Agent
+        access-control-allow-methods: GET,HEAD,OPTIONS
+        access-control-allow-origin: *
+        access-control-expose-headers: Content-Type,Warning,ETag,X-Pages,X-ESI-Error-Limit-Remain,X-ESI-Error-Limit-Reset
+        access-control-max-age: 600
+        allow: GET,HEAD,OPTIONS
+        cache-control: public
+        content-encoding: gzip
+        content-length: 736
+        content-type: application/json; charset=UTF-8
+        date: Tue, 22 Dec 2020 13:12:35 GMT
+        etag: \"51f30fc34ba95c0477b5d9ef01afe9eff477ef7636ae077ee9462ca7\"
+        expires: Tue, 22 Dec 2020 13:17:35 GMT
+        last-modified: Tue, 22 Dec 2020 13:12:35 GMT
+        strict-transport-security: max-age=31536000
+        vary: Accept-Encoding
+        x-esi-error-limit-remain: 100
+        x-esi-error-limit-reset: 25
+        x-esi-request-id: 7c2098f2-3b19-46ae-b0eb-7cfd520e1099
+        x-pages: 1 "
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/market.domain.11535.json"
+
+---
+
+simlet: market-domain-11535-page2
+
+request:
+  - method: GET
+  - uriPathPattern: "/markets/10000043/orders/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 2
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    []
+
+---
+
+simlet: character-92223647-industry-jobs
+
+request:
+  - method: GET
+  - uriPathPattern: "/characters/{characterId}/industry/jobs/"
+
+response:
+  from: stub
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/characters.92223647.industry.jobs.json"

@@ -1,0 +1,719 @@
+[
+  {
+    "description": "",
+    "fitting_id": 60320161,
+    "items": [
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 2048
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 5245
+      },
+      {
+        "flag": "HiSlot1",
+        "quantity": 1,
+        "type_id": 5245
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 8517
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 8517
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 10872
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31358
+      }
+    ],
+    "name": "VM Clearer A1",
+    "ship_type_id": 32880
+  },
+  {
+    "description": "",
+    "fitting_id": 44745698,
+    "items": [
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "LoSlot4",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 5973
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 8433
+      },
+      {
+        "flag": "MedSlot3",
+        "quantity": 1,
+        "type_id": 8433
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 9622
+      },
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 10998
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31754
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31790
+      },
+      {
+        "flag": "RigSlot2",
+        "quantity": 1,
+        "type_id": 31790
+      }
+    ],
+    "name": "MI Elef LS1.0",
+    "ship_type_id": 652
+  },
+  {
+    "description": "",
+    "fitting_id": 28101733,
+    "items": [
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 2048
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 2281
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 2553
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 3178
+      },
+      {
+        "flag": "HiSlot1",
+        "quantity": 1,
+        "type_id": 3178
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 3841
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 5561
+      },
+      {
+        "flag": "LoSlot4",
+        "quantity": 1,
+        "type_id": 5561
+      },
+      {
+        "flag": "LoSlot5",
+        "quantity": 1,
+        "type_id": 11229
+      },
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 11269
+      },
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 11317
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31059
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31059
+      }
+    ],
+    "name": "Occator AntiGanking",
+    "ship_type_id": 12745
+  },
+  {
+    "description": "",
+    "fitting_id": 28101737,
+    "items": [
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 2048
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 2281
+      },
+      {
+        "flag": "DroneBay",
+        "quantity": 6,
+        "type_id": 2456
+      },
+      {
+        "flag": "MedSlot4",
+        "quantity": 1,
+        "type_id": 2539
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 2553
+      },
+      {
+        "flag": "HiSlot1",
+        "quantity": 1,
+        "type_id": 3178
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 3831
+      },
+      {
+        "flag": "MedSlot3",
+        "quantity": 1,
+        "type_id": 3831
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 5561
+      },
+      {
+        "flag": "LoSlot4",
+        "quantity": 1,
+        "type_id": 5561
+      },
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 16311
+      },
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 16407
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 23527
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31119
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31119
+      },
+      {
+        "flag": "RigSlot2",
+        "quantity": 1,
+        "type_id": 31119
+      }
+    ],
+    "name": "Nereus AntiGanking",
+    "ship_type_id": 650
+  },
+  {
+    "description": "",
+    "fitting_id": 35947306,
+    "items": [
+      {
+        "flag": "MedSlot3",
+        "quantity": 1,
+        "type_id": 2539
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 2553
+      },
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 2605
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 2605
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 3831
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 5975
+      },
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 10998
+      },
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 10998
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 11577
+      },
+      {
+        "flag": "RigSlot2",
+        "quantity": 1,
+        "type_id": 31155
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31179
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31360
+      }
+    ],
+    "name": "EI Oruga N2",
+    "ship_type_id": 655
+  },
+  {
+    "description": "",
+    "fitting_id": 35947314,
+    "items": [
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "MedSlot3",
+        "quantity": 1,
+        "type_id": 2539
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 2553
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 3831
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 3841
+      },
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 10998
+      },
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 10998
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 11370
+      },
+      {
+        "flag": "RigSlot2",
+        "quantity": 1,
+        "type_id": 31155
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31179
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31360
+      }
+    ],
+    "name": "EI Oruga E2",
+    "ship_type_id": 655
+  },
+  {
+    "description": "",
+    "fitting_id": 44745364,
+    "items": [
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "LoSlot4",
+        "quantity": 1,
+        "type_id": 1319
+      },
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 5839
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 8433
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 8433
+      },
+      {
+        "flag": "MedSlot3",
+        "quantity": 1,
+        "type_id": 9622
+      },
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 10998
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31790
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31790
+      },
+      {
+        "flag": "RigSlot2",
+        "quantity": 1,
+        "type_id": 31790
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 35656
+      }
+    ],
+    "name": "IIS Magno E1",
+    "ship_type_id": 657
+  },
+  {
+    "description": "",
+    "fitting_id": 49342522,
+    "items": [
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "LoSlot4",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "LoSlot5",
+        "quantity": 1,
+        "type_id": 1335
+      },
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 2048
+      },
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 10872
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 11370
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 33894
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 33894
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 33915
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 35656
+      }
+    ],
+    "name": "ODST Odin B2",
+    "ship_type_id": 12745
+  },
+  {
+    "description": "",
+    "fitting_id": 46753535,
+    "items": [
+      {
+        "flag": "MedSlot2",
+        "quantity": 1,
+        "type_id": 1978
+      },
+      {
+        "flag": "MedSlot3",
+        "quantity": 1,
+        "type_id": 1978
+      },
+      {
+        "flag": "LoSlot6",
+        "quantity": 1,
+        "type_id": 2364
+      },
+      {
+        "flag": "HiSlot0",
+        "quantity": 1,
+        "type_id": 3025
+      },
+      {
+        "flag": "HiSlot1",
+        "quantity": 1,
+        "type_id": 3025
+      },
+      {
+        "flag": "HiSlot2",
+        "quantity": 1,
+        "type_id": 3025
+      },
+      {
+        "flag": "HiSlot3",
+        "quantity": 1,
+        "type_id": 3025
+      },
+      {
+        "flag": "HiSlot4",
+        "quantity": 1,
+        "type_id": 3025
+      },
+      {
+        "flag": "MedSlot1",
+        "quantity": 1,
+        "type_id": 5302
+      },
+      {
+        "flag": "LoSlot3",
+        "quantity": 1,
+        "type_id": 11269
+      },
+      {
+        "flag": "LoSlot0",
+        "quantity": 1,
+        "type_id": 11648
+      },
+      {
+        "flag": "LoSlot1",
+        "quantity": 1,
+        "type_id": 11648
+      },
+      {
+        "flag": "MedSlot0",
+        "quantity": 1,
+        "type_id": 12058
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 5,
+        "type_id": 12822
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 5,
+        "type_id": 12826
+      },
+      {
+        "flag": "LoSlot4",
+        "quantity": 1,
+        "type_id": 13970
+      },
+      {
+        "flag": "LoSlot5",
+        "quantity": 1,
+        "type_id": 13978
+      },
+      {
+        "flag": "LoSlot2",
+        "quantity": 1,
+        "type_id": 20353
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 5,
+        "type_id": 23089
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 5,
+        "type_id": 23095
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 10,
+        "type_id": 23097
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 2,
+        "type_id": 28999
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 2,
+        "type_id": 29001
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 1,
+        "type_id": 29013
+      },
+      {
+        "flag": "Cargo",
+        "quantity": 1,
+        "type_id": 29015
+      },
+      {
+        "flag": "SubSystemSlot1",
+        "quantity": 1,
+        "type_id": 29966
+      },
+      {
+        "flag": "SubSystemSlot0",
+        "quantity": 1,
+        "type_id": 30040
+      },
+      {
+        "flag": "Invalid",
+        "quantity": 1,
+        "type_id": 30078
+      },
+      {
+        "flag": "SubSystemSlot3",
+        "quantity": 1,
+        "type_id": 30119
+      },
+      {
+        "flag": "SubSystemSlot2",
+        "quantity": 1,
+        "type_id": 30173
+      },
+      {
+        "flag": "RigSlot1",
+        "quantity": 1,
+        "type_id": 31059
+      },
+      {
+        "flag": "RigSlot2",
+        "quantity": 1,
+        "type_id": 31059
+      },
+      {
+        "flag": "RigSlot0",
+        "quantity": 1,
+        "type_id": 31360
+      }
+    ],
+    "name": "LSC AAB Pierna 1.0",
+    "ship_type_id": 29986
+  }
+]

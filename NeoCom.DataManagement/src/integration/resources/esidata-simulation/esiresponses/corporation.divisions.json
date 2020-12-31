@@ -1,0 +1,61 @@
+{
+  "hangar": [
+    {
+      "division": 1,
+      "name": "Planetary"
+    },
+    {
+      "division": 2,
+      "name": "Industry"
+    },
+    {
+      "division": 3,
+      "name": "3rd Division"
+    },
+    {
+      "division": 4,
+      "name": "4th Division"
+    },
+    {
+      "division": 5,
+      "name": "5th Division"
+    },
+    {
+      "division": 6,
+      "name": "6th Division"
+    },
+    {
+      "division": 7,
+      "name": "7th Division"
+    }
+  ],
+  "wallet": [
+    {
+      "division": 1
+    },
+    {
+      "division": 2,
+      "name": "Planetary"
+    },
+    {
+      "division": 3,
+      "name": "Alt trading"
+    },
+    {
+      "division": 4,
+      "name": "4th Wallet Division"
+    },
+    {
+      "division": 5,
+      "name": "5th Wallet Division"
+    },
+    {
+      "division": 6,
+      "name": "6th Wallet Division"
+    },
+    {
+      "division": 7,
+      "name": "7th Wallet Division"
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+[
+  {
+    "is_singleton": true,
+    "item_id": 1018233258421,
+    "location_flag": "LoSlot0",
+    "location_id": 1018641164687,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 10998
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1032555374416,
+    "location_flag": "AutoFit",
+    "location_id": 1032555372158,
+    "location_type": "other",
+    "quantity": 1200,
+    "type_id": 17470
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896858,
+    "location_flag": "HiSlot0",
+    "location_id": 1024922896856,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3636
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1019261169419,
+    "location_flag": "CorpSAG2",
+    "location_id": 1027777234727,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 34
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1030723122040,
+    "location_flag": "AutoFit",
+    "location_id": 1032555513198,
+    "location_type": "other",
+    "quantity": 100,
+    "type_id": 44265
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1027777234727,
+    "location_flag": "Impounded",
+    "location_id": 60006526,
+    "location_type": "station",
+    "quantity": 1,
+    "type_id": 27
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1032555195108,
+    "location_flag": "OfficeFolder",
+    "location_id": 60008914,
+    "location_type": "station",
+    "quantity": 1,
+    "type_id": 27
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1018233251880,
+    "location_flag": "MedSlot0",
+    "location_id": 1018641164687,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 5971
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1018233258755,
+    "location_flag": "LoSlot1",
+    "location_id": 1018641164687,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 10998
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1032555372930,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3467
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1018739644223,
+    "location_flag": "HiSlot0",
+    "location_id": 1018641164687,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3634
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1018641164687,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 596
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1032555374814,
+    "location_flag": "AutoFit",
+    "location_id": 1032555370327,
+    "location_type": "other",
+    "quantity": 1200,
+    "type_id": 17470
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1032555373985,
+    "location_flag": "AutoFit",
+    "location_id": 1032555372930,
+    "location_type": "other",
+    "quantity": 1200,
+    "type_id": 17470
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896860,
+    "location_flag": "MedSlot0",
+    "location_id": 1024922896856,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 21857
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1032555513198,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3467
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1018233252138,
+    "location_flag": "MedSlot1",
+    "location_id": 1018641164687,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 8427
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1032555370327,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3467
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896859,
+    "location_flag": "HiSlot1",
+    "location_id": 1024922896856,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3651
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1032555372158,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3467
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1024922896856,
+    "location_flag": "CorpSAG3",
+    "location_id": 1027777234727,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 588
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1032555516783,
+    "location_flag": "AutoFit",
+    "location_id": 1032555338059,
+    "location_type": "other",
+    "quantity": 400,
+    "type_id": 17460
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1032555517648,
+    "location_flag": "AutoFit",
+    "location_id": 1032555513198,
+    "location_type": "other",
+    "quantity": 353,
+    "type_id": 17459
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1030723122045,
+    "location_flag": "AutoFit",
+    "location_id": 1032555513198,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 52290
+  },
+  {
+    "is_singleton": true,
+    "item_id": 1032555338059,
+    "location_flag": "CorpSAG2",
+    "location_id": 1032555195108,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 3467
+  },
+  {
+    "is_singleton": false,
+    "item_id": 1024922896864,
+    "location_flag": "Cargo",
+    "location_id": 1024922896856,
+    "location_type": "other",
+    "quantity": 1,
+    "type_id": 34
+  }
+]
