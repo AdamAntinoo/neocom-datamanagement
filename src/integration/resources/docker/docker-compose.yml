@@ -1,37 +1,33 @@
-version: '3'
+# TESTING - Docker Composer components
+# PROJECT CODE - 53
+#
+# Docker composer automatically creates a network. The container host matches the container name.
+#
+# This is the integration set of services so there is no application server, just the mock services.configs:
+#
+# SERVICES:
+# The dockers created by this file are the next services:
+# 5310 - [apisimulator-esi-oauth] esi-oauth api simulator service
+# 5320 - [apisimulator-esi-data] esi eve online data server api simulator service
+
+version: '3.8'
 services:
-  postgres-dev:
-    container_name: postgres
-    image: "postgres:11.2"
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=neocom
-      - POSTGRES_PASSWORD=01.Alpha
-
-  apisimulator-esioauth:
-    container_name: apisimulator-esioauth
+  apisimulator-esi-oauth:
+    container_name: apisimulator-esi-oauth
     image: apimastery/apisimulator
     ports:
-      - "6090:6090"
-    environment:
-      - APISIMULATOR_JAVA=/java-11
+      - "5310:6090"
     volumes:
-      - /usr/lib/jvm/java-11-oracle:/java-11
-#      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/apisimulator-http-1.4:/apisimulator-http
-      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/resources/esioauth-simulation:/esioauth-development
-    command: "bin/apisimulator start /esioauth-development -p 6090"
+      # WARNING - Use full absolute paths to make this work.
+      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esioauth-simulation:/esioauth-simulation
+    command: "bin/apisimulator start /esioauth-simulation -p 6090"
 
-  apisimulator-esi:
-    container_name: apisimulator-esi
+  apisimulator-esi-data:
+    container_name: apisimulator-esi-data
     image: apimastery/apisimulator
     ports:
-      - "6091:6090"
-    environment:
-      - APISIMULATOR_JAVA=/java-11
+      - "5320:6090"
     volumes:
-      - /usr/lib/jvm/java-11-oracle:/java-11
-#      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/apisimulator-http-1.4:/apisimulator-http
-      - /home/adam/Development/NeoCom/neocom-infinity-backend/backend.App/src/test/resources/esi-simulation:/esi-development
-    command: "bin/apisimulator start /esi-development -p 6090"
+      # WARNING - Use full absolute paths to make this work.
+      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esidata-simulation:/esidata-simulation
+    command: "bin/apisimulator start /esidata-simulation -p 6090"

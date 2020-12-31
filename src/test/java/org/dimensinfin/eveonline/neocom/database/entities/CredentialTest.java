@@ -113,7 +113,7 @@ public class CredentialTest {
 		credential.setJwtToken("-JWT-TOKEN-");
 		Assertions.assertEquals( "-JWT-TOKEN-" ,credential.getJwtToken());
 		credential.setUniqueCredential("-UNIQUE-CREDENTIAL-");
-		Assertions.assertEquals( "-UNIQUE-CREDENTIAL-" ,credential.getUniqueCredential());
+		Assertions.assertEquals( "tranquility.123456" ,credential.getUniqueCredential());
 	}
 
 	@Test

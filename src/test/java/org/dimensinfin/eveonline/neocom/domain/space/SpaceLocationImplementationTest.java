@@ -93,7 +93,7 @@ public class SpaceLocationImplementationTest {
 		Assertions.assertEquals( TEST_SOLAR_SYSTEM_NAME, ((SpaceSystem) location).getSolarSystemName() );
 		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_CLASS, ((SpaceSystem) location).getSecurityClass() );
 		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_STATUS, ((SpaceSystem) location).getSecurityStatus() );
-		Assertions.assertEquals( TEST_STATION_ID, ((Station) location).getStationId() );
+		Assertions.assertEquals( TEST_STATION_ID, ((Station) location).getStationId().intValue() );
 		Assertions.assertEquals( TEST_STATION_NAME, ((Station) location).getStationName() );
 	}
 
@@ -223,7 +223,7 @@ public class SpaceLocationImplementationTest {
 		Assertions.assertEquals( TEST_SOLAR_SYSTEM_NAME, ((SpaceSystem) location).getSolarSystemName() );
 		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_CLASS, ((SpaceSystem) location).getSecurityClass() );
 		Assertions.assertEquals( TEST_SOLAR_SYSTEM_SECURITY_STATUS, ((SpaceSystem) location).getSecurityStatus() );
-		Assertions.assertEquals( TEST_STATION_ID, ((Station) location).getStationId() );
+		Assertions.assertEquals( TEST_STATION_ID, ((Station) location).getStationId().intValue() );
 		Assertions.assertEquals( TEST_STATION_NAME, ((Station) location).getStationName() );
 	}
 }
