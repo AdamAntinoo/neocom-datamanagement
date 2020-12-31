@@ -1,6 +1,6 @@
 .print ">>> Create Regions data..."
 .read mapRegions.sql
-.print ">>> Create Contellations data..."
+.print ">>> Create Constellations data..."
 .read mapConstellations.sql
 .print ">>> Create Solar Systems data..."
 .read mapSolarSystems.sql
@@ -14,5 +14,9 @@
 .read createVersionTable.sql
 .read setVersion.sql
 .print ">>> Create Inventory types data..."
-.read invTypes.sql
+.mode csv
+.import invTypes.csv invTypes
+.print ">>> Create Industry Materials Production List..."
+.mode csv
+.import industryActivityMaterials.csv industryActivityMaterials
 .exit

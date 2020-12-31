@@ -21,6 +21,7 @@ jobs:
       - checkout
       - run:
           command: |
+            wait 5
             ./gradlew --version
 
   compile-datamanagement-job:
@@ -64,7 +65,10 @@ jobs:
           environment:
             PORT: 5320
           command: |
-            dockerize -wait tcp://localhost:${PORT}/universe/races/ -timeout 3m
+            wait 5
+            netstat -na | grep LISTEN
+            wait 5
+#            dockerize -wait tcp://localhost:${PORT}/universe/races/ -timeout 3m
       - run:
           name: BACKEND - Integration Testing application
           environment:
@@ -92,6 +96,7 @@ jobs:
             JDBC_DATABASE_URL: "jdbc:postgresql://0.0.0.0:5432/postgres"
             DB_USER: inno-user
             DB_PASSWORD: inno-password
+            SONAR_TOKEN: 4d2d1c6898c0815bf4862283c8179c8c5bb46724
           command: |
             ./gradlew integrationTest build
 

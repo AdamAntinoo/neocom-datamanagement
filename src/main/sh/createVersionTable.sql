@@ -5,6 +5,6 @@
 
 DROP TABLE IF EXISTS `version`;
 CREATE TABLE `version` (
-    `id` varchar(16),
-    `versionNumber` integer NOT NULL
+    `id` varchar(16) NOT NULL,
+    `versionNumber` varchar(16) NOT NULL
 );

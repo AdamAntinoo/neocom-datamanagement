@@ -85,8 +85,7 @@ sonarqube {
         property "sonar.projectVersion", project.version
         property "sonar.projectDescription", project.description
         property "sonar.sourceEncoding", "UTF-8"
-
-        property "sonar.login", "0aba8345fa52a3a9500132cd200b62eecf55199f"
+        property "sonar.login", "4d2d1c6898c0815bf4862283c8179c8c5bb46724"
     }
 }
 
