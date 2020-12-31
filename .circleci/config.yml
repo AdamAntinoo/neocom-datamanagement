@@ -46,10 +46,23 @@ jobs:
           command: |
             ./gradlew test
       - run:
+          name: BACKEND - Starting api simulation for ESI Authentication
+          environment:
+            PORT: 5310
+          command: |
+            ./support-service.sh start "/esioauth-simulation" 5310
+          background: true
+      - run:
+          name: BACKEND - Starting api simulation for ESI Data Service
+          environment:
+            PORT: 5320
+          command: |
+            ./support-service.sh start "/esidata-simulation" 5320
+          background: true
+      - run:
           name: BACKEND - Waiting for simulations start
           environment:
             PORT: 5320
-          working_directory: Printer3D-backend
           command: |
             dockerize -wait tcp://localhost:${PORT}/universe/races/ -timeout 3m
       - run:

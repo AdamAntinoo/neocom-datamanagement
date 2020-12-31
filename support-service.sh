@@ -2,15 +2,16 @@
 # - PARAMETERS & CONSTANTS
 COMMAND=$1
 
-SERVICE_PORT=6091
+SIMULATION_NAME=$2
+SERVICE_PORT=$3
 ADMIN_PORT=$(( $SERVICE_PORT + 100 ))
-SIMULATION_NAME='esi-simulation'
 
-WORKING_DIRECTORY="${HOME}/Development/NeoCom/neocom-datamanagement/NeoCom.DataManagement"
-APISIMULATOR_COMMAND="${WORKING_DIRECTORY}/src/test/apisimulator-http-1.4/bin/apisimulator"
+WORKING_DIRECTORY=`pwd`
+WORKING_DIRECTORY="${WORKING_DIRECTORY}/src/integration/resources"
+APISIMULATOR_COMMAND="${WORKING_DIRECTORY}/apisimulator-http-1.6.1/bin/apisimulator"
 APISUMULATOR_ADMIN_PORT=" -admin_port ${ADMIN_PORT} "
 APISIMULATOR_OPTIONS=" -p ${SERVICE_PORT} "
-APISIMULATOR_SIMULATION="${WORKING_DIRECTORY}/src/test/resources/$SIMULATION_NAME"
+APISIMULATOR_SIMULATION="${WORKING_DIRECTORY}/$SIMULATION_NAME"
 
 export APISIMULATOR_JAVA='/usr/lib/jvm/java-1.11.0-openjdk-amd64'
 
@@ -38,6 +39,7 @@ case $COMMAND in
   ;;
 'restart')
   stop
+  wait 1;
   start
   ;;
 *)
