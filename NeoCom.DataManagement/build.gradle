@@ -44,6 +44,24 @@ sourceSets {
         srcDirs += 'src/test/java'
         srcDirs += 'src/test/java-support'
     }
+    integration {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDirs += 'src/integration/java'
+        }
+    }
+    integration {
+        resources {
+            srcDirs += 'src/integration/resources'
+        }
+    }
+}
+
+// - C O N F I G U R A T I O N S
+configurations {
+    integrationImplementation.extendsFrom testImplementation
+    integrationRuntime.extendsFrom testRuntime
 }
 
 // - D E P E N D E N C I E S
@@ -62,8 +80,14 @@ sonarqube {
         property "sonar.projectName", "NeoCom - DataManagement"
         property "sonar.projectVersion", project.version
         property "sonar.projectDescription", project.description
-        property "sonar.sourceEncoding","UTF-8"
+        property "sonar.sourceEncoding", "UTF-8"
 
         property "sonar.login", "0aba8345fa52a3a9500132cd200b62eecf55199f"
     }
+}
+
+// - I N T E G R A T I O N   T E S T S
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
 }

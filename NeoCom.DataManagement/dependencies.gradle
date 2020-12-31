@@ -88,3 +88,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+// - I N T E G R A T I O N   T E S T I N G
+dependencies {
+//    integrationImplementation 'org.dimensinfin.neocom:neocom-datamanagement:0.20.0'
+}

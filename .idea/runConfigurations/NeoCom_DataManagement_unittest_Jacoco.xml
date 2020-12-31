@@ -2,7 +2,7 @@
   <configuration default="false" name="NeoCom.DataManagement unittest Jacoco" type="JUnit" factoryName="JUnit">
     <module name="NeoCom-DataManagement.NeoCom.DataManagement.test" />
     <useClassPathOnly />
-    <extension name="coverage" runner="jacoco">
+    <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.dimensinfin.eveonline.neocom.esiswagger.*" />
         <option name="ENABLED" value="true" />
