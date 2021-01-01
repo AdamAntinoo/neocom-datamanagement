@@ -43,6 +43,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSchematicsSc
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCharactersCharacterIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
+import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.updater.NeoComUpdater;
 import org.dimensinfin.logging.LogWrapper;
@@ -75,7 +76,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	public GetCharactersCharacterIdOk getCharactersCharacterId( final int identifier ) {
 		LogWrapper.enter( MessageFormat.format( "Pilot Identifier: {0}", Integer.valueOf( identifier ).toString() ) );
 		try {
-			final Response<GetCharactersCharacterIdOk> characterResponse = this.retrofitFactory
+			final Response<GetCharactersCharacterIdOk> characterResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( CharacterApi.class )
 					.getCharactersCharacterId( identifier, DEFAULT_ESI_SERVER, null )
@@ -98,7 +99,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			boolean morePages = true;
 			int pageCounter = 1;
 			while (morePages) {
-				final Response<List<GetCharactersCharacterIdAssets200Ok>> assetsApiResponse = this.retrofitFactory
+				final Response<List<GetCharactersCharacterIdAssets200Ok>> assetsApiResponse = this.retrofitService
 						.accessAuthenticatedConnector( credential )
 						.create( AssetsApi.class )
 						.getCharactersCharacterIdAssets(
@@ -136,7 +137,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			boolean morePages = true;
 			int pageCounter = 1;
 			while (morePages) {
-				final Response<List<GetCharactersCharacterIdBlueprints200Ok>> blueprintResponse = this.retrofitFactory
+				final Response<List<GetCharactersCharacterIdBlueprints200Ok>> blueprintResponse = this.retrofitService
 						.accessAuthenticatedConnector( credential )
 						.create( CharacterApi.class )
 						.getCharactersCharacterIdBlueprints(
@@ -168,7 +169,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	public List<GetCharactersCharacterIdFittings200Ok> getCharactersCharacterIdFittings( final Credential credential ) {
 		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
 		try {
-			final Response<List<GetCharactersCharacterIdFittings200Ok>> fittingsResponse = this.retrofitFactory
+			final Response<List<GetCharactersCharacterIdFittings200Ok>> fittingsResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( FittingsApi.class )
 					.getCharactersCharacterIdFittings( credential.getAccountId(),
@@ -201,7 +202,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			boolean morePages = true;
 			int pageCounter = 1;
 			while (morePages) {
-				final Response<List<GetCharactersCharacterIdMining200Ok>> industryApiResponse = this.retrofitFactory
+				final Response<List<GetCharactersCharacterIdMining200Ok>> industryApiResponse = this.retrofitService
 						.accessAuthenticatedConnector( credential )
 						.create( IndustryApi.class )
 						.getCharactersCharacterIdMining(
@@ -230,7 +231,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
 		try {
 			// Create the request to be returned so it can be called.
-			final Response<List<GetCharactersCharacterIdPlanets200Ok>> planetaryApiResponse = this.retrofitFactory
+			final Response<List<GetCharactersCharacterIdPlanets200Ok>> planetaryApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( PlanetaryInteractionApi.class )
 					.getCharactersCharacterIdPlanets(
@@ -251,7 +252,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	                                                                                          final Credential credential ) {
 		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
 		try {
-			final Response<GetCharactersCharacterIdPlanetsPlanetIdOk> planetaryApiResponse = this.retrofitFactory
+			final Response<GetCharactersCharacterIdPlanetsPlanetIdOk> planetaryApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( PlanetaryInteractionApi.class )
 					.getCharactersCharacterIdPlanetsPlanetId(
@@ -272,7 +273,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	public Double getCharactersCharacterIdWallet( final Credential credential ) {
 		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
 		try {
-			final Response<Double> walletApiResponse = this.retrofitFactory
+			final Response<Double> walletApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( WalletApi.class )
 					.getCharactersCharacterIdWallet( credential.getAccountId()
@@ -297,7 +298,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			boolean morePages = true;
 			int pageCounter = 1;
 			while (morePages) {
-				final Response<List<GetCorporationsCorporationIdAssets200Ok>> assetsApiResponse = this.retrofitFactory
+				final Response<List<GetCorporationsCorporationIdAssets200Ok>> assetsApiResponse = this.retrofitService
 						.accessAuthenticatedConnector( credential )
 						.create( AssetsApi.class )
 						.getCorporationsCorporationIdAssets( corporationId,
@@ -325,7 +326,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	public GetCorporationsCorporationIdDivisionsOk getCorporationsCorporationIdDivisions( final Integer corporationId, final Credential credential ) {
 		NeoComLogger.enter();
 		try {
-			final Response<GetCorporationsCorporationIdDivisionsOk> divisionsResponse = this.retrofitFactory
+			final Response<GetCorporationsCorporationIdDivisionsOk> divisionsResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( CorporationApi.class )
 					.getCorporationsCorporationIdDivisions(
@@ -347,7 +348,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 		NeoComLogger.enter( "Schematic id: {}", Integer.toString( schematicId ) );
 		try {
 			// Create the request to be returned so it can be called.
-			final Response<GetUniverseSchematicsSchematicIdOk> schematicistResponse = this.retrofitFactory
+			final Response<GetUniverseSchematicsSchematicIdOk> schematicistResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( PlanetaryInteractionApi.class )
 					.getUniverseSchematicsSchematicId(
@@ -366,7 +367,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	public GetUniversePlanetsPlanetIdOk getUniversePlanetsPlanetId( final int identifier ) {
 		NeoComLogger.enter( "Planet identifier:", Integer.toString( identifier ) );
 		try {
-			final Response<GetUniversePlanetsPlanetIdOk> universeApiResponse = this.retrofitFactory
+			final Response<GetUniversePlanetsPlanetIdOk> universeApiResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniversePlanetsPlanetId(
@@ -389,7 +390,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 		try {
 			String datasource = DEFAULT_ESI_SERVER; // Set the server to the default or to the selected server.
 			if (null != server) datasource = server;
-			final Response<GetStatusOk> statusApiResponse = this.retrofitFactory
+			final Response<GetStatusOk> statusApiResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( StatusApi.class )
 					.getStatus( datasource.toLowerCase(), null ).execute();
@@ -406,7 +407,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	                                                                                             final Credential credential ) {
 		NeoComLogger.enter();
 		try {
-			final Response<List<PostCharactersCharacterIdAssetsNames200Ok>> assetsApiResponse = this.retrofitFactory
+			final Response<List<PostCharactersCharacterIdAssetsNames200Ok>> assetsApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( AssetsApi.class )
 					.postCharactersCharacterIdAssetsNames(
@@ -428,7 +429,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	                                                                                                     final Credential credential ) {
 		NeoComLogger.enter();
 		try {
-			final Response<List<PostCorporationsCorporationIdAssetsNames200Ok>> assetsApiResponse = this.retrofitFactory
+			final Response<List<PostCorporationsCorporationIdAssetsNames200Ok>> assetsApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( AssetsApi.class )
 					.postCorporationsCorporationIdAssetsNames(
@@ -448,7 +449,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@Override
 	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
-		return this.storeCacheManager.accessItem( itemId ).blockingGet();
+		return this.storeCacheManager.accessType( itemId ).blockingGet();
 	}
 
 	@Override
@@ -476,7 +477,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
 			Objects.requireNonNull( this.onConstruction.locationCatalogService );
 			Objects.requireNonNull( this.onConstruction.storeCacheManager );
-			Objects.requireNonNull( this.onConstruction.retrofitFactory );
+			Objects.requireNonNull( this.onConstruction.retrofitService );
 			// Inject the new adapter to the classes that depend on it.
 			NeoComUpdater.injectsEsiDataAdapter( this.onConstruction );
 			return this.onConstruction;
@@ -502,11 +503,11 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 		public ESIDataProvider.Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
 			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitFactory = retrofitFactory;
+			this.onConstruction.retrofitService = retrofitFactory;
 			return this;
 		}
 
-		public ESIDataProvider.Builder withStoreCacheManager( final StoreCacheManager storeCacheManager ) {
+		public ESIDataProvider.Builder withStoreCacheManager( final IStoreCache storeCacheManager ) {
 			Objects.requireNonNull( storeCacheManager );
 			this.onConstruction.storeCacheManager = storeCacheManager;
 			return this;

@@ -36,6 +36,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -53,8 +54,8 @@ public class ESIUniverseDataProvider {
 	// - C O M P O N E N T S
 	protected IConfigurationService configurationProvider;
 	protected IFileSystem fileSystemAdapter;
-	protected StoreCacheManager storeCacheManager;
-	protected RetrofitFactory retrofitFactory;
+	protected IStoreCache storeCacheManager;
+	protected RetrofitFactory retrofitService;
 
 	// - C O N S T R U C T O R S
 	protected ESIUniverseDataProvider() {}
@@ -63,7 +64,7 @@ public class ESIUniverseDataProvider {
 	// - A L L I A N C E   P U B L I C   I N F O R M A T I O N
 	public GetAlliancesAllianceIdOk getAlliancesAllianceId( final int identifier ) {
 		try {
-			final Response<GetAlliancesAllianceIdOk> allianceResponse = this.retrofitFactory
+			final Response<GetAlliancesAllianceIdOk> allianceResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( AllianceApi.class )
 					.getAlliancesAllianceId( identifier, DEFAULT_ESI_SERVER, null )
@@ -78,7 +79,7 @@ public class ESIUniverseDataProvider {
 
 	public GetAlliancesAllianceIdIconsOk getAlliancesAllianceIdIcons( final int identifier ) {
 		try {
-			final Response<GetAlliancesAllianceIdIconsOk> allianceResponse = this.retrofitFactory
+			final Response<GetAlliancesAllianceIdIconsOk> allianceResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( AllianceApi.class )
 					.getAlliancesAllianceIdIcons( identifier, DEFAULT_ESI_SERVER, null )
@@ -94,7 +95,7 @@ public class ESIUniverseDataProvider {
 	// - C O R P O R A T I O N   P U B L I C   I N F O R M A T I O N
 	public GetCorporationsCorporationIdOk getCorporationsCorporationId( final int identifier ) {
 		try {
-			final Response<GetCorporationsCorporationIdOk> corporationResponse = this.retrofitFactory
+			final Response<GetCorporationsCorporationIdOk> corporationResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( CorporationApi.class )
 					.getCorporationsCorporationId( identifier, DEFAULT_ESI_SERVER, null )
@@ -109,7 +110,7 @@ public class ESIUniverseDataProvider {
 
 	public GetCorporationsCorporationIdIconsOk getCorporationsCorporationIdIcons( final int identifier ) {
 		try {
-			final Response<GetCorporationsCorporationIdIconsOk> corporationResponse = this.retrofitFactory
+			final Response<GetCorporationsCorporationIdIconsOk> corporationResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( CorporationApi.class )
 					.getCorporationsCorporationIdIcons( identifier, DEFAULT_ESI_SERVER, null )
@@ -125,7 +126,7 @@ public class ESIUniverseDataProvider {
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
 		try {
 			// Create the request to be returned so it can be called.
-			final Response<GetUniverseConstellationsConstellationIdOk> systemResponse = this.retrofitFactory
+			final Response<GetUniverseConstellationsConstellationIdOk> systemResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniverseConstellationsConstellationId( constellationId,
@@ -153,7 +154,7 @@ public class ESIUniverseDataProvider {
 			int pageCounter = 1;
 			while (morePages) {
 				try {
-					final Response<List<GetMarketsRegionIdOrders200Ok>> marketOrdersResponse = this.retrofitFactory
+					final Response<List<GetMarketsRegionIdOrders200Ok>> marketOrdersResponse = this.retrofitService
 							.accessUniverseConnector()
 							.create( MarketApiV2.class )
 							.getMarketsRegionIdOrders( regionId, "all", DEFAULT_ESI_SERVER, pageCounter, typeId, null )
@@ -182,7 +183,7 @@ public class ESIUniverseDataProvider {
 	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
 		try {
 			// Create the request to be returned so it can be called.
-			final Response<GetUniverseRegionsRegionIdOk> systemResponse = this.retrofitFactory
+			final Response<GetUniverseRegionsRegionIdOk> systemResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniverseRegionsRegionId( regionId,
@@ -200,7 +201,7 @@ public class ESIUniverseDataProvider {
 	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
 		LogWrapper.enter( MessageFormat.format( "stationId: {0}", stationId.toString() ) );
 		try {
-			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitFactory
+			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniverseStationsStationId( stationId, DEFAULT_ESI_SERVER, null )
@@ -216,7 +217,7 @@ public class ESIUniverseDataProvider {
 	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
 		try {
 			// Create the request to be returned so it can be called.
-			final Response<GetUniverseSystemsSystemIdOk> systemResponse = this.retrofitFactory
+			final Response<GetUniverseSystemsSystemIdOk> systemResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniverseSystemsSystemId( systemId
@@ -233,7 +234,7 @@ public class ESIUniverseDataProvider {
 
 	// - C A C H E D   A P I
 	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
-		return this.storeCacheManager.accessItem( itemId ).blockingGet();
+		return this.storeCacheManager.accessType( itemId ).blockingGet();
 	}
 
 	@TimeElapsed
@@ -277,11 +278,12 @@ public class ESIUniverseDataProvider {
 			this.downloadPilotFamilyData();
 		return racesCache.get( identifier );
 	}
-
+@Deprecated
 	@TimeElapsed
 	public GetUniverseSystemsSystemIdOk searchSolarSystem4Id( final int solarSystemId ) {
-		NeoComLogger.info( "SolarSystem: {}", solarSystemId + "" );
-		return this.storeCacheManager.accessSolarSystem( solarSystemId ).blockingGet();
+//		NeoComLogger.info( "SolarSystem: {}", solarSystemId + "" );
+//		return this.storeCacheManager.accessSolarSystem( solarSystemId ).blockingGet();
+	return null;
 	}
 
 	private void downloadItemPrices() {
@@ -316,7 +318,7 @@ public class ESIUniverseDataProvider {
 	private List<GetUniverseAncestries200Ok> getUniverseAncestries( final String datasource ) {
 		//		NeoComLogger.enter();
 		try {
-			final Response<List<GetUniverseAncestries200Ok>> ancestriesList = this.retrofitFactory
+			final Response<List<GetUniverseAncestries200Ok>> ancestriesList = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniverseAncestries(
@@ -337,7 +339,7 @@ public class ESIUniverseDataProvider {
 	private List<GetUniverseBloodlines200Ok> getUniverseBloodlines( final String datasource ) {
 		//		NeoComLogger.enter();
 		try {
-			final Response<List<GetUniverseBloodlines200Ok>> bloodLinesList = this.retrofitFactory
+			final Response<List<GetUniverseBloodlines200Ok>> bloodLinesList = this.retrofitService
 					.accessUniverseConnector()
 					.create(
 							UniverseApi.class )
@@ -364,7 +366,7 @@ public class ESIUniverseDataProvider {
 	private List<GetMarketsPrices200Ok> getUniverseMarketsPrices() {
 		try {
 			// Create the request to be returned so it can be called.
-			final Response<List<GetMarketsPrices200Ok>> marketApiResponse = this.retrofitFactory
+			final Response<List<GetMarketsPrices200Ok>> marketApiResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( MarketApi.class )
 					.getMarketsPrices( DEFAULT_ESI_SERVER.toLowerCase(), null )
@@ -381,7 +383,7 @@ public class ESIUniverseDataProvider {
 	private List<GetUniverseRaces200Ok> getUniverseRaces( final String datasource ) {
 		//		NeoComLogger.enter();
 		try {
-			final Response<List<GetUniverseRaces200Ok>> racesList = this.retrofitFactory
+			final Response<List<GetUniverseRaces200Ok>> racesList = this.retrofitService
 					.accessUniverseConnector()
 					.create( UniverseApi.class )
 					.getUniverseRaces( DEFAULT_ACCEPT_LANGUAGE, datasource, null, "en-us" )
@@ -408,7 +410,7 @@ public class ESIUniverseDataProvider {
 		public ESIUniverseDataProvider build() {
 			Objects.requireNonNull( this.onConstruction.configurationProvider );
 			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
-			Objects.requireNonNull( this.onConstruction.retrofitFactory );
+			Objects.requireNonNull( this.onConstruction.retrofitService );
 			Objects.requireNonNull( this.onConstruction.storeCacheManager );
 			NeoItem.injectEsiUniverseDataAdapter( this.onConstruction );
 			return this.onConstruction;
@@ -428,11 +430,11 @@ public class ESIUniverseDataProvider {
 
 		public ESIUniverseDataProvider.Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
 			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitFactory = retrofitFactory;
+			this.onConstruction.retrofitService = retrofitFactory;
 			return this;
 		}
 
-		public ESIUniverseDataProvider.Builder withStoreCacheManager( final StoreCacheManager storeCacheManager ) {
+		public ESIUniverseDataProvider.Builder withStoreCacheManager( final IStoreCache storeCacheManager ) {
 			Objects.requireNonNull( storeCacheManager );
 			this.onConstruction.storeCacheManager = storeCacheManager;
 			return this;

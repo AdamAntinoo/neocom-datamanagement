@@ -25,7 +25,6 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
@@ -43,13 +42,13 @@ public class ESIDataService extends ESIDataProvider {
 	@Inject
 	public ESIDataService( final @NotNull @Named("IConfigurationService") IConfigurationService configurationService,
 	                       final @NotNull @Named("IFileSystem") IFileSystem fileSystem,
-			//	                       final @NotNull @Named("StoreCacheManager") StoreCacheManager storeCacheManager,
-			               final @NotNull @Named("RetrofitFactory") RetrofitFactory retrofitFactory/* ,
+	                       final @NotNull @Named("IStoreCache") IStoreCache storeCacheManager,
+	                       final @NotNull @Named("RetrofitService") RetrofitService retrofitService/* ,
 	                       final @NotNull @Named("LocationCatalogService") LocationCatalogService locationCatalogService*/ ) {
 		this.configurationProvider = configurationService;
 		this.fileSystemAdapter = fileSystem;
-		//		this.storeCacheManager = storeCacheManager;
-		this.retrofitFactory = retrofitFactory;
+		this.storeCacheManager = storeCacheManager;
+		this.retrofitService = retrofitService;
 		//		this.locationCatalogService=locationCatalogService;
 	}
 
@@ -61,7 +60,7 @@ public class ESIDataService extends ESIDataProvider {
 	public List<GetCharactersCharacterIdIndustryJobs200Ok> getCharactersCharacterIdIndustryJobs( final Credential credential ) {
 		LogWrapper.enter();
 		try {
-			final Response<List<GetCharactersCharacterIdIndustryJobs200Ok>> industryJobsResponse = this.retrofitFactory
+			final Response<List<GetCharactersCharacterIdIndustryJobs200Ok>> industryJobsResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( IndustryApi.class )
 					.getCharactersCharacterIdIndustryJobs(
@@ -86,7 +85,7 @@ public class ESIDataService extends ESIDataProvider {
 	public List<GetCharactersCharacterIdOrders200Ok> getCharactersCharacterIdOrders( final Credential credential ) {
 		LogWrapper.enter();
 		try {
-			final Response<List<GetCharactersCharacterIdOrders200Ok>> industryJobsResponse = this.retrofitFactory
+			final Response<List<GetCharactersCharacterIdOrders200Ok>> industryJobsResponse = this.retrofitService
 					.accessUniverseConnector()
 					.create( MarketApi.class )
 					.getCharactersCharacterIdOrders(

@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testcontainers.containers.GenericContainer;
 
+import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
-import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
@@ -29,6 +29,7 @@ public class ESIDataServiceIT {
 	private IConfigurationService configurationService;
 	private IFileSystem fileSystem;
 	private RetrofitService retrofitService;
+	private IStoreCache storeCache;
 	private GenericContainer<?> esiAuthenticationSimulator;
 	private GenericContainer<?> esiDataSimulator;
 
@@ -38,6 +39,7 @@ public class ESIDataServiceIT {
 		this.configurationService = injector.getInstance( SBConfigurationService.class );
 		this.fileSystem = injector.getInstance( SBFileSystemAdapter.class );
 		this.retrofitService = injector.getInstance( RetrofitService.class );
+		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
 	}
 
 	@Test
@@ -53,7 +55,10 @@ public class ESIDataServiceIT {
 		//		Mockito.when( this.retrofitFactory.accessUniverseConnector() ).thenReturn()
 		Mockito.when( job.getJobId() ).thenReturn( TEST_INDUSTRY_JOBS_JOB_ID );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService( this.configurationService, this.fileSystem, this.retrofitService );
+		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
+				this.fileSystem,
+				this.storeCache,
+				this.retrofitService );
 		final List<GetCharactersCharacterIdIndustryJobs200Ok> obtained = esiDataService.getCharactersCharacterIdIndustryJobs( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );

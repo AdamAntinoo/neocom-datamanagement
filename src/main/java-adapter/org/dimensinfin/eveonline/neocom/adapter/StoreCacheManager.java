@@ -30,6 +30,7 @@ import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -46,7 +47,7 @@ import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsCon
  * the external module as the cache element provider in case there is a miss on the cached data.
  */
 @NeoComAdapter
-public class StoreCacheManager {
+public class StoreCacheManager implements IStoreCache {
 	private static final String PATH_DELIMITER = "/";
 	private static final int CACHE_VERSION = 151;
 	private static final int CACHE_COUNTER = 2;
@@ -80,16 +81,31 @@ public class StoreCacheManager {
 	// - C O N S T R U C T O R S
 	protected StoreCacheManager() { }
 
-	public Single<GetUniverseCategoriesCategoryIdOk> accessCategory( final Integer categoryId ) {
+//	public Single<GetUniverseCategoriesCategoryIdOk> accessCategory( final Integer categoryId ) {
+//		return this.categoryStore.get( categoryId );
+//	}
+//
+//	public Single<GetUniverseGroupsGroupIdOk> accessGroup( final Integer groupId ) {
+//		return this.itemGroupStore.get( groupId );
+//	}
+
+	// - C A C H E   E X P O R T E D   A P I
+	@Deprecated
+	public Single<GetUniverseTypesTypeIdOk> accessItem( final Integer itemId ) {
+		return this.esiItemStore.get( itemId );
+	}
+
+	@Override
+	public Single<GetUniverseCategoriesCategoryIdOk> accessCategory( final int categoryId ) {
 		return this.categoryStore.get( categoryId );
 	}
 
-	public Single<GetUniverseGroupsGroupIdOk> accessGroup( final Integer groupId ) {
+	@Override
+	public Single<GetUniverseGroupsGroupIdOk> accessGroup( final int groupId ) {
 		return this.itemGroupStore.get( groupId );
 	}
 
-	// - C A C H E   E X P O R T E D   A P I
-	public Single<GetUniverseTypesTypeIdOk> accessItem( final Integer itemId ) {
+	public Single<GetUniverseTypesTypeIdOk> accessType( final int itemId ) {
 		return this.esiItemStore.get( itemId );
 	}
 
@@ -148,7 +164,8 @@ public class StoreCacheManager {
 	public static class Builder {
 		private StoreCacheManager onConstruction;
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
+
 		/**
 		 * This Builder declares the mandatory components to be linked on construction so the Null validation is done as soon as
 		 * possible.
@@ -191,7 +208,7 @@ public class StoreCacheManager {
 	public static class UniverseTypeFetcher implements Fetcher<GetUniverseTypesTypeIdOk, Integer> {
 		private Retrofit neocomRetrofitNoAuth; // HTTP client to be used on not authenticated endpoints.
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public UniverseTypeFetcher( final Retrofit neocomRetrofitNoAuth ) {
 			this.neocomRetrofitNoAuth = neocomRetrofitNoAuth;
 		}
@@ -229,7 +246,7 @@ public class StoreCacheManager {
 	public static class UniverseItemGroupFetcher implements Fetcher<GetUniverseGroupsGroupIdOk, Integer> {
 		private Retrofit neocomRetrofitNoAuth; // HTTP client to be used on not authenticated endpoints.
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public UniverseItemGroupFetcher( final Retrofit neocomRetrofitNoAuth ) {
 			this.neocomRetrofitNoAuth = neocomRetrofitNoAuth;
 		}
@@ -260,7 +277,7 @@ public class StoreCacheManager {
 	public static class UniverseItemCategoryFetcher implements Fetcher<GetUniverseCategoriesCategoryIdOk, Integer> {
 		private Retrofit neocomRetrofitNoAuth; // HTTP client to be used on not authenticated endpoints.
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public UniverseItemCategoryFetcher( final Retrofit neocomRetrofitNoAuth ) {
 			this.neocomRetrofitNoAuth = neocomRetrofitNoAuth;
 		}
@@ -294,7 +311,7 @@ public class StoreCacheManager {
 		private static final int TIMESTAMP_CACHE_INDEX = 1;
 		private DiskLruCache persistentStorage;
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public EsiItemPersister( final DiskLruCache persistentStorage ) {
 			this.persistentStorage = persistentStorage;
 		}

@@ -6,6 +6,9 @@ import com.google.inject.name.Names;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
+import org.dimensinfin.eveonline.neocom.service.IStoreCache;
+import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
@@ -47,6 +50,12 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		bind( ISDEDatabaseService.class )
 				.annotatedWith( Names.named( "ISDEDatabaseService" ) )
 				.to( SBSDEDatabaseService.class );
+		bind( IStoreCache.class )
+				.annotatedWith( Names.named( "IStoreCache" ) )
+				.to( MemoryStoreCacheService.class );
+		bind( ESIDataService.class )
+				.annotatedWith( Names.named( "ESIDataService" ) )
+				.to( ESIDataService.class );
 		bind( ResourceFactory.class )
 				.annotatedWith( Names.named( "ResourceFactory" ) )
 				.to( ResourceFactory.class );
