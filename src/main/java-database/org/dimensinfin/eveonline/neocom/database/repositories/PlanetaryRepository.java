@@ -8,8 +8,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.dimensinfin.eveonline.neocom.database.ISDEDatabaseAdapter;
-import org.dimensinfin.eveonline.neocom.database.RawStatement;
+import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseAdapter;
+import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
+import org.dimensinfin.eveonline.neocom.database.core.RawStatement;
 import org.dimensinfin.eveonline.neocom.planetary.Schematics;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
@@ -46,7 +47,7 @@ public class PlanetaryRepository implements Serializable {
 		final int SCHEMATICS4ID_ISINPUT_COLINDEX = 5;
 		List<Schematics> scheList = new ArrayList<>();
 		try {
-			final RawStatement cursor = this.sdeDatabaseAdapter
+			final ISDEStatement cursor = this.sdeDatabaseAdapter
 					.constructStatement( SELECT_SCHEMATICS4ID, new String[]{ schematicId.toString() } );
 			while (cursor.moveToNext()) {
 				scheList.add( new Schematics.Builder()
@@ -77,7 +78,7 @@ public class PlanetaryRepository implements Serializable {
 		final int SCHEMATICS4OUTPUT_ISINPUT_COLINDEX = 6;
 		List<Schematics> scheList = new ArrayList<>();
 		try {
-			final RawStatement cursor = this.sdeDatabaseAdapter
+			final ISDEStatement cursor = this.sdeDatabaseAdapter
 					.constructStatement( SELECT_SCHEMATICS4OUTPUT, new String[]{ Integer.toString( targetId ) } );
 			while (cursor.moveToNext()) {
 				// - S C H E M A T I C S 4 O U T P U T

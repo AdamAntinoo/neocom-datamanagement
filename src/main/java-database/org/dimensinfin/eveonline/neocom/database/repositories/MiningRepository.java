@@ -21,6 +21,7 @@ import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
 import org.dimensinfin.eveonline.neocom.miningextraction.converter.MiningExtractionEntityToMiningExtractionConverter;
 import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
 /**
@@ -39,7 +40,9 @@ public class MiningRepository {
 	// - C O M P O N E N T S
 	protected Dao<MiningExtractionEntity, String> miningExtractionDao;
 	protected LocationCatalogService locationCatalogService;
+	private ResourceFactory resourceFactory;
 
+// - C O N S T R U C T O R S
 	/**
 	 * This other method does the same Mining Extractions processing but only for the records for the current date. The difference is that today
 	 * records are aggregated by hour instead of by day. So we will have a record for one ore/system since the hour we did the extractions until
@@ -51,8 +54,8 @@ public class MiningRepository {
 	public MiningExtraction accessMiningExtractionFindById( final String recordIdentifier ) {
 		try {
 			final MiningExtractionEntity extraction = this.miningExtractionDao.queryForId( recordIdentifier );
-			if (null != extraction) return new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService ).convert(
-					this.miningExtractionDao.queryForId( recordIdentifier ) );
+			if (null != extraction) return new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService, this.resourceFactory )
+					.convert( this.miningExtractionDao.queryForId( recordIdentifier ) );
 			else return null;
 		} catch (final SQLException sqle) {
 			NeoComLogger.error( ErrorInfoCatalog.MINING_EXTRACTION_BYID_SEARCH_FAILED.getErrorMessage( recordIdentifier ), sqle );
@@ -72,20 +75,23 @@ public class MiningRepository {
 	 */
 	public List<MiningExtraction> accessMiningExtractions4Pilot( final Credential credential ) {
 		return Stream.of( this.queryMiningExtractions4Pilot( credential ) )
-				.map( ( extraction ) -> new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService ).convert( extraction ) )
+				.map( ( extraction ) -> new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService, this.resourceFactory )
+						.convert( extraction ) )
 				.collect( Collectors.toList() );
 	}
 
 	public List<MiningExtraction> accessResources4Date( final Credential credential, final LocalDate filterDate ) {
 		return Stream.of( this.queryResources4Date( credential, filterDate ) )
-				.map( ( extraction ) -> new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService ).convert( extraction ) )
+				.map( ( extraction ) -> new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService, this.resourceFactory )
+						.convert( extraction ) )
 				.collect( Collectors.toList() );
 	}
 
 	public List<MiningExtraction> accessTodayMiningExtractions4Pilot( final Credential credential ) {
 		return Stream.of( this.queryDatedMiningExtractions4Pilot( credential ) )
 				.filter( this::filterOutNotTodayRecords )
-				.map( ( extraction ) -> new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService ).convert( extraction ) )
+				.map( ( extraction ) -> new MiningExtractionEntityToMiningExtractionConverter( this.locationCatalogService, this.resourceFactory )
+						.convert( extraction ) )
 				.collect( Collectors.toList() );
 	}
 
@@ -182,6 +188,7 @@ public class MiningRepository {
 	public static class Builder {
 		private MiningRepository onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new MiningRepository();
 		}
@@ -201,6 +208,12 @@ public class MiningRepository {
 		public MiningRepository.Builder withMiningExtractionDao( final Dao<MiningExtractionEntity, String> miningExtractionDao ) {
 			Objects.requireNonNull( miningExtractionDao );
 			this.onConstruction.miningExtractionDao = miningExtractionDao;
+			return this;
+		}
+
+		public MiningRepository.Builder withResourceFactory( final ResourceFactory resourceFactory ) {
+			Objects.requireNonNull( resourceFactory );
+			this.onConstruction.resourceFactory = resourceFactory;
 			return this;
 		}
 	}

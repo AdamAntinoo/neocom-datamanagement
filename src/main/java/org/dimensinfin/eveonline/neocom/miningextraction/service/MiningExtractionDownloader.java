@@ -11,16 +11,20 @@ import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
 import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.database.repositories.MiningRepository;
 import org.dimensinfin.eveonline.neocom.miningextraction.converter.GetCharactersCharacterIdMiningToMiningExtractionConverter;
 import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
 public class MiningExtractionDownloader {
 	private Credential credential;
 	private ESIDataProvider esiDataProvider;
 	private LocationCatalogService locationCatalogService;
+	private ResourceFactory resourceFactory;
 
+	// - C O N S T R U C T O R S
 	private MiningExtractionDownloader() {}
 
 	/**
@@ -43,6 +47,7 @@ public class MiningExtractionDownloader {
 				.map( ( extractionOk ) -> {
 					final MiningExtraction extraction = new GetCharactersCharacterIdMiningToMiningExtractionConverter(
 							this.locationCatalogService,
+							this.resourceFactory,
 							this.credential.getAccountId(),
 							LocalDate.now() )
 							.convert( extractionOk );
@@ -57,6 +62,7 @@ public class MiningExtractionDownloader {
 	public static class Builder {
 		private MiningExtractionDownloader onConstruction;
 
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new MiningExtractionDownloader();
 		}
@@ -80,6 +86,12 @@ public class MiningExtractionDownloader {
 		public MiningExtractionDownloader.Builder withLocationCatalogService( final LocationCatalogService locationCatalogService ) {
 			Objects.requireNonNull( locationCatalogService );
 			this.onConstruction.locationCatalogService = locationCatalogService;
+			return this;
+		}
+
+		public MiningExtractionDownloader.Builder withResourceFactory( final ResourceFactory resourceFactory ) {
+			Objects.requireNonNull( resourceFactory );
+			this.onConstruction.resourceFactory = resourceFactory;
 			return this;
 		}
 	}

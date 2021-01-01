@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.infinity.service;
+package org.dimensinfin.eveonline.neocom.service;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import org.testcontainers.containers.GenericContainer;
 
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
-import org.dimensinfin.eveonline.neocom.infinity.IntegrationNeoComServicesDependenciesModule;
+import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.RetrofitService;
+import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
+import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_SCOPE;

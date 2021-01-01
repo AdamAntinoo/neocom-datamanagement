@@ -13,7 +13,7 @@ public class PlanetaryResource extends Resource {
 	}
 
 	public PlanetaryResourceTierType getTier() {
-		return PlanetaryResourceTierType.searchTierType4Group( this.getItem().getGroupName() );
+		return PlanetaryResourceTierType.searchTierType4Group( this.getGroupName() );
 	}
 
 	// - C O R E

@@ -1,5 +1,7 @@
 package org.dimensinfin.eveonline.neocom.miningextraction.converter;
 
+import javax.validation.constraints.NotNull;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -12,19 +14,22 @@ import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdMining200Ok;
 import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.service.NeoItemFactory;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 import retrofit2.Converter;
 
 public class GetCharactersCharacterIdMiningToMiningExtractionConverter implements Converter<GetCharactersCharacterIdMining200Ok, MiningExtraction> {
 	private LocationCatalogService locationCatalogService;
+	private final ResourceFactory resourceFactory;
 	private Integer ownerId;
 	private LocalDate processingDate;
 
-	public GetCharactersCharacterIdMiningToMiningExtractionConverter( final LocationCatalogService locationCatalogService,
+	public GetCharactersCharacterIdMiningToMiningExtractionConverter( final @NotNull LocationCatalogService locationCatalogService,
+	                                                                  final @NotNull ResourceFactory resourceFactory,
 	                                                                  final Integer ownerId,
 	                                                                  final LocalDate processingDate ) {
 		this.locationCatalogService = locationCatalogService;
+		this.resourceFactory = resourceFactory;
 		this.ownerId = ownerId;
 		this.processingDate = processingDate;
 	}
@@ -38,7 +43,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverter implement
 			return new MiningExtraction.Builder()
 					.withExtractionDate( value.getDate().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ) )
 					.withExtractionHour( extractionHour )
-					.withNeoItem( NeoItemFactory.getSingleton().getItemById( value.getTypeId() ) )
+					.withNeoItem( this.resourceFactory.getItemById( value.getTypeId() ) )
 					.withOwnerId( this.ownerId )
 					.withQuantity( value.getQuantity() )
 					.withSpaceSystem( (SpaceSystem) spaceLocation )

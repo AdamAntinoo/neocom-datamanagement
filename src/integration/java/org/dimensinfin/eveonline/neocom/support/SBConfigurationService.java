@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.infinity.service;
+package org.dimensinfin.eveonline.neocom.support;
 
 import java.io.File;
 import java.io.FileInputStream;
