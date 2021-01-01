@@ -1,6 +1,7 @@
 package org.dimensinfin.eveonline.neocom;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
@@ -40,24 +41,31 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 
 		bind( IConfigurationService.class )
 				.annotatedWith( Names.named( "IConfigurationService" ) )
-				.to( SBConfigurationService.class );
+				.to( SBConfigurationService.class )
+				.in( Singleton.class );
 		bind( IFileSystem.class )
 				.annotatedWith( Names.named( "IFileSystem" ) )
-				.to( SBFileSystemAdapter.class );
+				.to( SBFileSystemAdapter.class )
+				.in( Singleton.class );
 		bind( RetrofitService.class )
 				.annotatedWith( Names.named( "RetrofitService" ) )
-				.to( RetrofitService.class );
+				.to( RetrofitService.class )
+				.in( Singleton.class );
 		bind( ISDEDatabaseService.class )
 				.annotatedWith( Names.named( "ISDEDatabaseService" ) )
-				.to( SBSDEDatabaseService.class );
+				.to( SBSDEDatabaseService.class )
+				.in( Singleton.class );
 		bind( IStoreCache.class )
 				.annotatedWith( Names.named( "IStoreCache" ) )
-				.to( MemoryStoreCacheService.class );
+				.to( MemoryStoreCacheService.class )
+				.in( Singleton.class );
 		bind( ESIDataService.class )
 				.annotatedWith( Names.named( "ESIDataService" ) )
-				.to( ESIDataService.class );
+				.to( ESIDataService.class )
+				.in( Singleton.class );
 		bind( ResourceFactory.class )
 				.annotatedWith( Names.named( "ResourceFactory" ) )
-				.to( ResourceFactory.class );
+				.to( ResourceFactory.class )
+				.in( Singleton.class );
 	}
 }
