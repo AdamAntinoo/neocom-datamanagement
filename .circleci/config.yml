@@ -21,7 +21,6 @@ jobs:
       - checkout
       - run:
           command: |
-            wait 5
             ./gradlew --version
 
   cache-dependencies:
