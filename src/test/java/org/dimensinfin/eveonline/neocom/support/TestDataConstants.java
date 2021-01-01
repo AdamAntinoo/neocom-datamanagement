@@ -69,4 +69,7 @@ public class TestDataConstants {
 		public static final String TEST_PILOT_PREFERENCE_STRING_VALUE = "Amarr VIII (Oris) - Emperor Family Academy";
 		public static final Double TEST_PILOT_PREFERENCE_NUMERIC_VALUE = 87642.5623334;
 	}
+	public static class SDERepositoryConstants{
+		public static final Integer TEST_SDE_REPOSITORY_TYPE_ID = 32873;
+	}
 }

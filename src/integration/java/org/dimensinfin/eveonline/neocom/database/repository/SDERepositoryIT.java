@@ -2,8 +2,6 @@ package org.dimensinfin.eveonline.neocom.database.repository;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Test;
@@ -21,12 +19,6 @@ public class SDERepositoryIT {
 	private ISDEDatabaseService sdeDatabaseService;
 	private ResourceFactory resourceFactory;
 
-	public void beforeEach() {
-		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
-		this.sdeDatabaseService = injector.getInstance( SBSDEDatabaseService.class );
-		this.resourceFactory = injector.getInstance( ResourceFactory.class );
-	}
-
 	@Test
 	public void accessBillOfMaterials() {
 		// Prepare
@@ -39,5 +31,11 @@ public class SDERepositoryIT {
 		Assertions.assertTrue( obtained.size() > 0 );
 		Assertions.assertEquals( 9, obtained.size() );
 		Assertions.assertEquals( "Nocxium", obtained.get( 2 ).getName() );
+	}
+
+	public void beforeEach() {
+		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
+		this.sdeDatabaseService = injector.getInstance( SBSDEDatabaseService.class );
+		this.resourceFactory = injector.getInstance( ResourceFactory.class );
 	}
 }
