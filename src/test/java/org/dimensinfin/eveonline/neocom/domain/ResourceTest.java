@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.service.NeoItemFactory;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -45,9 +45,9 @@ public class ResourceTest {
 	@Test
 	public void gettersContract() {
 		// Given
-		final NeoItemFactory factory = Mockito.mock( NeoItemFactory.class );
+		final ResourceFactory factory = Mockito.mock( ResourceFactory.class );
 		final NeoItem neoItem = Mockito.mock( NeoItem.class );
-		NeoItemFactory.setSingleton( factory );
+//		ResourceFactory.setSingleton( factory );
 		// When
 		Mockito.when( factory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 34 );
@@ -77,9 +77,9 @@ public class ResourceTest {
 	@Test
 	public void toStringContract() {
 		// Given
-		final NeoItemFactory factory = Mockito.mock( NeoItemFactory.class );
+		final ResourceFactory factory = Mockito.mock( ResourceFactory.class );
 		final NeoItem neoItem = Mockito.mock( NeoItem.class );
-		NeoItemFactory.setSingleton( factory );
+//		ResourceFactory.setSingleton( factory );
 		// When
 		Mockito.when( factory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 34 );

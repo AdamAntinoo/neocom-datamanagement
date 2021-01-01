@@ -10,7 +10,7 @@ import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
 import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
-import org.dimensinfin.eveonline.neocom.service.NeoItemFactory;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 public class MiningExtractionEntityToMiningExtractionConverterTest {
 	@Test
@@ -19,10 +19,10 @@ public class MiningExtractionEntityToMiningExtractionConverterTest {
 		final MiningExtractionEntity miningExtractionEntity = Mockito.mock( MiningExtractionEntity.class );
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		final SpaceSystemImplementation spaceLocation = Mockito.mock( SpaceSystemImplementation.class );
-		final NeoItemFactory neoItemFactory = Mockito.mock( NeoItemFactory.class );
+		final ResourceFactory resourceFactory = Mockito.mock( ResourceFactory.class );
 		final NeoItem neoItem = Mockito.mock( NeoItem.class );
 		final LocalDate processingDate = LocalDate.now();
-		NeoItemFactory.setSingleton( neoItemFactory );
+//		ResourceFactory.setSingleton( resourceFactory );
 		// When
 		Mockito.when( miningExtractionEntity.getOwnerId() ).thenReturn( 92223647 );
 		Mockito.when( miningExtractionEntity.getTypeId() ).thenReturn( 17459 );
@@ -32,7 +32,7 @@ public class MiningExtractionEntityToMiningExtractionConverterTest {
 		Mockito.when( miningExtractionEntity.getExtractionDateName() )
 				.thenReturn( LocalDate.now().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ) );
 		Mockito.when( locationCatalogService.searchLocation4Id( Mockito.anyLong() ) ).thenReturn( spaceLocation );
-		Mockito.when( neoItemFactory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
+		Mockito.when( resourceFactory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 17459 );
 		Mockito.when( neoItem.getName() ).thenReturn( "Piroxeres" );
 		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
@@ -41,7 +41,7 @@ public class MiningExtractionEntityToMiningExtractionConverterTest {
 		Mockito.when( spaceLocation.getLocationId() ).thenReturn( 30001669L );
 		Mockito.when( spaceLocation.getSolarSystemName() ).thenReturn( "Esescama" );
 		// Test
-		final MiningExtraction miningExtraction = new MiningExtractionEntityToMiningExtractionConverter( locationCatalogService )
+		final MiningExtraction miningExtraction = new MiningExtractionEntityToMiningExtractionConverter( locationCatalogService , resourceFactory)
 				.convert( miningExtractionEntity );
 		final String calculatedId = LocalDate.now().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ) +
 				":" +

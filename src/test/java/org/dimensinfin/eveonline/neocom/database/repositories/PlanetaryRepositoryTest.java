@@ -3,7 +3,7 @@ package org.dimensinfin.eveonline.neocom.database.repositories;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.database.ISDEDatabaseAdapter;
+import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseAdapter;
 
 public class PlanetaryRepositoryTest {
 	@Test

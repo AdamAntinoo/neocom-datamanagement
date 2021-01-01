@@ -6,14 +6,14 @@ import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.planetary.PlanetaryResourceTierType;
-import org.dimensinfin.eveonline.neocom.service.NeoItemFactory;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 public class PlanetaryResourceTest {
 	@Test
 	public void toStringContract() {
 		// Given
-		final NeoItemFactory factory=Mockito.mock(NeoItemFactory.class);
-		NeoItemFactory.setSingleton( factory );
+		final ResourceFactory factory=Mockito.mock( ResourceFactory.class);
+//		ResourceFactory.setSingleton( factory );
 		final NeoItem neoItem= Mockito.mock(NeoItem.class);
 		// When
 		Mockito.when( factory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
@@ -28,8 +28,8 @@ public class PlanetaryResourceTest {
 	@Test
 	public void getTier() {
 		// Given
-		final NeoItemFactory factory=Mockito.mock(NeoItemFactory.class);
-		NeoItemFactory.setSingleton( factory );
+		final ResourceFactory factory=Mockito.mock( ResourceFactory.class);
+//		ResourceFactory.setSingleton( factory );
 		final NeoItem neoItem= Mockito.mock(NeoItem.class);
 		// When
 		Mockito.when( factory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );

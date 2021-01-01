@@ -8,11 +8,11 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.dimensinfin.eveonline.neocom.database.ISDEDatabaseAdapter;
-import org.dimensinfin.eveonline.neocom.database.RawStatement;
 import org.dimensinfin.eveonline.neocom.database.SBRawStatement;
+import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseAdapter;
+import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-
+@Deprecated
 public class TestSDEDBAdapter implements ISDEDatabaseAdapter {
     protected static Logger logger = LoggerFactory.getLogger(TestSDEDBAdapter.class);
     private IFileSystem fileSystemAdapter;
@@ -20,7 +20,7 @@ public class TestSDEDBAdapter implements ISDEDatabaseAdapter {
     private String schema = "jdbc:sqlite";
     private String databasePath;
     private String databaseName;
-    private int databaseVersion = 0;
+    private String databaseVersion = "-not-read-";
     private Connection connectionSource = null;
 
     // - C O N S T R U C T O R S
@@ -29,7 +29,7 @@ public class TestSDEDBAdapter implements ISDEDatabaseAdapter {
     }
 
     @Override
-    public Integer getDatabaseVersion() {
+    public String getDatabaseVersion() {
         return this.databaseVersion;
     }
 
@@ -82,8 +82,9 @@ public class TestSDEDBAdapter implements ISDEDatabaseAdapter {
      * <code>RawStatements</code> that can isolate the generic database access code from the platform specific. This
      * statement uses the database connection to create a generic JDBC Java statement.
      */
-    public RawStatement constructStatement(final String query, final String[] parameters) throws SQLException {
-        return new SBRawStatement(this.getSDEConnection(), query, parameters);
+    public ISDEStatement constructStatement( final String query, final String[] parameters) throws SQLException {
+        return null;
+//        return new SBRawStatement(this.getSDEConnection(), query, parameters);
     }
 
     // - B U I L D E R

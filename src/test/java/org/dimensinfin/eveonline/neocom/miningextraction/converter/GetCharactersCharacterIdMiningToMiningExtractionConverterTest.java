@@ -14,7 +14,7 @@ import org.dimensinfin.eveonline.neocom.domain.space.SpaceConstellationImplement
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdMining200Ok;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.service.NeoItemFactory;
+import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 	private static final int DEFAULT_MINING_OWNER_IDENTIFIER = 92223647;
@@ -23,6 +23,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 	public void convertFailure() {
 		// Given
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
+		final ResourceFactory resourceFactory=Mockito.mock(ResourceFactory.class);
 		final int ownerId = DEFAULT_MINING_OWNER_IDENTIFIER;
 		final LocalDate processingDate = LocalDate.now();
 		final GetCharactersCharacterIdMining200Ok mining200Ok = Mockito.mock( GetCharactersCharacterIdMining200Ok.class );
@@ -37,7 +38,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		// Exceptions
 		Assertions.assertThrows( NeoComRuntimeException.class, () -> {
 					final MiningExtraction miningExtraction = new GetCharactersCharacterIdMiningToMiningExtractionConverter(
-							locationCatalogService, ownerId, processingDate )
+							locationCatalogService, resourceFactory, ownerId, processingDate )
 							.convert( mining200Ok );
 				},
 				"Expected GetCharactersCharacterIdMiningToMiningExtractionConverter.convert() to NeoComRuntimeException null verification, but it didn't." );
@@ -47,12 +48,13 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 	public void convertSuccessPastDate() {
 		// Given
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
+//		final ResourceFactory resourceFactory=Mockito.mock(ResourceFactory.class);
 		final int ownerId = DEFAULT_MINING_OWNER_IDENTIFIER;
 		final LocalDate processingDate = LocalDate.now();
 		final GetCharactersCharacterIdMining200Ok mining200Ok = Mockito.mock( GetCharactersCharacterIdMining200Ok.class );
 		final SpaceSystemImplementation spaceLocation = Mockito.mock( SpaceSystemImplementation.class );
-		final NeoItemFactory neoItemFactory = Mockito.mock( NeoItemFactory.class );
-		NeoItemFactory.setSingleton( neoItemFactory );
+		final ResourceFactory resourceFactory = Mockito.mock( ResourceFactory.class );
+//		ResourceFactory.setSingleton( resourceFactory );
 		final NeoItem neoItem = Mockito.mock( NeoItem.class );
 		// When
 		Mockito.when( mining200Ok.getTypeId() ).thenReturn( 17459 );
@@ -61,7 +63,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Mockito.when( mining200Ok.getSolarSystemId() ).thenReturn( 30001669 );
 		Mockito.when( locationCatalogService.searchLocation4Id( Mockito.anyLong() ) ).thenReturn( spaceLocation );
 		Mockito.when( spaceLocation.getLocationId() ).thenReturn( 30001669L );
-		Mockito.when( neoItemFactory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
+		Mockito.when( resourceFactory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 17459 );
 		Mockito.when( neoItem.getName() ).thenReturn( "Piroxeres" );
 		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
@@ -70,7 +72,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Mockito.when( spaceLocation.getSolarSystemName() ).thenReturn( "Esescama" );
 		// Test
 		final MiningExtraction miningExtraction = new GetCharactersCharacterIdMiningToMiningExtractionConverter(
-				locationCatalogService, ownerId, processingDate )
+				locationCatalogService, resourceFactory, ownerId, processingDate )
 				.convert( mining200Ok );
 		// Assertions
 		Assertions.assertNotNull( miningExtraction );
@@ -96,8 +98,8 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		final LocalDate processingDate = LocalDate.now();
 		final GetCharactersCharacterIdMining200Ok mining200Ok = Mockito.mock( GetCharactersCharacterIdMining200Ok.class );
 		final SpaceSystemImplementation spaceLocation = Mockito.mock( SpaceSystemImplementation.class );
-		final NeoItemFactory neoItemFactory = Mockito.mock( NeoItemFactory.class );
-		NeoItemFactory.setSingleton( neoItemFactory );
+		final ResourceFactory resourceFactory = Mockito.mock( ResourceFactory.class );
+//		ResourceFactory.setSingleton( resourceFactory );
 		final NeoItem neoItem = Mockito.mock( NeoItem.class );
 		// When
 		Mockito.when( mining200Ok.getTypeId() ).thenReturn( 17459 );
@@ -106,7 +108,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Mockito.when( mining200Ok.getSolarSystemId() ).thenReturn( 30001669 );
 		Mockito.when( locationCatalogService.searchLocation4Id( Mockito.anyLong() ) ).thenReturn( spaceLocation );
 		Mockito.when( spaceLocation.getLocationId() ).thenReturn( 30001669L );
-		Mockito.when( neoItemFactory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
+		Mockito.when( resourceFactory.getItemById( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 17459 );
 		Mockito.when( neoItem.getName() ).thenReturn( "Piroxeres" );
 		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
@@ -115,7 +117,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Mockito.when( spaceLocation.getSolarSystemName() ).thenReturn( "Esescama" );
 		// Test
 		final MiningExtraction miningExtraction = new GetCharactersCharacterIdMiningToMiningExtractionConverter(
-				locationCatalogService, ownerId, processingDate )
+				locationCatalogService, resourceFactory, ownerId, processingDate )
 				.convert( mining200Ok );
 		final String calculatedId = LocalDate.now().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ) +
 				":" +
