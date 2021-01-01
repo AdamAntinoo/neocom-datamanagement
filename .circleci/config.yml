@@ -64,10 +64,6 @@ jobs:
           - v1-dependencies-{{ checksum "dependencies.gradle" }}
           - v1-dependencies-
       - run:
-          name: BACKEND - Unit Testing application
-          command: |
-            ./gradlew test
-      - run:
           name: BACKEND - Starting api simulation for ESI Authentication
           environment:
             PORT: 5310
@@ -82,6 +78,10 @@ jobs:
             ./support-service.sh start "esidata-simulation" 5320
           background: true
       - run:
+          name: BACKEND - Unit Testing application
+          command: |
+            ./gradlew test
+      - run:
           name: BACKEND - Install dockerize
           command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
           environment:
@@ -91,17 +91,15 @@ jobs:
           environment:
             PORT: 5320
           command: |
-            # wait 5
             netstat -na | grep LISTEN
-            # wait 5
-            dockerize -wait http://localhost:${PORT}/universe/races/ -timeout 3m
+            # dockerize -wait http://localhost:${PORT}/universe/races/ -timeout 3m
       - run:
           name: BACKEND - Integration Testing application
           environment:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
-            ./gradlew integrationTest
+            ./gradlew clean integrationTest
       - store_test_results:
           path: ~/project/NeoCom.DataManagement/build/test-results
       - store_artifacts:  
