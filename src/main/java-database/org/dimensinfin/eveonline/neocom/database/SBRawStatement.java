@@ -5,8 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.dimensinfin.eveonline.neocom.database.core.RawStatement;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
-
+@Deprecated
 public class SBRawStatement extends RawStatement {
     private PreparedStatement prepStmt;
     private ResultSet cursor;
