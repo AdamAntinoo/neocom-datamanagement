@@ -16,12 +16,14 @@ import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
 import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AllianceApi;
+import org.dimensinfin.eveonline.neocom.esiswagger.api.CharacterApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CorporationApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApiV2;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsPrices200Ok;
@@ -119,6 +121,25 @@ public class ESIUniverseDataProvider {
 				return corporationResponse.body();
 		} catch (final IOException ioe) {
 			NeoComLogger.error( ioe );
+		}
+		return null;
+	}
+
+	// - C H A R A C T E R   P U B L I C   I N F O R M A T I O N
+	@TimeElapsed
+	public GetCharactersCharacterIdOk getCharactersCharacterId( final int identifier ) {
+		LogWrapper.enter( MessageFormat.format( "Pilot Identifier: {0}", Integer.valueOf( identifier ).toString() ) );
+		try {
+			final Response<GetCharactersCharacterIdOk> characterResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( CharacterApi.class )
+					.getCharactersCharacterId( identifier, DEFAULT_ESI_SERVER, null )
+					.execute();
+			if (characterResponse.isSuccessful()) return characterResponse.body();
+		} catch (final IOException | RuntimeException ioe) {
+			LogWrapper.error( ioe );
+		} finally {
+			LogWrapper.exit();
 		}
 		return null;
 	}
@@ -239,12 +260,12 @@ public class ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public GetUniverseCategoriesCategoryIdOk searchItemCategory4Id( final int categoryId ) {
-		NeoComLogger.info( "CategoryId: {}", categoryId + "" );
+//		NeoComLogger.info( "CategoryId: {}", categoryId + "" );
 		return this.storeCacheManager.accessCategory( categoryId ).blockingGet();
 	}
 
 	public GetUniverseGroupsGroupIdOk searchItemGroup4Id( final int groupId ) {
-		NeoComLogger.info( "GroupId: {}", groupId + "" );
+//		NeoComLogger.info( "GroupId: {}", groupId + "" );
 		return this.storeCacheManager.accessGroup( groupId ).blockingGet();
 	}
 

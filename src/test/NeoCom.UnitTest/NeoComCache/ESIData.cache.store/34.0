@@ -1,0 +1,18 @@
+{
+  "capacity" : 0.0,
+  "description" : "The main building block in space structures. A very hard, yet bendable metal. Cannot be used in human habitats due to its instability at atmospheric temperatures. Very common throughout the central regions of known universe.\r\n\r\nMay be obtained by reprocessing the following ores and their variations available in high security status star systems:\r\n<a href=showinfo:1230>Veldspar</a>, <a href=showinfo:1228>Scordite</a>, <a href=showinfo:18>Plagioclase</a>\r\n\r\nIt is also present in huge amounts in rare ores like <a href=showinfo:19>Spodumain</a>, <a href=showinfo:52316>Bezdnacine</a>, <a href=showinfo:52315>Rakovene</a> and <a href=showinfo:52306>Talassonite</a>.",
+  "dogmaAttributes" : [ ],
+  "dogmaEffects" : [ ],
+  "graphicId" : null,
+  "groupId" : 18,
+  "iconId" : 22,
+  "marketGroupId" : 1857,
+  "mass" : 0.0,
+  "name" : "Tritanium",
+  "packagedVolume" : 0.01,
+  "portionSize" : 1,
+  "published" : true,
+  "radius" : 1.0,
+  "typeId" : 34,
+  "volume" : 0.01
+}

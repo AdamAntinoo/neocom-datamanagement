@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="NeoCom.DataManagement unittest Jacoco" type="JUnit" factoryName="JUnit">
-    <module name="NeoCom-DataManagement.NeoCom.DataManagement.test" />
+    <module name="NeoCom-DataManagement.test" />
     <useClassPathOnly />
     <extension name="coverage">
       <pattern>
@@ -29,9 +29,12 @@
         <option name="INCLUDE" value="false" />
       </pattern>
     </extension>
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="ALTERNATIVE_JRE_PATH" value="1.8-OpenJDK" />
+    <option name="PACKAGE_NAME" value="org.dimensinfin.eveonline.neocom" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
-    <option name="TEST_OBJECT" value="directory" />
+    <option name="TEST_OBJECT" value="package" />
     <option name="PARAMETERS" value="" />
     <dir value="$PROJECT_DIR$/NeoCom.DataManagement/src/test/java/org/dimensinfin/eveonline/neocom" />
     <method v="2">

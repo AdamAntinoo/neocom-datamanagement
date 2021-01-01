@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testcontainers.containers.GenericContainer;
@@ -33,7 +32,6 @@ public class ESIDataServiceIT {
 	private GenericContainer<?> esiAuthenticationSimulator;
 	private GenericContainer<?> esiDataSimulator;
 
-	@BeforeEach
 	public void beforeEach() {
 		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
 		this.configurationService = injector.getInstance( SBConfigurationService.class );
@@ -44,6 +42,8 @@ public class ESIDataServiceIT {
 
 	@Test
 	public void getCharactersCharacterIdIndustryJobsSuccess() {
+		// Prepare
+		this.beforeEach();
 		// Given
 		final Credential credential = Mockito.mock( Credential.class );
 		final GetCharactersCharacterIdIndustryJobs200Ok job = Mockito.mock( GetCharactersCharacterIdIndustryJobs200Ok.class );

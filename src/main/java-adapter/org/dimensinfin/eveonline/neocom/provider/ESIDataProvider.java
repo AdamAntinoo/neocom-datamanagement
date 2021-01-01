@@ -73,24 +73,6 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	protected ESIDataProvider() {}
 
 	@TimeElapsed
-	public GetCharactersCharacterIdOk getCharactersCharacterId( final int identifier ) {
-		LogWrapper.enter( MessageFormat.format( "Pilot Identifier: {0}", Integer.valueOf( identifier ).toString() ) );
-		try {
-			final Response<GetCharactersCharacterIdOk> characterResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( CharacterApi.class )
-					.getCharactersCharacterId( identifier, DEFAULT_ESI_SERVER, null )
-					.execute();
-			if (characterResponse.isSuccessful()) return characterResponse.body();
-		} catch (final IOException | RuntimeException ioe) {
-			LogWrapper.error( ioe );
-		} finally {
-			LogWrapper.exit();
-		}
-		return null;
-	}
-
-	@TimeElapsed
 	public List<GetCharactersCharacterIdAssets200Ok> getCharactersCharacterIdAssets( final Credential credential ) {
 		LogWrapper.enter( MessageFormat.format( CREDENTIAL_LOG_LITERAL, credential.toString() ) );
 		List<GetCharactersCharacterIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
@@ -446,22 +428,22 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 		}
 		return new ArrayList<>();
 	}
+//@Deprecated
+//	@Override
+//	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
+//		return this.storeCacheManager.accessType( itemId ).blockingGet();
+//	}
 
-	@Override
-	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
-		return this.storeCacheManager.accessType( itemId ).blockingGet();
-	}
+//	@Override
+//	@TimeElapsed
+//	public GetUniverseCategoriesCategoryIdOk searchItemCategory4Id( final int categoryId ) {
+//		return this.storeCacheManager.accessCategory( categoryId ).blockingGet();
+//	}
 
-	@Override
-	@TimeElapsed
-	public GetUniverseCategoriesCategoryIdOk searchItemCategory4Id( final int categoryId ) {
-		return this.storeCacheManager.accessCategory( categoryId ).blockingGet();
-	}
-
-	@Override
-	public GetUniverseGroupsGroupIdOk searchItemGroup4Id( final int groupId ) {
-		return this.storeCacheManager.accessGroup( groupId ).blockingGet();
-	}
+//	@Override
+//	public GetUniverseGroupsGroupIdOk searchItemGroup4Id( final int groupId ) {
+//		return this.storeCacheManager.accessGroup( groupId ).blockingGet();
+//	}
 
 	// - B U I L D E R
 	public static class Builder {

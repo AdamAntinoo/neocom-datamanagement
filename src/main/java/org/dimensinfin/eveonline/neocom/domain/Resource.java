@@ -30,7 +30,8 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 	protected int quantity;
 
 	// - C O N S T R U C T O R S
-	protected  Resource(){}
+	protected Resource() {}
+
 	@Deprecated
 	public Resource( final int typeId ) {
 		super();
@@ -76,7 +77,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 	}
 
 	public int add( final int count ) {
-		this.quantity = this.getQuantity() + count;
+		this.quantity = this.getQuantity() + Math.max( 0, count );
 		return this.quantity;
 	}
 
@@ -120,7 +121,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 
 	public int sub( final int count ) {
 		if (count > this.quantity) this.quantity = 0;
-		else this.quantity = this.getQuantity() - count;
+		else this.quantity = this.getQuantity() - Math.max( 0, count );
 		return this.quantity;
 	}
 
@@ -128,7 +129,6 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 	public String toString() {
 		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
 				.append( "baseQty", quantity )
-				//				.append( "stackSize", stackSize )
 				.append( "name", getName() )
 				.append( "typeId", getTypeId() )
 				.append( "quantity", getQuantity() )
@@ -137,6 +137,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 				.append( "jsonClass", getJsonClass() )
 				.toString();
 	}
+
 	// - B U I L D E R
 	public static class Builder {
 		private final Resource onConstruction;

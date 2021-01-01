@@ -22,7 +22,7 @@ dependencies {
 // - D I M E N S I N F I N
 dependencies {
     implementation 'org.bitbucket.dimensinfin:core-lib:3.2.0'
-    implementation 'org.bitbucket.dimensinfin:annotations:0.3.1'
+    implementation 'org.bitbucket.dimensinfin:annotations:0.3.2'
 }
 
 // - N E O C O M   L I B R A R I E S

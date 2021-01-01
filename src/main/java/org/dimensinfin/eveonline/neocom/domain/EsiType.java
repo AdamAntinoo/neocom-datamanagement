@@ -9,8 +9,8 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
 
 public class EsiType extends NeoComNode {
 	private static final long serialVersionUID = 1430130141655722687L;
-	private static final String ESI_ICON_URL_PREFIX="https://image.eveonline.com/Type/";
-	private static final String ESI_ICON_URL_SUFFIX="_64.png";
+	public static final String ESI_ICON_URL_PREFIX="https://image.eveonline.com/Type/";
+	public static final String ESI_ICON_URL_SUFFIX="_64.png";
 
 	protected int typeId = -1;
 	protected IndustryGroup industryGroup = IndustryGroup.UNDEFINED;
