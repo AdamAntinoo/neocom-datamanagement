@@ -18,7 +18,6 @@ import com.nytimes.android.external.store3.base.impl.Store;
 import com.nytimes.android.external.store3.base.impl.StoreBuilder;
 import org.joda.time.DateTime;
 
-import org.dimensinfin.eveonline.neocom.annotation.NeoComAdapter;
 import org.dimensinfin.eveonline.neocom.core.StorageUnits;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
@@ -46,7 +45,6 @@ import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsCon
  * The caches should be externally configurable and other components may register new caches for their usage using
  * the external module as the cache element provider in case there is a miss on the cached data.
  */
-@NeoComAdapter
 public class StoreCacheManager implements IStoreCache {
 	private static final String PATH_DELIMITER = "/";
 	private static final int CACHE_VERSION = 151;

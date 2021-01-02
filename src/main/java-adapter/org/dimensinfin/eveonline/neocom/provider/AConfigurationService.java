@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
-import org.dimensinfin.eveonline.neocom.annotation.NeoComAdapter;
-
 /**
  * Reads all the properties files found under a configurable place. The class scans for all files that end with '.properties'
  * and reads the name/value pairs into a accessible cache.
@@ -20,7 +18,6 @@ import org.dimensinfin.eveonline.neocom.annotation.NeoComAdapter;
  * @author Adam Antinoo
  * @since 0.14.0
  */
-@NeoComAdapter
 public abstract class AConfigurationService implements IConfigurationService {
 	private static final String DEFAULT_PROPERTIES_FOLDER = "properties"; // The default initial location if not specified.
 

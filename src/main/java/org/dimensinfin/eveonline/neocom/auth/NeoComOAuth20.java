@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
+import org.dimensinfin.logging.LogWrapper;
 
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
@@ -51,7 +51,7 @@ public class NeoComOAuth20 {
 	}
 
 	public TokenTranslationResponse fromRefresh( final String refresh ) {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		try {
 			TokenTranslationResponse existing = this.store.get( refresh );
 			if ((null == existing) || (existing.getExpiresOn() < (System.currentTimeMillis() - 5 * 1000))) {
@@ -63,10 +63,10 @@ public class NeoComOAuth20 {
 			logger.info( "<< [NeoComOAuth20.fromRefresh]> Return valid token." );
 			return existing;
 		} catch (OAuthException | IOException | InterruptedException | ExecutionException ee) {
-			NeoComLogger.error( ee );
+			LogWrapper.error( ee );
 			return null;
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 	}
 

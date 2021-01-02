@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.logging.LogWrapper;
 
 public class AssetRepository {
@@ -32,7 +31,7 @@ public class AssetRepository {
 	protected Dao<NeoAsset, UUID> assetDao;
 	protected ConnectionSource connection4Transaction;
 
-// - C O N S T R U C T O R S
+	// - C O N S T R U C T O R S
 	protected AssetRepository() {}
 
 	/**
@@ -41,7 +40,7 @@ public class AssetRepository {
 	 * new download.
 	 */
 	public synchronized void clearInvalidRecords( final long pilotIdentifier ) {
-		NeoComLogger.enter( "pilotIdentifier: {}", Long.toString( pilotIdentifier ) );
+		LogWrapper.enter( MessageFormat.format( "pilotIdentifier: {0}", Long.toString( pilotIdentifier ) ) );
 		synchronized (this.connection4Transaction) {
 			try {
 				TransactionManager.callInTransaction( this.connection4Transaction, () -> {
@@ -64,9 +63,9 @@ public class AssetRepository {
 					return null;
 				} );
 			} catch (final SQLException sqle) {
-				NeoComLogger.info( "Problem clearing invalid records", sqle );
+				LogWrapper.info( "Problem clearing invalid records", sqle );
 			} finally {
-				NeoComLogger.exit();
+				LogWrapper.exit();
 			}
 		}
 	}
@@ -81,7 +80,7 @@ public class AssetRepository {
 			Where<NeoAsset, UUID> where = queryBuilder.where();
 			where.eq( OWNERID, ownerId );
 			final List<NeoAsset> assetList = assetDao.query( queryBuilder.prepare() );
-			NeoComLogger.info( "Assets read: {}", assetList.size() + "" );
+			LogWrapper.info( MessageFormat.format( "Assets read: {0}", assetList.size() ) );
 			return Stream.of( assetList )
 					.map( this::assetReconstructor )
 					.collect( Collectors.toList() );
@@ -95,7 +94,7 @@ public class AssetRepository {
 		Objects.requireNonNull( assetId );
 		try {
 			final List<NeoAsset> assetList = this.assetDao.queryForEq( "assetId", assetId );
-			NeoComLogger.info( "Assets read: {}", assetList.size() + "" );
+			LogWrapper.info( MessageFormat.format( "Assets read: {0}", assetList.size() ) );
 			if (!assetList.isEmpty()) return assetList.get( 0 );
 			else return null;
 		} catch (java.sql.SQLException sqle) {
@@ -109,7 +108,7 @@ public class AssetRepository {
 			record.timeStamp();
 			record.generateUid();
 			this.assetDao.createOrUpdate( record );
-			NeoComLogger.info( "Wrote asset to database id [" + record.getAssetId() + "]" );
+			LogWrapper.info( MessageFormat.format( "Wrote asset to database id [{0}]", record.getAssetId() ) );
 		}
 	}
 
@@ -119,7 +118,7 @@ public class AssetRepository {
 	 * processing of data by the application.
 	 */
 	public synchronized void replaceAssets( final long pilotIdentifier ) {
-		NeoComLogger.enter( "pilotIdentifier: {}", Long.toString( pilotIdentifier ) );
+		LogWrapper.enter( MessageFormat.format("pilotIdentifier: {}", Long.toString( pilotIdentifier )) );
 		synchronized (this.connection4Transaction) {
 			try {
 				TransactionManager.callInTransaction( this.connection4Transaction, () -> {
@@ -140,21 +139,21 @@ public class AssetRepository {
 					return null;
 				} );
 			} catch (final SQLException sqle) {
-				NeoComLogger.info( "Problem replacing records", sqle );
+				LogWrapper.info( "Problem replacing records", sqle );
 			} finally {
-				NeoComLogger.exit();
+				LogWrapper.exit();
 			}
 		}
 	}
 
 	private NeoAsset assetReconstructor( final NeoAsset target ) {
-		NeoComLogger.enter( "Reconstructing asset: " + target.getAssetId() );
+		LogWrapper.enter( "Reconstructing asset: " + target.getAssetId() );
 		target.setItemDelegate( new NeoItem( target.getTypeId() ) );
 		if (target.hasParentContainer()) { // Search for the parent asset. If not found then report a warning.
 			final NeoAsset parent = this.findAssetById( target.getParentContainerId() );
 			if (null != parent) target.setParentContainer( this.assetReconstructor( parent ) );
 			else {
-				NeoComLogger.error( "Parent asset not found on post read action: " +
+				LogWrapper.error( "Parent asset not found on post read action: " +
 								target.getParentContainerId(),
 						new NeoComRuntimeException( "If an asset has a parent identifier then it should have a matching asset " +
 								"instance." ) );
@@ -167,7 +166,7 @@ public class AssetRepository {
 	public static class Builder {
 		private AssetRepository onConstruction;
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new AssetRepository();
 		}

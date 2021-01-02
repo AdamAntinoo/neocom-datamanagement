@@ -7,11 +7,10 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import org.joda.time.LocalDate;
 
+import org.dimensinfin.annotation.LogEnterExit;
+import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
-import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
-import org.dimensinfin.eveonline.neocom.database.repositories.MiningRepository;
 import org.dimensinfin.eveonline.neocom.miningextraction.converter.GetCharactersCharacterIdMiningToMiningExtractionConverter;
 import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;

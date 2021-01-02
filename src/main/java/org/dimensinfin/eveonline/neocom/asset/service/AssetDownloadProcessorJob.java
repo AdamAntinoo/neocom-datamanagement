@@ -10,10 +10,9 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import org.dimensinfin.annotation.LogEnterExit;
+import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
-import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.annotation.NeoComComponent;
-import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.asset.converter.EsiAssets200Ok2NeoAssetConverter;
 import org.dimensinfin.eveonline.neocom.asset.converter.GetCharactersCharacterIdAsset2EsiAssets200OkConverter;
 import org.dimensinfin.eveonline.neocom.asset.converter.GetCharactersCharacterIdAsset2NeoAssetConverter;
@@ -30,11 +29,10 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporat
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
+import org.dimensinfin.logging.LogWrapper;
 
-@NeoComComponent
 public class AssetDownloadProcessorJob extends Job {
 //	private static final Map<EsiAssets200Ok.LocationFlagEnum, Integer> officeContainerLocationFlags = new EnumMap<>(
 //			EsiAssets200Ok.LocationFlagEnum.class );
@@ -132,7 +130,7 @@ public class AssetDownloadProcessorJob extends Job {
 
 				convertedAssetList.put( targetAsset.getAssetId(), targetAsset );
 			} catch (final RuntimeException rtex) {
-				NeoComLogger.error( ErrorInfoCatalog.RUNTIME_PROCESSING_ASSET.getErrorMessage( assetOk.getItemId().toString() ), rtex );
+				LogWrapper.error( ErrorInfoCatalog.RUNTIME_PROCESSING_ASSET.getErrorMessage( assetOk.getItemId().toString() ), rtex );
 			}
 		}
 		for (final NeoAsset asset : this.convertedAssetList.values()) {
@@ -172,7 +170,7 @@ public class AssetDownloadProcessorJob extends Job {
 				results.add( targetAsset );
 				// TODO - Complete the code to read the assets userLabel after all assets are processed and persisted.
 			} catch (final RuntimeException rtex) {
-				NeoComLogger.error( "Processing asset: " + assetOk.getItemId().toString() + " - {}", rtex );
+				LogWrapper.error( "Processing asset: " + assetOk.getItemId().toString() + " - {}", rtex );
 			}
 		}
 		return results;
@@ -232,7 +230,7 @@ public class AssetDownloadProcessorJob extends Job {
 				}
 			}
 		} catch (final RuntimeException rtex) {
-			NeoComLogger.error( rtex );
+			LogWrapper.error( rtex );
 		}
 	}
 
@@ -277,7 +275,7 @@ public class AssetDownloadProcessorJob extends Job {
 				// With assets separate the update from the creation because they use a generated unique key.
 				this.assetRepository.persist( targetAsset );
 			} catch (final SQLException | RuntimeException sqle) {
-				NeoComLogger.error( "Processing asset: " + assetOk.getItemId().toString() + " - {}", sqle );
+				LogWrapper.error( "Processing asset: " + assetOk.getItemId().toString() + " - {}", sqle );
 			}
 		}
 		// - O R P H A N   L O C A T I O N   A S S E T S
@@ -290,7 +288,7 @@ public class AssetDownloadProcessorJob extends Job {
 		// Update the mining value on the Credential.
 		this.credential.setMiningResourcesEstimatedValue( this.miningResourceValue );
 		this.credentialRepository.persist( this.credential );
-		NeoComLogger.exit();
+		LogWrapper.exit();
 		return true;
 	}
 

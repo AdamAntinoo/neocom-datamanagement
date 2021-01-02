@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
+import org.dimensinfin.annotation.LogEnterExit;
 import org.dimensinfin.eveonline.neocom.auth.ESIStore;
 import org.dimensinfin.eveonline.neocom.auth.HttpAuthenticatedClientFactory;
 import org.dimensinfin.eveonline.neocom.auth.HttpBackendClientFactory;
@@ -23,7 +23,7 @@ import org.dimensinfin.eveonline.neocom.core.support.GSONLocalDateDeserializer;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
+import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -124,7 +124,7 @@ public class RetrofitFactory {
 				this.connectors.put( credential.getUniqueCredential(), hitConnector );
 			}
 		} catch (final IOException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 			throw new NeoComRuntimeException( ErrorInfoCatalog.FILESYSTEM_FAILURE_RETROFIT_CACHE_RELATED );
 		}
 		return hitConnector;
@@ -151,7 +151,7 @@ public class RetrofitFactory {
 				this.connectors.put( BACKEND_CONNECTOR_IDENTIFIER, hitConnector );
 			}
 		} catch (final IOException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 			throw new NeoComRuntimeException( ErrorInfoCatalog.FILESYSTEM_FAILURE_RETROFIT_CACHE_RELATED );
 		}
 		return hitConnector;
@@ -196,7 +196,7 @@ public class RetrofitFactory {
 				this.connectors.put( UNIVERSE_CONNECTOR_IDENTIFIER, hitConnector );
 			}
 		} catch (final IOException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 			throw new NeoComRuntimeException( ErrorInfoCatalog.FILESYSTEM_FAILURE_RETROFIT_CACHE_RELATED );
 		}
 		return hitConnector;

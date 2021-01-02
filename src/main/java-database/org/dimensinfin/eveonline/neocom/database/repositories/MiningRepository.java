@@ -1,6 +1,7 @@
 package org.dimensinfin.eveonline.neocom.database.repositories;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -129,9 +130,9 @@ public class MiningRepository {
 			builder.orderBy( "solarSystemId", true );
 			builder.orderBy( "typeId", true );
 			final PreparedQuery<MiningExtractionEntity> preparedQuery = builder.prepare();
-			NeoComLogger.info( "SELECT: {}", preparedQuery.getStatement() );
+			NeoComLogger.info( MessageFormat.format("SELECT: {0}", preparedQuery.getStatement() ));
 			final List<MiningExtractionEntity> dataList = this.miningExtractionDao.query( preparedQuery );
-			NeoComLogger.info( "Records read: {}", dataList.size() + "" );
+			NeoComLogger.info( MessageFormat.format("Records read: {0}", dataList.size() ) );
 			return dataList;
 		} catch (SQLException sqle) {
 			NeoComLogger.error( "SQL [MiningRepository.accessDatedMiningExtractions4Pilot]> SQL Exception: {}", sqle );
@@ -146,9 +147,9 @@ public class MiningRepository {
 			where.eq( OWNERID_FIELDNAME, credential.getAccountId() );
 			builder.orderBy( ID_FIELDNAME, false );
 			final PreparedQuery<MiningExtractionEntity> preparedQuery = builder.prepare();
-			NeoComLogger.info( "SELECT: {}", preparedQuery.getStatement() );
+			NeoComLogger.info( MessageFormat.format("SELECT: {0}", preparedQuery.getStatement() ));
 			final List<MiningExtractionEntity> dataList = this.miningExtractionDao.query( preparedQuery );
-			NeoComLogger.info( "Records read: {}", dataList.size() + "" );
+			NeoComLogger.info( MessageFormat.format("Records read: {0}", dataList.size() ) );
 			return dataList;
 		} catch (final SQLException sqle) {
 			NeoComLogger.error( sqle );
@@ -165,10 +166,10 @@ public class MiningRepository {
 					.eq( "extractionDateName", filterDate.toString( "YYYY-MM-dd" ) );
 			builder.selectRaw( "\"typeId\"", "MAX(\"quantity\")" );
 			builder.groupBy( "typeId" );
-			NeoComLogger.info( "SELECT: {}",
-					builder.prepareStatementString() );
+			NeoComLogger.info( MessageFormat.format("SELECT: {0}",
+					builder.prepareStatementString()) );
 			final GenericRawResults<String[]> dataList = this.miningExtractionDao.queryRaw( builder.prepareStatementString() );
-			NeoComLogger.info( "Records read: {}", dataList.getResults().size() + "" );
+			NeoComLogger.info( MessageFormat.format("Records read: {0}", dataList.getResults().size() ) );
 			List<MiningExtractionEntity> results = new ArrayList<>();
 			for (String[] record : dataList.getResults()) {
 				try {

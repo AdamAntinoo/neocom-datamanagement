@@ -27,8 +27,8 @@ dependencies {
 
 // - N E O C O M   L I B R A R I E S
 dependencies {
-    compileOnly 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
-    compileOnly 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
+    implementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
+//    implementation 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
 }
 
 dependencies {
@@ -41,7 +41,6 @@ dependencies {
     implementation 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.jcabi:jcabi-aspects:0.22.6' // Useful annotations for methods
     implementation 'org.modelmapper:modelmapper:1.1.0' // Help mapping ESI Get200Ok classes to similar classes on the app model
-
     // P A R S E R
     implementation "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion" // JSON converter
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"

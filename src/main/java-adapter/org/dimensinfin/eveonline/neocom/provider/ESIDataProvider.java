@@ -11,11 +11,10 @@ import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.aspects.Loggable;
 
+import org.dimensinfin.annotation.LogEnterExit;
+import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
-import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.annotation.NeoComAdapter;
-import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AssetsApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CharacterApi;
@@ -44,7 +43,6 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCharactersCharacterIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.updater.NeoComUpdater;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -61,7 +59,6 @@ import retrofit2.Response;
  * This class will also use other components to be able to store downloaded SDE data into caches, be them temporal in memory or
  * persisted on disk.
  */
-@NeoComAdapter
 public class ESIDataProvider extends ESIUniverseDataProvider {
 	public static final String DEFAULT_ESI_SERVER = "Tranquility".toLowerCase();
 	public static final String DEFAULT_ACCEPT_LANGUAGE = "en-us";
@@ -149,7 +146,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public List<GetCharactersCharacterIdFittings200Ok> getCharactersCharacterIdFittings( final Credential credential ) {
-		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
 		try {
 			final Response<List<GetCharactersCharacterIdFittings200Ok>> fittingsResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -159,9 +156,9 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (fittingsResponse.isSuccessful()) return fittingsResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return new ArrayList<>();
 	}
@@ -177,7 +174,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	 */
 	@TimeElapsed
 	public List<GetCharactersCharacterIdMining200Ok> getCharactersCharacterIdMining( final Credential credential ) {
-		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
 		List<GetCharactersCharacterIdMining200Ok> returnMiningList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
@@ -201,16 +198,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 				}
 			}
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return returnMiningList;
 	}
 
 	@TimeElapsed
 	public List<GetCharactersCharacterIdPlanets200Ok> getCharactersCharacterIdPlanets( final Credential credential ) {
-		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
 		try {
 			// Create the request to be returned so it can be called.
 			final Response<List<GetCharactersCharacterIdPlanets200Ok>> planetaryApiResponse = this.retrofitService
@@ -222,9 +219,9 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (planetaryApiResponse.isSuccessful()) return planetaryApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return new ArrayList<>();
 	}
@@ -232,7 +229,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	@TimeElapsed
 	public GetCharactersCharacterIdPlanetsPlanetIdOk getCharactersCharacterIdPlanetsPlanetId( final Integer planetId,
 	                                                                                          final Credential credential ) {
-		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
 		try {
 			final Response<GetCharactersCharacterIdPlanetsPlanetIdOk> planetaryApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -244,16 +241,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (planetaryApiResponse.isSuccessful()) return planetaryApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return null;
 	}
 
 	@TimeElapsed
 	public Double getCharactersCharacterIdWallet( final Credential credential ) {
-		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
 		try {
 			final Response<Double> walletApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -263,9 +260,9 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (walletApiResponse.isSuccessful()) return walletApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return -1.0;
 	}
@@ -273,7 +270,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	@TimeElapsed
 	public List<GetCorporationsCorporationIdAssets200Ok> getCorporationsCorporationIdAssets( final Credential credential,
 	                                                                                         final Integer corporationId ) {
-		NeoComLogger.enter( CREDENTIAL_LOG_LITERAL, credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
 		List<GetCorporationsCorporationIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
@@ -296,9 +293,9 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 				}
 			}
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return returnAssetList;
 	}
@@ -306,7 +303,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	@TimeElapsed
 	@LogEnterExit
 	public GetCorporationsCorporationIdDivisionsOk getCorporationsCorporationIdDivisions( final Integer corporationId, final Credential credential ) {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		try {
 			final Response<GetCorporationsCorporationIdDivisionsOk> divisionsResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -318,16 +315,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (divisionsResponse.isSuccessful()) return divisionsResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return null;
 	}
 
 	@TimeElapsed
 	public GetUniverseSchematicsSchematicIdOk getUniversePlanetarySchematicsById( final int schematicId ) {
-		NeoComLogger.enter( "Schematic id: {}", Integer.toString( schematicId ) );
+		LogWrapper.enter( MessageFormat.format("Schematic id: {0}", Integer.toString( schematicId ) ));
 		try {
 			// Create the request to be returned so it can be called.
 			final Response<GetUniverseSchematicsSchematicIdOk> schematicistResponse = this.retrofitService
@@ -338,16 +335,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (schematicistResponse.isSuccessful()) return schematicistResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return null;
 	}
 
 	@TimeElapsed
 	public GetUniversePlanetsPlanetIdOk getUniversePlanetsPlanetId( final int identifier ) {
-		NeoComLogger.enter( "Planet identifier:", Integer.toString( identifier ) );
+		LogWrapper.enter( MessageFormat.format("Planet identifier: {0}", Integer.toString( identifier )) );
 		try {
 			final Response<GetUniversePlanetsPlanetIdOk> universeApiResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -359,16 +356,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							null ).execute();
 			if (universeApiResponse.isSuccessful()) return universeApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return null;
 	}
 
 	@TimeElapsed
 	public GetStatusOk getUniverseStatus( final String server ) {
-		NeoComLogger.enter( "Server:", server );
+		LogWrapper.enter( MessageFormat.format("Server: {0}", server ));
 		try {
 			String datasource = DEFAULT_ESI_SERVER; // Set the server to the default or to the selected server.
 			if (null != server) datasource = server;
@@ -378,16 +375,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.getStatus( datasource.toLowerCase(), null ).execute();
 			if (statusApiResponse.isSuccessful()) return statusApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return null;
 	}
 
 	public List<PostCharactersCharacterIdAssetsNames200Ok> postCharactersCharacterIdAssetsNames( final List<Long> listItemIds,
 	                                                                                             final Credential credential ) {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		try {
 			final Response<List<PostCharactersCharacterIdAssetsNames200Ok>> assetsApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -400,16 +397,16 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (assetsApiResponse.isSuccessful()) return assetsApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return new ArrayList<>();
 	}
 
 	public List<PostCorporationsCorporationIdAssetsNames200Ok> postCorporationsCorporationIdAssetsNames( final List<Long> listItemIds,
 	                                                                                                     final Credential credential ) {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		try {
 			final Response<List<PostCorporationsCorporationIdAssetsNames200Ok>> assetsApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -422,9 +419,9 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.execute();
 			if (assetsApiResponse.isSuccessful()) return assetsApiResponse.body();
 		} catch (IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 		return new ArrayList<>();
 	}

@@ -14,7 +14,7 @@ import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.aspects.Loggable;
 
-import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
+import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.domain.space.Station;

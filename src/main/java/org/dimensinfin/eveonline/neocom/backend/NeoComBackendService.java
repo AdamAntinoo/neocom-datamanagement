@@ -1,18 +1,19 @@
 package org.dimensinfin.eveonline.neocom.backend;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.annotation.TimeElapsed;
+import org.dimensinfin.annotation.LogEnterExit;
+import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.backend.rest.v1.CredentialStoreResponse;
 import org.dimensinfin.eveonline.neocom.backend.rest.v1.NeoComApiv1;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
+import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
 import static org.dimensinfin.eveonline.neocom.provider.RetrofitFactory.DEFAULT_CONTENT_TYPE;
@@ -27,7 +28,7 @@ public class NeoComBackendService {
 	@TimeElapsed
 	@LogEnterExit
 	public List<MiningExtractionEntity> accessTodayMiningExtractions4Pilot( final Credential credential ) {
-		NeoComLogger.enter( "Credential: {}", credential.toString() );
+		LogWrapper.enter( MessageFormat.format("Credential: {0}", credential.toString()) );
 		try {
 			final Response<List<MiningExtractionEntity>> backendApiResponse = this.retrofitFactory
 					.accessBackendConnector()
@@ -38,7 +39,7 @@ public class NeoComBackendService {
 					.execute();
 			if (backendApiResponse.isSuccessful()) return backendApiResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		}
 		return new ArrayList<>();
 	}
@@ -46,7 +47,7 @@ public class NeoComBackendService {
 	@TimeElapsed
 	@LogEnterExit
 	public CredentialStoreResponse storeCredential( final Credential credential ) {
-		NeoComLogger.enter( "Credential: {}", credential.toString() );
+		LogWrapper.enter( MessageFormat.format("Credential: {0}", credential.toString()) );
 		try {
 			final Response<CredentialStoreResponse> backendApiResponse = this.retrofitFactory
 					.accessBackendConnector()
@@ -55,7 +56,7 @@ public class NeoComBackendService {
 					.execute();
 			if (backendApiResponse.isSuccessful()) return backendApiResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		}
 		return null;
 	}

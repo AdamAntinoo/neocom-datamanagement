@@ -1,6 +1,7 @@
 package org.dimensinfin.eveonline.neocom.miningextraction.service;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +19,7 @@ import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 public class MiningExtractionPersistent {
 	private MiningRepository miningRepository;
 
+// - C O N S T R U C T O R S
 	private MiningExtractionPersistent() {}
 
 	public void persistMiningExtractions( final List<MiningExtraction> extractions ) {
@@ -33,8 +35,9 @@ public class MiningExtractionPersistent {
 								extractionEntity.getId(),
 								sqle.getCause().toString() ) );
 					}
-					NeoComLogger.info( "Creating mining extraction: {} > Quantity: {}",
-							extractionEntity.getId(), extractionEntity.getQuantity() + "" );
+					NeoComLogger.info( MessageFormat.format( "Creating mining extraction: {0} > Quantity: {1}",
+							extractionEntity.getId(),
+							extractionEntity.getQuantity() ) );
 					return extractionEntity;
 				} )
 				.collect( Collectors.toList() );
@@ -44,6 +47,7 @@ public class MiningExtractionPersistent {
 	public static class Builder {
 		private MiningExtractionPersistent onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new MiningExtractionPersistent();
 		}

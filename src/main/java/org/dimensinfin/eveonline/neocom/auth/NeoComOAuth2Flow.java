@@ -1,11 +1,13 @@
 package org.dimensinfin.eveonline.neocom.auth;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Objects;
 
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.utility.Base64;
+import org.dimensinfin.logging.LogWrapper;
 
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
@@ -89,11 +91,11 @@ public class NeoComOAuth2Flow {
 					.create( GetAccessToken.class );
 		} catch (final RuntimeException rte) {
 			// Url can miss the protocol name so silently the system fails.
-			NeoComLogger.error( rte );
+			LogWrapper.error( rte );
 			return null;
 		}
 		final TokenRequestBody tokenRequestBody = new TokenRequestBody().setCode( store.getAuthCode() );
-		NeoComLogger.info( "Creating request call." );
+		LogWrapper.info( "Creating request call." );
 		final String peckString = authorizationClientid + ":" + authorizationSecretKey;
 		String peck = Base64.encodeBytes( peckString.getBytes() ).replaceAll( "\n", "" );
 		store.setPeck( peck );
@@ -108,14 +110,15 @@ public class NeoComOAuth2Flow {
 		try {
 			final Response<TokenTranslationResponse> response = request.execute();
 			if (response.isSuccessful()) {
-				NeoComLogger.info( "Response is 200 OK." );
+				LogWrapper.info( "Response is 200 OK." );
 				return response.body();
 			} else {
-				NeoComLogger.info( "Response is {} - {}.", response.code() + "",
-						response.message() );
+				LogWrapper.info( MessageFormat.format("Response is {0} - {1}.",
+						response.code(),
+						response.message() ));
 			}
 		} catch (final IOException ioe) {
-			NeoComLogger.error( ioe );
+			LogWrapper.error( ioe );
 		}
 		return null;
 	}
@@ -152,8 +155,9 @@ public class NeoComOAuth2Flow {
 				NeoComLogger.info( "Character verification OK." );
 				return verificationResponse.body();
 			} else {
-				NeoComLogger.info( "Response is {} - {}.", verificationResponse.code() + "",
-						verificationResponse.message() );
+				NeoComLogger.info( MessageFormat.format("Response is {0} - {1}.",
+						verificationResponse.code() + "",
+						verificationResponse.message() ));
 			}
 		} catch (final IOException ioe) {
 			NeoComLogger.error( ioe );

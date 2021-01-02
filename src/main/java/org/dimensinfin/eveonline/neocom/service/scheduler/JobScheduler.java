@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.service.scheduler;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
-import org.dimensinfin.eveonline.neocom.annotation.Singleton;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.converter.JobToJobRecordConverter;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.CronScheduleGenerator;
@@ -35,7 +35,6 @@ import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.19.0
  */
-@Singleton
 public class JobScheduler {
 	private static final ExecutorService schedulerExecutor = Executors.newSingleThreadExecutor();
 	private static JobScheduler singleton = new JobScheduler();
@@ -48,8 +47,10 @@ public class JobScheduler {
 	private Map<Integer, Job> jobsRegistered = new HashMap<>();
 	private CronScheduleGenerator cronScheduleGenerator = new HourlyCronScheduleGenerator.Builder().build();
 
+// - C O N S T R U C T O R S
 	private JobScheduler() {}
 
+// - G E T T E R S   &   S E T T E R S
 	public int getJobCount() {
 		return this.jobsRegistered.size();
 	}
@@ -60,10 +61,6 @@ public class JobScheduler {
 				.collect( Collectors.toList() );
 	}
 
-	public void setCronScheduleGenerator( final CronScheduleGenerator cronScheduleGenerator ) {
-		this.cronScheduleGenerator = cronScheduleGenerator;
-	}
-
 	public void clear() {
 		this.jobsRegistered.clear();
 	}
@@ -71,9 +68,10 @@ public class JobScheduler {
 	public int registerJob( final Job job2Register ) {
 		final Job registration = this.jobsRegistered.put( job2Register.getUniqueIdentifier(), job2Register );
 		if (null == registration)
-			NeoComLogger.info( "Registering job: (#{}) - {}",
+			NeoComLogger.info( MessageFormat.format( "Registering job: (#{0}) - {1}",
 					job2Register.getUniqueIdentifier() + "",
-					job2Register.getClass().getSimpleName() );
+					job2Register.getClass().getSimpleName() )
+			);
 		return this.jobsRegistered.size();
 	}
 
@@ -89,6 +87,10 @@ public class JobScheduler {
 			if (this.cronScheduleGenerator.match( job.getSchedule() ))
 				this.scheduleJob( job );
 		}
+	}
+
+	public void setCronScheduleGenerator( final CronScheduleGenerator cronScheduleGenerator ) {
+		this.cronScheduleGenerator = cronScheduleGenerator;
 	}
 
 	public boolean wait4Completion() throws InterruptedException {

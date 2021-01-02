@@ -17,8 +17,8 @@ import org.dimensinfin.core.interfaces.IEventEmitter;
 import org.dimensinfin.core.interfaces.IEventReceiver;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.service.UpdaterJobManager;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;
+import org.dimensinfin.logging.LogWrapper;
 
 public abstract class NeoComUpdater<M> implements IEventEmitter {
 	protected static final Logger logger = LoggerFactory.getLogger( NeoComUpdater.class );
@@ -131,7 +131,7 @@ public abstract class NeoComUpdater<M> implements IEventEmitter {
 	public void onException( final Exception exception ) {
 		this.lastException = exception;
 		this.status = JobStatus.EXCEPTION;
-		NeoComLogger.error( exception );
+		LogWrapper.error( exception );
 	}
 
 	public void onPrepare() {

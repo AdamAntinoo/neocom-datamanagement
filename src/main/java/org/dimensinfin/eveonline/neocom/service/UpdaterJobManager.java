@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.service;
 
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,10 +45,12 @@ public class UpdaterJobManager {
 		if (alreadyScheduled( identifier )) {
 			final JobRecord target = runningJobs.get( identifier );
 			final JobStatus jobStatus = target.getJob().getStatus();
-			NeoComLogger.info( "Job {} already on state: {}", updater.getIdentifier() + "", jobStatus.name() );
+			NeoComLogger.info( MessageFormat.format("Job {0} already on state: {1}",
+					updater.getIdentifier() ,
+					jobStatus.name()) );
 			return;
 		}
-		NeoComLogger.info( "Scheduling job {}", updater.getIdentifier() + "" );
+		NeoComLogger.info( MessageFormat.format("Scheduling job {0}", updater.getIdentifier() ) );
 		updater.setStatus( JobStatus.SCHEDULED );
 		try {
 			final JobRecord record = new JobRecord( updater );
@@ -126,17 +129,17 @@ public class UpdaterJobManager {
 		public NeoComUpdater<?> call() {
 			try {
 				NeoComLogger.info( LogMessagesExternalisedType.UPDATEMANAGER_JOB_ENTERING_STATE.getMessage()
-						, this.getJob().getIdentifier(), "OnPrepare" );
+						+ this.getJob().getIdentifier()+ "OnPrepare" );
 				this.job.onPrepare();
 				NeoComLogger.info( LogMessagesExternalisedType.UPDATEMANAGER_JOB_ENTERING_STATE.getMessage()
-						, this.getJob().getIdentifier(), "OnRun" );
+						+ this.getJob().getIdentifier()+ "OnRun" );
 				this.job.onRun();
 				NeoComLogger.info( LogMessagesExternalisedType.UPDATEMANAGER_JOB_ENTERING_STATE.getMessage()
-						, this.getJob().getIdentifier(), "OnComplete" );
+						+ this.getJob().getIdentifier()+ "OnComplete" );
 				this.job.onComplete();
 			} catch (RuntimeException rte) {
 				NeoComLogger.info( LogMessagesExternalisedType.UPDATEMANAGER_JOB_ENTERING_STATE.getMessage()
-						, this.getJob().getIdentifier(), "OnException" );
+						+ this.getJob().getIdentifier()+ "OnException" );
 				this.job.onException( rte );
 			}
 			return this.job;

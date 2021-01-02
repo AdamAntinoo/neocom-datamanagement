@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.asset.service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +8,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import org.dimensinfin.annotation.LogEnterExit;
 import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
-import org.dimensinfin.eveonline.neocom.annotation.LogEnterExit;
 import org.dimensinfin.eveonline.neocom.asset.domain.IAssetSource;
 import org.dimensinfin.eveonline.neocom.asset.domain.INeoAsset;
 import org.dimensinfin.eveonline.neocom.asset.domain.LocationAssetContainer;
@@ -29,7 +30,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellatio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
+import org.dimensinfin.logging.LogWrapper;
 
 /**
  * This providers serves as the interface between the network or the storage services and the client to manage the different lists of assets that
@@ -123,7 +124,7 @@ public class AssetProvider {
 				}
 			}
 		} catch (final RuntimeException rte) {
-			NeoComLogger.error( rte );
+			LogWrapper.error( rte );
 		}
 		return new ArrayList<>( regions.values() );
 	}
@@ -153,9 +154,9 @@ public class AssetProvider {
 				point = this.assetMap.get( key );
 			}
 		} catch (final NoSuchElementException nsee) {
-			NeoComLogger.info( "Classification complete: {} assets", this.assetCounter + "" );
+			LogWrapper.info( MessageFormat.format("Classification complete: {0} assets", this.assetCounter ) );
 		} catch (final RuntimeException rte) {
-			NeoComLogger.error( rte );
+			LogWrapper.error( rte );
 		}
 		return this.assetCounter;
 	}
@@ -215,7 +216,7 @@ public class AssetProvider {
 	}
 
 	private void add2UnreachableLocation( final INeoAsset asset ) {
-		NeoComLogger.info( "Adding to unrechable list: {}", asset.getLocationId().toString() );
+		LogWrapper.info( MessageFormat.format("Adding to unrechable list: {0}", asset.getLocationId().toString() ));
 		final LocationAssetContainer hit = this.spaceLocationsCache.computeIfAbsent( UNREACHABLE_LOCATION_IDENTIFIER, key ->
 				new LocationAssetContainer.Builder()
 						.withSpaceLocation( unreachableSpaceLocation )
@@ -255,9 +256,9 @@ public class AssetProvider {
 				point = this.assetMap.get( key );
 			}
 		} catch (final NoSuchElementException nsee) {
-			NeoComLogger.info( "Classification complete: {} assets", this.assetCounter + "" );
+			LogWrapper.info( MessageFormat.format("Classification complete: {0} assets", this.assetCounter ) );
 		} catch (final RuntimeException rtex) {
-			NeoComLogger.error( rtex );
+			LogWrapper.error( rtex );
 		}
 	}
 
@@ -309,7 +310,7 @@ public class AssetProvider {
 	 * space location of a game station. All assets should be covered by this classification.
 	 */
 	private void processAsset( final NeoAsset asset ) {
-		NeoComLogger.info( "Processing asset: {}", asset.getAssetId() + "" );
+		LogWrapper.info( MessageFormat.format("Processing asset: {0}", asset.getAssetId() ) );
 		final NeoAsset removedNode = this.assetMap.remove( asset.getAssetId() ); // Remove the asset from the pending for processing asset list.
 		if (null == removedNode) return; // Stop reprocessing a node that was already processed.
 		this.checkIfContainer( asset );
@@ -328,7 +329,7 @@ public class AssetProvider {
 				this.add2SpaceLocation( asset );
 				break;
 			case UNKNOWN: // Add the asset to the UNKNOWN space location.
-				NeoComLogger.info( "Not accessible location coordinates: {}", asset.getLocationId().toString() );
+				LogWrapper.info( MessageFormat.format("Not accessible location coordinates: {0}", asset.getLocationId().toString() ));
 				this.add2UnreachableLocation( asset );
 				break;
 			default:

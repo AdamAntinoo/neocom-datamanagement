@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.dimensinfin.eveonline.neocom.annotation.NeoComAdapter;
 import org.dimensinfin.eveonline.neocom.core.AccessStatistics;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
@@ -28,7 +27,6 @@ import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.JobScheduler;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.logging.LogWrapper;
@@ -44,7 +42,6 @@ import retrofit2.Response;
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.19.0
  */
-@NeoComAdapter
 public class LocationCatalogService extends Job {
 	public enum LocationCacheAccessType {
 		NOT_FOUND, GENERATED, DATABASE_ACCESS, MEMORY_ACCESS
@@ -82,11 +79,11 @@ public class LocationCatalogService extends Job {
 
 	@Override
 	public Boolean call() {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		try {
 			return this.writeLocationsDataCache();
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 	}
 
@@ -235,9 +232,9 @@ public class LocationCatalogService extends Job {
 				return universeResponse.body();
 			}
 		} catch (final IOException ioe) {
-			NeoComLogger.error( "[IOException]> locating public structure: ", ioe );
+			LogWrapper.error( "[IOException]> locating public structure: ", ioe );
 		} catch (final RuntimeException rte) {
-			NeoComLogger.error( "[RuntimeException]> locating public structure: ", rte );
+			LogWrapper.error( "[RuntimeException]> locating public structure: ", rte );
 		}
 		return null;
 	}

@@ -10,9 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseAdapter;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
-import org.dimensinfin.eveonline.neocom.database.core.RawStatement;
 import org.dimensinfin.eveonline.neocom.planetary.Schematics;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
+import org.dimensinfin.logging.LogWrapper;
 
 /**
  * This class will interface with the local repository for SDE data (first option) and possibly on the future for the local
@@ -61,7 +60,7 @@ public class PlanetaryRepository implements Serializable {
 			}
 			cursor.close();
 		} catch (final Exception ex) {
-			NeoComLogger.error( "Exception processing statement: {}", ex );
+			LogWrapper.error( "Exception processing statement: {}", ex );
 		} finally {
 			logger.info( "<< [PlanetaryRepository.searchSchematics4Id]" );
 		}
@@ -93,7 +92,7 @@ public class PlanetaryRepository implements Serializable {
 			}
 			cursor.close();
 		} catch (final Exception ex) {
-			NeoComLogger.error( "Exception processing statement: {}", ex );
+			LogWrapper.error( "Exception processing statement: {}", ex );
 		} finally {
 			logger.info( "<< [PlanetaryRepository.searchSchematics4Output]" );
 		}
