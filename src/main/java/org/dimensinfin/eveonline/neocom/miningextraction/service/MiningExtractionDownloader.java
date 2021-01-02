@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.miningextraction.service;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +42,8 @@ public class MiningExtractionDownloader {
 	@LogEnterExit
 	public List<MiningExtraction> downloadMiningExtractions() {
 		// Get to the Network and download the data from the ESI api.
-		NeoComLogger.info( "Starting download of credential {} mining extractions...", this.credential.getAccountId() + "" );
+		NeoComLogger.info( MessageFormat.format( "Starting download of credential {0} mining extractions...",
+				this.credential.getAccountId() ) );
 		return Stream.of( Objects.requireNonNull( this.esiDataProvider.getCharactersCharacterIdMining( credential ) ) )
 				.map( ( extractionOk ) -> {
 					final MiningExtraction extraction = new GetCharactersCharacterIdMiningToMiningExtractionConverter(
@@ -51,7 +53,7 @@ public class MiningExtractionDownloader {
 							LocalDate.now() )
 							.convert( extractionOk );
 					final String recordId = extraction.getId();
-					NeoComLogger.info( "Generating record identifier: {}.", recordId );
+					NeoComLogger.info( MessageFormat.format( "Generating record identifier: {0}.", recordId ) );
 					return extraction;
 				} )
 				.collect( Collectors.toList() );

@@ -2,6 +2,7 @@ package org.dimensinfin.eveonline.neocom.support;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 import com.j256.ormlite.db.PostgresDatabaseType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -75,7 +76,7 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 				+ "/" + "postgres" +
 				"?user=" + "neocom" +
 				"&password=" + "01.Alpha";
-		NeoComLogger.info( "Postgres SQL URL: {}", connectionUrl );
+		NeoComLogger.info( MessageFormat.format("Postgres SQL URL: {0}", connectionUrl ));
 		try {
 			connectionSource1 = new JdbcConnectionSource( connectionUrl, new PostgresDatabaseType() );
 		} catch (final SQLException sqle) {
