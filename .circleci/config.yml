@@ -68,34 +68,38 @@ jobs:
           command: |
             ./gradlew test
       - store_test_results:
-          path: ~/project/NeoCom.DataManagement/build/test-results
+          path: ~/build/test-results
       - store_artifacts:  
-          path: ~/project/NeoCom.DataManagement/build/libs
+          path: ~/build/libs
   acceptance-test-datamanagement-job:
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
-      - run:
-          name: BACKEND - Validate the CI machine configuration
-          command: |
-            ./gradlew --version
-            sudo snap install figlet
-      - run:
-          name: BACKEND - Start the docker simulators
-          command: |
-            ./docker-service.sh start integration
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "dependencies.gradle" }}
+          - v1-dependencies-
+      # - run:
+      #     name: BACKEND - Validate the CI machine configuration
+      #     command: |
+      #       ./gradlew --version
+      #       sudo snap install figlet
+      # - run:
+      #     name: BACKEND - Start the docker simulators
+      #     command: |
+      #       ./docker-service.sh start integration
       - run:
           name: BACKEND - Integration Testing application
           environment:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
-            ./gradlew clean integrationTest
-      - store_test_results:
-          path: ~/project/NeoCom.DataManagement/build/test-results
-      - store_artifacts:
-          path: ~/project/NeoCom.DataManagement/build/libs
+            ./gradlew integrationTest
+      # - store_test_results:
+      #     path: ~/project/NeoCom.DataManagement/build/test-results
+      # - store_artifacts:
+      #     path: ~/project/NeoCom.DataManagement/build/libs
 
   build-datamanagement-job:
     docker:
@@ -105,16 +109,14 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     steps:
       - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "dependencies.gradle" }}
+          - v1-dependencies-
       - run:
           name: BACKEND - Build the library to be deployed from JitPack
-          environment:
-            PORT: 5140
-            JDBC_DATABASE_URL: "jdbc:postgresql://0.0.0.0:5432/postgres"
-            DB_USER: inno-user
-            DB_PASSWORD: inno-password
-            SONAR_TOKEN: 4d2d1c6898c0815bf4862283c8179c8c5bb46724
           command: |
-            ./gradlew integrationTest build
+            ./gradlew build
 
 workflows:
   version: 2
