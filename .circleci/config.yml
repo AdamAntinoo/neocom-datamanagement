@@ -77,9 +77,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: BACKEND - Validate the CI machine comfiguration
+          name: BACKEND - Validate the CI machine configuration
           command: |
             ./gradlew --version
+            snap install figlet
       - run:
           name: BACKEND - Start the docker simulators
           command: |
