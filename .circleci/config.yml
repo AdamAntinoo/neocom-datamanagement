@@ -63,48 +63,37 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "dependencies.gradle" }}
           - v1-dependencies-
-      # - run:
-      #     name: BACKEND - Starting api simulation for ESI Authentication
-      #     environment:
-      #       PORT: 5310
-      #     command: |
-      #       ./support-service.sh start "esioauth-simulation" 5310
-      #     background: true
-      # - run:
-      #     name: BACKEND - Starting api simulation for ESI Data Service
-      #     environment:
-      #       PORT: 5320
-      #     command: |
-      #       ./support-service.sh start "esidata-simulation" 5320
-      #     background: true
       - run:
           name: BACKEND - Unit Testing application
           command: |
             ./gradlew test
-      # - run:
-      #     name: BACKEND - Install dockerize
-      #     command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-      #     environment:
-      #       DOCKERIZE_VERSION: v0.3.0
-      # - run:
-      #     name: BACKEND - Waiting for simulations start
-      #     environment:
-      #       PORT: 5320
-      #     command: |
-      #       netstat -na | grep LISTEN
-      #       # dockerize -wait http://localhost:${PORT}/universe/races/ -timeout 3m
+      - store_test_results:
+          path: ~/project/NeoCom.DataManagement/build/test-results
+      - store_artifacts:  
+          path: ~/project/NeoCom.DataManagement/build/libs
+  acceptance-test-datamanagement-job:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: BACKEND - Validate the CI machine comfiguration
+          command: |
+            ./gradlew --version
+      - run:
+          name: BACKEND - Start the docker simulators
+          command: |
+            ./docker-service.sh start integration
       - run:
           name: BACKEND - Integration Testing application
           environment:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
-            ./support-service.sh start "esioauth-simulation" 5310
-            ./support-service.sh start "esidata-simulation" 5320
             ./gradlew clean integrationTest
       - store_test_results:
           path: ~/project/NeoCom.DataManagement/build/test-results
-      - store_artifacts:  
+      - store_artifacts:
           path: ~/project/NeoCom.DataManagement/build/libs
 
   build-datamanagement-job:
@@ -158,6 +147,14 @@ workflows:
       - test-datamanagement-job:
           requires:
             - compile-datamanagement-job
+          filters:
+            branches:
+              only:
+                - test
+      - acceptance-test-datamanagement-job:
+          requires:
+            - compile-datamanagement-job
+            - test-datamanagement-job
           filters:
             branches:
               only:
