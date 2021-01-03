@@ -76,10 +76,10 @@ jobs:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "dependencies.gradle" }}
-          - v1-dependencies-
+      # - restore_cache:
+      #     keys:
+      #     - v1-dependencies-{{ checksum "dependencies.gradle" }}
+      #     - v1-dependencies-
       # - run:
       #     name: BACKEND - Validate the CI machine configuration
       #     command: |
@@ -161,7 +161,7 @@ workflows:
           filters:
             branches:
               only:
-                - experimental
+                - test
 
   datamanagement-deploy:
     jobs:
