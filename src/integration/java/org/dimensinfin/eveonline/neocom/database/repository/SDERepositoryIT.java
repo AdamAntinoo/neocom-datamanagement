@@ -19,7 +19,7 @@ public class SDERepositoryIT {
 	private ISDEDatabaseService sdeDatabaseService;
 	private ResourceFactory resourceFactory;
 
-	@Test
+//	@Test
 	public void accessBillOfMaterials() {
 		// Prepare
 		this.beforeEach();
