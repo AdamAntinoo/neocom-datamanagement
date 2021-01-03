@@ -47,10 +47,10 @@ public class JobScheduler {
 	private Map<Integer, Job> jobsRegistered = new HashMap<>();
 	private CronScheduleGenerator cronScheduleGenerator = new HourlyCronScheduleGenerator.Builder().build();
 
-// - C O N S T R U C T O R S
+	// - C O N S T R U C T O R S
 	private JobScheduler() {}
 
-// - G E T T E R S   &   S E T T E R S
+	// - G E T T E R S   &   S E T T E R S
 	public int getJobCount() {
 		return this.jobsRegistered.size();
 	}

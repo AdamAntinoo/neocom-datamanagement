@@ -19,6 +19,7 @@ import org.dimensinfin.eveonline.neocom.service.scheduler.domain.CronScheduleGen
  * minutes - hours
  */
 public class HourlyCronScheduleGenerator implements CronScheduleGenerator {
+	// - C O N S T R U C T O R S
 	private HourlyCronScheduleGenerator() {}
 
 	/**
@@ -109,6 +110,7 @@ public class HourlyCronScheduleGenerator implements CronScheduleGenerator {
 	public static class Builder {
 		private HourlyCronScheduleGenerator onConstruction;
 
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new HourlyCronScheduleGenerator();
 		}

@@ -13,23 +13,17 @@ class HourlyCronScheduleGeneratorTest {
 	private HourlyCronScheduleGenerator generator4Test;
 
 	@BeforeEach
-	void setUp() {
+	void beforeEach() {
 		this.generator4Test = new HourlyCronScheduleGenerator.Builder().build();
 	}
 
 	@AfterEach
-	void tearDown() {
+	void afterEach() {
 		DateTimeUtils.setCurrentMillisSystem(); // Make sure to cleanup afterwards
 	}
 
 	@Test
-	void constructor() {
-		final HourlyCronScheduleGenerator generator = new HourlyCronScheduleGenerator.Builder().build();
-		Assertions.assertNotNull( generator );
-	}
-
-	@Test
-	void build() {
+	void buildContract() {
 		final HourlyCronScheduleGenerator generator = new HourlyCronScheduleGenerator.Builder().build();
 		Assertions.assertNotNull( generator );
 	}
