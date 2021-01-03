@@ -80,7 +80,7 @@ jobs:
           name: BACKEND - Validate the CI machine configuration
           command: |
             ./gradlew --version
-            snap install figlet
+            sudo snap install figlet
       - run:
           name: BACKEND - Start the docker simulators
           command: |
@@ -159,7 +159,7 @@ workflows:
           filters:
             branches:
               only:
-                - test
+                - experimental
 
   datamanagement-deploy:
     jobs:
