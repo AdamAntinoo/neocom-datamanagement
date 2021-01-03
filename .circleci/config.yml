@@ -76,6 +76,16 @@ jobs:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
+      - run:
+          name: BACKEND - Generate the SDE database
+          working_directory: src/integration/sh
+          command: |
+            mkdir downloads
+            rm -rf *.db
+            rm -rf *.csv
+            ./update-sde.sh
+            ./create-sde.sh
+            ./install-sde.sh
       # - restore_cache:
       #     keys:
       #     - v1-dependencies-{{ checksum "dependencies.gradle" }}
