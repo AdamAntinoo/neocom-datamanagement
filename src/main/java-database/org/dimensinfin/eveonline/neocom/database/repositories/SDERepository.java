@@ -69,6 +69,27 @@ public class SDERepository {
 		return buildJob;
 	}
 
+	public int accessModule4Blueprint( final int blueprintTypeId ) {
+		LogWrapper.enter();
+		final String SELECT_MODULE4BLUEPRINT = "SELECT productTypeID FROM industryActivityProducts BT"
+				+ " WHERE typeId = ? AND activityID = 1";
+		final int PRODUCTTYPEID_MODULE4BLUEPRINT_COLINDEX = 1;
+		int productTypeId = -1;
+		try {
+			final ISDEStatement cursor = this.sdeDatabaseService
+					.constructStatement( SELECT_MODULE4BLUEPRINT, new String[]{ Integer.toString( blueprintTypeId ) } );
+			while (cursor.moveToNext()) {
+				productTypeId = cursor.getInt( PRODUCTTYPEID_MODULE4BLUEPRINT_COLINDEX );
+			}
+			cursor.close();
+		} catch (final SQLException sqle) {
+			LogWrapper.error( sqle );
+		} finally {
+			LogWrapper.exit();
+		}
+		return productTypeId;
+	}
+
 	public List<Resource> accessSkillRequired( final int itemId ) {
 		LogWrapper.enter();
 		final String SKILLS_REQUIRED = "SELECT ais.typeID, ais.skillID, ais.level, it.typeName " +
@@ -79,7 +100,7 @@ public class SDERepository {
 		final List<Resource> skillsRequired = new ArrayList<>();
 		try {
 			final ISDEStatement cursor = this.sdeDatabaseService
-					.constructStatement( SKILLS_REQUIRED, new String[]{ Integer.valueOf( itemId ).toString() } );
+					.constructStatement( SKILLS_REQUIRED, new String[]{ Integer.toString( itemId ) } );
 			while (cursor.moveToNext()) {
 				skillsRequired.add( this.resourceFactory.generateResource4Id(
 						cursor.getInt( SKILL_REQUIRED_SKILLID_COLINDEX ),
