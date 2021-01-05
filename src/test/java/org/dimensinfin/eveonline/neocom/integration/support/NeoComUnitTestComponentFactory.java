@@ -3,7 +3,7 @@ package org.dimensinfin.eveonline.neocom.integration.support;
 import java.sql.SQLException;
 import java.util.Objects;
 
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
 import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;

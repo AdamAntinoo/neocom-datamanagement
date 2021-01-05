@@ -3,7 +3,7 @@ package org.dimensinfin.eveonline.neocom.asset.service;
 import java.util.List;
 import java.util.Objects;
 
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.domain.IAssetSource;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;

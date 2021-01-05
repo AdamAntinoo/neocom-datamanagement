@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import org.dimensinfin.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.domain.IAssetSource;
 import org.dimensinfin.eveonline.neocom.asset.domain.INeoAsset;
 import org.dimensinfin.eveonline.neocom.asset.domain.LocationAssetContainer;

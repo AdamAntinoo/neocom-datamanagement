@@ -2,13 +2,10 @@ package org.dimensinfin.eveonline.neocom.miningextraction.converter;
 
 import javax.validation.constraints.NotNull;
 
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystem;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
-import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
-import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
 import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
 import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;

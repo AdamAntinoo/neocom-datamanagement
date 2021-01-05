@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.adapter;
+package org.dimensinfin.eveonline.neocom.service;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.dimensinfin.eveonline.neocom.core.AccessStatistics;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
@@ -16,7 +14,6 @@ import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.Structure;
-import org.dimensinfin.eveonline.neocom.domain.space.StructureImplementation;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
@@ -34,10 +31,14 @@ import org.dimensinfin.logging.LogWrapper;
 import retrofit2.Response;
 
 /**
- * The location catalog service will be used to define game locations. It is able to understand their different contents depending on the type of
- * location.
+ * The location catalog service will be used to define Eve Online space locations. It is able to understand their different contents depending on the
+ * type of location.
  * Locations should be cached and have a simple Object dump process registered on the scheduler that saves the current location list every minute.
  * Locations already defined are read back from the storage at creation time.
+ * Heroku implementations will not have available storage space so the serialization and recovery should be an injectable dependency module that
+ * can change the storage implementation depending on the target environment. By default then the location list is not persisted.
+ *
+ * Now Locations are completely normalized and just depend on two class implementations. Storage can then be done into a database instance.
  *
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.19.0
@@ -48,20 +49,24 @@ public class LocationCatalogService extends Job {
 	}
 
 	private static final AccessStatistics locationsCacheStatistics = new AccessStatistics();
-	private static final Logger logger = LoggerFactory.getLogger( LocationCatalogService.class );
 	private static Map<Long, SpaceLocation> locationCache = new HashMap<>();
 	// - C O M P O N E N T S
-	protected IConfigurationService configurationProvider;
-	protected IFileSystem fileSystemAdapter;
-	protected ESIUniverseDataProvider esiUniverseDataProvider;
-	protected RetrofitFactory retrofitFactory;
+	private final IConfigurationService configurationProvider;
+	private final IFileSystem fileSystemAdapter;
+	private final ESIUniverseDataProvider esiUniverseDataProvider;
+	private final RetrofitFactory retrofitFactory;
 
 	private Map<String, Integer> locationTypeCounters = new HashMap<>();
-	private boolean dirtyCache = false;
+	private boolean dirtyCache = false; // Flag used to detect if the cache should be persisted because it has changed.
+	@Deprecated
 	private LocationCacheAccessType lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 
 	// - C O N S T R U C T O R S
-	protected LocationCatalogService() { }
+	public LocationCatalogService( final IConfigurationService configurationProvider, final IFileSystem fileSystemAdapter, final RetrofitFactory retrofitFactory ) {
+		this.configurationProvider = configurationProvider;
+		this.fileSystemAdapter = fileSystemAdapter;
+		this.retrofitFactory = retrofitFactory;
+	}
 
 	// - G E T T E R S   &   S E T T E R S
 	public Map<String, Integer> getLocationTypeCounters() {
@@ -269,7 +274,7 @@ public class LocationCatalogService extends Job {
 
 		// - C O N S T R U C T O R S
 		public Builder() {
-			this.onConstruction = new LocationCatalogService();
+			this.onConstruction = new LocationCatalogService( configurationProvider, fileSystemAdapter, retrofitFactory );
 		}
 
 		public LocationCatalogService build() {

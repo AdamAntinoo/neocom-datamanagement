@@ -3,7 +3,7 @@ package org.dimensinfin.eveonline.neocom;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
-import org.dimensinfin.eveonline.neocom.adapter.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
 
