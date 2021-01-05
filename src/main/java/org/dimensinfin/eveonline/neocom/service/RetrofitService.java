@@ -11,8 +11,8 @@ import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
 
 public class RetrofitService extends RetrofitFactory {
 	@Inject
-	public RetrofitService( final @NotNull @Named("IConfigurationService") IConfigurationService configurationProvider,
-	                        final @NotNull @Named("IFileSystem") IFileSystem fileSystemAdapter ) {
+	public RetrofitService( final @NotNull @Named(DMServicesDependenciesModule.ICONFIGURATION_SERVICE) IConfigurationService configurationProvider,
+	                        final @NotNull @Named(DMServicesDependenciesModule.IFILE_SYSTEM) IFileSystem fileSystemAdapter ) {
 		this.configurationProvider = configurationProvider;
 		this.fileSystemAdapter = fileSystemAdapter;
 	}

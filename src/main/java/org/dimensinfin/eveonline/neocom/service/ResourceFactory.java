@@ -16,7 +16,7 @@ public class ResourceFactory {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public ResourceFactory( final @NotNull @Named("ESIDataService") ESIDataService esiDataService ) {this.esiDataService = esiDataService;}
+	public ResourceFactory( final @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) ESIDataService esiDataService ) {this.esiDataService = esiDataService;}
 
 	public Resource generateResource4Id( final int typeId, final int quantity ) {
 		final GetUniverseTypesTypeIdOk item = this.esiDataService.searchEsiItem4Id( typeId );

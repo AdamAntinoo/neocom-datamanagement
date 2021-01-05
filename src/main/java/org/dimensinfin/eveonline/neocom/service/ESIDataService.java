@@ -22,6 +22,10 @@ import org.dimensinfin.eveonline.neocom.esiswagger.api.IndustryApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOrders200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
@@ -40,16 +44,16 @@ public class ESIDataService extends ESIDataProvider {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public ESIDataService( final @NotNull @Named("IConfigurationService") IConfigurationService configurationService,
-	                       final @NotNull @Named("IFileSystem") IFileSystem fileSystem,
-	                       final @NotNull @Named("IStoreCache") IStoreCache storeCacheManager,
-	                       final @NotNull @Named("RetrofitService") RetrofitService retrofitService/* ,
-	                       final @NotNull @Named("LocationCatalogService") LocationCatalogService locationCatalogService*/ ) {
+	public ESIDataService( final @NotNull @Named(DMServicesDependenciesModule.ICONFIGURATION_SERVICE) IConfigurationService configurationService,
+	                       final @NotNull @Named(DMServicesDependenciesModule.IFILE_SYSTEM) IFileSystem fileSystem,
+	                       final @NotNull @Named(DMServicesDependenciesModule.ISTORE_CACHE) IStoreCache storeCacheManager,
+	                       final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService,
+	                       final @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) LocationCatalogService locationCatalogService ) {
 		this.configurationProvider = configurationService;
 		this.fileSystemAdapter = fileSystem;
 		this.storeCacheManager = storeCacheManager;
 		this.retrofitService = retrofitService;
-		//		this.locationCatalogService=locationCatalogService;
+		this.locationCatalogService = locationCatalogService;
 	}
 
 	// - I N D U S T R Y
@@ -103,8 +107,6 @@ public class ESIDataService extends ESIDataProvider {
 		return new ArrayList<>();
 	}
 
-	// - M A R K E T
-
 	/**
 	 * Searches on a predefined table for the match on the Region identifier. This reference table will store the preferred Market Hub for the
 	 * selected region. If the region value of not found on the reference table then the spacial Jita market is selected as the region hub.
@@ -124,5 +126,23 @@ public class ESIDataService extends ESIDataProvider {
 		//			);
 		//			return (Station) this.locationCatalogService.searchLocation4Id( PREDEFINED_MARKET_HUB_STATION_ID );
 		//		}
+	}
+
+	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
+		return this.locationCatalogService.getUniverseConstellationById( constellationId );
+	}
+	// - M A R K E T
+
+	// - L O C A T I O N   D E L E G A T I O N
+	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
+		return this.locationCatalogService.getUniverseRegionById( regionId );
+	}
+
+	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
+		return this.locationCatalogService.getUniverseStationById( stationId );
+	}
+
+	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
+		return this.locationCatalogService.getUniverseSystemById( systemId );
 	}
 }

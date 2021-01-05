@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
@@ -21,15 +22,10 @@ public class JobToJobRecordConverterTest {
 		final IFileSystem fileSystem = Mockito.mock( IFileSystem.class );
 		final RetrofitFactory retrofitFactory = Mockito.mock( RetrofitFactory.class );
 		final ESIUniverseDataProvider esiUniverseDataProvider = Mockito.mock( ESIUniverseDataProvider.class );
-		final LocationCatalogService job = new LocationCatalogService.Builder()
-				.withConfigurationProvider( configurationProvider )
-				.withFileSystemAdapter( fileSystem )
-				.withRetrofitFactory( retrofitFactory )
-				.withESIUniverseDataProvider( esiUniverseDataProvider )
-				.build();
+		final LocationCatalogService job = Mockito.mock(LocationCatalogService.class);
 		final JobRecord obtained = new JobToJobRecordConverter().convert( job );
 		// Assertions
-		Assertions.assertEquals( "LocationCatalogService", obtained.getJobName() );
+		Assertions.assertEquals( DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE, obtained.getJobName() );
 		Assertions.assertEquals( "* - *", obtained.getSchedule() );
 		Assertions.assertEquals( JobStatus.READY, obtained.getStatus() );
 	}

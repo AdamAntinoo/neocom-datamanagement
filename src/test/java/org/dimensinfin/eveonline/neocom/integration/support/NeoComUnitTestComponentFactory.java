@@ -97,13 +97,13 @@ public class NeoComUnitTestComponentFactory {
 	}
 
 	public LocationCatalogService getLocationCatalogService() {
-		if (null == this.locationCatalogService)
-			this.locationCatalogService = new LocationCatalogService.Builder()
-					.withConfigurationProvider( this.getConfigurationProvider() )
-					.withFileSystemAdapter( this.getFileSystemAdapter() )
-					.withRetrofitFactory( this.getRetrofitFactory() )
-					.withESIUniverseDataProvider( this.getESIUniverseDataProvider() )
-					.build();
+//		if (null == this.locationCatalogService)
+//			this.locationCatalogService = new LocationCatalogService.Builder()
+//					.withConfigurationProvider( this.getConfigurationProvider() )
+//					.withFileSystemAdapter( this.getFileSystemAdapter() )
+//					.withRetrofitFactory( this.getRetrofitFactory() )
+//					.withESIUniverseDataProvider( this.getESIUniverseDataProvider() )
+//					.build();
 		return this.locationCatalogService;
 	}
 

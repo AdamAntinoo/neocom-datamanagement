@@ -142,24 +142,6 @@ public class ESIUniverseDataProvider {
 		return null;
 	}
 
-	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
-		try {
-			// Create the request to be returned so it can be called.
-			final Response<GetUniverseConstellationsConstellationIdOk> systemResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( UniverseApi.class )
-					.getUniverseConstellationsConstellationId( constellationId,
-							DEFAULT_ACCEPT_LANGUAGE,
-							DEFAULT_ESI_SERVER, null, null )
-					.execute();
-			if (systemResponse.isSuccessful())
-				return systemResponse.body();
-		} catch (IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return null;
-	}
-
 	/**
 	 * On new implementation if there are no more pages of data the response is a 404 instead of an empty list. Detect also this case.
 	 */
@@ -199,58 +181,7 @@ public class ESIUniverseDataProvider {
 		return returnMarketOrderList;
 	}
 
-	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
-		try {
-			// Create the request to be returned so it can be called.
-			final Response<GetUniverseRegionsRegionIdOk> systemResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( UniverseApi.class )
-					.getUniverseRegionsRegionId( regionId,
-							DEFAULT_ACCEPT_LANGUAGE,
-							DEFAULT_ESI_SERVER.toLowerCase(), null, null )
-					.execute();
-			if (systemResponse.isSuccessful()) return systemResponse.body();
-		} catch (IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return null;
-	}
-
 	// - P R O V I D E R   A P I
-	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
-		LogWrapper.enter( MessageFormat.format( "stationId: {0}", stationId.toString() ) );
-		try {
-			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( UniverseApi.class )
-					.getUniverseStationsStationId( stationId, DEFAULT_ESI_SERVER, null )
-					.execute();
-			if (stationResponse.isSuccessful())
-				return stationResponse.body();
-		} catch (final IOException ioe) {
-			LogWrapper.error( "IOException during ESI data access.", ioe );
-		}
-		return null;
-	}
-
-	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
-		try {
-			// Create the request to be returned so it can be called.
-			final Response<GetUniverseSystemsSystemIdOk> systemResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( UniverseApi.class )
-					.getUniverseSystemsSystemId( systemId
-							, DEFAULT_ACCEPT_LANGUAGE
-							, DEFAULT_ESI_SERVER, null, null )
-					.execute();
-			if (systemResponse.isSuccessful())
-				return systemResponse.body();
-		} catch (IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return null;
-	}
-
 	// - C A C H E D   A P I
 	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
 		return this.storeCacheManager.accessType( itemId ).blockingGet();

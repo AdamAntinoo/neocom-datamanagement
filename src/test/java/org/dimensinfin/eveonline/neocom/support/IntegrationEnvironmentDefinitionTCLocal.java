@@ -158,12 +158,12 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 				.withStoreCacheManager( this.itStoreCacheManager )
 				.withRetrofitFactory( this.itRetrofitFactory )
 				.build();
-		this.itLocationCatalogService = new LocationCatalogService.Builder()
-				.withConfigurationProvider( this.itConfigurationProvider )
-				.withFileSystemAdapter( this.itFileSystemAdapter )
-				.withESIUniverseDataProvider( this.itEsiUniverseDataProvider )
-				.withRetrofitFactory( this.itRetrofitFactory )
-				.build();
+//		this.itLocationCatalogService = new LocationCatalogService.Builder()
+//				.withConfigurationProvider( this.itConfigurationProvider )
+//				.withFileSystemAdapter( this.itFileSystemAdapter )
+//				.withESIUniverseDataProvider( this.itEsiUniverseDataProvider )
+//				.withRetrofitFactory( this.itRetrofitFactory )
+//				.build();
 		this.esiDataProvider = new ESIDataProvider.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )

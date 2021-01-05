@@ -13,6 +13,7 @@ import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
 import org.dimensinfin.eveonline.neocom.domain.Resource;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -23,7 +24,7 @@ public class SDERepository {
 	// - C O N S T R U C T O R S
 	@Inject
 	public SDERepository( final @NotNull @Named("ISDEDatabaseService") ISDEDatabaseService sdeDatabaseService,
-	                      final @NotNull @Named("ResourceFactory") ResourceFactory resourceFactory ) {
+	                      final @NotNull @Named(DMServicesDependenciesModule.RESOURCE_FACTORY) ResourceFactory resourceFactory ) {
 		this.sdeDatabaseService = Objects.requireNonNull( sdeDatabaseService );
 		this.resourceFactory = Objects.requireNonNull( resourceFactory );
 	}

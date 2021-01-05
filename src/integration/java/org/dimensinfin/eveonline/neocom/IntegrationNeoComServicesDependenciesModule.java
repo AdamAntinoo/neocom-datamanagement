@@ -7,6 +7,7 @@ import com.google.inject.name.Names;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
@@ -40,15 +41,15 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.toInstance( sdeDatabasePath );
 
 		bind( IConfigurationService.class )
-				.annotatedWith( Names.named( "IConfigurationService" ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.ICONFIGURATION_SERVICE ) )
 				.to( SBConfigurationService.class )
 				.in( Singleton.class );
 		bind( IFileSystem.class )
-				.annotatedWith( Names.named( "IFileSystem" ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.IFILE_SYSTEM ) )
 				.to( SBFileSystemAdapter.class )
 				.in( Singleton.class );
 		bind( RetrofitService.class )
-				.annotatedWith( Names.named( "RetrofitService" ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.RETROFIT_SERVICE ) )
 				.to( RetrofitService.class )
 				.in( Singleton.class );
 		bind( ISDEDatabaseService.class )
@@ -56,15 +57,15 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.to( SBSDEDatabaseService.class )
 				.in( Singleton.class );
 		bind( IStoreCache.class )
-				.annotatedWith( Names.named( "IStoreCache" ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.ISTORE_CACHE ) )
 				.to( MemoryStoreCacheService.class )
 				.in( Singleton.class );
 		bind( ESIDataService.class )
-				.annotatedWith( Names.named( "ESIDataService" ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.ESIDATA_SERVICE ) )
 				.to( ESIDataService.class )
 				.in( Singleton.class );
 		bind( ResourceFactory.class )
-				.annotatedWith( Names.named( "ResourceFactory" ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.RESOURCE_FACTORY ) )
 				.to( ResourceFactory.class )
 				.in( Singleton.class );
 	}

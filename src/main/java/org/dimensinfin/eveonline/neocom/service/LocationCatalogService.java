@@ -5,7 +5,10 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.dimensinfin.eveonline.neocom.core.AccessStatistics;
@@ -20,15 +23,12 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
-import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
-import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
-import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
-import org.dimensinfin.eveonline.neocom.service.scheduler.JobScheduler;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
+import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ACCEPT_LANGUAGE;
+import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 
 /**
  * The location catalog service will be used to define Eve Online space locations. It is able to understand their different contents depending on the
@@ -51,10 +51,7 @@ public class LocationCatalogService extends Job {
 	private static final AccessStatistics locationsCacheStatistics = new AccessStatistics();
 	private static Map<Long, SpaceLocation> locationCache = new HashMap<>();
 	// - C O M P O N E N T S
-	private final IConfigurationService configurationProvider;
-	private final IFileSystem fileSystemAdapter;
-	private final ESIUniverseDataProvider esiUniverseDataProvider;
-	private final RetrofitFactory retrofitFactory;
+	private final RetrofitService retrofitService;
 
 	private Map<String, Integer> locationTypeCounters = new HashMap<>();
 	private boolean dirtyCache = false; // Flag used to detect if the cache should be persisted because it has changed.
@@ -62,10 +59,9 @@ public class LocationCatalogService extends Job {
 	private LocationCacheAccessType lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 
 	// - C O N S T R U C T O R S
-	public LocationCatalogService( final IConfigurationService configurationProvider, final IFileSystem fileSystemAdapter, final RetrofitFactory retrofitFactory ) {
-		this.configurationProvider = configurationProvider;
-		this.fileSystemAdapter = fileSystemAdapter;
-		this.retrofitFactory = retrofitFactory;
+	@Inject
+	public LocationCatalogService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService ) {
+		this.retrofitService = retrofitService;
 	}
 
 	// - G E T T E R S   &   S E T T E R S
@@ -86,7 +82,7 @@ public class LocationCatalogService extends Job {
 	public Boolean call() {
 		LogWrapper.enter();
 		try {
-			return this.writeLocationsDataCache();
+			return this.persistLocationsDataCache();
 		} finally {
 			LogWrapper.exit();
 		}
@@ -98,11 +94,85 @@ public class LocationCatalogService extends Job {
 		this.dirtyCache = false;
 	}
 
+	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<GetUniverseConstellationsConstellationIdOk> systemResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseConstellationsConstellationId( constellationId,
+							DEFAULT_ACCEPT_LANGUAGE,
+							DEFAULT_ESI_SERVER, null, null )
+					.execute();
+			if (systemResponse.isSuccessful())
+				return systemResponse.body();
+		} catch (IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<GetUniverseRegionsRegionIdOk> systemResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseRegionsRegionId( regionId,
+							DEFAULT_ACCEPT_LANGUAGE,
+							DEFAULT_ESI_SERVER.toLowerCase(), null, null )
+					.execute();
+			if (systemResponse.isSuccessful()) return systemResponse.body();
+		} catch (IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
+		LogWrapper.enter( MessageFormat.format( "stationId: {0}", stationId.toString() ) );
+		try {
+			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseStationsStationId( stationId, DEFAULT_ESI_SERVER, null )
+					.execute();
+			if (stationResponse.isSuccessful())
+				return stationResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( "IOException during ESI data access.", ioe );
+		}
+		return null;
+	}
+
+	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<GetUniverseSystemsSystemIdOk> systemResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseSystemsSystemId( systemId
+							, DEFAULT_ACCEPT_LANGUAGE
+							, DEFAULT_ESI_SERVER, null, null )
+					.execute();
+			if (systemResponse.isSuccessful())
+				return systemResponse.body();
+		} catch (IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	// - S E A R C H   L O C A T I O N   A P I
+
 	/**
 	 * Use a single place where to search for locations if we know a full location identifier. It will detect if the location is a space or
 	 * structure location and search for the right record.
+	 * This method is used for Pilot and structure locations.
 	 *
 	 * @param locationId full location identifier obtained from any asset with the full location identifier.
+	 * @param credential the pilot Credential to be used to access the list of structures. Not all structures are available and it is a secured
+	 *                   endpoint.
 	 * @return a SpaceLocation record with the complete location data identifiers and descriptions.
 	 */
 	public SpaceLocation searchLocation4Id( final LocationIdentifier locationId, final Credential credential ) {
@@ -111,6 +181,12 @@ public class LocationCatalogService extends Job {
 		else return this.searchLocation4Id( locationId.getSpaceIdentifier() );
 	}
 
+	/**
+	 * Method to search for public locations and space stations that do not belong to players.
+	 *
+	 * @param locationId the unique identifier for the location
+	 * @return a SpaceLocation with the correct fields filled. Can be Region or Constellation or Space or Station.
+	 */
 	public SpaceLocation searchLocation4Id( final Long locationId ) {
 		this.lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 		if (locationCache.containsKey( locationId ))
@@ -127,8 +203,6 @@ public class LocationCatalogService extends Job {
 		} else return null;
 	}
 
-	// - S E A R C H   L O C A T I O N   A P I
-
 	public SpaceLocation searchStructure4Id( final Long locationId, final Credential credential ) {
 		this.lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 		if (locationCache.containsKey( locationId ))
@@ -139,30 +213,30 @@ public class LocationCatalogService extends Job {
 		if (null != hit) {
 			this.lastLocationAccess = LocationCacheAccessType.GENERATED;
 			this.storeOnCacheLocation( hit );
-			logger.info( ">< [LocationCatalogService.searchStructure4Id]> [HIT-{}/{} ] Location {} generated from Public " +
-							"Structure Data.",
-					hits, access, locationId );
+			LogWrapper.info( MessageFormat.format(
+					"[HIT-{0,number,integer}/{1,number,integer} ] Location {2,number,integer} generated from Public Structure Data.",
+					hits, access, locationId ) );
 			return hit;
 		} else return null;
 	}
 
 	// - C A C H E   M A N A G E M E N T
-	public void stopService() {
-		this.writeLocationsDataCache();
-		this.cleanLocationsCache();
-	}
+	//	public void stopService() {
+	//		this.persistLocationsDataCache();
+	//		this.cleanLocationsCache();
+	//	}
 
 	private SpaceLocation buildUpLocation( final Long locationId ) {
 		if (locationId < 20000000) { // Can be a Region
 			return this.storeOnCacheLocation(
 					new SpaceLocationImplementation.Builder()
-							.withRegion( Objects.requireNonNull( this.esiUniverseDataProvider.getUniverseRegionById( locationId.intValue() ) ) )
+							.withRegion( Objects.requireNonNull( this.getUniverseRegionById( locationId.intValue() ) ) )
 							.build() );
 		}
 		if (locationId < 30000000) { // Can be a Constellation
-			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
 					.getUniverseConstellationById( locationId.intValue() ) );
-			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
 					.getUniverseRegionById( constellation.getRegionId() ) );
 			return this.storeOnCacheLocation(
 					new SpaceLocationImplementation.Builder()
@@ -171,11 +245,10 @@ public class LocationCatalogService extends Job {
 							.build() );
 		}
 		if (locationId < 40000000) { // Can be a system
-			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.esiUniverseDataProvider
-					.getUniverseSystemById( locationId.intValue() ) );
-			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.getUniverseSystemById( locationId.intValue() ) );
+			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
 					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
-			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
 					.getUniverseRegionById( constellation.getRegionId() ) );
 			return this.storeOnCacheLocation(
 					new SpaceLocationImplementation.Builder()
@@ -185,13 +258,13 @@ public class LocationCatalogService extends Job {
 							.build() );
 		}
 		if (locationId < 61000000) { // Can be a game station
-			final GetUniverseStationsStationIdOk station = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseStationsStationIdOk station = Objects.requireNonNull( this
 					.getUniverseStationById( locationId.intValue() ) );
-			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.esiUniverseDataProvider
-					.getUniverseSystemById( station.getSystemId()) );
-			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this
+					.getUniverseSystemById( station.getSystemId() ) );
+			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
 					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
-			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
 					.getUniverseRegionById( constellation.getRegionId() ) );
 			return this.storeOnCacheLocation(
 					new SpaceLocationImplementation.Builder()
@@ -206,11 +279,11 @@ public class LocationCatalogService extends Job {
 
 	private SpaceLocation buildUpStructure( final Long locationId, final Credential credential ) {
 		final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull( this.search200OkStructureById( locationId, credential ) );
-		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.esiUniverseDataProvider
+		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this
 				.getUniverseSystemById( locationId.intValue() ) );
-		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this.esiUniverseDataProvider
+		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
 				.getUniverseConstellationById( solarSystem.getConstellationId() ) );
-		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this.esiUniverseDataProvider
+		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
 				.getUniverseRegionById( constellation.getRegionId() ) );
 		return this.storeOnCacheLocation(
 				new Structure.Builder()
@@ -221,13 +294,13 @@ public class LocationCatalogService extends Job {
 						.build() );
 	}
 
-	private void registerOnScheduler() {
-		JobScheduler.getJobScheduler().registerJob( this );
-	}
+	//	private void registerOnScheduler() {
+	//		JobScheduler.getJobScheduler().registerJob( this );
+	//	}
 
 	private GetUniverseStructuresStructureIdOk search200OkStructureById( final Long structureId, final Credential credential ) {
 		try {
-			final Response<GetUniverseStructuresStructureIdOk> universeResponse = this.retrofitFactory
+			final Response<GetUniverseStructuresStructureIdOk> universeResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
 					.create( UniverseApi.class )
 					.getUniverseStructuresStructureId( structureId,
@@ -237,9 +310,9 @@ public class LocationCatalogService extends Job {
 				return universeResponse.body();
 			}
 		} catch (final IOException ioe) {
-			LogWrapper.error( "[IOException]> locating public structure: ", ioe );
+			LogWrapper.error( ioe );
 		} catch (final RuntimeException rte) {
-			LogWrapper.error( "[RuntimeException]> locating public structure: ", rte );
+			LogWrapper.error( rte );
 		}
 		return null;
 	}
@@ -253,12 +326,12 @@ public class LocationCatalogService extends Job {
 		return locationCache.get( locationId );
 	}
 
-	private void startService() {
-		// TODO - This is not required until the citadel structures get stored on the SDE database.
-		//		this.verifySDERepository(); // Check that the LocationsCache table exists and verify the contents
-		this.readLocationsDataCache(); // Load the cache from the storage.
-		this.registerOnScheduler(); // Register on scheduler to update storage every some minutes
-	}
+	//	private void startService() {
+	//		// TODO - This is not required until the citadel structures get stored on the SDE database.
+	//		//		this.verifySDERepository(); // Check that the LocationsCache table exists and verify the contents
+	//		this.readLocationsDataCache(); // Load the cache from the storage.
+	//		this.registerOnScheduler(); // Register on scheduler to update storage every some minutes
+	//	}
 
 	private SpaceLocation storeOnCacheLocation( final SpaceLocation entry ) {
 		if (null != entry) {
@@ -268,52 +341,10 @@ public class LocationCatalogService extends Job {
 		return entry;
 	}
 
-	// - B U I L D E R
-	public static class Builder {
-		private LocationCatalogService onConstruction;
+	//	synchronized void readLocationsDataCache() {
+	//	}
 
-		// - C O N S T R U C T O R S
-		public Builder() {
-			this.onConstruction = new LocationCatalogService( configurationProvider, fileSystemAdapter, retrofitFactory );
-		}
-
-		public LocationCatalogService build() {
-			Objects.requireNonNull( this.onConstruction.configurationProvider );
-			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
-			Objects.requireNonNull( this.onConstruction.esiUniverseDataProvider );
-			this.onConstruction.startService();
-			return this.onConstruction;
-		}
-
-		public Builder withConfigurationProvider( final IConfigurationService configurationProvider ) {
-			Objects.requireNonNull( configurationProvider );
-			this.onConstruction.configurationProvider = configurationProvider;
-			return this;
-		}
-
-		public Builder withESIUniverseDataProvider( final ESIUniverseDataProvider esiUniverseDataProvider ) {
-			Objects.requireNonNull( esiUniverseDataProvider );
-			this.onConstruction.esiUniverseDataProvider = esiUniverseDataProvider;
-			return this;
-		}
-
-		public Builder withFileSystemAdapter( final IFileSystem fileSystemAdapter ) {
-			Objects.requireNonNull( fileSystemAdapter );
-			this.onConstruction.fileSystemAdapter = fileSystemAdapter;
-			return this;
-		}
-
-		public Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
-			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitFactory = retrofitFactory;
-			return this;
-		}
-	}
-
-	synchronized void readLocationsDataCache() {
-	}
-
-	synchronized boolean writeLocationsDataCache() {
+	synchronized boolean persistLocationsDataCache() {
 		return false;
 	}
 }

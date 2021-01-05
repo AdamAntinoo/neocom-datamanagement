@@ -13,6 +13,7 @@ import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.industry.converter.GetCharactersCharacterIdIndustryJobsToJobEntityConverter;
 import org.dimensinfin.eveonline.neocom.industry.persistence.JobEntity;
 import org.dimensinfin.eveonline.neocom.industry.persistence.JobRepository;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -21,7 +22,7 @@ public class IndustryJobControlService {
 	private JobRepository jobRepository;
 
 	// - C O N S T R U C T O R S
-	public IndustryJobControlService( final @NotNull @Named("ESIDataService") ESIDataService esiDataService ,
+	public IndustryJobControlService( final @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) ESIDataService esiDataService ,
 	                                  final @NotNull @Named("JobRepository") JobRepository jobRepository) {
 		this.esiDataService = esiDataService;
 		this.jobRepository=jobRepository;
