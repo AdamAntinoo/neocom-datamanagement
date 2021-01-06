@@ -149,7 +149,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 
 		public Resource build() {
 			Objects.requireNonNull( this.onConstruction.typeId );
-			Objects.requireNonNull( this.onConstruction.item );
+			Objects.requireNonNull( this.onConstruction.type );
 			Objects.requireNonNull( this.onConstruction.group );
 			Objects.requireNonNull( this.onConstruction.category );
 			return this.onConstruction;
@@ -166,7 +166,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 		}
 
 		public Resource.Builder withItemType( final GetUniverseTypesTypeIdOk item ) {
-			this.onConstruction.item = Objects.requireNonNull( item );
+			this.onConstruction.type = Objects.requireNonNull( item );
 			return this;
 		}
 

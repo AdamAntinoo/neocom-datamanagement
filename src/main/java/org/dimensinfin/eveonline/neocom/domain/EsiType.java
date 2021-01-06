@@ -8,13 +8,12 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 
 public class EsiType extends NeoComNode {
+	public static final String ESI_ICON_URL_PREFIX = "https://image.eveonline.com/Type/";
+	public static final String ESI_ICON_URL_SUFFIX = "_64.png";
 	private static final long serialVersionUID = 1430130141655722687L;
-	public static final String ESI_ICON_URL_PREFIX="https://image.eveonline.com/Type/";
-	public static final String ESI_ICON_URL_SUFFIX="_64.png";
-
 	protected int typeId = -1;
 	protected IndustryGroup industryGroup = IndustryGroup.UNDEFINED;
-	protected GetUniverseTypesTypeIdOk item;
+	protected GetUniverseTypesTypeIdOk type;
 	protected GetUniverseGroupsGroupIdOk group;
 	protected GetUniverseCategoriesCategoryIdOk category;
 
@@ -76,24 +75,36 @@ public class EsiType extends NeoComNode {
 		return this.industryGroup;
 	}
 
-	public GetUniverseTypesTypeIdOk getItem() {
-		return this.item;
+	public String getName() {
+		return this.type.getName();
 	}
 
-	public String getName() {
-		return this.item.getName();
+	/**
+	 * This method evaluates the item name since the technology level is not stored on any repository (up to the moment). The assumption is that
+	 * all items have Tech I until otherwise detected.
+	 * Tech detection is done on the type name end string.
+	 *
+	 * @return the expected tech level for the item.
+	 */
+	public String getTech() {
+		if (this.getName().endsWith( "III" )) return "Tech III";
+		if (this.getName().endsWith( "II" )) return "Tech II";
+		return "Tech I";
+	}
+
+	public GetUniverseTypesTypeIdOk getType() {
+		return this.type;
+	}
+
+	public String getTypeIconURL() {
+		return ESI_ICON_URL_PREFIX + this.getTypeId() + ESI_ICON_URL_SUFFIX;
 	}
 
 	public int getTypeId() {
 		return this.typeId;
 	}
-@Deprecated
-	public String getURLForItem() {
-		return ESI_ICON_URL_PREFIX + this.getTypeId() + ESI_ICON_URL_SUFFIX;
-	}
-	public String getTypeIconURL ()  {
-		return ESI_ICON_URL_PREFIX + this.getTypeId() + ESI_ICON_URL_SUFFIX;
-	}
+
+	public double getVolume() {return this.type.getVolume();}
 
 	protected void classifyIndustryGroup() {
 		if ((this.getGroupName().equalsIgnoreCase( "Composite" )) && (this.getCategoryName().equalsIgnoreCase( "Material" ))) {
@@ -143,8 +154,6 @@ public class EsiType extends NeoComNode {
 		}
 	}
 
-	public double getVolume() {return this.item.getVolume();}
-
 	// - B U I L D E R
 	public static class Builder {
 		private final EsiType onConstruction;
@@ -156,7 +165,7 @@ public class EsiType extends NeoComNode {
 
 		public EsiType build() {
 			Objects.requireNonNull( this.onConstruction.typeId );
-			Objects.requireNonNull( this.onConstruction.item );
+			Objects.requireNonNull( this.onConstruction.type );
 			Objects.requireNonNull( this.onConstruction.group );
 			Objects.requireNonNull( this.onConstruction.category );
 			return this.onConstruction;
@@ -173,7 +182,7 @@ public class EsiType extends NeoComNode {
 		}
 
 		public EsiType.Builder withItemType( final GetUniverseTypesTypeIdOk item ) {
-			this.onConstruction.item = Objects.requireNonNull( item );
+			this.onConstruction.type = Objects.requireNonNull( item );
 			return this;
 		}
 

@@ -44,7 +44,7 @@ public class PlanetaryResource extends Resource {
 		}
 
 		public PlanetaryResource build() {
-			Objects.requireNonNull( this.onConstruction.item );
+			Objects.requireNonNull( this.onConstruction.type );
 			Objects.requireNonNull( this.onConstruction.group );
 			Objects.requireNonNull( this.onConstruction.category );
 			return this.onConstruction;
@@ -61,7 +61,7 @@ public class PlanetaryResource extends Resource {
 		}
 
 		public PlanetaryResource.Builder withItemType( final GetUniverseTypesTypeIdOk item ) {
-			this.onConstruction.item = Objects.requireNonNull( item );
+			this.onConstruction.type = Objects.requireNonNull( item );
 			return this;
 		}
 

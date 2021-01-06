@@ -37,7 +37,7 @@ public class MiningExtractionEntityToMiningExtractionConverterTest {
 		Mockito.when( neoItem.getName() ).thenReturn( "Piroxeres" );
 		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
 		Mockito.when( neoItem.getVolume() ).thenReturn( 0.01 );
-		Mockito.when( neoItem.getURLForItem() ).thenReturn( "http://17459.png" );
+		Mockito.when( neoItem.getTypeIconURL() ).thenReturn( "http://17459.png" );
 		Mockito.when( spaceLocation.getLocationId() ).thenReturn( 30001669L );
 		Mockito.when( spaceLocation.getSolarSystemName() ).thenReturn( "Esescama" );
 		// Test

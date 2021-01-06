@@ -167,7 +167,7 @@ public class NeoAsset extends UpdatableEntity implements INeoAsset {
 
 	public String getGroupName() {return this.itemDelegate.getGroupName();}
 
-	public String getURLForItem() {return this.itemDelegate.getURLForItem();}
+	public String getURLForItem() {return this.itemDelegate.getTypeIconURL();}
 
 	public String getUserLabel() {
 		return this.userLabel;

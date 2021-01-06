@@ -34,10 +34,11 @@ public class ESIDataServiceIT {
 	private static final Integer TEST_INDUSTRY_JOBS_JOB_ID = 446529008;
 	private static final Integer TEST_CREDENTIAL_ID = 92223647;
 
-	private SBConfigurationService configurationService;
+	private SBConfigurationService configurationService; // Use the class to get access to the method to update properties.
 	private IFileSystem fileSystem;
-	private RetrofitService retrofitService;
 	private IStoreCache storeCache;
+	private RetrofitService retrofitService;
+	private LocationCatalogService locationCatalogService;
 	private GenericContainer<?> esiAuthenticationSimulator;
 	private GenericContainer<?> esiDataSimulator;
 
@@ -49,9 +50,9 @@ public class ESIDataServiceIT {
 		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
 		this.configurationService = injector.getInstance( SBConfigurationService.class );
 		this.fileSystem = injector.getInstance( SBFileSystemAdapter.class );
-		this.retrofitService = injector.getInstance( RetrofitService.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
-
+		this.retrofitService = injector.getInstance( RetrofitService.class );
+		this.locationCatalogService = injector.getInstance( LocationCatalogService.class );
 		// Update the retrofit port configurations.
 		this.configurationService.setProperty( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
 				"http://" +
@@ -84,7 +85,8 @@ public class ESIDataServiceIT {
 		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
 				this.fileSystem,
 				this.storeCache,
-				this.retrofitService );
+				this.retrofitService,
+				this.locationCatalogService );
 		final List<GetCharactersCharacterIdIndustryJobs200Ok> obtained = esiDataService.getCharactersCharacterIdIndustryJobs( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );

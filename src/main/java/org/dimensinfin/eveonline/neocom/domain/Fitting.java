@@ -36,7 +36,7 @@ public class Fitting extends NeoComNode {
 
 	public String getHullGroup() {return this.shipItem.getHullGroup();}
 
-	public String getURLForItem() {return this.shipItem.getURLForItem();}
+	public String getURLForItem() {return this.shipItem.getTypeIconURL();}
 
 	public List<FittingItem> getItems() {
 		return this.items;

@@ -20,6 +20,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 
 @JsonIgnoreProperties
+@Deprecated
 public class NeoItem extends NeoComNode implements IItemFacet {
 	public enum IndustryGroup {
 		UNDEFINED, OUTPUT, SKILL, BLUEPRINT, COMPONENTS, HULL, CHARGE, DATACORES, DATAINTERFACES, DECRIPTORS, ITEMS, MINERAL,
@@ -259,7 +260,7 @@ public class NeoItem extends NeoComNode implements IItemFacet {
 //	}
 
 	// - I I T E M F A C E T
-	public String getURLForItem() {
+	public String getTypeIconURL() {
 		return "https://image.eveonline.com/Type/" + this.getTypeId() + "_64.png";
 	}
 

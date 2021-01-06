@@ -85,7 +85,7 @@ public class MiningExtraction {
 	public Integer getTypeId() {return this.resourceItem.getTypeId();}
 
 	public String getURLForItem() {
-		return this.resourceItem.getURLForItem();
+		return this.resourceItem.getTypeIconURL();
 	}
 
 	public double getVolume() {
