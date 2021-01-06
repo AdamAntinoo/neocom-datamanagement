@@ -81,20 +81,20 @@ jobs:
           working_directory: src/integration/sh
           command: |
             mkdir downloads
-            rm -rf *.db
-            rm -rf *.csv
-            ./update-sde.sh
-            ./create-sde.sh
             ./install-sde.sh
+      - run:
+          name: BACKEND - Generate build resources and get them ready
+          command: |
+            ./gradlew clean processIntegrationResources
       # - restore_cache:
       #     keys:
       #     - v1-dependencies-{{ checksum "dependencies.gradle" }}
       #     - v1-dependencies-
-      # - run:
-      #     name: BACKEND - Validate the CI machine configuration
-      #     command: |
-      #       ./gradlew --version
-      #       sudo snap install figlet
+      - run:
+          name: BACKEND - Validate the CI machine configuration
+          command: |
+            ./gradlew --version
+            sudo snap install figlet
       # - run:
       #     name: BACKEND - Start the docker simulators
       #     command: |
