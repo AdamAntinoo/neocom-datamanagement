@@ -28,4 +28,7 @@
 .print ">>> Create Industry Materials Skills List..."
 .mode csv
 .import industryActivitySkills.csv industryActivitySkills
+.print ">>> Create Industry Activity Products List..."
+.mode csv
+.import industryActivityProducts.csv industryActivityProducts
 .exit
