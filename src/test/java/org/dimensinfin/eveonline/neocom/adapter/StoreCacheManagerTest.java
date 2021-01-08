@@ -12,6 +12,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.support.TestConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SupportFileSystem;
 
@@ -30,10 +31,7 @@ public class StoreCacheManagerTest {
 		this.fileSystemAdapter = new SupportFileSystem.Builder()
 				.optionalApplicationDirectory( "./src/test/NeoCom.UnitTest" )
 				.build();
-		final RetrofitFactory retrofitFactory = new RetrofitFactory.Builder()
-				.withConfigurationProvider( configurationProvider )
-				.withFileSystemAdapter( fileSystemAdapter )
-				.build();
+		final RetrofitFactory retrofitFactory = new RetrofitService( configurationProvider , fileSystemAdapter );
 		this.storeCacheManager4test = new StoreCacheManager.Builder()
 				.withConfigurationProvider( configurationProvider )
 				.withFileSystemAdapter( fileSystemAdapter )
@@ -47,10 +45,7 @@ public class StoreCacheManagerTest {
 //		final IFileSystem fileSystemAdapter = new SupportFileSystem.Builder()
 //				.optionalApplicationDirectory( "./src/test/NeoCom.UnitTest" )
 //				.build();
-		final RetrofitFactory retrofitFactory = new RetrofitFactory.Builder()
-				.withConfigurationProvider( this.configurationProvider )
-				.withFileSystemAdapter( this.fileSystemAdapter )
-				.build();
+		final RetrofitFactory retrofitFactory = new RetrofitService( configurationProvider , fileSystemAdapter );
 		final StoreCacheManager storeCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.configurationProvider )
 				.withFileSystemAdapter( this.fileSystemAdapter )

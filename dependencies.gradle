@@ -15,7 +15,6 @@ dependencies {
     implementation "joda-time:joda-time:$jodaTimeVersion" // Use this library for support on Android systems
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'com.annimon:stream:1.1.9' // Android compatible streams
-//    runtimeOnly 'org.aspectj:aspectjrt:1.6.12'
     implementation  'com.google.inject:guice:4.2.3' // Google injection library compatible with Android
 }
 
@@ -28,7 +27,6 @@ dependencies {
 // - N E O C O M   L I B R A R I E S
 dependencies {
     implementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
-//    implementation 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
 }
 
 dependencies {
@@ -65,9 +63,7 @@ dependencies {
     // C O R E
     testImplementation 'org.slf4j:slf4j-simple:1.7.26'
     testImplementation "joda-time:joda-time:$jodaTimeVersion"
-    testImplementation 'junit:junit:4.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    testImplementation 'org.junit.vintage:junit-vintage-engine:5.4.2'
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.10'
     // N E O C O M
     testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'

@@ -18,14 +18,16 @@ import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;
 public class JobToJobRecordConverterTest {
 	@Test
 	public void convert() {
+		// Given
 		final IConfigurationService configurationProvider = Mockito.mock( IConfigurationService.class );
 		final IFileSystem fileSystem = Mockito.mock( IFileSystem.class );
 		final RetrofitFactory retrofitFactory = Mockito.mock( RetrofitFactory.class );
 		final ESIUniverseDataProvider esiUniverseDataProvider = Mockito.mock( ESIUniverseDataProvider.class );
-		final LocationCatalogService job = Mockito.mock(LocationCatalogService.class);
+		final Job4Test job = new Job4Test();
+		// Test
 		final JobRecord obtained = new JobToJobRecordConverter().convert( job );
 		// Assertions
-		Assertions.assertEquals( DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE, obtained.getJobName() );
+		Assertions.assertEquals( "Job4Test", obtained.getJobName() );
 		Assertions.assertEquals( "* - *", obtained.getSchedule() );
 		Assertions.assertEquals( JobStatus.READY, obtained.getStatus() );
 	}

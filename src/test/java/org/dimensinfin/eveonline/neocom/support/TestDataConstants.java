@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.support;
 
+import org.dimensinfin.eveonline.neocom.domain.IndustryGroup;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
@@ -30,6 +31,9 @@ public class TestDataConstants {
 		public static final Integer TEST_ESI_CHARACTER_ANCESTRY_IDENTIFIER = 200;
 		public static final Integer TEST_ESI_CHARACTER_BLOODLINE_IDENTIFIER = 300;
 		public static final Float TEST_ESI_CHARACTER_SECURITY_STATUS = 0.5F;
+
+		public static final Integer TEST_ESI_UNIVERSE_JOB_ID = 98384726;
+		public static final Integer	TEST_ESI_UNIVERSE_JOB_INSTALLER_ID=98384726;
 
 		static {
 			TEST_ESI_CHARACTER_DATA.setName( TEST_ESI_CHARACTER_NAME );
@@ -72,6 +76,17 @@ public class TestDataConstants {
 
 	public static class SDERepositoryConstants {
 		public static final Integer TEST_SDE_REPOSITORY_TYPE_ID = 32873;
+	}
+
+	public static final class EsiTypeConstants {
+		public static final Integer TEST_ESITYPE_ID = 11535;
+		public static final String TEST_ESITYPE_NAME = "Magnetometric Sensor Cluster";
+		public static final String TEST_ESITYPE_GROUP_NAME = "Construction Components";
+		public static final String TEST_ESITYPE_CATEGORY_NAME = "Commodity";
+		public static final String TEST_ESITYPE_TYPEICON_URL = "https://image.eveonline.com/Type/11535_64.png";
+		public static final IndustryGroup TEST_ESITYPE_INDUSTRYGROUP_NAME = IndustryGroup.COMMODITY;
+		public static final String TEST_ESITYPE_HULLGROUP_NAME = "not-applies";
+		public static final String TEST_ESITYPE_TECH = "Tech I";
 	}
 
 	public static final class ResourceConstants {

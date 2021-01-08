@@ -10,6 +10,7 @@ import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
@@ -48,17 +49,17 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.annotatedWith( Names.named( DMServicesDependenciesModule.IFILE_SYSTEM ) )
 				.to( SBFileSystemAdapter.class )
 				.in( Singleton.class );
+		bind( IStoreCache.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.ISTORE_CACHE ) )
+				.to( MemoryStoreCacheService.class )
+				.in( Singleton.class );
 		bind( RetrofitService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.RETROFIT_SERVICE ) )
 				.to( RetrofitService.class )
 				.in( Singleton.class );
-		bind( ISDEDatabaseService.class )
-				.annotatedWith( Names.named( "ISDEDatabaseService" ) )
-				.to( SBSDEDatabaseService.class )
-				.in( Singleton.class );
-		bind( IStoreCache.class )
-				.annotatedWith( Names.named( DMServicesDependenciesModule.ISTORE_CACHE ) )
-				.to( MemoryStoreCacheService.class )
+		bind( LocationCatalogService.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE ) )
+				.to( LocationCatalogService.class )
 				.in( Singleton.class );
 		bind( ESIDataService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ESIDATA_SERVICE ) )
@@ -68,5 +69,13 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.annotatedWith( Names.named( DMServicesDependenciesModule.RESOURCE_FACTORY ) )
 				.to( ResourceFactory.class )
 				.in( Singleton.class );
+		bind( ISDEDatabaseService.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.ISDE_DATABASE_SERVICE ) )
+				.to( SBSDEDatabaseService.class )
+				.in( Singleton.class );
+//		bind( NeoComDatabaseService.class )
+//				.annotatedWith( Names.named( DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE ) )
+//				.to( IntegrationNeoComDatabaseService.class )
+//				.in( Singleton.class );
 	}
 }

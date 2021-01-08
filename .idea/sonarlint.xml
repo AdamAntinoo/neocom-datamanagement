@@ -2,6 +2,13 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
+    <option name="fileExclusions">
+      <list>
+        <option value="FILE:src/main/java/org/dimensinfin/eveonline/neocom/utility/Base64.java" />
+        <option value="DIRECTORY:src/test" />
+        <option value="DIRECTORY:src/integration" />
+      </list>
+    </option>
     <option name="projectKey" value="evedimensinfin_neocom-datamanagement" />
     <option name="serverId" value="NeoCom-SonarCloud" />
   </component>

@@ -17,7 +17,7 @@ import org.dimensinfin.eveonline.neocom.domain.space.SpaceRegionImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystem;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.StationImplementation;
-import org.dimensinfin.eveonline.neocom.domain.space.StructureImplementation;
+import org.dimensinfin.eveonline.neocom.domain.space.Structure;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 
 class FacetedExpandableContainerTest {
@@ -77,7 +77,7 @@ class FacetedExpandableContainerTest {
 
 		final SpaceSystemImplementation space = Mockito.mock( SpaceSystemImplementation.class );
 		final StationImplementation station = Mockito.mock( StationImplementation.class );
-		final StructureImplementation structure = Mockito.mock( StructureImplementation.class );
+		final Structure structure = Mockito.mock( Structure.class );
 		regionSlot.addContent( space );
 		regionSlot.addContent( station );
 		regionSlot.addContent( structure );

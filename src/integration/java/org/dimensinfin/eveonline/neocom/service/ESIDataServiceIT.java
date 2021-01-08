@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
@@ -16,6 +16,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
+import org.dimensinfin.logging.LogWrapper;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
@@ -24,8 +25,8 @@ import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.Credent
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_UNIQUE_ID;
 
 public class ESIDataServiceIT {
-	private static final int ESI_AUTHENTICATION_UNITTESTING_PORT = 5310;
-	private static final int ESI_DATA_UNITTESTING_PORT = 5320;
+	private static final int ESI_AUTHENTICATION_UNITTESTING_PORT = 53100;
+	private static final int ESI_DATA_UNITTESTING_PORT = 53200;
 	private static final String ESI_AUTHENTICATION_SIMULATOR_SERVICE_NAME = "/esioauth-simulation";
 	private static final String ESI_DATA_SIMULATOR_SERVICE_NAME = "/esidata-simulation";
 	private static final String ESI_DATA_SIMULATOR_PATH = "/home/adam/Development/NeoCom0.20/NeoCom-DataManagement/NeoCom" +
@@ -50,26 +51,28 @@ public class ESIDataServiceIT {
 		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
 		this.configurationService = injector.getInstance( SBConfigurationService.class );
 		this.fileSystem = injector.getInstance( SBFileSystemAdapter.class );
-		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
-		this.retrofitService = injector.getInstance( RetrofitService.class );
-		this.locationCatalogService = injector.getInstance( LocationCatalogService.class );
+		this.retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
+		this.storeCache = new MemoryStoreCacheService( this.retrofitService );
+		//		this.retrofitService = injector.getInstance( RetrofitService.class );
+		this.locationCatalogService = new  LocationCatalogService(this.retrofitService);
 		// Update the retrofit port configurations.
-		this.configurationService.setProperty( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
-				"http://" +
-						esiAuthenticationSimulator.getContainerIpAddress() +
-						":" +
-						esiAuthenticationSimulator.getMappedPort( ESI_AUTHENTICATION_UNITTESTING_PORT ) );
-		this.configurationService.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
-				"http://" +
-						esiDataSimulator.getContainerIpAddress() +
-						":" +
-						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
+//		LogWrapper.info( "Update configuration." );
+//		this.configurationService.setProperty( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
+//				"http://" +
+//						esiAuthenticationSimulator.getContainerIpAddress() +
+//						":" +
+//						esiAuthenticationSimulator.getMappedPort( ESI_AUTHENTICATION_UNITTESTING_PORT ) );
+//		this.configurationService.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
+//				"http://" +
+//						esiDataSimulator.getContainerIpAddress() +
+//						":" +
+//						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
 	}
 
 	@Test
 	public void getCharactersCharacterIdIndustryJobsSuccess() {
 		// Prepare
-		this.prepareMocks();
+//		this.prepareMocks();
 		this.beforeEach();
 		// Given
 		final Credential credential = Mockito.mock( Credential.class );
