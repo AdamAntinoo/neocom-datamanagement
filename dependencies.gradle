@@ -67,7 +67,7 @@ dependencies {
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.10'
     // N E O C O M
     testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
-    testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
+//    testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
     // T E S T   F R A M E W O R K
     testImplementation "org.testcontainers:testcontainers:1.15.0-rc2"
     testImplementation "org.testcontainers:postgresql:1.9.1"

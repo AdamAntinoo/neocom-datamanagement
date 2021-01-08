@@ -28,13 +28,13 @@ ext {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    google()
-    jcenter()
-    maven { url 'https://jitpack.io' }
-}
+//repositories {
+//    mavenLocal()
+//    mavenCentral()
+//    google()
+//    jcenter()
+//    maven { url 'https://jitpack.io' }
+//}
 
 // - S O U R C E S
 sourceSets {
