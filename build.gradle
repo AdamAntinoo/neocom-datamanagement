@@ -63,10 +63,10 @@ sourceSets {
 }
 
 // - C O N F I G U R A T I O N S
-configurations {
-    integrationImplementation.extendsFrom testImplementation
-    integrationRuntime.extendsFrom testRuntime
-}
+//configurations {
+//    integrationImplementation.extendsFrom testImplementation
+//    integrationRuntime.extendsFrom testRuntime
+//}
 
 // - D E P E N D E N C I E S
 apply from: './dependencies.gradle'
