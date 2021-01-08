@@ -1,7 +1,6 @@
 package org.dimensinfin.eveonline.neocom.industry.services;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 
@@ -18,24 +17,29 @@ import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.logging.LogWrapper;
 
 public class IndustryJobControlService {
-	private ESIDataService esiDataService;
-	private JobRepository jobRepository;
+	private final ESIDataService esiDataService;
+	private final JobRepository jobRepository;
 
 	// - C O N S T R U C T O R S
-	public IndustryJobControlService( final @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) ESIDataService esiDataService ,
-	                                  final @NotNull @Named("JobRepository") JobRepository jobRepository) {
+	public IndustryJobControlService( final @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) ESIDataService esiDataService,
+	                                  final @NotNull @Named("JobRepository") JobRepository jobRepository ) {
 		this.esiDataService = esiDataService;
-		this.jobRepository=jobRepository;
+		this.jobRepository = jobRepository;
 	}
 
-	public List<JobEntity> getActiveIndustryJobs( final Credential credential )  {
+	/**
+	 * Reads the jobs from the ESI service and after transforming the jobs persists it on the Job repository.
+	 * @param credential the pilot credential to use to read the industry job list.
+	 * @return
+	 */
+	public List<JobEntity> getActiveIndustryJobs( final Credential credential ) {
 		final GetCharactersCharacterIdIndustryJobsToJobEntityConverter jobConverter =
-				new GetCharactersCharacterIdIndustryJobsToJobEntityConverter(   credential.getAccountName());
-			return Stream.of( this.esiDataService.getCharactersCharacterIdIndustryJobs( credential ) )
+				new GetCharactersCharacterIdIndustryJobsToJobEntityConverter( credential.getAccountName() );
+		return Stream.of( this.esiDataService.getCharactersCharacterIdIndustryJobs( credential ) )
 				.map( job -> jobConverter.convert( job ) )
 				.map( industryJob -> {
 					try {
-						this.jobRepository.persist(industryJob);
+						this.jobRepository.persist( industryJob );
 					} catch (final SQLException sqle) {
 						LogWrapper.error( sqle );
 					}

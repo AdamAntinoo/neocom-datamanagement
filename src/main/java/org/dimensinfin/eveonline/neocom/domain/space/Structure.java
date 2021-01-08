@@ -37,10 +37,12 @@ public class Structure extends SpaceLocationImplementation implements SpaceSyste
 		return LocationIdentifierType.STRUCTURE;
 	}
 
+	@Override
 	public Long getStationId() {
 		return this.structureId;
 	}
 
+	@Override
 	public String getStationName() {return this.structureName;}
 
 	// - C O R E

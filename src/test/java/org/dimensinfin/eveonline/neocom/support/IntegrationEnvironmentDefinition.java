@@ -19,6 +19,7 @@ import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 
 public class IntegrationEnvironmentDefinition {
 	protected static final Logger logger = LoggerFactory.getLogger( IntegrationEnvironmentDefinition.class );
@@ -136,10 +137,7 @@ public class IntegrationEnvironmentDefinition {
 		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
 				.optionalApplicationDirectory( "./out/test/NeoCom.IntegrationTest/" )
 				.build();
-		this.itRetrofitFactory = new RetrofitFactory.Builder()
-				.withConfigurationProvider( this.itConfigurationProvider )
-				.withFileSystemAdapter( this.itFileSystemAdapter )
-				.build();
+		this.itRetrofitFactory = new RetrofitService( this.itConfigurationProvider , this.itFileSystemAdapter );
 		this.itStoreCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )

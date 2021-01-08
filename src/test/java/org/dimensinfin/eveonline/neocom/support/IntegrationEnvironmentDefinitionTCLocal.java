@@ -23,6 +23,7 @@ import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
@@ -143,10 +144,7 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
 				.optionalApplicationDirectory( "./out/test/NeoCom.UnitTest/" )
 				.build();
-		this.itRetrofitFactory = new RetrofitFactory.Builder()
-				.withConfigurationProvider( this.itConfigurationProvider )
-				.withFileSystemAdapter( this.itFileSystemAdapter )
-				.build();
+		this.itRetrofitFactory = new RetrofitService( this.itConfigurationProvider , this.itFileSystemAdapter );
 		this.itStoreCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )

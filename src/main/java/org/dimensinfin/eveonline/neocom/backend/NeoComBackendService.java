@@ -17,7 +17,7 @@ import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
 import static org.dimensinfin.eveonline.neocom.provider.RetrofitFactory.DEFAULT_CONTENT_TYPE;
-
+@Deprecated
 public class NeoComBackendService {
 	// - C O M P O N E N T S
 	protected RetrofitFactory retrofitFactory;

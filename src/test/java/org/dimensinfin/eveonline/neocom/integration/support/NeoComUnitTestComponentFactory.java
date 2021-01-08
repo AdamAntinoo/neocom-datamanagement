@@ -11,6 +11,7 @@ import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.support.IntegrationNeoComDBAdapter;
 import org.dimensinfin.eveonline.neocom.support.TestConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
@@ -68,10 +69,7 @@ public class NeoComUnitTestComponentFactory {
 
 	public RetrofitFactory getRetrofitFactory() {
 		if (null == this.retrofitFactory)
-			this.retrofitFactory = new RetrofitFactory.Builder()
-					.withConfigurationProvider( this.getConfigurationProvider() )
-					.withFileSystemAdapter( this.getFileSystemAdapter() )
-					.build();
+			this.retrofitFactory = new RetrofitService( this.getConfigurationProvider() , this.getFileSystemAdapter() );
 		return this.retrofitFactory;
 	}
 

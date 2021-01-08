@@ -15,6 +15,7 @@ import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.entities.PilotPreferencesEntity;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.logging.LogWrapper;
 
 public class PilotPreferencesRepository {
@@ -23,7 +24,7 @@ public class PilotPreferencesRepository {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	private PilotPreferencesRepository( final @NotNull @Named("NeoComDatabaseService") NeoComDatabaseService neoComDatabaseService ) {
+	private PilotPreferencesRepository( final @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) NeoComDatabaseService neoComDatabaseService ) {
 		try {
 			this.pilotPreferencesDao = Objects.requireNonNull(neoComDatabaseService).getPilotPreferencesDao();
 		} catch (final SQLException sqle) {

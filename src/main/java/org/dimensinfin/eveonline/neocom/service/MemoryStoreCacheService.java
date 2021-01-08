@@ -29,7 +29,7 @@ public class MemoryStoreCacheService implements IStoreCache {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	private MemoryStoreCacheService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService ) {
+	public MemoryStoreCacheService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService ) {
 		this.retrofitService = retrofitService;
 	}
 

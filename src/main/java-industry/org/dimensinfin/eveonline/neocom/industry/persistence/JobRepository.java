@@ -7,14 +7,16 @@ import javax.validation.constraints.NotNull;
 import com.google.inject.name.Named;
 import com.j256.ormlite.dao.Dao;
 
+import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.logging.LogWrapper;
 
 public class JobRepository {
-	private Dao<JobEntity, String> industryJobDao;
+	private final Dao<JobEntity, String> industryJobDao;
 
 	// - C O N S T R U C T O R S
-	public JobRepository( final @NotNull @Named("DaoJobEntity") Dao<JobEntity, String> industryJobDao ) {
-		this.industryJobDao = industryJobDao;
+	public JobRepository( final @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) NeoComDatabaseService neoComDatabaseService ) throws SQLException {
+		this.industryJobDao = neoComDatabaseService.getIndustryJobDao();
 	}
 
 	public void persist( final JobEntity jobEntity ) throws SQLException {

@@ -12,6 +12,8 @@ public class DMServicesDependenciesModule extends AbstractModule {
 	public static final String IFILE_SYSTEM = "IFileSystem";
 	public static final String ISTORE_CACHE = "IStoreCache";
 	public static final String LOCATION_CATALOG_SERVICE = "LocationCatalogService";
+	public static final String ISDE_DATABASE_SERVICE = "ISDEDatabaseService";
+	public static final String NEOCOM_DATABASE_SERVICE = "NeoComDatabaseService";
 
 	@Override
 	protected void configure() {

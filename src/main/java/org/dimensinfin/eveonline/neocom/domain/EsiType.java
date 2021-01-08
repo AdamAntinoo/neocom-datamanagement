@@ -1,6 +1,13 @@
 package org.dimensinfin.eveonline.neocom.domain;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.dimensinfin.eveonline.neocom.core.EveGlobalConstants;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
@@ -11,11 +18,41 @@ public class EsiType extends NeoComNode {
 	public static final String ESI_ICON_URL_PREFIX = "https://image.eveonline.com/Type/";
 	public static final String ESI_ICON_URL_SUFFIX = "_64.png";
 	private static final long serialVersionUID = 1430130141655722687L;
+	private static final Map<String, String> hullGroupMap = new HashMap<>();
+
+	static {
+		hullGroupMap.put( "Assault Frigate", "frigate" );
+		hullGroupMap.put( "Attack Battlecruiser", "battlecruiser" );
+		hullGroupMap.put( "Battleship", "battleship" );
+		hullGroupMap.put( "Blockade Runner", "battlecruiser" );
+		hullGroupMap.put( "Combat Battlecruiser", "battlecruiser" );
+		hullGroupMap.put( "Combat Recon Ship", "battleship" );
+		hullGroupMap.put( "Command Destroyer", "destroyer" );
+		hullGroupMap.put( "Corvette", "shuttle" );
+		hullGroupMap.put( "Cruiser", "cruiser" );
+		hullGroupMap.put( "Deep Space Transport", "industrial" );
+		hullGroupMap.put( "Destroyer", "destroyer" );
+		hullGroupMap.put( "Exhumer", "miningBarge" );
+		hullGroupMap.put( "Frigate", "frigate" );
+		hullGroupMap.put( "Heavy Assault Cruiser", "cruiser" );
+		hullGroupMap.put( "Industrial", "industrial" );
+		hullGroupMap.put( "Industrial Command Ship", "industrial" );
+		hullGroupMap.put( "Interceptor", "frigate" );
+		hullGroupMap.put( "Interdictor", "frigate" );
+		hullGroupMap.put( "Logistics", "cruiser" );
+		hullGroupMap.put( "Mining Barge", "miningBarge" );
+		hullGroupMap.put( "Shuttle", "shuttle" );
+		hullGroupMap.put( "Stealth Bomber", "cruiser" );
+		hullGroupMap.put( "Strategic Cruiser", "cruiser" );
+		hullGroupMap.put( "Tactical Destroyer", "destroyer" );
+
+	}
+
 	protected int typeId = -1;
 	protected IndustryGroup industryGroup = IndustryGroup.UNDEFINED;
-	protected GetUniverseTypesTypeIdOk type;
-	protected GetUniverseGroupsGroupIdOk group;
-	protected GetUniverseCategoriesCategoryIdOk category;
+	protected transient GetUniverseTypesTypeIdOk type;
+	protected transient GetUniverseGroupsGroupIdOk group;
+	protected transient GetUniverseCategoriesCategoryIdOk category;
 
 	// - C O N S T R U C T O R S
 	protected EsiType() {}
@@ -39,32 +76,8 @@ public class EsiType extends NeoComNode {
 
 	// - V I R T U A L   A C C E S S O R S
 	public String getHullGroup() {
-		if (this.getIndustryGroup() == IndustryGroup.HULL) {
-			if (this.getGroupName().equalsIgnoreCase( "Assault Frigate" )) return "frigate";
-			if (this.getGroupName().equalsIgnoreCase( "Attack Battlecruiser" )) return "battlecruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Battleship" )) return "battleship";
-			if (this.getGroupName().equalsIgnoreCase( "Blockade Runner" )) return "battlecruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Combat Battlecruiser" )) return "battlecruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Combat Recon Ship" )) return "battleship";
-			if (this.getGroupName().equalsIgnoreCase( "Command Destroyer" )) return "destroyer";
-			if (this.getGroupName().equalsIgnoreCase( "Corvette" )) return "shuttle";
-			if (this.getGroupName().equalsIgnoreCase( "Cruiser" )) return "cruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Deep Space Transport" )) return "industrial";
-			if (this.getGroupName().equalsIgnoreCase( "Destroyer" )) return "destroyer";
-			if (this.getGroupName().equalsIgnoreCase( "Exhumer" )) return "miningBarge";
-			if (this.getGroupName().equalsIgnoreCase( "Frigate" )) return "frigate";
-			if (this.getGroupName().equalsIgnoreCase( "Heavy Assault Cruiser" )) return "cruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Industrial" )) return "industrial";
-			if (this.getGroupName().equalsIgnoreCase( "Industrial Command Ship" )) return "industrial";
-			if (this.getGroupName().equalsIgnoreCase( "Interceptor" )) return "frigate";
-			if (this.getGroupName().equalsIgnoreCase( "Interdictor" )) return "frigate";
-			if (this.getGroupName().equalsIgnoreCase( "Logistics" )) return "cruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Mining Barge" )) return "miningBarge";
-			if (this.getGroupName().equalsIgnoreCase( "Shuttle" )) return "shuttle";
-			if (this.getGroupName().equalsIgnoreCase( "Stealth Bomber" )) return "cruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Strategic Cruiser" )) return "cruiser";
-			if (this.getGroupName().equalsIgnoreCase( "Tactical Destroyer" )) return "destroyer";
-		}
+		if (this.getIndustryGroup() == IndustryGroup.HULL)
+			return hullGroupMap.getOrDefault( this.getGroupName(), "not-applies" );
 		return "not-applies";
 	}
 
@@ -105,6 +118,36 @@ public class EsiType extends NeoComNode {
 	}
 
 	public double getVolume() {return this.type.getVolume();}
+
+	// - C O R E
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 )
+				.appendSuper( super.hashCode() )
+				.append( this.typeId )
+				.append( this.industryGroup ).toHashCode();
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof EsiType)) return false;
+		final EsiType esiType = (EsiType) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) )
+				.append( this.typeId, esiType.typeId )
+				.append( this.industryGroup, esiType.industryGroup ).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "typeId", this.typeId )
+				.append( "industryGroup", this.industryGroup )
+				.append( "type", this.type )
+				.append( "group", this.group )
+				.append( "category", this.category )
+				.toString();
+	}
 
 	protected void classifyIndustryGroup() {
 		if ((this.getGroupName().equalsIgnoreCase( "Composite" )) && (this.getCategoryName().equalsIgnoreCase( "Material" ))) {
@@ -164,7 +207,7 @@ public class EsiType extends NeoComNode {
 		}
 
 		public EsiType build() {
-			Objects.requireNonNull( this.onConstruction.typeId );
+			if (this.onConstruction.typeId < 0) throw new NullPointerException( "EsiType itemId should not be left unassigned." );
 			Objects.requireNonNull( this.onConstruction.type );
 			Objects.requireNonNull( this.onConstruction.group );
 			Objects.requireNonNull( this.onConstruction.category );

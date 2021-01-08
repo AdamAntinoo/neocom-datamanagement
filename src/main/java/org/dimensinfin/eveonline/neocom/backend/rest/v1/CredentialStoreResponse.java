@@ -3,7 +3,7 @@ package org.dimensinfin.eveonline.neocom.backend.rest.v1;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+@Deprecated
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CredentialStoreResponse {
 	private String jwtToken;

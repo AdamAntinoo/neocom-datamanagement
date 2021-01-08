@@ -23,7 +23,7 @@ public class SDERepository {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public SDERepository( final @NotNull @Named("ISDEDatabaseService") ISDEDatabaseService sdeDatabaseService,
+	public SDERepository( final @NotNull @Named(DMServicesDependenciesModule.ISDE_DATABASE_SERVICE) ISDEDatabaseService sdeDatabaseService,
 	                      final @NotNull @Named(DMServicesDependenciesModule.RESOURCE_FACTORY) ResourceFactory resourceFactory ) {
 		this.sdeDatabaseService = Objects.requireNonNull( sdeDatabaseService );
 		this.resourceFactory = Objects.requireNonNull( resourceFactory );

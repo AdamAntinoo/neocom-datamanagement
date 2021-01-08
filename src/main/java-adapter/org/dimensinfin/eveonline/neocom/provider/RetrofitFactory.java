@@ -51,7 +51,7 @@ import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsCon
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_AGENT;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_LOCATION;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_TIMEOUT;
-
+@Deprecated
 public class RetrofitFactory {
 	public static final String DEFAULT_CONTENT_TYPE = "application/json";
 	public static final Converter.Factory GSON_CONVERTER_FACTORY =
@@ -243,31 +243,31 @@ public class RetrofitFactory {
 		cacheDataFile.createNewFile();
 	}
 
-	// - B U I L D E R
-	public static class Builder {
-		private RetrofitFactory onConstruction;
-
-		// - C O N S T R U C T O R S
-		public Builder() {
-			this.onConstruction = new RetrofitFactory();
-		}
-
-		public RetrofitFactory build() {
-			Objects.requireNonNull( this.onConstruction.configurationProvider );
-			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
-			return this.onConstruction;
-		}
-
-		public RetrofitFactory.Builder withConfigurationProvider( final IConfigurationService configurationProvider ) {
-			Objects.requireNonNull( configurationProvider );
-			this.onConstruction.configurationProvider = configurationProvider;
-			return this;
-		}
-
-		public RetrofitFactory.Builder withFileSystemAdapter( final IFileSystem fileSystemAdapter ) {
-			Objects.requireNonNull( fileSystemAdapter );
-			this.onConstruction.fileSystemAdapter = fileSystemAdapter;
-			return this;
-		}
-	}
+//	// - B U I L D E R
+//	public static class Builder {
+//		private RetrofitFactory onConstruction;
+//
+//		// - C O N S T R U C T O R S
+//		public Builder() {
+//			this.onConstruction = new RetrofitFactory();
+//		}
+//
+//		public RetrofitFactory build() {
+//			Objects.requireNonNull( this.onConstruction.configurationProvider );
+//			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
+//			return this.onConstruction;
+//		}
+//
+//		public RetrofitFactory.Builder withConfigurationProvider( final IConfigurationService configurationProvider ) {
+//			Objects.requireNonNull( configurationProvider );
+//			this.onConstruction.configurationProvider = configurationProvider;
+//			return this;
+//		}
+//
+//		public RetrofitFactory.Builder withFileSystemAdapter( final IFileSystem fileSystemAdapter ) {
+//			Objects.requireNonNull( fileSystemAdapter );
+//			this.onConstruction.fileSystemAdapter = fileSystemAdapter;
+//			return this;
+//		}
+//	}
 }

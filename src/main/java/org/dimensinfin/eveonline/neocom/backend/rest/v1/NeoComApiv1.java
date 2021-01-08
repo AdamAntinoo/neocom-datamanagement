@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-
+@Deprecated
 public interface NeoComApiv1 {
 	@GET("/api/v1/neocom/miningextractions/pilot/{pilotId}/today")
 	Call<List<MiningExtractionEntity>> accessTodayMiningExtractions4Pilot( @Header("Content-Type") String contentType,
