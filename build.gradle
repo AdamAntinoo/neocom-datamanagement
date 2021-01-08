@@ -48,25 +48,25 @@ sourceSets {
         srcDirs += 'src/test/java'
         srcDirs += 'src/test/java-support'
     }
-//    integration {
-//        java {
-//            compileClasspath += main.output + test.output
-//            runtimeClasspath += main.output + test.output
-//            srcDirs += 'src/integration/java'
-//        }
-//    }
-//    integration {
-//        resources {
-//            srcDirs += 'src/integration/resources'
-//        }
-//    }
+    integration {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDirs += 'src/integration/java'
+        }
+    }
+    integration {
+        resources {
+            srcDirs += 'src/integration/resources'
+        }
+    }
 }
 
 // - C O N F I G U R A T I O N S
-//configurations {
-//    integrationImplementation.extendsFrom testImplementation
-//    integrationRuntime.extendsFrom testRuntime
-//}
+configurations {
+    integrationImplementation.extendsFrom testImplementation
+    integrationRuntime.extendsFrom testRuntime
+}
 
 // - D E P E N D E N C I E S
 apply from: './dependencies.gradle'
@@ -90,14 +90,14 @@ sonarqube {
 }
 
 // - I N T E G R A T I O N   T E S T S
-task preIntegrationTask(type: Exec) {
-    workingDir "$projectDir/src/integration/sh"
-    commandLine 'sh', './install-sde.sh'
-}
-task integrationTest(type: Test) {
-    testClassesDirs = sourceSets.integration.output.classesDirs
-    classpath = sourceSets.integration.runtimeClasspath
-}
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
-integrationTest.dependsOn preIntegrationTask
+//task preIntegrationTask(type: Exec) {
+//    workingDir "$projectDir/src/integration/sh"
+//    commandLine 'sh', './install-sde.sh'
+//}
+//task integrationTest(type: Test) {
+//    testClassesDirs = sourceSets.integration.output.classesDirs
+//    classpath = sourceSets.integration.runtimeClasspath
+//}
+//check.dependsOn integrationTest
+//integrationTest.mustRunAfter test
+//integrationTest.dependsOn preIntegrationTask
