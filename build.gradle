@@ -48,18 +48,18 @@ sourceSets {
         srcDirs += 'src/test/java'
         srcDirs += 'src/test/java-support'
     }
-    integration {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDirs += 'src/integration/java'
-        }
-    }
-    integration {
-        resources {
-            srcDirs += 'src/integration/resources'
-        }
-    }
+//    integration {
+//        java {
+//            compileClasspath += main.output + test.output
+//            runtimeClasspath += main.output + test.output
+//            srcDirs += 'src/integration/java'
+//        }
+//    }
+//    integration {
+//        resources {
+//            srcDirs += 'src/integration/resources'
+//        }
+//    }
 }
 
 // - C O N F I G U R A T I O N S
