@@ -90,9 +90,14 @@ sonarqube {
 }
 
 // - I N T E G R A T I O N   T E S T S
+task preIntegrationTask(type: Exec) {
+    workingDir "$projectDir/src/integration/sh"
+    commandLine 'sh', './install-sde.sh'
+}
 task integrationTest(type: Test) {
     testClassesDirs = sourceSets.integration.output.classesDirs
     classpath = sourceSets.integration.runtimeClasspath
 }
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
+integrationTest.dependsOn preIntegrationTask
