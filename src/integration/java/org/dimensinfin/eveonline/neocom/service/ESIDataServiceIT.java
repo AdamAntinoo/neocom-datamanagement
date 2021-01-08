@@ -69,7 +69,7 @@ public class ESIDataServiceIT {
 //						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
 	}
 
-	@Test
+//	@Test
 	public void getCharactersCharacterIdIndustryJobsSuccess() {
 		// Prepare
 //		this.prepareMocks();
