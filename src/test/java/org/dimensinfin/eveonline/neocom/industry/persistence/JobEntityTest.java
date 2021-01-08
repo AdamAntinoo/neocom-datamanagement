@@ -17,7 +17,9 @@ public class JobEntityTest {
 		JobEntity jobEntity = new JobEntity();
 		Assertions.assertNotNull( jobEntity );
 		// Mapped
-		final GetCharactersCharacterIdIndustryJobs200Ok universeJob = Mockito.mock( GetCharactersCharacterIdIndustryJobs200Ok.class );
+		final GetCharactersCharacterIdIndustryJobs200Ok universeJob = new GetCharactersCharacterIdIndustryJobs200Ok();
+		universeJob.setJobId( TEST_ESI_UNIVERSE_JOB_ID );
+		universeJob.setInstallerId( TEST_ESI_UNIVERSE_JOB_INSTALLER_ID );
 		jobEntity = new GetCharactersCharacterIdIndustryJobsToJobEntityConverter( "InstallerName" ).convert( universeJob );
 		Assertions.assertNotNull( jobEntity );
 	}
