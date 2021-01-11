@@ -24,7 +24,7 @@ public class PilotPreferencesRepository {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	private PilotPreferencesRepository( final @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) NeoComDatabaseService neoComDatabaseService ) {
+	private PilotPreferencesRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) {
 		try {
 			this.pilotPreferencesDao = Objects.requireNonNull(neoComDatabaseService).getPilotPreferencesDao();
 		} catch (final SQLException sqle) {

@@ -1,28 +1,33 @@
 package org.dimensinfin.eveonline.neocom.database.repositories;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.j256.ormlite.dao.Dao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
+import org.dimensinfin.logging.LogWrapper;
 
 public class CredentialRepository {
-	protected static Logger logger = LoggerFactory.getLogger(CredentialRepository.class);
-
 	protected Dao<Credential, String> credentialDao;
 
-	public List<Credential> findAllByServer( final String esiServer ) {
+	// - C O N S T R U C T O R S
+	@Inject
+	public CredentialRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) {
 		try {
-			return this.credentialDao.queryForEq("dataSource", esiServer.toLowerCase());
-		} catch (SQLException sqle) {
-			logger.warn("W [CredentialRepository.findAllByServer]> Exception reading all Credentials. {}",
-					sqle.getMessage());
-			return new ArrayList<>();
+			this.credentialDao = Objects.requireNonNull( neoComDatabaseService ).getCredentialDao();
+		} catch (final SQLException sqle) {
+			LogWrapper.error( sqle );
+			throw new NeoComRuntimeException( sqle );
 		}
 	}
 
@@ -30,41 +35,51 @@ public class CredentialRepository {
 		List<Credential> credentialList = new ArrayList<>();
 		try {
 			return this.credentialDao.queryForAll();
-		} catch (SQLException sqle) {
-			logger.error("EX [CredentialRepository.findAllByServer]> SQLException: {}", sqle.getMessage());
+		} catch (final SQLException sqle) {
+			LogWrapper.error( sqle );
 		}
 		return credentialList;
 
 	}
 
-	public void persist( final Credential record ) throws SQLException {
-		if (null != record) {
-			record.timeStamp();
-			this.credentialDao.createOrUpdate(record);
+	public List<Credential> findAllByServer( final String esiServer ) {
+		try {
+			return this.credentialDao.queryForEq( "dataSource", esiServer.toLowerCase() );
+		} catch (final SQLException sqle) {
+			LogWrapper.error( MessageFormat.format( "Exception reading all Credentials. {0}", esiServer ), sqle );
+			return new ArrayList<>();
 		}
 	}
 
 	public Credential findCredentialById( final String credentialId ) throws SQLException {
-		return this.credentialDao.queryForId(credentialId);
+		return this.credentialDao.queryForId( credentialId );
 	}
 
-	// - B U I L D E R
-	public static class Builder {
-		protected CredentialRepository onConstruction;
-
-		public Builder() {
-			this.onConstruction = new CredentialRepository();
-		}
-
-		public Builder withCredentialDao( final Dao<Credential, String> credentialDao ) {
-			Objects.requireNonNull( credentialDao );
-			this.onConstruction.credentialDao = credentialDao;
-			return this;
-		}
-
-		public CredentialRepository build() {
-			Objects.requireNonNull(this.onConstruction.credentialDao);
-			return this.onConstruction;
+	public void persist( final Credential record ) throws SQLException {
+		if (null != record) {
+			record.timeStamp();
+			this.credentialDao.createOrUpdate( record );
 		}
 	}
+
+	//	// - B U I L D E R
+	//	public static class Builder {
+	//		protected CredentialRepository onConstruction;
+	//
+	//		// - C O N S T R U C T O R S
+	//		public Builder() {
+	//			this.onConstruction = new CredentialRepository( neoComDatabaseService );
+	//		}
+	//
+	//		public CredentialRepository build() {
+	//			Objects.requireNonNull( this.onConstruction.credentialDao );
+	//			return this.onConstruction;
+	//		}
+	//
+	//		public Builder withCredentialDao( final Dao<Credential, String> credentialDao ) {
+	//			Objects.requireNonNull( credentialDao );
+	//			this.onConstruction.credentialDao = credentialDao;
+	//			return this;
+	//		}
+	//	}
 }
