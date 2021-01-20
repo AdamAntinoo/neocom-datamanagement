@@ -13,8 +13,8 @@ import org.dimensinfin.eveonline.neocom.industry.persistence.JobEntity;
 import org.dimensinfin.eveonline.neocom.industry.persistence.JobRepository;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiUniverseTestDataConstants.TEST_ESI_UNIVERSE_JOB_ID;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiUniverseTestDataConstants.TEST_ESI_UNIVERSE_JOB_INSTALLER_ID;
+import static org.dimensinfin.eveonline.neocom.service.ESIDataServiceTest.GetCharactersMockConstants.TEST_ESI_UNIVERSE_JOB_ID;
+import static org.dimensinfin.eveonline.neocom.service.ESIDataServiceTest.GetCharactersMockConstants.TEST_ESI_UNIVERSE_JOB_INSTALLER_ID;
 
 public class IndustryJobControlServiceTest {
 	@Test

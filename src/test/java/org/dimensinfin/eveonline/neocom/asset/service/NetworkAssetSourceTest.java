@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
@@ -22,7 +23,7 @@ public class NetworkAssetSourceTest {
 		final Credential credential = Mockito.mock( Credential.class );
 		final AssetRepository assetRepository = Mockito.mock( AssetRepository.class );
 		final CredentialRepository credentialRepository = Mockito.mock( CredentialRepository.class );
-		final ESIDataProvider esiDataProvider = Mockito.mock( ESIDataProvider.class );
+		final ESIDataService esiDataProvider = Mockito.mock( ESIDataService.class );
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		final NetworkAssetSource networkAssetSource = new NetworkAssetSource.Builder()
 				.withCredential( credential )
@@ -39,7 +40,7 @@ public class NetworkAssetSourceTest {
 		final Credential credential = Mockito.mock( Credential.class );
 		final AssetRepository assetRepository = Mockito.mock( AssetRepository.class );
 		final CredentialRepository credentialRepository = Mockito.mock( CredentialRepository.class );
-		final ESIDataProvider esiDataProvider = Mockito.mock( ESIDataProvider.class );
+		final ESIDataService esiDataProvider = Mockito.mock( ESIDataService.class );
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		Assertions.assertThrows( NullPointerException.class, () -> {
 					final NetworkAssetSource networkAssetSource = new NetworkAssetSource.Builder()
@@ -117,7 +118,7 @@ public class NetworkAssetSourceTest {
 		final Credential credential = Mockito.mock( Credential.class );
 		final AssetRepository assetRepository = Mockito.mock( AssetRepository.class );
 		final CredentialRepository credentialRepository = Mockito.mock( CredentialRepository.class );
-		final ESIDataProvider esiDataProvider = Mockito.mock( ESIDataProvider.class );
+		final ESIDataService esiDataProvider = Mockito.mock( ESIDataService.class );
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		final AssetDownloadProcessorJob assetDownloadProcessorJob = Mockito.mock( AssetDownloadProcessorJob.class );
 		Mockito.when( assetDownloadProcessorJob.downloadCorporationAssets( Mockito.anyInt() ) ).thenReturn( new ArrayList<>() );

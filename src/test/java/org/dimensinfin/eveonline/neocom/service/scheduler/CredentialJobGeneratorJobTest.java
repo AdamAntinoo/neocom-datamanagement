@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
@@ -21,7 +22,7 @@ public class CredentialJobGeneratorJobTest {
 	private AssetRepository assetRepository;
 	private CredentialRepository credentialRepository;
 	private IConfigurationService configurationService;
-	private ESIDataProvider esiDataProvider;
+	private ESIDataService esiDataProvider;
 	private LocationCatalogService locationCatalogService;
 	private MiningRepository miningRepository;
 	private ISchedulerConfiguration schedulerConfiguration;
@@ -32,7 +33,7 @@ public class CredentialJobGeneratorJobTest {
 		this.credentialRepository = Mockito.mock( CredentialRepository.class );
 		this.miningRepository = Mockito.mock( MiningRepository.class );
 		this.configurationService = Mockito.mock( IConfigurationService.class );
-		this.esiDataProvider = Mockito.mock( ESIDataProvider.class );
+		this.esiDataProvider = Mockito.mock( ESIDataService.class );
 		this.locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		this.schedulerConfiguration = Mockito.mock( ISchedulerConfiguration.class );
 	}

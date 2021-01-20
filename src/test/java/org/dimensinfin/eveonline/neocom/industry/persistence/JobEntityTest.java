@@ -2,13 +2,12 @@ package org.dimensinfin.eveonline.neocom.industry.persistence;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
 import org.dimensinfin.eveonline.neocom.industry.converter.GetCharactersCharacterIdIndustryJobsToJobEntityConverter;
 
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiUniverseTestDataConstants.TEST_ESI_UNIVERSE_JOB_ID;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiUniverseTestDataConstants.TEST_ESI_UNIVERSE_JOB_INSTALLER_ID;
+import static org.dimensinfin.eveonline.neocom.service.ESIDataServiceTest.GetCharactersMockConstants.TEST_ESI_UNIVERSE_JOB_ID;
+import static org.dimensinfin.eveonline.neocom.service.ESIDataServiceTest.GetCharactersMockConstants.TEST_ESI_UNIVERSE_JOB_INSTALLER_ID;
 
 public class JobEntityTest {
 	@Test

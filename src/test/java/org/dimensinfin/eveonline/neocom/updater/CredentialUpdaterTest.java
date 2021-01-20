@@ -14,6 +14,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRaces200Ok;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 
 public class CredentialUpdaterTest {
 	private Credential model4Test;
@@ -77,7 +78,7 @@ public class CredentialUpdaterTest {
 		assetList.add( esiAsset );
 		assetList.add( esiAsset );
 		final GetCharactersCharacterIdOk pilotPublicData = Mockito.mock( GetCharactersCharacterIdOk.class );
-		final ESIDataProvider esiDataProvider = Mockito.mock( ESIDataProvider.class );
+		final ESIDataService esiDataProvider = Mockito.mock( ESIDataService.class );
 		final GetUniverseRaces200Ok raceData = Mockito.mock( GetUniverseRaces200Ok.class );
 		Mockito.when( raceData.getName() ).thenReturn( "Amarr" );
 		Mockito.when( esiDataProvider.getCharactersCharacterIdAssets( Mockito.any( Credential.class ) ) )
