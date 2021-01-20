@@ -89,25 +89,6 @@ public class ESIUniverseDataProvider {
 		return null;
 	}
 
-	// - C H A R A C T E R   P U B L I C   I N F O R M A T I O N
-	@TimeElapsed
-	public GetCharactersCharacterIdOk getCharactersCharacterId( final int identifier ) {
-		LogWrapper.enter( MessageFormat.format( "Pilot Identifier: {0}", identifier ) );
-		try {
-			final Response<GetCharactersCharacterIdOk> characterResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( CharacterApi.class )
-					.getCharactersCharacterId( identifier, DEFAULT_ESI_SERVER, null )
-					.execute();
-			if (characterResponse.isSuccessful()) return characterResponse.body();
-		} catch (final IOException | RuntimeException ioe) {
-			LogWrapper.error( ioe );
-		} finally {
-			LogWrapper.exit();
-		}
-		return null;
-	}
-
 	// - C O R P O R A T I O N   P U B L I C   I N F O R M A T I O N
 	public GetCorporationsCorporationIdOk getCorporationsCorporationId( final int identifier ) {
 		try {

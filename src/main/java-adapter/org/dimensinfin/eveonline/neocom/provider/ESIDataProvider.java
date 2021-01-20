@@ -57,87 +57,13 @@ import retrofit2.Response;
 public class ESIDataProvider extends ESIUniverseDataProvider {
 	public static final String DEFAULT_ESI_SERVER = "Tranquility".toLowerCase();
 	public static final String DEFAULT_ACCEPT_LANGUAGE = "en-us";
-	private static final String CREDENTIAL_LOG_LITERAL = "Credential: {0}";
+	protected static final String CREDENTIAL_LOG_LITERAL = "Credential: {0}";
 	// - C O M P O N E N T S
 	protected LocationCatalogService locationCatalogService;
 
 	// - C O N S T R U C T O R S
 	protected ESIDataProvider() {}
 
-	@TimeElapsed
-	public List<GetCharactersCharacterIdAssets200Ok> getCharactersCharacterIdAssets( final Credential credential ) {
-		LogWrapper.enter( MessageFormat.format( CREDENTIAL_LOG_LITERAL, credential.toString() ) );
-		List<GetCharactersCharacterIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
-		try {
-			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
-			boolean morePages = true;
-			int pageCounter = 1;
-			while (morePages) {
-				final Response<List<GetCharactersCharacterIdAssets200Ok>> assetsApiResponse = this.retrofitService
-						.accessAuthenticatedConnector( credential )
-						.create( AssetsApi.class )
-						.getCharactersCharacterIdAssets(
-								credential.getAccountId(),
-								credential.getDataSource().toLowerCase(),
-								null, pageCounter, null )
-						.execute();
-				if (assetsApiResponse.isSuccessful()) {
-					// Check for out of page running.
-					if (Objects.requireNonNull( assetsApiResponse.body() ).isEmpty()) morePages = false;
-					else {
-						// Copy the assets to the result list.
-						returnAssetList.addAll( Objects.requireNonNull( assetsApiResponse.body() ) );
-						pageCounter++;
-					}
-				}
-			}
-		} catch (final IOException | RuntimeException ioe) {
-			LogWrapper.error( ioe );
-		} finally {
-			LogWrapper.exit();
-		}
-		return returnAssetList;
-	}
-
-	@TimeElapsed
-	@Loggable(Loggable.DEBUG)
-	@LogExceptions
-	@Cacheable(lifetime = 3600, unit = TimeUnit.SECONDS)
-	public List<GetCharactersCharacterIdBlueprints200Ok> getCharactersCharacterIdBlueprints( final Credential credential ) {
-		LogWrapper.enter( MessageFormat.format( CREDENTIAL_LOG_LITERAL, credential.toString() ) );
-		List<GetCharactersCharacterIdBlueprints200Ok> returnBlueprintList = new ArrayList<>( 1000 );
-		try {
-			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
-			boolean morePages = true;
-			int pageCounter = 1;
-			while (morePages) {
-				final Response<List<GetCharactersCharacterIdBlueprints200Ok>> blueprintResponse = this.retrofitService
-						.accessAuthenticatedConnector( credential )
-						.create( CharacterApi.class )
-						.getCharactersCharacterIdBlueprints(
-								credential.getAccountId(),
-								credential.getDataSource().toLowerCase(),
-								null,
-								pageCounter,
-								null )
-						.execute();
-				if (blueprintResponse.isSuccessful()) {
-					// Check for out of page running.
-					if (Objects.requireNonNull( blueprintResponse.body() ).isEmpty()) morePages = false;
-					else {
-						// Copy the assets to the result list.
-						returnBlueprintList.addAll( Objects.requireNonNull( blueprintResponse.body() ) );
-						pageCounter++;
-					}
-				}
-			}
-		} catch (final IOException | RuntimeException ioe) {
-			LogWrapper.error( ioe );
-		} finally {
-			LogWrapper.exit();
-		}
-		return returnBlueprintList;
-	}
 
 	@TimeElapsed
 	public List<GetCharactersCharacterIdFittings200Ok> getCharactersCharacterIdFittings( final Credential credential ) {
@@ -243,24 +169,6 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 		return null;
 	}
 
-	@TimeElapsed
-	public Double getCharactersCharacterIdWallet( final Credential credential ) {
-		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
-		try {
-			final Response<Double> walletApiResponse = this.retrofitService
-					.accessAuthenticatedConnector( credential )
-					.create( WalletApi.class )
-					.getCharactersCharacterIdWallet( credential.getAccountId()
-							, credential.getDataSource(), null, null )
-					.execute();
-			if (walletApiResponse.isSuccessful()) return walletApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
-			LogWrapper.error( ioe );
-		} finally {
-			LogWrapper.exit();
-		}
-		return -1.0;
-	}
 
 	@TimeElapsed
 	public List<GetCorporationsCorporationIdAssets200Ok> getCorporationsCorporationIdAssets( final Credential credential,
@@ -453,7 +361,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			Objects.requireNonNull( this.onConstruction.storeCacheManager );
 			Objects.requireNonNull( this.onConstruction.retrofitService );
 			// Inject the new adapter to the classes that depend on it.
-			NeoComUpdater.injectsEsiDataAdapter( this.onConstruction );
+//			NeoComUpdater.injectsEsiDataAdapter( this.onConstruction );
 			return this.onConstruction;
 		}
 
