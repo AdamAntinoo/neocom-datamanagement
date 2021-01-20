@@ -101,7 +101,7 @@ jobs:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
-            ./gradlew integrationTest
+            ./gradlew integration
 
   build-datamanagement-job:
     docker:
@@ -164,6 +164,15 @@ workflows:
             branches:
               only:
                 - test
+      - build-datamanagement-job:
+          requires:
+            - compile-datamanagement-job
+            - test-datamanagement-job
+            - integration-datamanagement-job
+          filters:
+            branches:
+              only:
+                - master
 
   datamanagement-deploy:
     jobs:
