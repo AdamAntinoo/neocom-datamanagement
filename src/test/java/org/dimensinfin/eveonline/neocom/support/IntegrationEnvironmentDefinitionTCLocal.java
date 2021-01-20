@@ -28,7 +28,7 @@ import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_SERVER_LOCATION;
-
+@Deprecated
 public class IntegrationEnvironmentDefinitionTCLocal {
 	protected static final Logger logger = LoggerFactory.getLogger( IntegrationEnvironmentDefinitionTCLocal.class );
 	protected static final Integer TEST_CORPORATION_IDENTIFIER = 98384726;

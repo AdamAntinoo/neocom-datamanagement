@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.service.AssetDownloadProcessorJob;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
@@ -26,7 +27,7 @@ public class CredentialJobGeneratorJob extends Job {
 	private ISchedulerConfiguration schedulerConfiguration;
 	private AssetRepository assetRepository;
 	private MiningRepository miningRepository;
-	private ESIDataProvider esiDataProvider;
+	private ESIDataService esiDataProvider;
 	private LocationCatalogService locationCatalogService;
 
 	private CredentialJobGeneratorJob() {
@@ -148,7 +149,7 @@ public class CredentialJobGeneratorJob extends Job {
 			return this;
 		}
 
-		public CredentialJobGeneratorJob.Builder withEsiDataProvider( final ESIDataProvider esiDataProvider ) {
+		public CredentialJobGeneratorJob.Builder withEsiDataProvider( final ESIDataService esiDataProvider ) {
 			Objects.requireNonNull( esiDataProvider );
 			this.onConstruction.esiDataProvider = esiDataProvider;
 			return this;

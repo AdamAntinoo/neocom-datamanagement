@@ -3,6 +3,7 @@ package org.dimensinfin.eveonline.neocom.asset.service;
 import java.util.List;
 import java.util.Objects;
 
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.domain.IAssetSource;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
@@ -16,7 +17,7 @@ public class NetworkAssetSource implements IAssetSource {
 	private Credential credential;
 	private AssetRepository assetRepository;
 	private CredentialRepository credentialRepository;
-	private ESIDataProvider esiDataProvider;
+	private ESIDataService esiDataProvider;
 	private LocationCatalogService locationCatalogService;
 
 	private NetworkAssetSource() {}
@@ -73,7 +74,7 @@ public class NetworkAssetSource implements IAssetSource {
 			return this;
 		}
 
-		public NetworkAssetSource.Builder withEsiDataProvider( final ESIDataProvider esiDataProvider ) {
+		public NetworkAssetSource.Builder withEsiDataProvider( final ESIDataService esiDataProvider ) {
 			Objects.requireNonNull( esiDataProvider );
 			this.onConstruction.esiDataProvider = esiDataProvider;
 			return this;

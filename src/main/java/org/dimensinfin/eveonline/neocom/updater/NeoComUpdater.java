@@ -16,6 +16,7 @@ import org.dimensinfin.core.domain.IntercommunicationEvent;
 import org.dimensinfin.core.interfaces.IEventEmitter;
 import org.dimensinfin.core.interfaces.IEventReceiver;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.UpdaterJobManager;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;
 import org.dimensinfin.logging.LogWrapper;
@@ -24,9 +25,9 @@ public abstract class NeoComUpdater<M> implements IEventEmitter {
 	protected static final Logger logger = LoggerFactory.getLogger( NeoComUpdater.class );
 
 	// - C O M P O N E N T S
-	protected static ESIDataProvider esiDataProvider;
+	protected static ESIDataService esiDataProvider;
 
-	public static void injectsEsiDataAdapter( final ESIDataProvider newesiDataProvider ) {
+	public static void injectsEsiDataAdapter( final ESIDataService newesiDataProvider ) {
 		esiDataProvider = newesiDataProvider;
 	}
 

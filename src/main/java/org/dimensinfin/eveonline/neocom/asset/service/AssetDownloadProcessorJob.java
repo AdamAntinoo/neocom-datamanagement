@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.dimensinfin.annotation.LogEnterExit;
 import org.dimensinfin.annotation.TimeElapsed;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.converter.EsiAssets200Ok2NeoAssetConverter;
 import org.dimensinfin.eveonline.neocom.asset.converter.GetCharactersCharacterIdAsset2EsiAssets200OkConverter;
@@ -34,19 +35,6 @@ import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 import org.dimensinfin.logging.LogWrapper;
 
 public class AssetDownloadProcessorJob extends Job {
-//	private static final Map<EsiAssets200Ok.LocationFlagEnum, Integer> officeContainerLocationFlags = new EnumMap<>(
-//			EsiAssets200Ok.LocationFlagEnum.class );
-//
-//	static {
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG1, 1 );
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG2, 2 );
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG3, 3 );
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG4, 4 );
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG5, 5 );
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG6, 6 );
-//		officeContainerLocationFlags.put( EsiAssets200Ok.LocationFlagEnum.CORPSAG7, 7 );
-//	}
-
 	private final Map<Long, NeoAsset> convertedAssetList = new HashMap<>();
 	// - I N T E R N A L   W O R K   F I E L D S
 	private Map<Long, EsiAssets200Ok> assetsMap = new HashMap<>();
@@ -56,7 +44,7 @@ public class AssetDownloadProcessorJob extends Job {
 	private Credential credential;
 	private AssetRepository assetRepository;
 	private CredentialRepository credentialRepository;
-	private ESIDataProvider esiDataProvider;
+	private ESIDataService esiDataProvider;
 	private LocationCatalogService locationCatalogService;
 
 	private AssetDownloadProcessorJob() {super();}
@@ -70,11 +58,6 @@ public class AssetDownloadProcessorJob extends Job {
 				.append( this.getClass().getSimpleName() )
 				.toHashCode();
 	}
-
-//	@Override
-//	public String getName() {
-//		return this.getClass().getSimpleName();
-//	}
 
 	/**
 	 * Download the list of assets that belong to a character or corporation and process their location references while
@@ -352,7 +335,7 @@ public class AssetDownloadProcessorJob extends Job {
 			return this;
 		}
 
-		public AssetDownloadProcessorJob.Builder withEsiDataProvider( final ESIDataProvider esiDataProvider ) {
+		public AssetDownloadProcessorJob.Builder withEsiDataProvider( final ESIDataService esiDataProvider ) {
 			Objects.requireNonNull( esiDataProvider );
 			this.onConstruction.esiDataProvider = esiDataProvider;
 			return this;
