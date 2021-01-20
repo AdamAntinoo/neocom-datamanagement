@@ -4,6 +4,7 @@ WORKING_DIRECTORY=$(pwd)
 downloadFiles() {
   mkdir --parents "${WORKING_DIRECTORY}/downloads"
   cd "${WORKING_DIRECTORY}/downloads" || exit 1
+  rm *.*
   allFiles=("mapRegions" "mapConstellations" "mapSolarSystems" "staStationTypes" "planetSchematicsPinMap" "planetSchematicsTypeMap" "invTypes"
   "industryActivityMaterials" "industryActivitySkills" "industryActivityProducts")
 

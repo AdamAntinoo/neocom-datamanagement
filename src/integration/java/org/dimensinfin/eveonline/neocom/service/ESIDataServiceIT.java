@@ -13,16 +13,15 @@ import org.testcontainers.containers.GenericContainer;
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
-import org.dimensinfin.logging.LogWrapper;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_SCOPE;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_UNIQUE_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ESIDataServiceConstants.TEST_CHARACTER_IDENTIFIER;
 
 public class ESIDataServiceIT {
 	private static final int ESI_AUTHENTICATION_UNITTESTING_PORT = 53100;
@@ -53,26 +52,41 @@ public class ESIDataServiceIT {
 		this.fileSystem = injector.getInstance( SBFileSystemAdapter.class );
 		this.retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
 		this.storeCache = new MemoryStoreCacheService( this.retrofitService );
-		//		this.retrofitService = injector.getInstance( RetrofitService.class );
-		this.locationCatalogService = new  LocationCatalogService(this.retrofitService);
+		this.locationCatalogService = new LocationCatalogService( this.retrofitService );
 		// Update the retrofit port configurations.
-//		LogWrapper.info( "Update configuration." );
-//		this.configurationService.setProperty( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
-//				"http://" +
-//						esiAuthenticationSimulator.getContainerIpAddress() +
-//						":" +
-//						esiAuthenticationSimulator.getMappedPort( ESI_AUTHENTICATION_UNITTESTING_PORT ) );
-//		this.configurationService.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
-//				"http://" +
-//						esiDataSimulator.getContainerIpAddress() +
-//						":" +
-//						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
+		//		LogWrapper.info( "Update configuration." );
+		//		this.configurationService.setProperty( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
+		//				"http://" +
+		//						esiAuthenticationSimulator.getContainerIpAddress() +
+		//						":" +
+		//						esiAuthenticationSimulator.getMappedPort( ESI_AUTHENTICATION_UNITTESTING_PORT ) );
+		//		this.configurationService.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
+		//				"http://" +
+		//						esiDataSimulator.getContainerIpAddress() +
+		//						":" +
+		//						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
 	}
 
-//	@Test
+	@Test
+	public void getCharactersCharacterId() {
+		// Prepare
+		this.beforeEach();
+		// Test
+		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
+				this.fileSystem,
+				this.storeCache,
+				this.retrofitService,
+				this.locationCatalogService );
+		final GetCharactersCharacterIdOk obtained = esiDataService.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertEquals( "Beth Ripley", obtained.getName() );
+	}
+
+	//	@Test
 	public void getCharactersCharacterIdIndustryJobsSuccess() {
 		// Prepare
-//		this.prepareMocks();
+		//		this.prepareMocks();
 		this.beforeEach();
 		// Given
 		final Credential credential = Mockito.mock( Credential.class );

@@ -1,6 +1,7 @@
 #!/bin/bash
 figlet InstallSDE
-./update-sde.sh
+
+cp downloads/*.csv .
 ./create-sde.sh
 
 echo "> Moving database to destinations."

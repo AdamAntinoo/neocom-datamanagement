@@ -71,26 +71,26 @@ jobs:
           path: ~/build/test-results
       - store_artifacts:  
           path: ~/build/libs
-  acceptance-test-datamanagement-job:
+  integration-datamanagement-job:
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
+          name: BACKEND - Validate the CI machine configuration
+          command: |
+            ./gradlew --version
+            sudo snap install figlet
+      - run:
           name: BACKEND - Generate the SDE database
           working_directory: src/integration/sh
           command: |
-            mkdir downloads
+            ./update-sde.sh
             ./install-sde.sh
       - run:
           name: BACKEND - Generate build resources and get them ready
           command: |
             ./gradlew clean processIntegrationResources
-      - run:
-          name: BACKEND - Validate the CI machine configuration
-          command: |
-            ./gradlew --version
-            sudo snap install figlet
       - run:
           name: BACKEND - Start the docker simulators
           command: |
@@ -102,10 +102,6 @@ jobs:
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
             ./gradlew integrationTest
-      # - store_test_results:
-      #     path: ~/project/NeoCom.DataManagement/build/test-results
-      # - store_artifacts:
-      #     path: ~/project/NeoCom.DataManagement/build/libs
 
   build-datamanagement-job:
     docker:
@@ -160,7 +156,7 @@ workflows:
             branches:
               only:
                 - test
-      - acceptance-test-datamanagement-job:
+      - integration-datamanagement-job:
           requires:
             - compile-datamanagement-job
             - test-datamanagement-job
@@ -186,9 +182,18 @@ workflows:
               only: /0.*/
             branches:
               ignore: /.*/
+      - integration-datamanagement-job:
+          requires:
+            - start-job
+          filters:
+            tags:
+              only: /0.*/
+            branches:
+              ignore: /.*/
       - build-datamanagement-job:
           requires:
             - test-datamanagement-job
+            - integration-datamanagement-job
           filters:
             tags:
               only: /0.*/

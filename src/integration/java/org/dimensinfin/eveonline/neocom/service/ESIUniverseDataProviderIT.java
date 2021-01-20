@@ -78,22 +78,6 @@ public class ESIUniverseDataProviderIT {
 		Assertions.assertEquals( "https://images.evetech.net/Alliance/117383987_64.png", obtained.getPx64x64() );
 	}
 
-	@Test
-	public void getCharactersCharacterId() {
-		// Prepare
-		this.beforeEach();
-		// Test
-		final ESIUniverseDataProvider universeDataProvider = new ESIUniverseDataProvider.Builder()
-				.withConfigurationProvider( this.configurationService )
-				.withFileSystemAdapter( this.fileSystem )
-				.withRetrofitFactory( this.retrofitService )
-				.withStoreCacheManager( this.storeCache )
-				.build();
-		final GetCharactersCharacterIdOk obtained = universeDataProvider.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
-		// Assertions
-		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( "Beth Ripley", obtained.getName() );
-	}
 
 	@Test
 	public void getCorporationsCorporationId() {
