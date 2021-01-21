@@ -9,8 +9,8 @@
 #                 The only actions are to compile the source code.
 #   Development: This branch compiles the code and checks that the installation and preparation stages are ready.
 #                Used to confirm there are no defects on the compilation code.
-#   Testing: This branch activales all unit tests, integration and accceptance tests.
-#            After the testing completes suucessfully then the script activated the steps to update the sonarcloud quality gate data.
+#   Testing: This branch activates all unit tests, integration and acceptance tests.
+#            After the testing completes successfully then the script activated the steps to update the sonarcloud quality gate data.
 #
 version: 2.1
 jobs:
@@ -34,8 +34,10 @@ jobs:
             ./gradlew dependencies
       - save_cache:
           paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "dependencies.gradle" }}
+            - ~/project/.gradle
+          keys:
+            - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
+            - v1-dependencies-
 
   compile-datamanagement-job:
     docker:
@@ -44,7 +46,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "dependencies.gradle" }}
+          - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
           - v1-dependencies-
       - run:
           name: DATAMANAGEMENT - Compile the current library code
@@ -61,47 +63,70 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "dependencies.gradle" }}
+          - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
           - v1-dependencies-
       - run:
-          name: BACKEND - Unit Testing application
+          name: DATAMANAGEMENT - Unit Testing application
           command: |
             ./gradlew test
       - store_test_results:
-          path: ~/build/test-results
+          path: ~/project/build/test-results
       - store_artifacts:  
-          path: ~/build/libs
+          path: ~/project/build/libs
+      - save_cache:
+          paths:
+            - ~/project/.gradle
+            - ~/project/build
+            - ~/project/coverage
+          keys:
+            - v1-build-{{ checksum "~/project/build.gradle" }}
+            - v1-build-
   integration-datamanagement-job:
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
-          name: BACKEND - Validate the CI machine configuration
+          name: DATAMANAGEMENT - Validate the CI machine configuration
           command: |
             ./gradlew --version
             sudo snap install figlet
       - run:
-          name: BACKEND - Generate the SDE database
+          name: DATAMANAGEMENT - Generate the SDE database
           working_directory: src/integration/sh
           command: |
             ./update-sde.sh
             ./install-sde.sh
       - run:
-          name: BACKEND - Generate build resources and get them ready
+          name: DATAMANAGEMENT - Generate build resources and get them ready
           command: |
             ./gradlew clean processIntegrationResources
       - run:
-          name: BACKEND - Start the docker simulators
+          name: DATAMANAGEMENT - Start the docker simulators
           command: |
             ./docker-service.sh start integration
       - run:
-          name: BACKEND - Integration Testing application
+          name: DATAMANAGEMENT - Integration Testing application
           environment:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
-            ./gradlew integration
+            ./gradlew integrationTest
+  quality-sonarcloud-backend:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-build-{{ checksum "~/project/build.gradle" }}
+            - v1-build-
+      - run:
+          name: DATAMANAGEMENT - Update SonarQube statistics
+          environment:
+            SONAR_TOKEN: 0784ee732d6aaa1fbac965792c35aa028bfe35e1
+          command: |
+            ./gradlew test jacocoTestReport sonarqube
 
   build-datamanagement-job:
     docker:

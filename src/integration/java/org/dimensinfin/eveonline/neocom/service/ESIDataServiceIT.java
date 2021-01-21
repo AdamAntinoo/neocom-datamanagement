@@ -80,7 +80,7 @@ public class ESIDataServiceIT {
 		final GetCharactersCharacterIdOk obtained = esiDataService.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( "Beth Ripley", obtained.getName() );
+		Assertions.assertEquals( "Zach Zender", obtained.getName() );
 	}
 
 	//	@Test

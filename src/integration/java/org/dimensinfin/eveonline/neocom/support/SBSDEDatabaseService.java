@@ -22,7 +22,7 @@ public class SBSDEDatabaseService implements ISDEDatabaseService {
 	// - C O N S T R U C T O R S
 	@Inject
 	public SBSDEDatabaseService( final @NotNull @Named("SDEDatabasePath") String databasePath ) throws SQLException {
-		this.databasePath = databasePath;
+		this.databasePath = System.getProperty( "user.dir" ) +databasePath;
 		this.openSDEDB();
 	}
 
@@ -68,7 +68,7 @@ public class SBSDEDatabaseService implements ISDEDatabaseService {
 		} catch (final ClassNotFoundException cnfe) {
 			throw new SQLException( MessageFormat.format( "Cannot create connection. {0}.", cnfe.getMessage() ) );
 		}
-		final String dbPath = new File( System.getProperty( "user.dir" ) + this.databasePath ).getAbsolutePath();
+		final String dbPath = new File(  this.databasePath ).getAbsolutePath();
 		this.connectionSource = DriverManager.getConnection( "jdbc:sqlite:"+dbPath );
 		this.connectionSource.setAutoCommit( false );
 	}

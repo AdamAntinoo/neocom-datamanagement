@@ -1,14 +1,4 @@
 // - P L U G I N S
-//buildscript {
-//    repositories {
-//        mavenLocal()
-//        mavenCentral()
-//        maven {
-//            url "https://jitpack.io"
-//            credentials { username authToken }
-//        }
-//    }
-//}
 plugins {
     id 'java'
     id 'maven-publish'
@@ -85,19 +75,22 @@ sonarqube {
         property "sonar.projectVersion", project.version
         property "sonar.projectDescription", project.description
         property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.login", "4d2d1c6898c0815bf4862283c8179c8c5bb46724"
+//        property "sonar.login", "4d2d1c6898c0815bf4862283c8179c8c5bb46724"
     }
 }
 
 // - I N T E G R A T I O N   T E S T S
-//task preIntegrationTask(type: Exec) {
-//    workingDir "$projectDir/src/integration/sh"
-//    commandLine 'sh', './install-sde.sh'
-//}
-//task integrationTest(type: Test) {
-//    testClassesDirs = sourceSets.integration.output.classesDirs
-//    classpath = sourceSets.integration.runtimeClasspath
-//}
-//check.dependsOn integrationTest
-//integrationTest.mustRunAfter test
-//integrationTest.dependsOn preIntegrationTask
+task preIntegrationTask(type: Exec) {
+    group = 'integration'
+    workingDir "$projectDir/src/integration/sh"
+    commandLine 'bash', './update-sde.sh'
+    commandLine 'bash', './install-sde.sh'
+}
+task integrationTest(type: Test) {
+    group = 'integration'
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+}
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+integrationTest.dependsOn preIntegrationTask

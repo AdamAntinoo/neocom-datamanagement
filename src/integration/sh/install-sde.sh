@@ -6,4 +6,5 @@ cp downloads/*.csv .
 
 echo "> Moving database to destinations."
 mv sde.db ../resources/
+rm -rf *.csv
 echo "> SDE db installation completed."
