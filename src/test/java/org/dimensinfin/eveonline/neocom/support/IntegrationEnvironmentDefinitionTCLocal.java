@@ -14,6 +14,7 @@ import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
@@ -86,7 +87,7 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 		connectionSource = connectionSource1;
 	}
 
-	protected TestConfigurationService itConfigurationProvider;
+	protected IConfigurationService itConfigurationProvider;
 	protected IFileSystem itFileSystemAdapter;
 	protected IntegrationNeoComDBAdapter itNeoComIntegrationDBAdapter;
 	protected AssetRepository itAssetRepository;
@@ -108,8 +109,8 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 		Mockito.when( credential4Test.getDataSource() ).thenReturn( "tranquility" );
 		Mockito.when( credential4Test.setMiningResourcesEstimatedValue( Mockito.anyDouble() ) ).thenReturn( credential4Test );
 
-		this.itConfigurationProvider = new TestConfigurationService.Builder()
-				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
+//		this.itConfigurationProvider = new TestConfigurationService.Builder()
+//				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
 		this.itConfigurationProvider.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
 				"http://" +
 						esisimulator.getContainerIpAddress() +

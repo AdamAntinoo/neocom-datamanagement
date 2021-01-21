@@ -8,8 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.text.MessageFormat;
-
 import javax.validation.constraints.NotNull;
 
 import com.google.inject.Inject;
@@ -37,6 +38,11 @@ public class SBFileSystemAdapter implements IFileSystem {
 	@Inject
 	public SBFileSystemAdapter( final @NotNull @Named("ApplicationDirectory") String applicationDirectory ) {
 		this.applicationDirectory = applicationDirectory;
+	}
+
+	@Override
+	public boolean checkWritable( final String filePath ) {
+		return Files.isWritable( FileSystems.getDefault().getPath( filePath ) );
 	}
 
 	@Override
@@ -96,22 +102,22 @@ public class SBFileSystemAdapter implements IFileSystem {
 				.toString();
 	}
 
-//	// - B U I L D E R
-//	public static class Builder {
-//		private SBFileSystemAdapter onConstruction;
-//
-//// - C O N S T R U C T O R S
-//		public Builder() {
-//			this.onConstruction = new SBFileSystemAdapter();
-//		}
-//
-//		public SBFileSystemAdapter build() {
-//			return this.onConstruction;
-//		}
-//
-//		public SBFileSystemAdapter.Builder optionalApplicationDirectory( final String applicationDirectory ) {
-//			if (null != applicationDirectory) this.onConstruction.applicationDirectory = applicationDirectory;
-//			return this;
-//		}
-//	}
+	//	// - B U I L D E R
+	//	public static class Builder {
+	//		private SBFileSystemAdapter onConstruction;
+	//
+	//// - C O N S T R U C T O R S
+	//		public Builder() {
+	//			this.onConstruction = new SBFileSystemAdapter();
+	//		}
+	//
+	//		public SBFileSystemAdapter build() {
+	//			return this.onConstruction;
+	//		}
+	//
+	//		public SBFileSystemAdapter.Builder optionalApplicationDirectory( final String applicationDirectory ) {
+	//			if (null != applicationDirectory) this.onConstruction.applicationDirectory = applicationDirectory;
+	//			return this;
+	//		}
+	//	}
 }

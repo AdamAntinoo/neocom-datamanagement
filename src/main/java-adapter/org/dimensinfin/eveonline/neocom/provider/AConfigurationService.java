@@ -37,6 +37,14 @@ public abstract class AConfigurationService implements IConfigurationService {
 		return false;
 	}
 
+	public boolean getResourceBoolean( final String key, final Boolean defaultValue ) {
+		final String value = this.getResourceString( key, defaultValue.toString() );
+		if (value.equalsIgnoreCase( "true" )) return true;
+		if (value.equalsIgnoreCase( "on" )) return true;
+		if (value.equalsIgnoreCase( "1" )) return true;
+		return false;
+	}
+
 	public Integer getResourceInteger( final String key ) {
 		final String value = this.configurationProperties.getProperty( key );
 		if (null == value) return 0;
@@ -59,14 +67,6 @@ public abstract class AConfigurationService implements IConfigurationService {
 		final String value = this.configurationProperties.getProperty( key, defaultValue );
 		if (null == value) return this.generateMissing( key );
 		else return value;
-	}
-
-	public boolean getResourceBoolean( final String key, final Boolean defaultValue ) {
-		final String value = this.getResourceString( key, defaultValue.toString() );
-		if (value.equalsIgnoreCase( "true" )) return true;
-		if (value.equalsIgnoreCase( "on" )) return true;
-		if (value.equalsIgnoreCase( "1" )) return true;
-		return false;
 	}
 
 	// - P L A T F O R M   S P E C I F I C   S E C T I O N
@@ -97,27 +97,27 @@ public abstract class AConfigurationService implements IConfigurationService {
 	}
 
 	// - B U I L D E R
-	protected abstract static class Builder<T extends AConfigurationService, B extends AConfigurationService.Builder> {
-		protected B actualClassBuilder;
-
-// - C O N S T R U C T O R S
-		public Builder() {
-			this.actualClassBuilder = this.getActualBuilder();
-		}
-
-		public T build() {
-			Objects.requireNonNull( this.getActual().configuredPropertiesDirectory );
-			this.getActual().readAllProperties();
-			return this.getActual();
-		}
-
-		public B optionalPropertiesDirectory( final String propertiesDirectory ) {
-			if (null != propertiesDirectory) this.getActual().configuredPropertiesDirectory = propertiesDirectory;
-			return this.getActualBuilder();
-		}
-
-		protected abstract T getActual();
-
-		protected abstract B getActualBuilder();
-	}
+//	protected abstract static class Builder<T extends AConfigurationService, B extends AConfigurationService.Builder> {
+//		protected B actualClassBuilder;
+//
+//		// - C O N S T R U C T O R S
+//		protected Builder() {
+//			this.actualClassBuilder = this.getActualBuilder();
+//		}
+//
+//		public T build() {
+//			Objects.requireNonNull( this.getActual().configuredPropertiesDirectory );
+//			this.getActual().readAllProperties();
+//			return this.getActual();
+//		}
+//
+//		public B optionalPropertiesDirectory( final String propertiesDirectory ) {
+//			if (null != propertiesDirectory) this.getActual().configuredPropertiesDirectory = propertiesDirectory;
+//			return this.getActualBuilder();
+//		}
+//
+//		protected abstract T getActual();
+//
+//		protected abstract B getActualBuilder();
+//	}
 }

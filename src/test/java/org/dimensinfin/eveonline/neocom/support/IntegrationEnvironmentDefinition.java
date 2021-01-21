@@ -15,6 +15,7 @@ import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
 import org.dimensinfin.eveonline.neocom.database.repositories.CredentialRepository;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
+import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
@@ -78,7 +79,7 @@ public class IntegrationEnvironmentDefinition {
 	//		}
 	//		connectionSource = connectionSource1;
 	//	}
-	protected TestConfigurationService itConfigurationProvider;
+	protected IConfigurationService itConfigurationProvider;
 	protected IFileSystem itFileSystemAdapter;
 	protected IntegrationNeoComDBAdapter itNeoComIntegrationDBAdapter;
 	protected AssetRepository itAssetRepository;
@@ -100,8 +101,8 @@ public class IntegrationEnvironmentDefinition {
 		Mockito.when( credential4Test.getDataSource() ).thenReturn( "tranquility" );
 		Mockito.when( credential4Test.setMiningResourcesEstimatedValue( Mockito.anyDouble() ) ).thenReturn( credential4Test );
 
-		this.itConfigurationProvider = new TestConfigurationService.Builder()
-				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
+//		this.itConfigurationProvider = new TestConfigurationService.Builder()
+//				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
 		//		this.itConfigurationProvider.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
 		//				"http://" +
 		//						esisimulator.getContainerIpAddress() +

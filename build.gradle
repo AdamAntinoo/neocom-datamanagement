@@ -82,6 +82,11 @@ sonarqube {
 // - I N T E G R A T I O N   T E S T S
 task preIntegrationTask(type: Exec) {
     group = 'integration'
+    inputs.files(fileTree('src/integration/sh/downloads'))
+            .withPropertyName('csvTableContents')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.file(layout.projectDirectory.dir('src/integration/resources/sde.db'))
+            .withPropertyName('outputDb')
     workingDir "$projectDir/src/integration/sh"
     commandLine 'bash', './update-sde.sh'
     commandLine 'bash', './install-sde.sh'
