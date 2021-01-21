@@ -11,7 +11,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.dimensinfin.eveonline.neocom.domain.EsiType.ESI_ICON_URL_PREFIX;
 import static org.dimensinfin.eveonline.neocom.domain.EsiType.ESI_ICON_URL_SUFFIX;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_QUANTITY;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_QUANTITY;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_CATEGORY;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_GROUP;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_NAME;
@@ -31,15 +31,15 @@ public class ResourceTest {
 				.withGroup( group )
 				.withCategory( category )
 				.build()
-				.setQuantity( TEST_QUANTITY );
+				.setQuantity( TEST_RESOURCE_QUANTITY );
 		// Test
 		resource.add( 123 );
 		// Assertions
-		Assertions.assertEquals( TEST_QUANTITY + 123, resource.getQuantity() );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY + 123, resource.getQuantity() );
 		resource.add( 0 );
-		Assertions.assertEquals( TEST_QUANTITY + 123 + 0, resource.getQuantity() );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY + 123 + 0, resource.getQuantity() );
 		resource.add( -10 );
-		Assertions.assertEquals( TEST_QUANTITY + 123 + 0, resource.getQuantity() );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY + 123 + 0, resource.getQuantity() );
 	}
 
 	@Test
@@ -81,10 +81,10 @@ public class ResourceTest {
 				.withGroup( group )
 				.withCategory( category )
 				.build()
-				.setQuantity( TEST_QUANTITY );
+				.setQuantity( TEST_RESOURCE_QUANTITY );
 		// Assertions
 		Assertions.assertEquals( TEST_RESOURCE_TYPE_ID, resource.getTypeId() );
-		Assertions.assertEquals( TEST_QUANTITY, resource.getQuantity() );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY, resource.getQuantity() );
 		Assertions.assertEquals( TEST_RESOURCE_CATEGORY, resource.getCategoryName() );
 		Assertions.assertEquals( TEST_RESOURCE_GROUP, resource.getGroupName() );
 		Assertions.assertEquals( TEST_RESOURCE_NAME, resource.getName() );
@@ -105,16 +105,16 @@ public class ResourceTest {
 				.withGroup( group )
 				.withCategory( category )
 				.build()
-				.setQuantity( TEST_QUANTITY );
+				.setQuantity( TEST_RESOURCE_QUANTITY );
 		// Test
 		resource.sub( 123 );
 		// Assertions
-		Assertions.assertEquals( TEST_QUANTITY - 123, resource.getQuantity() );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY - 123, resource.getQuantity() );
 		resource.sub( 0 );
-		Assertions.assertEquals( TEST_QUANTITY - 123 - 0, resource.getQuantity() );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY - 123 - 0, resource.getQuantity() );
 		resource.sub( -10 );
-		Assertions.assertEquals( TEST_QUANTITY - 123 - 0, resource.getQuantity() );
-		resource.sub( TEST_QUANTITY * 2 );
+		Assertions.assertEquals( TEST_RESOURCE_QUANTITY - 123 - 0, resource.getQuantity() );
+		resource.sub( TEST_RESOURCE_QUANTITY * 2 );
 		Assertions.assertEquals( 0, resource.getQuantity() );
 	}
 
@@ -137,7 +137,7 @@ public class ResourceTest {
 				.withGroup( group )
 				.withCategory( category )
 				.build()
-				.setQuantity( TEST_QUANTITY );
+				.setQuantity( TEST_RESOURCE_QUANTITY );
 		// Assertions
 		final String expected = "{\"baseQty\":543,\"name\":\"Silicates\",\"typeId\":16636,\"quantity\":543,\"volume\":0.5,\"price\":0.0,\"jsonClass\":\"Resource\"}";
 		Assertions.assertEquals( expected, resource.toString() );

@@ -325,7 +325,7 @@ public class ESIUniverseDataProvider {
 			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
 			Objects.requireNonNull( this.onConstruction.retrofitService );
 			Objects.requireNonNull( this.onConstruction.storeCacheManager );
-			NeoItem.injectEsiUniverseDataAdapter( this.onConstruction );
+//			NeoItem.injectEsiUniverseDataAdapter( this.onConstruction );
 			return this.onConstruction;
 		}
 

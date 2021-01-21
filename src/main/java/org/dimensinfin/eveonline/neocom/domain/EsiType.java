@@ -13,6 +13,7 @@ import org.dimensinfin.eveonline.neocom.core.EveGlobalConstants;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants;
 
 public class EsiType extends NeoComNode {
 	public static final String ESI_ICON_URL_PREFIX = "https://image.eveonline.com/Type/";
@@ -168,13 +169,13 @@ public class EsiType extends NeoComNode {
 		if (this.getCategoryName().equalsIgnoreCase( "Commodity" )) {
 			this.industryGroup = IndustryGroup.COMMODITY;
 		}
-		if (this.getCategoryName().equalsIgnoreCase( EveGlobalConstants.Blueprint )) {
+		if (this.getCategoryName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.BLUEPRINT )) {
 			this.industryGroup = IndustryGroup.BLUEPRINT;
 		}
-		if (this.getCategoryName().equalsIgnoreCase( EveGlobalConstants.Skill )) {
+		if (this.getCategoryName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.SKILL )) {
 			this.industryGroup = IndustryGroup.SKILL;
 		}
-		if (this.getGroupName().equalsIgnoreCase( EveGlobalConstants.Mineral )) {
+		if (this.getGroupName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.MINERAL )) {
 			this.industryGroup = IndustryGroup.REFINEDMATERIAL;
 		}
 		if (this.getCategoryName().equalsIgnoreCase( "Module" )) {

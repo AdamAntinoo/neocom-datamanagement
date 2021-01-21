@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
-import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.domain.Resource;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
@@ -39,10 +38,5 @@ public class ResourceFactory {
 				.withGroup( group )
 				.withCategory( this.esiDataService.searchItemCategory4Id( group.getCategoryId() ) )
 				.build();
-	}
-
-	@Deprecated
-	public NeoItem getItemById( final Integer itemId ) {
-		return new NeoItem( itemId );
 	}
 }

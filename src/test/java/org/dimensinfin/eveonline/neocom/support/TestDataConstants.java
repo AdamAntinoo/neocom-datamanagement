@@ -66,7 +66,7 @@ public class TestDataConstants {
 
 	public static final class ResourceConstants {
 		public static final Integer TEST_RESOURCE_TYPE_ID = 16636;
-		public static final Integer TEST_QUANTITY = 543;
+		public static final Integer TEST_RESOURCE_QUANTITY = 543;
 		public static final String TEST_RESOURCE_GROUP = "Moon Materials";
 		public static final String TEST_RESOURCE_CATEGORY = "Material";
 		public static final String TEST_RESOURCE_NAME = "Silicates";

@@ -8,7 +8,6 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.dimensinfin.eveonline.neocom.database.SBRawStatement;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseAdapter;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
+import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystem;
 
@@ -25,7 +26,7 @@ public class MiningExtraction {
 	private String extractionDateName;
 	private int extractionHour = 24; // The hour of the day for this extraction delta or 24 if this is the date aggregated value.
 	private Integer ownerId; // The credential identifier of the pilot's extraction.
-	private NeoItem resourceItem;
+	private EsiType resourceItem;
 	private SpaceSystem solarSystemLocation;
 
 	// - C O N S T R U C T O R S
@@ -65,9 +66,9 @@ public class MiningExtraction {
 				.concat( this.ownerId.toString() );
 	}
 
-	public double getPrice() {
-		return this.resourceItem.getPrice();
-	}
+//	public double getPrice() {
+//		return this.resourceItem.getPrice();
+//	}
 
 	public Long getQuantity() {
 		return this.quantity;
@@ -136,7 +137,7 @@ public class MiningExtraction {
 				.append( "systemName", getSystemName() )
 				.append( "URLForItem", getURLForItem() )
 				.append( "volume", getVolume() )
-				.append( "price", getPrice() )
+//				.append( "price", getPrice() )
 				.toString();
 	}
 
@@ -174,7 +175,7 @@ public class MiningExtraction {
 			return this;
 		}
 
-		public MiningExtraction.Builder withNeoItem( final NeoItem resourceItem ) {
+		public MiningExtraction.Builder withNeoItem( final EsiType resourceItem ) {
 			Objects.requireNonNull( resourceItem );
 			this.onConstruction.resourceItem = resourceItem;
 			return this;

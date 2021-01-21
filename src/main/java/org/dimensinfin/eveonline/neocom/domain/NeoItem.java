@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.domain;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOkDogmaAttributes;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
+import org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants;
+import org.dimensinfin.logging.LogWrapper;
 
 @JsonIgnoreProperties
 @Deprecated
@@ -73,10 +76,11 @@ public class NeoItem extends NeoComNode implements IItemFacet {
 			Objects.requireNonNull(this.group);
 			this.category = esiUniverseDataProvider.searchItemCategory4Id(this.group.getCategoryId());
 			Objects.requireNonNull(this.category);
-		} catch (RuntimeException rtex) {
-			logger.info("RT [NeoItem.loadup]> Error downloading the NeoItem data for code {}. Not able to complete the " +
-					"instantiation.",this.id);
-			logger.info("RT [NeoItem.loadup]> Message: {}", rtex.getMessage());
+		} catch (final RuntimeException rtex) {
+			LogWrapper.info( MessageFormat.format(
+					"RT [NeoItem.loadup]> Error downloading the NeoItem data for code {0}. Not able to complete the instantiation.",this.id
+			));
+			LogWrapper.error( rtex);
 		}
 	}
 
@@ -158,7 +162,7 @@ public class NeoItem extends NeoComNode implements IItemFacet {
 	}
 
 	public boolean isBlueprint() {
-		if (this.getCategoryName().equalsIgnoreCase(EveGlobalConstants.Blueprint))
+		if (this.getCategoryName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.BLUEPRINT))
 			return true;
 		else
 			return false;

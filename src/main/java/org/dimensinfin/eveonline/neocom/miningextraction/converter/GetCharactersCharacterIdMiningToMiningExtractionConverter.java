@@ -43,7 +43,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverter implement
 			return new MiningExtraction.Builder()
 					.withExtractionDate( value.getDate().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ) )
 					.withExtractionHour( extractionHour )
-					.withNeoItem( this.resourceFactory.getItemById( value.getTypeId() ) )
+					.withNeoItem( this.resourceFactory.generateType4Id( value.getTypeId() ) )
 					.withOwnerId( this.ownerId )
 					.withQuantity( value.getQuantity() )
 					.withSpaceSystem( (SpaceSystem) spaceLocation )

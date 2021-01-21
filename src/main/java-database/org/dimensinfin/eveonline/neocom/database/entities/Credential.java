@@ -12,6 +12,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.NonNls;
+
+import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 
 /**
  * Credentials are the block of data that stores the new authorization data for the ESI access to Eve Online data servers. The
@@ -36,7 +39,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Adam Antinoo
  */
-//@Entity(name = "Credentials")
 @DatabaseTable(tableName = "neocom.Credentials")
 @JsonIgnoreProperties
 public class Credential extends UpdatableEntity {
@@ -48,7 +50,7 @@ public class Credential extends UpdatableEntity {
 	}
 
 	@DatabaseField(id = true, index = true)
-	private String uniqueCredential = Credential.createUniqueIdentifier( "Tranquility".toLowerCase(), -2 );
+	private String uniqueCredential = Credential.createUniqueIdentifier( DEFAULT_ESI_SERVER.toLowerCase(), -2 );
 	@DatabaseField
 	private Integer accountId = -2;
 	@DatabaseField
@@ -56,13 +58,13 @@ public class Credential extends UpdatableEntity {
 	@DatabaseField
 	private int corporationId = -3; // Store the pilot's corporation identifier to be used on the UI.
 	@DatabaseField
-	private String dataSource = "Tranquility".toLowerCase();
+	private String dataSource = DEFAULT_ESI_SERVER.toLowerCase();
 	@DatabaseField(dataType = DataType.LONG_STRING)
 	private String accessToken;
 	@DatabaseField
-	private String tokenType = "Bearer";
+	private @NonNls String tokenType = "Bearer";
 	@DatabaseField(dataType = DataType.LONG_STRING)
-	private String scope = "publicData";
+	private @NonNls String scope = "publicData";
 	@DatabaseField(dataType = DataType.LONG_STRING)
 	private String refreshToken;
 	@DatabaseField
@@ -246,7 +248,7 @@ public class Credential extends UpdatableEntity {
 	@Override
 	public String toString() {
 		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
-				.append( "jsonClass", this.getJsonClass() )
+				.append( JSON_FIELD_NAME, this.getJsonClass() )
 				.append( "uniqueCredential", this.uniqueCredential )
 				.append( "walletBalance", this.walletBalance )
 				.append( "assetsCount", this.assetsCount )
@@ -259,7 +261,7 @@ public class Credential extends UpdatableEntity {
 
 	// - B U I L D E R
 	public static class Builder {
-		private Credential onConstruction;
+		private final Credential onConstruction;
 
 		public Builder( final Integer accountId ) {
 			Objects.requireNonNull( accountId );

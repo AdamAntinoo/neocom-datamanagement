@@ -18,8 +18,8 @@ import org.dimensinfin.core.interfaces.IJsonAngular;
  * common methods and implement the default behavior for nodes.
  */
 public abstract class NeoComNode implements ICollaboration, IJsonAngular {
-	protected static final long serialVersionUID = 6506043294337948561L;
-	protected static Logger logger = LoggerFactory.getLogger( NeoComNode.class );
+	private static final long serialVersionUID = 6506043294337948561L;
+	public static final String JSON_FIELD_NAME = "jsonClass";
 
 	public static String capitalizeFirstLetter( final String original ) {
 		Objects.requireNonNull( original );

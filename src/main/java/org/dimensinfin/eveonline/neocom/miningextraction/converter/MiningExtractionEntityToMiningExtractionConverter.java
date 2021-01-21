@@ -25,15 +25,13 @@ public class MiningExtractionEntityToMiningExtractionConverter implements Conver
 	@Override
 	public MiningExtraction convert( final MiningExtractionEntity value ) {
 		final SpaceLocation spaceLocation = this.locationCatalogService.searchLocation4Id( value.getSolarSystemId().longValue() );
-//		if (spaceLocation instanceof SpaceSystemImplementation)
 			return new MiningExtraction.Builder()
 					.withOwnerId( value.getOwnerId() )
-					.withNeoItem( this.resourceFactory.getItemById( value.getTypeId() ) )
+					.withNeoItem( this.resourceFactory.generateType4Id( value.getTypeId() ) )
 					.withSpaceSystem( (SpaceSystem) spaceLocation )
 					.withQuantity( value.getQuantity() )
 					.withExtractionDate( value.getExtractionDateName() )
 					.withExtractionHour( value.getExtractionHour() )
 					.build();
-//		else throw new NeoComRuntimeException( ErrorInfoCatalog.LOCATION_NOT_THE_CORRECT_TYPE.getErrorMessage() );
 	}
 }
