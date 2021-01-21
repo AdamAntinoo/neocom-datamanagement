@@ -15,14 +15,12 @@ import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AllianceApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.api.CharacterApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CorporationApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApiV2;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsPrices200Ok;
@@ -34,6 +32,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRaces200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
@@ -52,7 +51,7 @@ public class ESIUniverseDataProvider {
 	protected IConfigurationService configurationProvider;
 	protected IFileSystem fileSystemAdapter;
 	protected IStoreCache storeCacheManager;
-	protected RetrofitFactory retrofitService;
+	protected RetrofitService retrofitService;
 
 	// - C O N S T R U C T O R S
 	protected ESIUniverseDataProvider() {}
@@ -342,9 +341,9 @@ public class ESIUniverseDataProvider {
 			return this;
 		}
 
-		public ESIUniverseDataProvider.Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
-			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitService = retrofitFactory;
+		public ESIUniverseDataProvider.Builder withRetrofitFactory( final RetrofitService retrofitService ) {
+			Objects.requireNonNull( retrofitService );
+			this.onConstruction.retrofitService = retrofitService;
 			return this;
 		}
 

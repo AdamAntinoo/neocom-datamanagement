@@ -50,9 +50,9 @@ import retrofit2.Response;
 
 public class ESIDataService extends ESIDataProvider {
 	public static final Long PREDEFINED_MARKET_HUB_STATION_ID = 60003760L;
-	private static final Map<Integer, Long> regionMarketHubReferenceTable = new HashMap<>();
 	@NonNls
 	private static final ResourceBundle i18Bundle = ResourceBundle.getBundle( "i18Properties" );
+	private static final Map<Integer, Long> regionMarketHubReferenceTable = new HashMap<>();
 	private static final String PILOT_IDENTIFIER_LOG_LITERAL = i18Bundle.getString( "pilot.identifier.literal" );
 
 	static {

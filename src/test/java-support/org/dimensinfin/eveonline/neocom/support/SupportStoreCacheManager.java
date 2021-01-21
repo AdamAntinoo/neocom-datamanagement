@@ -3,10 +3,10 @@ package org.dimensinfin.eveonline.neocom.support;
 import java.util.Objects;
 
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 
 public class SupportStoreCacheManager extends StoreCacheManager {
-	private RetrofitFactory retrofitFactory;
+	private RetrofitService retrofitService;
 
 	private SupportStoreCacheManager() {}
 
@@ -34,9 +34,9 @@ public class SupportStoreCacheManager extends StoreCacheManager {
 			this.onConstruction = new SupportStoreCacheManager();
 		}
 
-		public SupportStoreCacheManager.Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
-			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitFactory = retrofitFactory;
+		public SupportStoreCacheManager.Builder withRetrofitFactory( final RetrofitService retrofitService ) {
+			Objects.requireNonNull( retrofitService );
+			this.onConstruction.retrofitService = retrofitService;
 			return this;
 		}
 

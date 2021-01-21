@@ -25,6 +25,11 @@ public class SupportFileSystem implements IFileSystem {
 	private SupportFileSystem() {}
 
 	@Override
+	public boolean checkWritable( final String filePath ) {
+		return true;
+	}
+
+	@Override
 	public InputStream openResource4Input( final String filePath ) throws IOException {
 		return new FileInputStream( new File( applicationDirectory + "/" + filePath ) );
 	}

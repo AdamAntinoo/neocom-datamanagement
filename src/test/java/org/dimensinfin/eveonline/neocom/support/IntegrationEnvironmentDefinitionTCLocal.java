@@ -22,7 +22,6 @@ import org.dimensinfin.eveonline.neocom.database.repositories.CredentialReposito
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
@@ -96,7 +95,7 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 	protected ESIUniverseDataProvider itEsiUniverseDataProvider;
 	protected ESIDataProvider esiDataProvider;
 	protected LocationCatalogService itLocationCatalogService;
-	protected RetrofitFactory itRetrofitFactory;
+	protected RetrofitService itRetrofitService;
 
 	@BeforeEach
 	public void beforeAllSetupEnvironment() throws IOException, SQLException {
@@ -141,20 +140,20 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 		Mockito.doAnswer( ( credential ) -> {
 			return null;
 		} ).when( this.itCredentialRepository ).persist( Mockito.any( Credential.class ) );
-		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
-				.optionalApplicationDirectory( "./out/test/NeoCom.UnitTest/" )
-				.build();
-		this.itRetrofitFactory = new RetrofitService( this.itConfigurationProvider , this.itFileSystemAdapter );
+//		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
+//				.optionalApplicationDirectory( "./out/test/NeoCom.UnitTest/" )
+//				.build();
+		this.itRetrofitService = new RetrofitService( this.itConfigurationProvider , this.itFileSystemAdapter );
 		this.itStoreCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
-				.withRetrofitFactory( this.itRetrofitFactory )
+				.withRetrofitFactory( this.itRetrofitService )
 				.build();
 		this.itEsiUniverseDataProvider = new ESIUniverseDataProvider.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
 				.withStoreCacheManager( this.itStoreCacheManager )
-				.withRetrofitFactory( this.itRetrofitFactory )
+				.withRetrofitFactory( this.itRetrofitService )
 				.build();
 //		this.itLocationCatalogService = new LocationCatalogService.Builder()
 //				.withConfigurationProvider( this.itConfigurationProvider )
@@ -166,7 +165,7 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
 				.withLocationCatalogService( this.itLocationCatalogService )
-				.withRetrofitFactory( this.itRetrofitFactory )
+				.withRetrofitFactory( this.itRetrofitService )
 				.withStoreCacheManager( this.itStoreCacheManager )
 				.build();
 	}

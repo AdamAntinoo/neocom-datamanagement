@@ -16,10 +16,10 @@ import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
 import org.dimensinfin.eveonline.neocom.database.repositories.CredentialRepository;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
-import org.dimensinfin.eveonline.neocom.service.RetrofitService;
+
 @Deprecated
 public class IntegrationEnvironmentDefinition {
 	protected static final Logger logger = LoggerFactory.getLogger( IntegrationEnvironmentDefinition.class );
@@ -87,7 +87,7 @@ public class IntegrationEnvironmentDefinition {
 	protected ESIUniverseDataProvider itEsiUniverseDataProvider;
 	protected ESIDataService esiDataProvider;
 	protected LocationCatalogService itLocationCatalogService;
-	protected RetrofitFactory itRetrofitFactory;
+	protected RetrofitService itRetrofitService;
 
 	@BeforeEach
 	public void beforeAllSetupEnvironment() throws IOException, SQLException {
@@ -132,20 +132,20 @@ public class IntegrationEnvironmentDefinition {
 		Mockito.doAnswer( ( credential ) -> {
 			return null;
 		} ).when( this.itCredentialRepository ).persist( Mockito.any( Credential.class ) );
-		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
-				.optionalApplicationDirectory( "./out/test/NeoCom.IntegrationTest/" )
-				.build();
-		this.itRetrofitFactory = new RetrofitService( this.itConfigurationProvider, this.itFileSystemAdapter );
+//		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
+//				.optionalApplicationDirectory( "./out/test/NeoCom.IntegrationTest/" )
+//				.build();
+		this.itRetrofitService = new RetrofitService( this.itConfigurationProvider, this.itFileSystemAdapter );
 		this.itStoreCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
-				.withRetrofitFactory( this.itRetrofitFactory )
+				.withRetrofitFactory( this.itRetrofitService )
 				.build();
 		this.itEsiUniverseDataProvider = new ESIUniverseDataProvider.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
 				.withStoreCacheManager( this.itStoreCacheManager )
-				.withRetrofitFactory( this.itRetrofitFactory )
+				.withRetrofitFactory( this.itRetrofitService )
 				.build();
 		//		this.itLocationCatalogService = new LocationCatalogService.Builder()
 		//				.withConfigurationProvider( this.itConfigurationProvider )

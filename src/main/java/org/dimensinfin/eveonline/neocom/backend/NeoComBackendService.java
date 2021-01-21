@@ -12,15 +12,15 @@ import org.dimensinfin.eveonline.neocom.backend.rest.v1.CredentialStoreResponse;
 import org.dimensinfin.eveonline.neocom.backend.rest.v1.NeoComApiv1;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
-import static org.dimensinfin.eveonline.neocom.provider.RetrofitFactory.DEFAULT_CONTENT_TYPE;
+import static org.dimensinfin.eveonline.neocom.service.RetrofitService.DEFAULT_CONTENT_TYPE;
 @Deprecated
 public class NeoComBackendService {
 	// - C O M P O N E N T S
-	protected RetrofitFactory retrofitFactory;
+	protected RetrofitService retrofitService;
 
 	// - C O N S T R U C T O R S
 	protected NeoComBackendService() {}
@@ -30,7 +30,7 @@ public class NeoComBackendService {
 	public List<MiningExtractionEntity> accessTodayMiningExtractions4Pilot( final Credential credential ) {
 		LogWrapper.enter( MessageFormat.format("Credential: {0}", credential.toString()) );
 		try {
-			final Response<List<MiningExtractionEntity>> backendApiResponse = this.retrofitFactory
+			final Response<List<MiningExtractionEntity>> backendApiResponse = this.retrofitService
 					.accessBackendConnector()
 					.create( NeoComApiv1.class )
 					.accessTodayMiningExtractions4Pilot( DEFAULT_CONTENT_TYPE,
@@ -49,7 +49,7 @@ public class NeoComBackendService {
 	public CredentialStoreResponse storeCredential( final Credential credential ) {
 		LogWrapper.enter( MessageFormat.format("Credential: {0}", credential.toString()) );
 		try {
-			final Response<CredentialStoreResponse> backendApiResponse = this.retrofitFactory
+			final Response<CredentialStoreResponse> backendApiResponse = this.retrofitService
 					.accessBackendConnector()
 					.create( NeoComApiv1.class )
 					.storeCredential( DEFAULT_CONTENT_TYPE, credential.getAccountId(), credential )
@@ -70,13 +70,13 @@ public class NeoComBackendService {
 		}
 
 		public NeoComBackendService build() {
-			Objects.requireNonNull( this.onConstruction.retrofitFactory );
+			Objects.requireNonNull( this.onConstruction.retrofitService );
 			return this.onConstruction;
 		}
 
-		public NeoComBackendService.Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
-			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitFactory = retrofitFactory;
+		public NeoComBackendService.Builder withRetrofitFactory( final RetrofitService retrofitService ) {
+			Objects.requireNonNull( retrofitService );
+			this.onConstruction.retrofitService = retrofitService;
 			return this;
 		}
 	}

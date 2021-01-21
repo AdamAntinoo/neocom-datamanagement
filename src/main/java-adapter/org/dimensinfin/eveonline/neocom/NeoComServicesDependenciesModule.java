@@ -6,7 +6,7 @@ import com.google.inject.name.Names;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 
 public class NeoComServicesDependenciesModule extends AbstractModule {
 
@@ -21,9 +21,9 @@ public class NeoComServicesDependenciesModule extends AbstractModule {
 		bind( StoreCacheManager.class )
 				.annotatedWith( Names.named( "StoreCacheManager" ) )
 				.to( StoreCacheManager.class );
-		bind( RetrofitFactory.class )
+		bind( RetrofitService.class )
 				.annotatedWith( Names.named( "RetrofitFactory" ) )
-				.to( RetrofitFactory.class );
+				.to( RetrofitService.class );
 		bind( LocationCatalogService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE ) )
 				.to( LocationCatalogService.class );

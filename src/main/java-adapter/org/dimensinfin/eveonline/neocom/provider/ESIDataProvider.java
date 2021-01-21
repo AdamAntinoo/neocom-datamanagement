@@ -5,27 +5,18 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
-import com.jcabi.aspects.Cacheable;
-import com.jcabi.aspects.LogExceptions;
-import com.jcabi.aspects.Loggable;
 
 import org.dimensinfin.annotation.LogEnterExit;
 import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AssetsApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.api.CharacterApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CorporationApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.FittingsApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.IndustryApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.PlanetaryInteractionApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.StatusApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.api.WalletApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdBlueprints200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdFittings200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdMining200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdPlanets200Ok;
@@ -38,7 +29,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSchematicsSc
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCharactersCharacterIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
-import org.dimensinfin.eveonline.neocom.updater.NeoComUpdater;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
@@ -383,9 +374,9 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			return this;
 		}
 
-		public ESIDataProvider.Builder withRetrofitFactory( final RetrofitFactory retrofitFactory ) {
-			Objects.requireNonNull( retrofitFactory );
-			this.onConstruction.retrofitService = retrofitFactory;
+		public ESIDataProvider.Builder withRetrofitFactory( final RetrofitService retrofitService ) {
+			Objects.requireNonNull( retrofitService );
+			this.onConstruction.retrofitService = retrofitService;
 			return this;
 		}
 

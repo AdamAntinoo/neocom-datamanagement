@@ -5,12 +5,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
-import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.provider.RetrofitFactory;
+import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobRecord;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;
@@ -21,7 +19,7 @@ public class JobToJobRecordConverterTest {
 		// Given
 		final IConfigurationService configurationProvider = Mockito.mock( IConfigurationService.class );
 		final IFileSystem fileSystem = Mockito.mock( IFileSystem.class );
-		final RetrofitFactory retrofitFactory = Mockito.mock( RetrofitFactory.class );
+		final RetrofitService retrofitService = Mockito.mock( RetrofitService.class );
 		final ESIUniverseDataProvider esiUniverseDataProvider = Mockito.mock( ESIUniverseDataProvider.class );
 		final Job4Test job = new Job4Test();
 		// Test

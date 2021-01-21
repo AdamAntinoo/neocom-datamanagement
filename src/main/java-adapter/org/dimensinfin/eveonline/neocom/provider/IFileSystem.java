@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface IFileSystem {
+	boolean checkWritable( String filePath );
+
 	InputStream openResource4Input( final String filePath ) throws IOException;
 
 	OutputStream openResource4Output( String filePath ) throws IOException;
