@@ -111,16 +111,16 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 
 //		this.itConfigurationProvider = new TestConfigurationService.Builder()
 //				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
-		this.itConfigurationProvider.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
-				"http://" +
-						esisimulator.getContainerIpAddress() +
-						":" +
-						esisimulator.getMappedPort( ESI_UNITTESTING_PORT ) );
-		this.itConfigurationProvider.setProperty( BACKEND_RETROFIT_SERVER_LOCATION,
-				"http://" +
-						backendSimulator.getContainerIpAddress() +
-						":" +
-						backendSimulator.getMappedPort( BACKEND_UNITTESTING_PORT ) );
+//		this.itConfigurationProvider.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
+//				"http://" +
+//						esisimulator.getContainerIpAddress() +
+//						":" +
+//						esisimulator.getMappedPort( ESI_UNITTESTING_PORT ) );
+//		this.itConfigurationProvider.setProperty( BACKEND_RETROFIT_SERVER_LOCATION,
+//				"http://" +
+//						backendSimulator.getContainerIpAddress() +
+//						":" +
+//						backendSimulator.getMappedPort( BACKEND_UNITTESTING_PORT ) );
 		final String databaseHostName = this.itConfigurationProvider.getResourceString( "P.database.neocom.databasehost" );
 		final String databasePath = this.itConfigurationProvider.getResourceString( "P.database.neocom.databasepath" );
 		final String databaseUser = this.itConfigurationProvider.getResourceString( "P.database.neocom.databaseuser" );
