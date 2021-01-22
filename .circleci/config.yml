@@ -125,19 +125,27 @@ jobs:
             ./gradlew test jacocoTestReport sonarqube
 
   build-datamanagement-job:
-    docker:
-      - image: circleci/openjdk:11-jdk
-        environment:
-          _JAVA_OPTIONS: "-Xmx3g"
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "dependencies.gradle" }}
-          - v1-dependencies-
+            - v1-build-{{ checksum "~/project/build.gradle" }}
+            - v1-build-
       - run:
-          name: BACKEND - Build the library to be deployed from JitPack
+          name: DATAMANAGEMENT - Validate the CI machine configuration
+          command: |
+            ./gradlew --version
+            sudo snap install figlet
+      - run:
+          name: DATAMANAGEMENT - Generate the SDE database
+          working_directory: src/integration/sh
+          command: |
+            ./update-sde.sh
+            ./install-sde.sh
+      - run:
+          name: BACKEND - Build the library as to be deployed from JitPack
           command: |
             ./gradlew clean -xtest build
 
@@ -181,6 +189,15 @@ workflows:
           requires:
             - compile-datamanagement-job
             - test-datamanagement-job
+          filters:
+            branches:
+              only:
+                - test
+      - quality-sonarcloud-backend:
+          requires:
+            - compile-datamanagement-job
+            - test-datamanagement-job
+            - integration-datamanagement-job
           filters:
             branches:
               only:
