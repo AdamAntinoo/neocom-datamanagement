@@ -35,9 +35,7 @@ jobs:
       - save_cache:
           paths:
             - ~/project/.gradle
-          keys:
-            - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
-            - v1-dependencies-
+          key: v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
 
   compile-datamanagement-job:
     docker:
@@ -78,9 +76,7 @@ jobs:
             - ~/project/.gradle
             - ~/project/build
             - ~/project/coverage
-          keys:
-            - v1-build-{{ checksum "~/project/build.gradle" }}
-            - v1-build-
+          key: v1-build-{{ checksum "~/project/build.gradle" }}
   integration-datamanagement-job:
     machine:
       image: ubuntu-2004:202010-01
@@ -143,7 +139,7 @@ jobs:
       - run:
           name: BACKEND - Build the library to be deployed from JitPack
           command: |
-            ./gradlew build
+            ./gradlew clean -xtest build
 
 workflows:
   version: 2

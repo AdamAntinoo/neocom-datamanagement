@@ -42,7 +42,7 @@ public class NeoAsset extends UpdatableEntity implements INeoAsset {
 	@Column(name = "ownerId", nullable = false)
 	private Integer ownerId; // The id of the character or corporations that own the asset.
 	@DatabaseField(index = true)
-	@Column(name = AssetRepository.ASSET_ID, nullable = false)
+	@Column(name = "assetId", nullable = false)
 	private Long assetId;
 	@DatabaseField
 	@Column(name = "typeId", nullable = false)

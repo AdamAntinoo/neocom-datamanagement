@@ -133,10 +133,10 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 				.withDatabaseURLConnection( connectionUrl )
 				.build();
 		this.connectionSource = new JdbcConnectionSource( connectionUrl, new PostgresDatabaseType() );
-		this.itAssetRepository = new AssetRepository.Builder()
-				.withAssetDao( this.itNeoComIntegrationDBAdapter.getAssetDao() )
-				.withConnection4Transaction( this.itNeoComIntegrationDBAdapter.getConnectionSource() )
-				.build();
+		this.itAssetRepository = new AssetRepository(this.itNeoComIntegrationDBAdapter);
+//				.withAssetDao( this.itNeoComIntegrationDBAdapter.getAssetDao() )
+//				.withConnection4Transaction( this.itNeoComIntegrationDBAdapter.getConnectionSource() )
+//				.build();
 		this.itCredentialRepository = Mockito.mock( CredentialRepository.class );
 		Mockito.doAnswer( ( credential ) -> {
 			return null;

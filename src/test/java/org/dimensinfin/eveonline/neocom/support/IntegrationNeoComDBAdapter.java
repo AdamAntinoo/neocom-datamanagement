@@ -11,12 +11,16 @@ import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.database.entities.DatabaseVersion;
 import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity;
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
+import org.dimensinfin.eveonline.neocom.database.entities.PilotPreferencesEntity;
+import org.dimensinfin.eveonline.neocom.industry.persistence.JobEntity;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
-public class IntegrationNeoComDBAdapter {
+public class IntegrationNeoComDBAdapter implements NeoComDatabaseService {
 	private String localConnectionDescriptor;
 	private boolean databaseValid = false;
 	private boolean isOpen = false;
@@ -48,11 +52,26 @@ public class IntegrationNeoComDBAdapter {
 		return this.credentialDao;
 	}
 
+	@Override
+	public Dao<JobEntity, String> getIndustryJobDao() throws SQLException {
+		return null;
+	}
+
 	public Dao<MiningExtractionEntity, String> getMiningExtractionDao() throws SQLException {
 		if (null == this.credentialDao) {
 			this.miningExtractionEntityDao = DaoManager.createDao( this.getConnectionSource(), MiningExtractionEntity.class );
 		}
 		return this.miningExtractionEntityDao;
+	}
+
+	@Override
+	public Dao<PilotPreferencesEntity, UUID> getPilotPreferencesDao() throws SQLException {
+		return null;
+	}
+
+	@Override
+	public Dao<DatabaseVersion, String> getVersionDao() throws SQLException {
+		return null;
 	}
 
 	public void onCreate( final ConnectionSource connectionSource ) {

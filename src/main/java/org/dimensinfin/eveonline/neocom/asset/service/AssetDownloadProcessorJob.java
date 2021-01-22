@@ -12,8 +12,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.dimensinfin.annotation.LogEnterExit;
 import org.dimensinfin.annotation.TimeElapsed;
-import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.converter.EsiAssets200Ok2NeoAssetConverter;
 import org.dimensinfin.eveonline.neocom.asset.converter.GetCharactersCharacterIdAsset2EsiAssets200OkConverter;
 import org.dimensinfin.eveonline.neocom.asset.converter.GetCharactersCharacterIdAsset2NeoAssetConverter;
@@ -29,6 +27,8 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdAssets200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 import org.dimensinfin.logging.LogWrapper;
@@ -37,6 +37,7 @@ public class AssetDownloadProcessorJob extends Job {
 	private final Map<Long, NeoAsset> convertedAssetList = new HashMap<>();
 	// - I N T E R N A L   W O R K   F I E L D S
 	private Map<Long, EsiAssets200Ok> assetsMap = new HashMap<>();
+	private double miningResourceValue = 0.0;
 	// -  C O M P O N E N T S
 	private Credential credential;
 	private AssetRepository assetRepository;
@@ -44,8 +45,10 @@ public class AssetDownloadProcessorJob extends Job {
 	private ESIDataService esiDataProvider;
 	private LocationCatalogService locationCatalogService;
 
+// - C O N S T R U C T O R S
 	private AssetDownloadProcessorJob() {super();}
 
+// - G E T T E R S   &   S E T T E R S
 	// - J O B
 	@Override
 	public int getUniqueIdentifier() {
@@ -54,17 +57,6 @@ public class AssetDownloadProcessorJob extends Job {
 				.append( this.credential.getAccountName() )
 				.append( this.getClass().getSimpleName() )
 				.toHashCode();
-	}
-
-	/**
-	 * Download the list of assets that belong to a character or corporation and process their location references while
-	 * converting to the application data version.
-	 *
-	 * @return true if the process completes successfully.
-	 */
-	@TimeElapsed
-	public Boolean call() throws Exception {
-		return this.processCharacterAssets();
 	}
 
 	// - C O R E
@@ -87,12 +79,23 @@ public class AssetDownloadProcessorJob extends Job {
 				.isEquals();
 	}
 
+	/**
+	 * Download the list of assets that belong to a character or corporation and process their location references while
+	 * converting to the application data version.
+	 *
+	 * @return true if the process completes successfully.
+	 */
+	@TimeElapsed
+	public Boolean call() throws Exception {
+		return this.processCharacterAssets();
+	}
+
 	@LogEnterExit
 	protected List<NeoAsset> downloadCorporationAssets( final Integer corporationId ) {
 		this.convertedAssetList.clear();
 		// TODO - Add the code to connect the office names to the office assets.
-//		this.corporationDivisions = this.esiDataProvider.getCorporationsCorporationIdDivisions( corporationId, this.credential );
-//		Objects.requireNonNull( this.corporationDivisions );
+		//		this.corporationDivisions = this.esiDataProvider.getCorporationsCorporationIdDivisions( corporationId, this.credential );
+		//		Objects.requireNonNull( this.corporationDivisions );
 		final List<GetCorporationsCorporationIdAssets200Ok> assetOkList = this.esiDataProvider
 				.getCorporationsCorporationIdAssets( this.credential, corporationId );
 		this.assetsMap = this.transformCorporation200OkAssets( assetOkList );
@@ -170,10 +173,10 @@ public class AssetDownloadProcessorJob extends Job {
 		return null;
 	}
 
-//	private String getDivisionName( final EsiAssets200Ok.LocationFlagEnum locationFlag,
-//	                                final List<GetCorporationsCorporationIdDivisionsOkHangar> hangarNames ) {
-//		return hangarNames.get( officeContainerLocationFlags.get( locationFlag ) ).getName();
-//	}
+	//	private String getDivisionName( final EsiAssets200Ok.LocationFlagEnum locationFlag,
+	//	                                final List<GetCorporationsCorporationIdDivisionsOkHangar> hangarNames ) {
+	//		return hangarNames.get( officeContainerLocationFlags.get( locationFlag ) ).getName();
+	//	}
 
 	private boolean isMiningResource( final NeoAsset asset2Test ) {
 		if (asset2Test.getCategoryName().equalsIgnoreCase( "Asteroid" )) return true;
@@ -182,9 +185,9 @@ public class AssetDownloadProcessorJob extends Job {
 		return false;
 	}
 
-//	private boolean isOfficeContainerLocation( final NeoAsset target ) {
-//		return officeContainerLocationFlags.contains( target.getLocationId().getLocationFlag() );
-//	}
+	//	private boolean isOfficeContainerLocation( final NeoAsset target ) {
+	//		return officeContainerLocationFlags.contains( target.getLocationId().getLocationFlag() );
+	//	}
 
 	private void locationProcessing( final NeoAsset targetAsset ) {
 		try {
@@ -205,7 +208,7 @@ public class AssetDownloadProcessorJob extends Job {
 						// SIDE EFFECTS. This is modifying the asset location.
 						// TODO-Review if this code should be uncommented.
 						workLocationId.setType( LocationIdentifierType.STRUCTURE );
-//						workLocationId.set( workLocationId.getSpaceIdentifier() );
+						//						workLocationId.set( workLocationId.getSpaceIdentifier() );
 						// SIDE EFFECTS. This is modifying the asset location.
 					}
 				}
@@ -235,7 +238,7 @@ public class AssetDownloadProcessorJob extends Job {
 				.getCharactersCharacterIdAssets( credential );
 		if (null == assetOkList) return false;
 		if (assetOkList.isEmpty()) return false;
-//		this.createPilotAssetMap( assetOkList ); // Map of asset for easy lookup.
+		//		this.createPilotAssetMap( assetOkList ); // Map of asset for easy lookup.
 		this.assetRepository.clearInvalidRecords( this.credential.getAccountId() );
 		for (final GetCharactersCharacterIdAssets200Ok assetOk : assetOkList) {
 			// - A S S E T   P R O C E S S I N G
@@ -243,8 +246,8 @@ public class AssetDownloadProcessorJob extends Job {
 				// Convert the asset from the OK format to a MVC compatible structure.
 				final NeoAsset targetAsset = new GetCharactersCharacterIdAsset2NeoAssetConverter().convert( assetOk );
 				// TODO - Complete the code to read the assets userLabel after all assets are processed and persisted.
-//				if (targetAsset.isShip()) downloadAssetEveName( targetAsset.getAssetId() );
-//				if (targetAsset.isContainer()) downloadAssetEveName( targetAsset.getAssetId() );
+				//				if (targetAsset.isShip()) downloadAssetEveName( targetAsset.getAssetId() );
+				//				if (targetAsset.isContainer()) downloadAssetEveName( targetAsset.getAssetId() );
 				// Mark the asset owner to the work in progress value.
 				targetAsset.setOwnerId( this.credential.getAccountId() * -1 );
 				// Do asset calculations like add the value is a mining resource.
@@ -261,9 +264,9 @@ public class AssetDownloadProcessorJob extends Job {
 		}
 		// - O R P H A N   L O C A T I O N   A S S E T S
 		// Second pass. All the assets in unknown locations should be readjusted for hierarchy changes.
-//		for (NeoComAsset asset : this.unlocatedAssets) {
-//			this.validateLocation( asset );
-//		}
+		//		for (NeoComAsset asset : this.unlocatedAssets) {
+		//			this.validateLocation( asset );
+		//		}
 		// Assign the assets to the pilot.
 		this.assetRepository.replaceAssets( this.credential.getAccountId() );
 		// Update the mining value on the Credential.
@@ -295,26 +298,6 @@ public class AssetDownloadProcessorJob extends Job {
 	public static class Builder extends Job.Builder<AssetDownloadProcessorJob, AssetDownloadProcessorJob.Builder> {
 		private AssetDownloadProcessorJob onConstruction;
 
-		@Override
-		protected AssetDownloadProcessorJob getActual() {
-			if (null == this.onConstruction) this.onConstruction = new AssetDownloadProcessorJob();
-			return this.onConstruction;
-		}
-
-		@Override
-		protected AssetDownloadProcessorJob.Builder getActualBuilder() {
-			return this;
-		}
-
-		public AssetDownloadProcessorJob build() {
-			final AssetDownloadProcessorJob instance = super.build();
-			Objects.requireNonNull( instance.credential );
-			Objects.requireNonNull( instance.esiDataProvider );
-			Objects.requireNonNull( instance.locationCatalogService );
-			Objects.requireNonNull( instance.assetRepository );
-			return instance;
-		}
-
 		public AssetDownloadProcessorJob.Builder withAssetRepository( final AssetRepository assetRepository ) {
 			Objects.requireNonNull( assetRepository );
 			this.getActual().assetRepository = assetRepository;
@@ -343,6 +326,26 @@ public class AssetDownloadProcessorJob extends Job {
 			Objects.requireNonNull( locationCatalogService );
 			this.onConstruction.locationCatalogService = locationCatalogService;
 			return this;
+		}
+
+		@Override
+		protected AssetDownloadProcessorJob getActual() {
+			if (null == this.onConstruction) this.onConstruction = new AssetDownloadProcessorJob();
+			return this.onConstruction;
+		}
+
+		@Override
+		protected AssetDownloadProcessorJob.Builder getActualBuilder() {
+			return this;
+		}
+
+		public AssetDownloadProcessorJob build() {
+			final AssetDownloadProcessorJob instance = super.build();
+			Objects.requireNonNull( instance.credential );
+			Objects.requireNonNull( instance.esiDataProvider );
+			Objects.requireNonNull( instance.locationCatalogService );
+			Objects.requireNonNull( instance.assetRepository );
+			return instance;
 		}
 	}
 }
