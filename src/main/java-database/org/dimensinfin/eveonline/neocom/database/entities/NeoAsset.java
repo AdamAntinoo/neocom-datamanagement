@@ -19,6 +19,7 @@ import org.dimensinfin.eveonline.neocom.asset.domain.EsiAssets200Ok;
 import org.dimensinfin.eveonline.neocom.asset.domain.INeoAsset;
 import org.dimensinfin.eveonline.neocom.database.persister.EsiAssets200OkPersister;
 import org.dimensinfin.eveonline.neocom.database.persister.LocationIdentifierPersister;
+import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
@@ -41,7 +42,7 @@ public class NeoAsset extends UpdatableEntity implements INeoAsset {
 	@Column(name = "ownerId", nullable = false)
 	private Integer ownerId; // The id of the character or corporations that own the asset.
 	@DatabaseField(index = true)
-	@Column(name = "assetId", nullable = false)
+	@Column(name = AssetRepository.ASSET_ID, nullable = false)
 	private Long assetId;
 	@DatabaseField
 	@Column(name = "typeId", nullable = false)

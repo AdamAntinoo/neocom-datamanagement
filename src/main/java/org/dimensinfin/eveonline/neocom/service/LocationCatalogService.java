@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.dimensinfin.eveonline.neocom.core.AccessStatistics;
@@ -54,9 +55,6 @@ public class LocationCatalogService extends Job {
 	private final RetrofitService retrofitService;
 
 	private Map<String, Integer> locationTypeCounters = new HashMap<>();
-	private boolean dirtyCache = false; // Flag used to detect if the cache should be persisted because it has changed.
-	@Deprecated
-	private LocationCacheAccessType lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 
 	// - C O N S T R U C T O R S
 	@Inject
@@ -78,6 +76,21 @@ public class LocationCatalogService extends Job {
 				.toHashCode();
 	}
 
+	// - C O R E
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.locationTypeCounters ).toHashCode();
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof LocationCatalogService)) return false;
+		final LocationCatalogService that = (LocationCatalogService) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) )
+				.append( this.locationTypeCounters, that.locationTypeCounters ).isEquals();
+	}
+
 	@Override
 	public Boolean call() {
 		LogWrapper.enter();
@@ -89,9 +102,10 @@ public class LocationCatalogService extends Job {
 	}
 
 	// - S T O R A G E
-	public void cleanLocationsCache() {
+	public int cleanLocationsCache() {
+		final int contentCount =   locationCache.size();
 		locationCache.clear();
-		this.dirtyCache = false;
+		return contentCount;
 	}
 
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
@@ -130,7 +144,7 @@ public class LocationCatalogService extends Job {
 	}
 
 	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
-		LogWrapper.enter( MessageFormat.format( "stationId: {0}", stationId.toString() ) );
+		LogWrapper.enter( MessageFormat.format( "stationId: {0}", stationId ) );
 		try {
 			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -140,7 +154,7 @@ public class LocationCatalogService extends Job {
 			if (stationResponse.isSuccessful())
 				return stationResponse.body();
 		} catch (final IOException ioe) {
-			LogWrapper.error( "IOException during ESI data access.", ioe );
+			LogWrapper.error( ioe );
 		}
 		return null;
 	}
@@ -188,14 +202,12 @@ public class LocationCatalogService extends Job {
 	 * @return a SpaceLocation with the correct fields filled. Can be Region or Constellation or Space or Station.
 	 */
 	public SpaceLocation searchLocation4Id( final Long locationId ) {
-		this.lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 		if (locationCache.containsKey( locationId ))
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
 		SpaceLocation hit = this.buildUpLocation( locationId );
 		if (null != hit) {
-			this.lastLocationAccess = LocationCacheAccessType.GENERATED;
 			this.storeOnCacheLocation( hit );
 			LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2} generated from ESI data.",
 					hits, access, locationId ) );
@@ -204,14 +216,12 @@ public class LocationCatalogService extends Job {
 	}
 
 	public SpaceLocation searchStructure4Id( final Long locationId, final Credential credential ) {
-		this.lastLocationAccess = LocationCacheAccessType.NOT_FOUND;
 		if (locationCache.containsKey( locationId ))
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
 		SpaceLocation hit = this.buildUpStructure( locationId, credential );
 		if (null != hit) {
-			this.lastLocationAccess = LocationCacheAccessType.GENERATED;
 			this.storeOnCacheLocation( hit );
 			LogWrapper.info( MessageFormat.format(
 					"[HIT-{0,number,integer}/{1,number,integer} ] Location {2,number,integer} generated from Public Structure Data.",
@@ -221,11 +231,6 @@ public class LocationCatalogService extends Job {
 	}
 
 	// - C A C H E   M A N A G E M E N T
-	//	public void stopService() {
-	//		this.persistLocationsDataCache();
-	//		this.cleanLocationsCache();
-	//	}
-
 	private SpaceLocation buildUpLocation( final Long locationId ) {
 		if (locationId < 20000000) { // Can be a Region
 			return this.storeOnCacheLocation(
@@ -294,10 +299,6 @@ public class LocationCatalogService extends Job {
 						.build() );
 	}
 
-	//	private void registerOnScheduler() {
-	//		JobScheduler.getJobScheduler().registerJob( this );
-	//	}
-
 	private GetUniverseStructuresStructureIdOk search200OkStructureById( final Long structureId, final Credential credential ) {
 		try {
 			final Response<GetUniverseStructuresStructureIdOk> universeResponse = this.retrofitService
@@ -319,30 +320,20 @@ public class LocationCatalogService extends Job {
 
 	private SpaceLocation searchOnMemoryCache( final Long locationId ) {
 		int access = locationsCacheStatistics.accountAccess( true );
-		this.lastLocationAccess = LocationCacheAccessType.MEMORY_ACCESS;
+		//		this.lastLocationAccess = LocationCacheAccessType.MEMORY_ACCESS;
 		int hits = locationsCacheStatistics.getHits();
 		LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2} found at cache.",
 				hits, access, locationId ) );
 		return locationCache.get( locationId );
 	}
 
-	//	private void startService() {
-	//		// TODO - This is not required until the citadel structures get stored on the SDE database.
-	//		//		this.verifySDERepository(); // Check that the LocationsCache table exists and verify the contents
-	//		this.readLocationsDataCache(); // Load the cache from the storage.
-	//		this.registerOnScheduler(); // Register on scheduler to update storage every some minutes
-	//	}
-
 	private SpaceLocation storeOnCacheLocation( final SpaceLocation entry ) {
 		if (null != entry) {
 			locationCache.put( entry.getLocationId(), entry );
-			this.dirtyCache = true;
+			//			this.dirtyCache = true;
 		}
 		return entry;
 	}
-
-	//	synchronized void readLocationsDataCache() {
-	//	}
 
 	synchronized boolean persistLocationsDataCache() {
 		return false;

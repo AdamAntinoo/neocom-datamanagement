@@ -13,7 +13,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
-import org.dimensinfin.eveonline.neocom.core.EveGlobalConstants;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
@@ -39,7 +38,7 @@ public class NeoItem extends NeoComNode implements IItemFacet {
 	 * and it is not tied to any specific market place.
 	 */
 	private double price = -1.0;
-	private String tech = EveGlobalConstants.TechI;
+	private String tech = GlobalWideConstants.EveGlobal.TECH_I;
 	// - A D D I T I O N A L   F I E L D S
 	private transient IndustryGroup industryGroup = IndustryGroup.UNDEFINED;
 
@@ -334,13 +333,13 @@ public class NeoItem extends NeoComNode implements IItemFacet {
 		if (this.getCategoryName().equalsIgnoreCase("Commodity")) {
 			industryGroup = IndustryGroup.COMMODITY;
 		}
-		if (this.getCategoryName().equalsIgnoreCase(EveGlobalConstants.Blueprint)) {
+		if (this.getCategoryName().equalsIgnoreCase(GlobalWideConstants.EveGlobal.BLUEPRINT)) {
 			industryGroup = IndustryGroup.BLUEPRINT;
 		}
-		if (this.getCategoryName().equalsIgnoreCase(EveGlobalConstants.Skill)) {
+		if (this.getCategoryName().equalsIgnoreCase(GlobalWideConstants.EveGlobal.SKILL)) {
 			industryGroup = IndustryGroup.SKILL;
 		}
-		if (this.getGroupName().equalsIgnoreCase(EveGlobalConstants.Mineral)) {
+		if (this.getGroupName().equalsIgnoreCase(GlobalWideConstants.EveGlobal.MINERAL)) {
 			industryGroup = IndustryGroup.REFINEDMATERIAL;
 		}
 		if (this.getCategoryName().equalsIgnoreCase("Module")) {

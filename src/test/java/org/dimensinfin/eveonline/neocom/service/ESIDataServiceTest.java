@@ -69,8 +69,6 @@ public class ESIDataServiceTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		// - Build the mock instances to be received
-		//		this.buildMocks();
 		this.configurationService = Mockito.mock( IConfigurationService.class );
 		this.fileSystem = Mockito.mock( IFileSystem.class );
 		this.storeCacheManager = Mockito.mock( IStoreCache.class );

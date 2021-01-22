@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="NeoCom.DataManagement unittest Jacoco" type="JUnit" factoryName="JUnit">
+  <configuration default="false" name="NeoCom.DataManagement UnitTest" type="JUnit" factoryName="JUnit">
     <module name="NeoCom-DataManagement.test" />
     <useClassPathOnly />
     <extension name="coverage">

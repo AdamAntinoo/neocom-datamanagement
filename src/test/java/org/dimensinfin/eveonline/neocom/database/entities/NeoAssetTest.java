@@ -37,7 +37,7 @@ public class NeoAssetTest {
 		Mockito.when( this.esiDataProvider.searchEsiItem4Id( Mockito.anyInt() ) ).thenReturn( this.esiItem );
 		Mockito.when( this.esiDataProvider.searchItemGroup4Id( Mockito.anyInt() ) ).thenReturn( this.esiGroup );
 		Mockito.when( this.esiDataProvider.searchItemCategory4Id( Mockito.anyInt() ) ).thenReturn( this.esiCategory );
-//		NeoItem.injectEsiUniverseDataAdapter( this.esiDataProvider );
+		NeoItem.injectEsiUniverseDataAdapter( this.esiDataProvider );
 	}
 
 	@Test

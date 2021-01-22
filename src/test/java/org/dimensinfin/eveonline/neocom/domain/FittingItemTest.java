@@ -33,7 +33,7 @@ public class FittingItemTest {
 				.thenReturn( group );
 		Mockito.when( this.esiUniverseDataProvider.searchItemCategory4Id( Mockito.anyInt() ) )
 				.thenReturn( category );
-//		NeoItem.injectEsiUniverseDataAdapter( this.esiUniverseDataProvider );
+		NeoItem.injectEsiUniverseDataAdapter( this.esiUniverseDataProvider );
 	}
 	@Test
 	public void buildComplete() {

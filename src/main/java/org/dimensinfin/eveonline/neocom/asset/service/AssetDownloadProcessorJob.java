@@ -29,7 +29,6 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdAssets200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
-import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
 import org.dimensinfin.logging.LogWrapper;
@@ -38,8 +37,6 @@ public class AssetDownloadProcessorJob extends Job {
 	private final Map<Long, NeoAsset> convertedAssetList = new HashMap<>();
 	// - I N T E R N A L   W O R K   F I E L D S
 	private Map<Long, EsiAssets200Ok> assetsMap = new HashMap<>();
-	//	private GetCorporationsCorporationIdDivisionsOk corporationDivisions;
-	private double miningResourceValue = 0.0;
 	// -  C O M P O N E N T S
 	private Credential credential;
 	private AssetRepository assetRepository;
@@ -206,6 +203,7 @@ public class AssetDownloadProcessorJob extends Job {
 									this.credential );
 					if (null != structure) {
 						// SIDE EFFECTS. This is modifying the asset location.
+						// TODO-Review if this code should be uncommented.
 						workLocationId.setType( LocationIdentifierType.STRUCTURE );
 //						workLocationId.set( workLocationId.getSpaceIdentifier() );
 						// SIDE EFFECTS. This is modifying the asset location.
