@@ -147,7 +147,7 @@ jobs:
       - run:
           name: BACKEND - Build the library as to be deployed from JitPack
           command: |
-            ./gradlew clean -xtest build
+            ./gradlew clean build -xtest -xintegrationTest
 
 workflows:
   version: 2
