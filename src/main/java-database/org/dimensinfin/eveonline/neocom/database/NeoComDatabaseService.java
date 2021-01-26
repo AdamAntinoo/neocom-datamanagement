@@ -11,6 +11,7 @@ import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
 import org.dimensinfin.eveonline.neocom.database.entities.PilotPreferencesEntity;
 import org.dimensinfin.eveonline.neocom.industry.persistence.JobEntity;
+import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOfferEntity;
 
 public interface NeoComDatabaseService {
 	Dao<NeoAsset, UUID> getAssetDao() throws SQLException;
@@ -24,4 +25,6 @@ public interface NeoComDatabaseService {
 	Dao<PilotPreferencesEntity, UUID> getPilotPreferencesDao() throws SQLException;
 
 	Dao<DatabaseVersion, String> getVersionDao() throws SQLException;
+
+	Dao<LoyaltyOfferEntity, Integer> getLoyaltyOfferDao();
 }
