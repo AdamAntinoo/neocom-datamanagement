@@ -118,42 +118,6 @@ public class ESIUniverseDataProvider {
 		}
 		return null;
 	}
-
-	/**
-	 * On new implementation if there are no more pages of data the response is a 404 instead of an empty list. Detect also this case.
-	 */
-	@TimeElapsed
-	public List<GetMarketsRegionIdOrders200Ok> getUniverseMarketOrdersForId( final Integer regionId, final Integer typeId ) {
-		LogWrapper.enter( MessageFormat.format( "regionId: {0} - typeId: {1}", regionId, typeId ) );
-		final List<GetMarketsRegionIdOrders200Ok> returnMarketOrderList = new ArrayList<>( 1000 );
-		try {
-			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
-			boolean morePages = true;
-			int pageCounter = 1;
-			while (morePages) {
-				final Response<List<GetMarketsRegionIdOrders200Ok>> marketOrdersResponse = this.retrofitService
-						.accessUniverseConnector()
-						.create( MarketApiV2.class )
-						.getMarketsRegionIdOrders( regionId, "all", DEFAULT_ESI_SERVER, pageCounter, typeId, null )
-						.execute();
-				if (marketOrdersResponse.isSuccessful()) {
-					// Check for out of page running.
-					if (Objects.requireNonNull( marketOrdersResponse.body() ).isEmpty()) morePages = false;
-					else {
-						// Copy the assets to the result list.
-						returnMarketOrderList.addAll( Objects.requireNonNull( marketOrdersResponse.body() ) );
-						pageCounter++;
-					}
-				} else morePages = false;
-			}
-		} catch (final IOException | RuntimeException rtex) {
-			LogWrapper.error( rtex );
-		} finally {
-			LogWrapper.exit();
-		}
-		return returnMarketOrderList;
-	}
-
 	// - P R O V I D E R   A P I
 	// - C A C H E D   A P I
 	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {

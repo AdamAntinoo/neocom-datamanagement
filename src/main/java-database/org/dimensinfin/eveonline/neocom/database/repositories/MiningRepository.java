@@ -25,6 +25,9 @@ import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
+import static org.dimensinfin.eveonline.neocom.database.repositories.DatabaseFieldNames.ID_FIELDNAME;
+import static org.dimensinfin.eveonline.neocom.database.repositories.DatabaseFieldNames.OWNERID_FIELDNAME;
+
 /**
  * The mining repository isolates the repository fro mining data from the details related to the search and access to the records. Current
  * implementation expects the records persisted on a database repository.
@@ -36,8 +39,6 @@ import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
  * @since 0.19.0
  */
 public class MiningRepository {
-	private static final String OWNERID_FIELDNAME = "ownerId";
-	private static final String ID_FIELDNAME = "id";
 	// - C O M P O N E N T S
 	protected Dao<MiningExtractionEntity, String> miningExtractionDao;
 	protected LocationCatalogService locationCatalogService;

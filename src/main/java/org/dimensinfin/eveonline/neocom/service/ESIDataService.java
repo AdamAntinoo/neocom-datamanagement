@@ -26,7 +26,9 @@ import org.dimensinfin.eveonline.neocom.esiswagger.api.AssetsApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CharacterApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.IndustryApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.LocationApi;
+import org.dimensinfin.eveonline.neocom.esiswagger.api.LoyaltyApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
+import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApiV2;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.SkillsApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.WalletApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
@@ -37,6 +39,9 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOrders200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdShipOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdSkillsOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetLoyaltyStoresCorporationIdOffers200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdHistory200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrders200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
@@ -273,7 +278,6 @@ public class ESIDataService extends ESIDataProvider {
 		return returnBlueprintList;
 	}
 
-	// - I N D U S T R Y
 	@TimeElapsed
 	@Loggable(Loggable.DEBUG)
 	@LogExceptions
@@ -400,6 +404,46 @@ public class ESIDataService extends ESIDataProvider {
 		return -1.0;
 	}
 
+	@TimeElapsed
+	public List<GetLoyaltyStoresCorporationIdOffers200Ok> getLoyaltyStoresOffers( final Integer corporationId ) {
+		LogWrapper.enter( MessageFormat.format( "corporationId: {0}", corporationId ) );
+		try {
+			final Response<List<GetLoyaltyStoresCorporationIdOffers200Ok>> loyaltyOffersResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( LoyaltyApi.class )
+					.getLoyaltyStoresCorporationIdOffers(
+							corporationId, DEFAULT_ESI_SERVER, null
+					)
+					.execute();
+			if (loyaltyOffersResponse.isSuccessful()) return loyaltyOffersResponse.body();
+		} catch (final IOException | RuntimeException ioe) {
+			LogWrapper.error( ioe );
+		} finally {
+			LogWrapper.exit();
+		}
+		return new ArrayList<>();
+	}
+
+	@TimeElapsed
+	public List<GetMarketsRegionIdHistory200Ok> getMarketsHistoryForRegion( final Integer regionId, final Integer typeId ) {
+		LogWrapper.enter( MessageFormat.format( "regionId: {0}", regionId ) );
+		try {
+			final Response<List<GetMarketsRegionIdHistory200Ok>> marketHistoryResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( MarketApi.class )
+					.getMarketsRegionIdHistory(
+							regionId, typeId, DEFAULT_ESI_SERVER, null
+					)
+					.execute();
+			if (marketHistoryResponse.isSuccessful()) return marketHistoryResponse.body();
+		} catch (final IOException | RuntimeException ioe) {
+			LogWrapper.error( ioe );
+		} finally {
+			LogWrapper.exit();
+		}
+		return new ArrayList<>();
+	}
+
 	/**
 	 * Searches on a predefined table for the match on the Region identifier. This reference table will store the preferred Market Hub for the
 	 * selected region. If the region value of not found on the reference table then the spacial Jita market is selected as the region hub.
@@ -419,6 +463,43 @@ public class ESIDataService extends ESIDataProvider {
 	// - L O C A T I O N   D E L E G A T I O N
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
 		return this.locationCatalogService.getUniverseConstellationById( constellationId );
+	}
+
+	/**
+	 * Returns the list of markets orders for an item on an specified region.
+	 *
+	 * On new implementation if there are no more pages of data the response is a 404 instead of an empty list. Detect also this case.
+	 */
+	@TimeElapsed
+	public List<GetMarketsRegionIdOrders200Ok> getUniverseMarketOrdersForId( final Integer regionId, final Integer typeId ) {
+		LogWrapper.enter( MessageFormat.format( "regionId: {0} - typeId: {1}", regionId, typeId ) );
+		final List<GetMarketsRegionIdOrders200Ok> returnMarketOrderList = new ArrayList<>( 1000 );
+		try {
+			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
+			boolean morePages = true;
+			int pageCounter = 1;
+			while (morePages) {
+				final Response<List<GetMarketsRegionIdOrders200Ok>> marketOrdersResponse = this.retrofitService
+						.accessUniverseConnector()
+						.create( MarketApiV2.class )
+						.getMarketsRegionIdOrders( regionId, "all", DEFAULT_ESI_SERVER, pageCounter, typeId, null )
+						.execute();
+				if (marketOrdersResponse.isSuccessful()) {
+					// Check for out of page running.
+					if (Objects.requireNonNull( marketOrdersResponse.body() ).isEmpty()) morePages = false;
+					else {
+						// Copy the assets to the result list.
+						returnMarketOrderList.addAll( Objects.requireNonNull( marketOrdersResponse.body() ) );
+						pageCounter++;
+					}
+				} else morePages = false;
+			}
+		} catch (final IOException | RuntimeException rtex) {
+			LogWrapper.error( rtex );
+		} finally {
+			LogWrapper.exit();
+		}
+		return returnMarketOrderList;
 	}
 
 	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {

@@ -301,6 +301,7 @@ public class RetrofitService {
 	}
 
 	private File testValidCacheFile( final File cacheDataFile ) throws IOException {
+		if (cacheDataFile.exists()) return cacheDataFile;
 		if (cacheDataFile.createNewFile())
 			return cacheDataFile;
 		else throw new IOException( "Cache file system is not operative. Removing cached from Retrofit services." );

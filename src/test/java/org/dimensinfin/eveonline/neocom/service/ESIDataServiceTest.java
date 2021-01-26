@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.core.support.GSONDateTimeDeserializer;
 import org.dimensinfin.eveonline.neocom.core.support.GSONLocalDateDeserializer;
+import org.dimensinfin.eveonline.neocom.core.support.GSONLocalDateSerializer;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.space.Station;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
@@ -27,6 +28,9 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOrders200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdShipOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdSkillsOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetLoyaltyStoresCorporationIdOffers200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdHistory200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrders200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
@@ -58,7 +62,10 @@ public class ESIDataServiceTest {
 							.registerTypeAdapter( DateTime.class, new GSONDateTimeDeserializer() )
 							.registerTypeAdapter( LocalDate.class, new GSONLocalDateDeserializer() )
 							.create() );
-	private final Gson gson = new Gson();
+	private final Gson gson = new GsonBuilder()
+			.registerTypeAdapter( LocalDate.class, new GSONLocalDateSerializer() )
+			.setPrettyPrinting()
+			.create();
 	private IConfigurationService configurationService;
 	private IFileSystem fileSystem;
 	private IStoreCache storeCacheManager;
@@ -495,6 +502,94 @@ public class ESIDataServiceTest {
 	}
 
 	@Test
+	public void getLoyaltyStoresOffers() {
+		// Given
+		final Integer TEST_LOYALTY_CORPORATION_ID = 1000179;
+		final List<GetLoyaltyStoresCorporationIdOffers200Ok> testLoyaltyOffers = new ArrayList<>();
+		final GetLoyaltyStoresCorporationIdOffers200Ok offer = new GetLoyaltyStoresCorporationIdOffers200Ok();
+		offer.setAkCost( 0 );
+		offer.setOfferId( 4207 );
+		offer.setIskCost( 79375000L );
+		offer.setLpCost( 79375 );
+		offer.setQuantity( 1 );
+		testLoyaltyOffers.add( offer );
+		offer.setTypeId( 16245 );
+		final String serializedGetLoyaltyStoresCorporationIdOffers = this.gson.toJson( testLoyaltyOffers );
+		final MockInterceptor interceptor = new MockInterceptor();
+		interceptor.addRule()
+				.get()
+				.url( "http://localhost/loyalty/stores/" + TEST_LOYALTY_CORPORATION_ID + "/offers/?datasource=tranquility" )
+				.answer( request -> new Response.Builder()
+						.code( 200 )
+						.body( ResponseBody.create( MEDIATYPE_JSON, serializedGetLoyaltyStoresCorporationIdOffers ) )
+				);
+		interceptor.addRule()
+				.pathMatches( Pattern.compile( ".*/characters/.*/blueprints.*" ) )
+				.anyTimes()
+				.answer( request -> new Response.Builder()
+						.code( 200 )
+						.body( ResponseBody.create( MEDIATYPE_JSON, "[]" ) )
+				);
+		final OkHttpClient httpClient = this.universeClientBuilder.addInterceptor( interceptor ).build();
+		// When
+		Mockito.when( this.retrofitService.accessUniverseConnector() )
+				.thenReturn( this.getNewUniverseConnector( httpClient ) );
+		// Test
+		final ESIDataService esiDataService = new ESIDataService(
+				this.configurationService,
+				this.fileSystem,
+				this.storeCacheManager,
+				this.retrofitService,
+				this.locationCatalogService );
+		final List<GetLoyaltyStoresCorporationIdOffers200Ok> obtained = esiDataService.getLoyaltyStoresOffers( TEST_LOYALTY_CORPORATION_ID );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertTrue( obtained.size() > 0 );
+	}
+
+	@Test
+	public void getMarketsHistoryForRegion() {
+		// Given
+		final Integer TEST_MARKET_REGION_ID = 10000043;
+		final Integer TEST_MARKET_TYPE_ID = 11535;
+		final List<GetMarketsRegionIdHistory200Ok> testMarketsHistory = new ArrayList<>();
+		final GetMarketsRegionIdHistory200Ok history = new GetMarketsRegionIdHistory200Ok();
+		history.setDate( LocalDate.now() );
+		history.setHighest( 745000.0 );
+		history.setLowest( 745000.0 );
+		history.setAverage( 745000.0 );
+		history.setOrderCount( 4L );
+		history.setVolume( 19L );
+		testMarketsHistory.add( history );
+		final String serializedGetMarketsRegionIdHistory = this.gson.toJson( testMarketsHistory );
+		final MockInterceptor interceptor = new MockInterceptor();
+		interceptor.addRule()
+				.get()
+				.url( "http://localhost/markets/" + TEST_MARKET_REGION_ID + "/history/?type_id=" + TEST_MARKET_TYPE_ID + "&datasource=tranquility" )
+				.answer( request -> new Response.Builder()
+						.code( 200 )
+						.body( ResponseBody.create( MEDIATYPE_JSON, serializedGetMarketsRegionIdHistory ) )
+				);
+		final OkHttpClient httpClient = this.universeClientBuilder.addInterceptor( interceptor ).build();
+		// When
+		Mockito.when( this.retrofitService.accessUniverseConnector() )
+				.thenReturn( this.getNewUniverseConnector( httpClient ) );
+		// Test
+		final ESIDataService esiDataService = new ESIDataService(
+				this.configurationService,
+				this.fileSystem,
+				this.storeCacheManager,
+				this.retrofitService,
+				this.locationCatalogService );
+		final List<GetMarketsRegionIdHistory200Ok> obtained = esiDataService.getMarketsHistoryForRegion(
+				TEST_MARKET_REGION_ID, TEST_MARKET_TYPE_ID
+		);
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertTrue( obtained.size() > 0 );
+	}
+
+	@Test
 	public void getRegionMarketHub() {
 		// Given
 		final Integer ESI_DATA_JITA_REGION_ID = 10000002;
@@ -542,6 +637,51 @@ public class ESIDataServiceTest {
 		final GetUniverseConstellationsConstellationIdOk obtained = esiDataService.getUniverseConstellationById( 10000015 );
 		// Assertions
 		Assertions.assertNotNull( obtained );
+	}
+
+	@Test
+	public void getUniverseMarketOrdersForId() {
+		// Given
+		final Integer TEST_MARKET_REGION_ID = 10000043;
+		final Integer TEST_MARKET_TYPE_ID = 11535;
+		final Long TEST_ESI_CHARACTER_LOCATION_ID = 30002516L;
+		final List<GetMarketsRegionIdOrders200Ok>testRegionOrders=new ArrayList<>();
+		final GetMarketsRegionIdOrders200Ok  order =new GetMarketsRegionIdOrders200Ok();
+		order.setIsBuyOrder( true );
+		order.setLocationId( (long) TEST_ESI_CHARACTER_LOCATION_ID );
+		testRegionOrders.add(order);
+		final String serializedGetMarketsRegionIdOrders = this.gson.toJson( testRegionOrders );
+		final MockInterceptor interceptor = new MockInterceptor();
+		interceptor.addRule()
+				.get()
+				.url( "http://localhost/markets/10000043/orders/?order_type=all&datasource=tranquility&page=1&type_id=11535" )
+				.answer( request -> new Response.Builder()
+						.code( 200 )
+						.body( ResponseBody.create( MEDIATYPE_JSON, serializedGetMarketsRegionIdOrders ) )
+				);
+		interceptor.addRule()
+				.pathMatches( Pattern.compile( ".*/markets/.*/orders.*" ) )
+				.anyTimes()
+				.answer( request -> new Response.Builder()
+						.code( 200 )
+						.body( ResponseBody.create( MEDIATYPE_JSON, "[]" ) )
+				);
+		final OkHttpClient httpClient = this.universeClientBuilder.addInterceptor( interceptor ).build();
+		// When
+		Mockito.when( this.retrofitService.accessUniverseConnector( ) )
+				.thenReturn( this.getNewUniverseConnector( httpClient ) );
+		// Test
+		final ESIDataService esiDataService = new ESIDataService(
+				this.configurationService,
+				this.fileSystem,
+				this.storeCacheManager,
+				this.retrofitService,
+				this.locationCatalogService );
+		final List<GetMarketsRegionIdOrders200Ok> obtained = esiDataService
+				.getUniverseMarketOrdersForId( TEST_MARKET_REGION_ID, TEST_MARKET_TYPE_ID );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertTrue( obtained.size() > 0 );
 	}
 
 	@Test

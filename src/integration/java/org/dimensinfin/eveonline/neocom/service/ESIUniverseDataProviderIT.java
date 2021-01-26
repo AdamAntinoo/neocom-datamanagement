@@ -111,19 +111,4 @@ public class ESIUniverseDataProviderIT {
 		Assertions.assertEquals( "https://images.evetech.net/Corporation/98384726_64.png", obtained.getPx64x64() );
 	}
 
-	@Test
-	public void getUniverseMarketOrdersForId() {
-		// Test
-		final ESIUniverseDataProvider universeDataProvider = new ESIUniverseDataProvider.Builder()
-				.withConfigurationProvider( this.configurationService )
-				.withFileSystemAdapter( this.fileSystem )
-				.withRetrofitFactory( this.retrofitService )
-				.withStoreCacheManager( this.storeCache )
-				.build();
-		final List<GetMarketsRegionIdOrders200Ok> obtained = universeDataProvider
-				.getUniverseMarketOrdersForId( TEST_MARKET_REGION_ID, TEST_MARKET_TYPE_ID );
-		// Assertions
-		Assertions.assertNotNull( obtained );
-		Assertions.assertTrue( obtained.size() > 0 );
-	}
 }
