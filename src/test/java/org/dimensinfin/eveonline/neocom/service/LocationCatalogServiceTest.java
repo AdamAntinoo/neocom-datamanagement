@@ -11,9 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.core.support.GSONDateTimeDeserializer;
-import org.dimensinfin.eveonline.neocom.core.support.GSONLocalDateDeserializer;
-import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.utility.support.GSONDateTimeDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.support.GSONLocalDateDeserializer;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 
 import okhttp3.OkHttpClient;

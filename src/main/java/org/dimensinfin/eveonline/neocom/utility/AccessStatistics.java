@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.core;
+package org.dimensinfin.eveonline.neocom.utility;
 
 public class AccessStatistics {
 	private int accesses = 0;

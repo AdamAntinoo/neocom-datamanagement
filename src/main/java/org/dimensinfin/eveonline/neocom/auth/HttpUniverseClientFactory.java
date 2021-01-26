@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.dimensinfin.eveonline.neocom.core.StorageUnits;
+import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
 
 import okhttp3.Cache;
 import okhttp3.CertificatePinner;

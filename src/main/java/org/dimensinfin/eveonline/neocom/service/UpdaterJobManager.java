@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.dimensinfin.eveonline.neocom.core.LogMessagesExternalisedType;
+import org.dimensinfin.eveonline.neocom.utility.LogMessagesExternalisedType;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;

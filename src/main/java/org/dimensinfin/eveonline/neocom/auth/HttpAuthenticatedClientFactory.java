@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
-import org.dimensinfin.eveonline.neocom.core.StorageUnits;
+import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 

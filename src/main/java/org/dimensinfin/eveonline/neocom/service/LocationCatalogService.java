@@ -12,7 +12,7 @@ import com.google.inject.name.Named;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import org.dimensinfin.eveonline.neocom.core.AccessStatistics;
+import org.dimensinfin.eveonline.neocom.utility.AccessStatistics;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;

@@ -18,7 +18,7 @@ import com.nytimes.android.external.store3.base.impl.Store;
 import com.nytimes.android.external.store3.base.impl.StoreBuilder;
 import org.joda.time.DateTime;
 
-import org.dimensinfin.eveonline.neocom.core.StorageUnits;
+import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
