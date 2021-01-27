@@ -2,7 +2,7 @@
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = '0.8.6'
+    toolVersion = '0.8.5'
     reportsDir = file("$buildDir/../coverage")
 }
 jacocoTestReport {
@@ -13,10 +13,6 @@ jacocoTestReport {
 }
 test {
     jacoco {
-        excludes = ['org.dimensinfin.eveonline.neocom.utility.Base64']
+        excludes = ['org.dimensinfin.eveonline.neocom.utility.*']
     }
 }
-plugins.withType(JacocoPlugin) {
-    tasks["test"].finalizedBy 'jacocoTestReport'
-}
-jacocoTestReport.dependsOn integrationTest

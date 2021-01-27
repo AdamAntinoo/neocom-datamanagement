@@ -68,20 +68,23 @@ jobs:
           command: |
             ./gradlew test
       - store_test_results:
-          path: ~/project/build/test-results
+          path: ~/project/build/test-results/test
       - store_artifacts:  
           path: ~/project/build/libs
       - save_cache:
           paths:
             - ~/project/.gradle
             - ~/project/build
-            - ~/project/coverage
           key: v1-build-{{ checksum "~/project/build.gradle" }}
   integration-datamanagement-job:
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-build-{{ checksum "~/project/build.gradle" }}
+            - v1-build-
       - run:
           name: DATAMANAGEMENT - Validate the CI machine configuration
           command: |
@@ -96,7 +99,7 @@ jobs:
       - run:
           name: DATAMANAGEMENT - Generate build resources and get them ready
           command: |
-            ./gradlew clean processIntegrationResources
+            ./gradlew processIntegrationResources
       - run:
           name: DATAMANAGEMENT - Start the docker simulators
           command: |
@@ -108,6 +111,13 @@ jobs:
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
             ./gradlew integrationTest
+      - store_test_results:
+          path: ~/project/build/test-results/integrationTest
+      - save_cache:
+          paths:
+            - ~/project/.gradle
+            - ~/project/build
+          key: v1-build-{{ checksum "~/project/build.gradle" }}
   quality-sonarcloud-backend:
     docker:
       - image: circleci/openjdk:11-jdk
@@ -122,7 +132,7 @@ jobs:
           environment:
             SONAR_TOKEN: 0784ee732d6aaa1fbac965792c35aa028bfe35e1
           command: |
-            ./gradlew test jacocoTestReport sonarqube
+            ./gradlew jacocoTestReport sonarqube
 
   build-datamanagement-job:
     machine:
