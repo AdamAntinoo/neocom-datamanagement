@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.j256.ormlite.dao.Dao;
 
@@ -22,6 +23,7 @@ public class LoyaltyOffersRepository {
 	private final Dao<LoyaltyOfferEntity, Integer> loyaltyOfferDao;
 
 	// - C O N S T R U C T O R S
+	@Inject
 	public LoyaltyOffersRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) throws SQLException {
 		this.loyaltyOfferDao = neoComDatabaseService.getLoyaltyOfferDao();
 	}

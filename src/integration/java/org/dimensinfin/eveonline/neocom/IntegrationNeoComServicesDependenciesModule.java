@@ -4,8 +4,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
+import org.dimensinfin.eveonline.neocom.database.DMDatabaseDependenciesModule;
 import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
+import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOffersRepository;
+import org.dimensinfin.eveonline.neocom.loyalty.service.LoyaltyService;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
@@ -84,6 +87,14 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		bind( NeoComDatabaseService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE ) )
 				.to( IntegrationNeoComDatabaseService.class )
+				.in( Singleton.class );
+		bind( LoyaltyOffersRepository.class )
+				.annotatedWith( Names.named( DMDatabaseDependenciesModule.LOYALTYOFFERS_REPOSITORY ) )
+				.to( LoyaltyOffersRepository.class )
+				.in( Singleton.class );
+		bind( LoyaltyService.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.LOYALTY_SERVICE ) )
+				.to( LoyaltyService.class )
 				.in( Singleton.class );
 	}
 }

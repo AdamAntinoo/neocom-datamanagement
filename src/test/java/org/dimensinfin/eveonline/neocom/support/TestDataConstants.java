@@ -1,7 +1,6 @@
 package org.dimensinfin.eveonline.neocom.support;
 
 import org.dimensinfin.eveonline.neocom.domain.IndustryGroup;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 
@@ -71,5 +70,18 @@ public class TestDataConstants {
 		public static final String TEST_RESOURCE_CATEGORY = "Material";
 		public static final String TEST_RESOURCE_NAME = "Silicates";
 		public static final Double TEST_RESOURCE_VOLUME = 0.5;
+	}
+
+	public static final class LoyaltyOfferEntityConstants {
+		public static final Integer TEST_LOYALTY_OFFER_ID = 4104;
+		public static final int TEST_LOYALTY_OFFER_CORPORATION_ID = 1000179;
+		public static final String TEST_LOYALTY_OFFER_CORPORATION_NAME = "24th Imperial Crusade";
+		public static final int TEST_LOYALTY_OFFER_LP_COST = 10875;
+		public static final long TEST_LOYALTY_OFFER_ISK_COST = 10875000L;
+		public static final int TEST_LOYALTY_OFFER_QUANTITY = 1;
+		public static final int TEST_LOYALTY_MARKET_HUB_REGION = 10000030;
+		public static final int TEST_LOYALTY_ITEM_ID = 10000030;
+		public static final String TEST_LOYALTY_ITEM_ID_NAME = "-ITEM-NAME-";
+		public static final Double TEST_LOYALTY_ITEM_SELL_PRICE = 123.45;
 	}
 }

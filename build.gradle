@@ -61,7 +61,7 @@ configurations {
 // - D E P E N D E N C I E S
 apply from: './dependencies.gradle'
 // - C O V E R A G E
-apply from: './jacoco.gradle'
+//apply from: './jacoco.gradle'
 // - P U B L I S H I N G
 apply from: './publishing.gradle'
 
@@ -79,6 +79,10 @@ sonarqube {
     }
 }
 
+// - T E S T
+test {
+    useJUnitPlatform()
+}
 // - I N T E G R A T I O N   T E S T S
 task preIntegrationTask(type: Exec) {
     group = 'integration'
@@ -92,10 +96,38 @@ task preIntegrationTask(type: Exec) {
     commandLine 'bash', './install-sde.sh'
 }
 task integrationTest(type: Test) {
+    useJUnitPlatform()
     group = 'integration'
     testClassesDirs = sourceSets.integration.output.classesDirs
     classpath = sourceSets.integration.runtimeClasspath
 }
+//integrationTest {
+//    useJUnitPlatform()
+//}
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
 integrationTest.dependsOn preIntegrationTask
+integrationTest.dependsOn test
+
+// - J A C O C O
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.8.6'
+    reportsDir = file("$buildDir/../coverage")
+}
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+test {
+    jacoco {
+        excludes = ['org.dimensinfin.eveonline.neocom.utility.Base64']
+    }
+}
+plugins.withType(JacocoPlugin) {
+    tasks["test"].finalizedBy 'jacocoTestReport'
+}
+jacocoTestReport.dependsOn integrationTest
