@@ -110,13 +110,14 @@ jobs:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
           command: |
-            ./gradlew integrationTest
+            ./gradlew test integrationTest jacocoTestReport
       - store_test_results:
-          path: ~/project/build/test-results/integrationTest
+          path: ~/project/build/test-results
       - save_cache:
           paths:
             - ~/project/.gradle
             - ~/project/build
+            - ~/project/coverage
           key: v1-build-{{ checksum "~/project/build.gradle" }}
   quality-sonarcloud-backend:
     docker:
@@ -132,7 +133,7 @@ jobs:
           environment:
             SONAR_TOKEN: 0784ee732d6aaa1fbac965792c35aa028bfe35e1
           command: |
-            ./gradlew jacocoTestReport sonarqube
+            ./gradlew sonarqube
 
   build-datamanagement-job:
     machine:
