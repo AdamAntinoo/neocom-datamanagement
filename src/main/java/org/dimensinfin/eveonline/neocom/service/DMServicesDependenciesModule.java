@@ -4,10 +4,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
+import org.dimensinfin.eveonline.neocom.loyalty.service.LoyaltyService;
+
 public class DMServicesDependenciesModule extends AbstractModule {
 	public static final String RETROFIT_SERVICE = "RetrofitService";
 	public static final String ESIDATA_SERVICE = "ESIDataService";
 	public static final String RESOURCE_FACTORY = "ResourceFactory";
+	public static final String LOYALTY_SERVICE = "LoyaltyService";
 	public static final String ICONFIGURATION_SERVICE = "IConfigurationService";
 	public static final String IFILE_SYSTEM = "IFileSystem";
 	public static final String ISTORE_CACHE = "IStoreCache";
@@ -32,6 +35,10 @@ public class DMServicesDependenciesModule extends AbstractModule {
 		bind( ResourceFactory.class )
 				.annotatedWith( Names.named( RESOURCE_FACTORY ) )
 				.to( ResourceFactory.class )
+				.in( Singleton.class );
+		bind( LoyaltyService.class )
+				.annotatedWith( Names.named( LOYALTY_SERVICE ) )
+				.to( LoyaltyService.class )
 				.in( Singleton.class );
 	}
 }

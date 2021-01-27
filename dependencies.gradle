@@ -65,8 +65,7 @@ dependencies {
     testImplementation 'org.slf4j:slf4j-simple:1.7.26'
     testImplementation "joda-time:joda-time:$jodaTimeVersion"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    // https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine
-    testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.0'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.0'
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.10'
     // N E O C O M
     testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'

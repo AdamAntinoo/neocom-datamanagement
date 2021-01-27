@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
+import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
@@ -14,6 +15,7 @@ import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
+import org.dimensinfin.eveonline.neocom.support.IntegrationNeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
 import org.dimensinfin.eveonline.neocom.support.SBSDEDatabaseService;
@@ -22,15 +24,18 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 	private static final String ENV_PROPERTIES_DIRECTORY = "PROPERTIES_DIRECTORY";
 	private static final String ENV_APPLICATION_DIRECTORY = "APPLICATION_DIRECTORY";
 	private static final String SDE_DATABASE = "SDE_DATABASE_PATH";
+	private static final String NEOCOM_DATABASE = "NEOCOM_DATABASE_PATH";
 
 	@Override
 	protected void configure() {
 		String propDirectory = System.getProperty( ENV_PROPERTIES_DIRECTORY );
 		String appDirectory = System.getProperty( ENV_APPLICATION_DIRECTORY );
 		String sdeDatabasePath = System.getProperty( SDE_DATABASE );
+		String neocomDatabasePath = System.getProperty( NEOCOM_DATABASE );
 		if (null == propDirectory) propDirectory = "/src/integration/resources/properties";
 		if (null == appDirectory) appDirectory = "appDir";
 		if (null == sdeDatabasePath) sdeDatabasePath = "/src/integration/resources/sde.db";
+		if (null == neocomDatabasePath) neocomDatabasePath = "jdbc:sqlite:neocom.db";
 		bind( String.class )
 				.annotatedWith( Names.named( "PropertiesDirectory" ) )
 				.toInstance( propDirectory );
@@ -40,6 +45,9 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		bind( String.class )
 				.annotatedWith( Names.named( "SDEDatabasePath" ) )
 				.toInstance( sdeDatabasePath );
+		bind( String.class )
+				.annotatedWith( Names.named( "NeoComDatabasePath" ) )
+				.toInstance( neocomDatabasePath );
 
 		bind( IConfigurationService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ICONFIGURATION_SERVICE ) )
@@ -73,9 +81,9 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ISDE_DATABASE_SERVICE ) )
 				.to( SBSDEDatabaseService.class )
 				.in( Singleton.class );
-//		bind( NeoComDatabaseService.class )
-//				.annotatedWith( Names.named( DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE ) )
-//				.to( IntegrationNeoComDatabaseService.class )
-//				.in( Singleton.class );
+		bind( NeoComDatabaseService.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE ) )
+				.to( IntegrationNeoComDatabaseService.class )
+				.in( Singleton.class );
 	}
 }

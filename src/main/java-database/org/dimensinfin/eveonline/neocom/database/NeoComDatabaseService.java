@@ -26,5 +26,5 @@ public interface NeoComDatabaseService {
 
 	Dao<DatabaseVersion, String> getVersionDao() throws SQLException;
 
-	Dao<LoyaltyOfferEntity, Integer> getLoyaltyOfferDao();
+	Dao<LoyaltyOfferEntity, Integer> getLoyaltyOfferDao() throws SQLException;
 }

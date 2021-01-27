@@ -18,6 +18,7 @@ import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
 import org.dimensinfin.eveonline.neocom.database.entities.PilotPreferencesEntity;
 import org.dimensinfin.eveonline.neocom.industry.persistence.JobEntity;
+import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOfferEntity;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
 public class IntegrationNeoComDBAdapter implements NeoComDatabaseService {
@@ -71,6 +72,11 @@ public class IntegrationNeoComDBAdapter implements NeoComDatabaseService {
 
 	@Override
 	public Dao<DatabaseVersion, String> getVersionDao() throws SQLException {
+		return null;
+	}
+
+	@Override
+	public Dao<LoyaltyOfferEntity, Integer> getLoyaltyOfferDao() throws SQLException {
 		return null;
 	}
 
