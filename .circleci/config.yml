@@ -91,6 +91,10 @@ jobs:
             ./gradlew --version
             sudo snap install figlet
       - run:
+          name: DATAMANAGEMENT - Prepare the installation for the SDE database
+          command: |
+            ./update-sde.sh
+      - run:
           name: DATAMANAGEMENT - Generate build resources and get them ready
           command: |
             ./gradlew processIntegrationResources
