@@ -92,6 +92,7 @@ jobs:
             sudo snap install figlet
       - run:
           name: DATAMANAGEMENT - Prepare the installation for the SDE database
+          working_directory: src/integration/sh
           command: |
             ./update-sde.sh
       - run:
