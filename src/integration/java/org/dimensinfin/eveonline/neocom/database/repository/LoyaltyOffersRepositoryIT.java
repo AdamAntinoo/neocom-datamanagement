@@ -19,7 +19,6 @@ import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.Loyalty
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_MARKET_HUB_REGION;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_OFFER_CORPORATION_ID;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_OFFER_CORPORATION_NAME;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_OFFER_ID;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_OFFER_ISK_COST;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_OFFER_LP_COST;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.LoyaltyOfferEntityConstants.TEST_LOYALTY_OFFER_QUANTITY;
@@ -55,7 +54,7 @@ public class LoyaltyOffersRepositoryIT {
 				.withLpCost( TEST_LOYALTY_OFFER_LP_COST )
 				.withIskCost( TEST_LOYALTY_OFFER_ISK_COST )
 				.withQuantity( TEST_LOYALTY_OFFER_QUANTITY )
-				.withMarketHubRegion( TEST_LOYALTY_MARKET_HUB_REGION )
+				.withMarketRegionId( TEST_LOYALTY_MARKET_HUB_REGION )
 				.withPrice( TEST_LOYALTY_ITEM_SELL_PRICE )
 				.build();
 		// Test

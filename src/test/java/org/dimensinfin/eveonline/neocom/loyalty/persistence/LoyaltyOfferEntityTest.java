@@ -30,7 +30,7 @@ public class LoyaltyOfferEntityTest {
 				.withLpCost( TEST_LOYALTY_OFFER_LP_COST )
 				.withIskCost( TEST_LOYALTY_OFFER_ISK_COST )
 				.withQuantity( TEST_LOYALTY_OFFER_QUANTITY )
-				.withMarketHubRegion( TEST_LOYALTY_MARKET_HUB_REGION )
+				.withMarketRegionId( TEST_LOYALTY_MARKET_HUB_REGION )
 				.withPrice( TEST_LOYALTY_ITEM_SELL_PRICE )
 				.build();
 		Assertions.assertNotNull( entity );

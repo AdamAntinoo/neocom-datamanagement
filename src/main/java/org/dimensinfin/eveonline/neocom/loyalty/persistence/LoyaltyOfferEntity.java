@@ -27,15 +27,15 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 	@DatabaseField(columnName = "corporationName")
 	private String corporationName;
 	@DatabaseField(columnName = "lpValue")
-	private int lpValue;
+	private Integer lpValue;
 	@DatabaseField(columnName = "iskCost")
 	private Long iskCost;
 	@DatabaseField(columnName = "lpCost")
 	private Integer lpCost;
 	@DatabaseField(columnName = "quantity")
 	private Integer quantity = 1;
-	@DatabaseField(columnName = "marketHubRegionId")
-	private Integer marketHubRegionId;
+	@DatabaseField(columnName = "marketRegionId")
+	private Integer marketRegionId;
 	@DatabaseField(columnName = "price")
 	private Double price;
 
@@ -49,6 +49,26 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 
 	public String getCorporationName() {
 		return this.corporationName;
+	}
+
+	public long getIskCost() {
+		return this.iskCost;
+	}
+
+	public int getLpCost() {
+		return this.lpCost;
+	}
+
+	public int getQuantity() {
+		return this.quantity;
+	}
+
+	public int getMarketRegionId() {
+		return this.marketRegionId;
+	}
+
+	public double getPrice() {
+		return this.price;
 	}
 
 	public int getLpValue() {
@@ -103,8 +123,8 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 			return this;
 		}
 
-		public LoyaltyOfferEntity.Builder withMarketHubRegion( final int marketHubRegionId ) {
-			this.onConstruction.marketHubRegionId = marketHubRegionId;
+		public LoyaltyOfferEntity.Builder withMarketRegionId( final int marketRegionId ) {
+			this.onConstruction.marketRegionId = marketRegionId;
 			return this;
 		}
 

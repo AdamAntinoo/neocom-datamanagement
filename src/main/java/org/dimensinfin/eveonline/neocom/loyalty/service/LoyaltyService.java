@@ -29,12 +29,12 @@ import org.dimensinfin.logging.LogWrapper;
  * The resulting data is recorded into a repository for later use.
  *
  * There are some attributes that can be configured like:
- * <li>
- * <ul>the number of days on the range period.</ul>
- * <ul>the volume of orders to make a date valid.</ul>
- * <ul>the number of dates inside a date range (expressed ad a percentage) to consider the item a secure sell.</ul>
- * <ul>the region to be used for the market operations.</ul>
- * </li>
+ * <ul>
+ * <li>the number of days on the range period.</li>
+ * <li>the volume of orders to make a date valid.</li>
+ * <li>the number of dates inside a date range (expressed ad a percentage) to consider the item a secure sell.</li>
+ * <li>the region to be used for the market operations.</li>
+ * </ul>
  *
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.20.0
@@ -66,13 +66,12 @@ public class LoyaltyService {
 	 *
 	 * @param corporationId the unique identifier for the loyalty store corporation that should be used as the offer source.
 	 */
-	public void processOffers( @NotNull final Integer corporationId ) {
+	public List<LoyaltyOfferEntity> processOffers( @NotNull final Integer corporationId ) {
 		final String loyaltyCorporationName = Objects.requireNonNull( this.esiDataService.getCorporationsCorporationId( corporationId ) ).getName();
-		this.esiDataService.getLoyaltyStoresOffers( corporationId )
+		return this.esiDataService.getLoyaltyStoresOffers( corporationId )
 				.stream()
 				.filter( offer -> offer.getRequiredItems().isEmpty() ) // Remove offers that have dependencies.
-				.filter( offer -> this.offerIsGreen( offer ) ) // Check for a Green on the sell
-				// state.
+				.filter( this::offerIsGreen ) // Check for a Green on the sell state.
 				.map( offer -> {
 					final List<GetMarketsRegionIdHistory200Ok> marketHistoryEsi = Objects
 							.requireNonNull( this.esiDataService.getMarketsHistoryForRegion(
@@ -86,11 +85,11 @@ public class LoyaltyService {
 							.withIskCost( offer.getIskCost() )
 							.withLpCost( offer.getLpCost() )
 							.withQuantity( offer.getQuantity() )
-							.withMarketHubRegion( this.regionId )
+							.withMarketRegionId( this.regionId )
 							.withPrice( marketHistoryEsi.get( marketHistoryEsi.size() - 1 ).getHighest() )
 							.build();
 				} ) // Convert to an entity suitable to be persisted.
-				.forEach( loyaltyOffer -> {
+				.peek( loyaltyOffer -> {
 					try {
 						LogWrapper.info( MessageFormat.format(
 								"persisting Loyalty offer: Corporation {0} - {1}->LP Value: {2}",
@@ -102,11 +101,12 @@ public class LoyaltyService {
 					} catch (final SQLException sqle) {
 						LogWrapper.error( sqle );
 					}
-				} );
+				} )
+				.collect( Collectors.toList() );
 	}
 
 	public LoyaltyService setDateCoveragePct( final int dateCoveragePct ) {
-		this.daysInRange = dateCoveragePct;
+		this.dateCoveragePct = dateCoveragePct;
 		return this;
 	}
 
