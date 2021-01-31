@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.utility.support;
+package org.dimensinfin.eveonline.neocom.utility;
 
 import java.lang.reflect.Type;
 

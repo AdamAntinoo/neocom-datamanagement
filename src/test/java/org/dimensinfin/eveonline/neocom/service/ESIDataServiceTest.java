@@ -15,9 +15,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.utility.support.GSONDateTimeDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.support.GSONLocalDateDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.support.GSONLocalDateSerializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateSerializer;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.space.Station;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
