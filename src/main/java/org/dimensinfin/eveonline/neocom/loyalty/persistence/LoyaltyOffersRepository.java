@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.table.TableUtils;
 
 import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
@@ -26,6 +27,17 @@ public class LoyaltyOffersRepository {
 	@Inject
 	public LoyaltyOffersRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) throws SQLException {
 		this.loyaltyOfferDao = neoComDatabaseService.getLoyaltyOfferDao();
+	}
+
+	public int deleteAll() {
+		try {
+			final long recordCount = this.loyaltyOfferDao.countOf();
+			TableUtils.clearTable( this.loyaltyOfferDao.getConnectionSource(), LoyaltyOfferEntity.class );
+			return (int) recordCount;
+		} catch (final SQLException sqle) {
+			LogWrapper.error( sqle );
+			return 0;
+		}
 	}
 
 	public void persist( final LoyaltyOfferEntity loyaltyOfferEntity ) throws SQLException {

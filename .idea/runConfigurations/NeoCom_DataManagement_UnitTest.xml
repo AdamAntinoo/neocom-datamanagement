@@ -14,11 +14,6 @@
         <option name="INCLUDE" value="false" />
       </pattern>
       <pattern>
-        <option name="PATTERN" value="org.dimensinfin.neocom.support.*" />
-        <option name="ENABLED" value="true" />
-        <option name="INCLUDE" value="false" />
-      </pattern>
-      <pattern>
         <option name="PATTERN" value="org.dimensinfin.eveonline.neocom.utility.Base64" />
         <option name="ENABLED" value="true" />
         <option name="INCLUDE" value="false" />
