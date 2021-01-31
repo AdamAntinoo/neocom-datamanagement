@@ -6,15 +6,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
-import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
+import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
 
 import okhttp3.Cache;
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_LOGIN_HOST;
 
 public class HttpAuthenticatedClientFactory {
@@ -23,42 +24,49 @@ public class HttpAuthenticatedClientFactory {
 	private Integer timeoutSeconds = 60;
 	private File cacheStoreFile;
 	private Long cacheSizeBytes = StorageUnits.GIGABYTES.toBytes( 2 );
-//	private Retrofit refreshRetrofit;
 	// - C O M P O N E N T S
 	private IConfigurationService configurationProvider;
 	private Credential credential;
 	private NeoComOAuth20 neoComOAuth20;
 
+	// - C O N S T R U C T O R S
 	private HttpAuthenticatedClientFactory() {}
 
+	protected String getRefreshToken() {
+		return this.credential.getRefreshToken();
+	}
+
 	private OkHttpClient clientBuilder() {
+		final HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
+		logInterceptor.setLevel( HttpLoggingInterceptor.Level.BASIC );
 		final OkHttpClient.Builder authenticatedClientBuilder = new OkHttpClient.Builder()
-				.addInterceptor(chain -> {
+				.addInterceptor( chain -> {
 					Request.Builder builder = chain.request().newBuilder()
-							.addHeader("User-Agent", this.agent);
-					return chain.proceed(builder.build());
-				})
-				.addInterceptor(chain -> {
-					if (StringUtils.isBlank(this.getRefreshToken()))
-						return chain.proceed(chain.request());
+							.addHeader( "User-Agent", this.agent );
+					return chain.proceed( builder.build() );
+				} )
+				.addInterceptor( logInterceptor )
+				.addInterceptor( chain -> {
+					if (StringUtils.isBlank( this.getRefreshToken() ))
+						return chain.proceed( chain.request() );
 					Request.Builder builder = chain.request().newBuilder();
-					final TokenTranslationResponse token = this.neoComOAuth20.fromRefresh(this.getRefreshToken());
+					final TokenTranslationResponse token = this.neoComOAuth20.fromRefresh( this.getRefreshToken() );
 					if (null != token)
-						builder.addHeader("Authorization", "Bearer " + token.getAccessToken());
-					return chain.proceed(builder.build());
-				})
-				.addInterceptor(chain -> {
-					if (StringUtils.isBlank(this.getRefreshToken()))
-						return chain.proceed(chain.request());
-					Response r = chain.proceed(chain.request());
+						builder.addHeader( "Authorization", "Bearer " + token.getAccessToken() );
+					return chain.proceed( builder.build() );
+				} )
+				.addInterceptor( chain -> {
+					if (StringUtils.isBlank( this.getRefreshToken() ))
+						return chain.proceed( chain.request() );
+					Response r = chain.proceed( chain.request() );
 					if (r.isSuccessful())
 						return r;
-					if (r.body().string().contains("invalid_token")) {
-						this.neoComOAuth20.fromRefresh(getRefreshToken());
-						r = chain.proceed(chain.request());
+					if (r.body().string().contains( "invalid_token" )) {
+						this.neoComOAuth20.fromRefresh( getRefreshToken() );
+						r = chain.proceed( chain.request() );
 					}
 					return r;
-				})
+				} )
 				.readTimeout( this.timeoutSeconds, TimeUnit.SECONDS )
 				.certificatePinner(
 						new CertificatePinner.Builder()
@@ -71,33 +79,21 @@ public class HttpAuthenticatedClientFactory {
 			authenticatedClientBuilder.cache( new Cache( this.cacheStoreFile, this.cacheSizeBytes ) );
 		return authenticatedClientBuilder.build();
 	}
-	protected  String getRefreshToken() {
-		return this.credential.getRefreshToken();
-	}
 
 	// - B U I L D E R
 	public static class Builder {
 		private HttpAuthenticatedClientFactory onConstruction;
 
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new HttpAuthenticatedClientFactory();
 		}
 
-		public HttpAuthenticatedClientFactory.Builder withNeoComOAuth20( final NeoComOAuth20 neoComOAuth20 ) {
-			Objects.requireNonNull( neoComOAuth20 );
-			this.onConstruction.neoComOAuth20 = neoComOAuth20;
-			return this;
-		}
-		public HttpAuthenticatedClientFactory.Builder withConfigurationProvider( final IConfigurationService configurationProvider ) {
-			Objects.requireNonNull( configurationProvider );
-			this.onConstruction.configurationProvider = configurationProvider;
-			return this;
-		}
-
-		public HttpAuthenticatedClientFactory.Builder withCredential( final Credential credential ) {
-			Objects.requireNonNull( credential );
-			this.onConstruction.credential = credential;
-			return this;
+		public OkHttpClient generate() {
+			Objects.requireNonNull( this.onConstruction.neoComOAuth20 );
+			Objects.requireNonNull( this.onConstruction.credential );
+			Objects.requireNonNull( this.onConstruction.configurationProvider );
+			return this.onConstruction.clientBuilder();
 		}
 
 		public HttpAuthenticatedClientFactory.Builder withAgent( final String agent ) {
@@ -118,17 +114,28 @@ public class HttpAuthenticatedClientFactory {
 			return this;
 		}
 
+		public HttpAuthenticatedClientFactory.Builder withConfigurationProvider( final IConfigurationService configurationProvider ) {
+			Objects.requireNonNull( configurationProvider );
+			this.onConstruction.configurationProvider = configurationProvider;
+			return this;
+		}
+
+		public HttpAuthenticatedClientFactory.Builder withCredential( final Credential credential ) {
+			Objects.requireNonNull( credential );
+			this.onConstruction.credential = credential;
+			return this;
+		}
+
+		public HttpAuthenticatedClientFactory.Builder withNeoComOAuth20( final NeoComOAuth20 neoComOAuth20 ) {
+			Objects.requireNonNull( neoComOAuth20 );
+			this.onConstruction.neoComOAuth20 = neoComOAuth20;
+			return this;
+		}
+
 		public HttpAuthenticatedClientFactory.Builder withTimeout( final Integer seconds ) {
 			if (null != seconds)
 				this.onConstruction.timeoutSeconds = seconds;
 			return this;
-		}
-
-		public OkHttpClient generate() {
-			Objects.requireNonNull( this.onConstruction.neoComOAuth20 );
-			Objects.requireNonNull( this.onConstruction.credential );
-			Objects.requireNonNull( this.onConstruction.configurationProvider );
-			return this.onConstruction.clientBuilder();
 		}
 	}
 }

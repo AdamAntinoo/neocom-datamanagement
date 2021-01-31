@@ -49,6 +49,7 @@ dependencies {
     // H T T P C L I E N T
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion" // HTTP encapsulation and swagger support
     implementation "com.squareup.retrofit2:converter-gson:2.3.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1' // Retrofit logs
     implementation 'com.github.scribejava:scribejava-core:5.4.0'
     // D A T A B A S E
     implementation "com.j256.ormlite:ormlite-jdbc:$ormliteVersion"
