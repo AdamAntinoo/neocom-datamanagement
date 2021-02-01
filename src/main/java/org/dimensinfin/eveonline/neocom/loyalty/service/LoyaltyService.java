@@ -85,7 +85,7 @@ public class LoyaltyService {
 							) );
 					if (!marketHistoryEsi.isEmpty()) LogWrapper.info( marketHistoryEsi.get( marketHistoryEsi.size() - 1 ).toString() );
 					return new LoyaltyOfferEntity.Builder()
-							.withId( offer.getOfferId() )
+							.withOfferId( offer.getOfferId() )
 							.withLoyaltyCorporation( corporationId, loyaltyCorporationName )
 							.withType( this.resourceFactory.generateType4Id( offer.getTypeId() ) )
 							.withIskCost( offer.getIskCost() )

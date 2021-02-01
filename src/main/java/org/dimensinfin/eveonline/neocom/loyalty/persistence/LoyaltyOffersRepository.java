@@ -2,7 +2,9 @@ package org.dimensinfin.eveonline.neocom.loyalty.persistence;
 
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 import com.google.inject.Inject;
@@ -15,6 +17,7 @@ import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.logging.LogWrapper;
 
 import static org.dimensinfin.eveonline.neocom.database.repositories.DatabaseFieldNames.CORPORATIONID_FIELDNAME;
+import static org.dimensinfin.eveonline.neocom.database.repositories.DatabaseFieldNames.MARKETREGIONID_FIELDNAME;
 
 /**
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
@@ -45,7 +48,7 @@ public class LoyaltyOffersRepository {
 			loyaltyOfferEntity.timeStamp();
 			this.loyaltyOfferDao.createOrUpdate( loyaltyOfferEntity );
 			LogWrapper.info( MessageFormat.format( "Write/Update loyalty offer. Id: {0} - type {1}",
-					loyaltyOfferEntity.getOfferId(),
+					loyaltyOfferEntity.getId(),
 					loyaltyOfferEntity.getTypeName() )
 			);
 		}
@@ -53,5 +56,12 @@ public class LoyaltyOffersRepository {
 
 	public List<LoyaltyOfferEntity> searchOffers4Corporation( final int corporationId ) throws SQLException {
 		return this.loyaltyOfferDao.queryForEq( CORPORATIONID_FIELDNAME, corporationId );
+	}
+
+	public List<LoyaltyOfferEntity> searchOffers4CorporationAndHub( final int corporationId, final int hubRegionid ) throws SQLException {
+		final Map<String, Object> where = new HashMap<>();
+		where.put( CORPORATIONID_FIELDNAME, corporationId );
+		where.put( MARKETREGIONID_FIELDNAME, hubRegionid );
+		return this.loyaltyOfferDao.queryForFieldValues( where );
 	}
 }

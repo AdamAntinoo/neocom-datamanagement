@@ -2,6 +2,7 @@ package org.dimensinfin.eveonline.neocom.database.repository;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -48,7 +49,7 @@ public class LoyaltyOffersRepositoryIT {
 		// Given
 		final String TEST_LOYALTY_CORPORATION_NAME = this.esiDataService.getCorporationsCorporationId( TEST_LOYALTY_CORPORATION_ID ).getName();
 		final LoyaltyOfferEntity loyaltyEntity = new LoyaltyOfferEntity.Builder()
-				.withId( TEST_LOYALTY_OFFER_ID )
+				.withOfferId( TEST_LOYALTY_OFFER_ID )
 				.withLoyaltyCorporation( TEST_LOYALTY_OFFER_CORPORATION_ID, TEST_LOYALTY_OFFER_CORPORATION_NAME )
 				.withType( this.resourceFactory.generateType4Id( TEST_LOYALTY_TYPE_ID ) )
 				.withLpCost( TEST_LOYALTY_OFFER_LP_COST )
@@ -62,6 +63,53 @@ public class LoyaltyOffersRepositoryIT {
 		loyaltyOffersRepository.persist( loyaltyEntity );
 		// Assertions
 		Assertions.assertTrue( this.neocomDatabaseService.getLoyaltyOfferDao().countOf() > 0 );
+		// Remove files
+		this.tearDown();
+	}
+
+	@Test
+	public void searchOffers4CorporationAndHub() throws SQLException {
+		// Prepare
+		this.beforeEach();
+		// Given
+		final LoyaltyOfferEntity offer1 = new LoyaltyOfferEntity.Builder()
+				.withOfferId( 1 )
+				.withLoyaltyCorporation( TEST_LOYALTY_CORPORATION_ID, "C1" )
+				.withIskCost( 100 )
+				.withLpCost( 100 )
+				.withMarketRegionId( 1 )
+				.withQuantity( 1 )
+				.withPrice( 200 )
+				.build();
+		final LoyaltyOfferEntity offer2= new LoyaltyOfferEntity.Builder()
+				.withOfferId( 2 )
+				.withLoyaltyCorporation( TEST_LOYALTY_CORPORATION_ID, "C1" )
+				.withIskCost( 100 )
+				.withLpCost( 100 )
+				.withMarketRegionId( 2 )
+				.withQuantity( 1 )
+				.withPrice( 200 )
+				.build();
+		final LoyaltyOfferEntity offer3= new LoyaltyOfferEntity.Builder()
+				.withOfferId( 3 )
+				.withLoyaltyCorporation( TEST_LOYALTY_CORPORATION_ID, "C1" )
+				.withIskCost( 100 )
+				.withLpCost( 100 )
+				.withMarketRegionId( 1 )
+				.withQuantity( 1 )
+				.withPrice( 200 )
+				.build();
+		// Test
+		final LoyaltyOffersRepository loyaltyOffersRepository = new LoyaltyOffersRepository( this.neocomDatabaseService );
+		loyaltyOffersRepository.persist( offer1);
+		loyaltyOffersRepository.persist( offer2);
+		loyaltyOffersRepository.persist( offer3 );
+		final List<LoyaltyOfferEntity> obtained = loyaltyOffersRepository
+				.searchOffers4CorporationAndHub( TEST_LOYALTY_CORPORATION_ID, 1 );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertTrue( obtained.size() > 0 );
+		Assertions.assertEquals( 2,obtained.size()  );
 		// Remove files
 		this.tearDown();
 	}

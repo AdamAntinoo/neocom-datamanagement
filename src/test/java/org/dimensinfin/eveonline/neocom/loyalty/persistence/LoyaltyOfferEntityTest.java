@@ -24,7 +24,7 @@ public class LoyaltyOfferEntityTest {
 		Mockito.when( esiLoyaltyType.getTypeId() ).thenReturn( TEST_LOYALTY_ITEM_ID );
 		Mockito.when( esiLoyaltyType.getName() ).thenReturn( TEST_LOYALTY_ITEM_ID_NAME );
 		final LoyaltyOfferEntity entity = new LoyaltyOfferEntity.Builder()
-				.withId( TEST_LOYALTY_OFFER_ID )
+				.withOfferId( TEST_LOYALTY_OFFER_ID )
 				.withLoyaltyCorporation( TEST_LOYALTY_OFFER_CORPORATION_ID, TEST_LOYALTY_OFFER_CORPORATION_NAME )
 				.withType( esiLoyaltyType )
 				.withLpCost( TEST_LOYALTY_OFFER_LP_COST )

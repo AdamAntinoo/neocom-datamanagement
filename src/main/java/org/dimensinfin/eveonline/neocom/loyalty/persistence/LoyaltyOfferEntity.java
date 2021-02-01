@@ -16,8 +16,13 @@ import org.dimensinfin.eveonline.neocom.domain.EsiType;
 public class LoyaltyOfferEntity extends UpdatableEntity {
 	private static final long serialVersionUID = 6772112244501770693L;
 
-	@DatabaseField(columnName = "offerId", id = true, index = true)
-	private int offerId = -1;
+	private static String generateOfferIdentifier( final Integer offerId, final Integer marketRegionId ) {
+		return offerId + ":" + marketRegionId;
+	}
+	@DatabaseField(columnName = "id", id = true, index = true)
+	private String id;
+	@DatabaseField(columnName = "offerId")
+	private Integer offerId;
 	@DatabaseField(columnName = "typeId")
 	private int typeId;
 	@DatabaseField(columnName = "typeName")
@@ -51,6 +56,10 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 		return this.corporationName;
 	}
 
+	public String getId() {
+		return this.id;
+	}
+
 	public long getIskCost() {
 		return this.iskCost;
 	}
@@ -59,24 +68,24 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 		return this.lpCost;
 	}
 
-	public int getQuantity() {
-		return this.quantity;
+	public int getLpValue() {
+		return this.lpValue;
 	}
 
 	public int getMarketRegionId() {
 		return this.marketRegionId;
 	}
 
+	public int getOfferId() {
+		return this.offerId;
+	}
+
 	public double getPrice() {
 		return this.price;
 	}
 
-	public int getLpValue() {
-		return this.lpValue;
-	}
-
-	public int getOfferId() {
-		return this.offerId;
+	public int getQuantity() {
+		return this.quantity;
 	}
 
 	public int getTypeId() {
@@ -97,13 +106,17 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 		}
 
 		public LoyaltyOfferEntity build() {
-			this.onConstruction.lpValue =(int) Math.round(((this.onConstruction.quantity * this.onConstruction.price) - this.onConstruction.iskCost) /
-					this.onConstruction.lpCost);
+			Objects.requireNonNull( this.onConstruction.offerId );
+			Objects.requireNonNull( this.onConstruction.marketRegionId );
+			this.onConstruction.id = generateOfferIdentifier( this.onConstruction.offerId, this.onConstruction.marketRegionId );
+			this.onConstruction.lpValue = (int) Math
+					.round( ((this.onConstruction.quantity * this.onConstruction.price) - this.onConstruction.iskCost) /
+							this.onConstruction.lpCost );
 			return this.onConstruction;
 		}
 
-		public LoyaltyOfferEntity.Builder withId( final int id ) {
-			this.onConstruction.offerId = id;
+		public LoyaltyOfferEntity.Builder withOfferId( final int offerId ) {
+			this.onConstruction.offerId = offerId;
 			return this;
 		}
 

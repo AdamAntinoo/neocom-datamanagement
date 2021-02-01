@@ -8,4 +8,5 @@ public final class DatabaseFieldNames {
 	public static final String ID_FIELDNAME = "id";
 	public static final String OWNERID_FIELDNAME = "ownerId";
 	public static final String CORPORATIONID_FIELDNAME="corporationId";
+	public static final String MARKETREGIONID_FIELDNAME="marketRegionId";
 }

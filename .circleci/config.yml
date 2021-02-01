@@ -130,7 +130,7 @@ jobs:
       - run:
           name: DATAMANAGEMENT - Update SonarQube statistics
           environment:
-            SONAR_TOKEN: 0784ee732d6aaa1fbac965792c35aa028bfe35e1
+            SONAR_TOKEN: 43aa5854943b217594aaefa3fd33c6e0cb83d24e
           command: |
             ./gradlew sonarqube
 
