@@ -66,6 +66,15 @@ public class LoyaltyService {
 		return this.profitLevel;
 	}
 
+	public int getRegionId() {
+		return this.regionId;
+	}
+
+	public LoyaltyService setRegionId( final int regionId ) {
+		this.regionId = regionId;
+		return this;
+	}
+
 	/**
 	 * Scans a new fresh set of offers for the requested <code>corporationId</code>.
 	 * Updates the loyalty repository with the new findings for profitable offers found for this corporation.
@@ -123,11 +132,6 @@ public class LoyaltyService {
 
 	public LoyaltyService setMinTradeVolume( final int minTradeVolume ) {
 		this.minTradeVolume = minTradeVolume;
-		return this;
-	}
-
-	public LoyaltyService setRegionId( final int regionId ) {
-		this.regionId = regionId;
 		return this;
 	}
 

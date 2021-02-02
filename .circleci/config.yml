@@ -129,8 +129,8 @@ jobs:
             - v1-build-
       - run:
           name: DATAMANAGEMENT - Update SonarQube statistics
-          environment:
-            SONAR_TOKEN: 43aa5854943b217594aaefa3fd33c6e0cb83d24e
+#          environment:
+#            SONAR_TOKEN: 43aa5854943b217594aaefa3fd33c6e0cb83d24e
           command: |
             ./gradlew sonarqube
 
