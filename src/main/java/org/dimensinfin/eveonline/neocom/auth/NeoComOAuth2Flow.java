@@ -16,29 +16,29 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_LOGIN_HOST;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_OAUTH_AUTHORIZATION_AUTHORIZE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_OAUTH_AUTHORIZATION_SERVER_NAME;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_OAUTH_AUTHORIZATION_STATE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
 
 public class NeoComOAuth2Flow {
 	protected TokenVerification tokenVerificationStore;
 	// - C O M P O N E N T S
 	private IConfigurationService configurationService;
 
+// - C O N S T R U C T O R S
 	private NeoComOAuth2Flow() {}
 
 	public String generateLoginUrl() {
 		final String state = Base64.encodeBytes(
-				this.configurationService.getResourceString( ESI_OAUTH_AUTHORIZATION_STATE ).getBytes() );
+				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE ).getBytes() );
 		final String clientId = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
 		return "https://" +
-				this.configurationService.getResourceString( ESI_OAUTH_AUTHORIZATION_SERVER_NAME ) +
+				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL ) +
 				"/" +
-				this.configurationService.getResourceString( ESI_OAUTH_AUTHORIZATION_AUTHORIZE ) +
+				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE ) +
 				"?response_type=code" +
 				"&redirect_uri=eveauth-neocom%3A%2F%2Fesiauthentication" +
 				"&scope=publicData esi-location.read_location.v1 esi-location.read_ship_type.v1 esi-mail.read_mail.v1 esi-skills.read_skills.v1 " +
@@ -70,7 +70,7 @@ public class NeoComOAuth2Flow {
 	 */
 	public boolean verifyState( final String encodedState ) {
 		final String checkState = Base64.encodeBytes(
-				this.configurationService.getResourceString( ESI_OAUTH_AUTHORIZATION_STATE ).getBytes()
+				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE ).getBytes()
 		).replaceAll( "\n", "" );
 		return encodedState.equals( checkState );
 	}
@@ -99,7 +99,7 @@ public class NeoComOAuth2Flow {
 		final String peckString = authorizationClientid + ":" + authorizationSecretKey;
 		String peck = Base64.encodeBytes( peckString.getBytes() ).replaceAll( "\n", "" );
 		store.setPeck( peck );
-		final String esiAuthenticationServerLoginUrl = this.configurationService.getResourceString( ESI_OAUTH_AUTHORIZATION_SERVER_NAME );
+		final String esiAuthenticationServerLoginUrl = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL );
 		final Call<TokenTranslationResponse> request = serviceGetAccessToken.getAccessToken(
 				authorizationContentType,
 				esiAuthenticationServerLoginUrl, // This is the esi login server for /oauth/token call
@@ -113,9 +113,9 @@ public class NeoComOAuth2Flow {
 				LogWrapper.info( "Response is 200 OK." );
 				return response.body();
 			} else {
-				LogWrapper.info( MessageFormat.format("Response is {0} - {1}.",
+				LogWrapper.info( MessageFormat.format( "Response is {0} - {1}.",
 						response.code(),
-						response.message() ));
+						response.message() ) );
 			}
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -155,9 +155,9 @@ public class NeoComOAuth2Flow {
 				NeoComLogger.info( "Character verification OK." );
 				return verificationResponse.body();
 			} else {
-				NeoComLogger.info( MessageFormat.format("Response is {0} - {1}.",
+				NeoComLogger.info( MessageFormat.format( "Response is {0} - {1}.",
 						verificationResponse.code() + "",
-						verificationResponse.message() ));
+						verificationResponse.message() ) );
 			}
 		} catch (final IOException ioe) {
 			NeoComLogger.error( ioe );
@@ -169,6 +169,7 @@ public class NeoComOAuth2Flow {
 	public static class Builder {
 		private NeoComOAuth2Flow onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new NeoComOAuth2Flow();
 		}

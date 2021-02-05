@@ -25,12 +25,12 @@ import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_OAUTH_AUTHORIZATION_STATE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
 
 public class AuthenticatedRequestIT {
 	private static final String CURRENT_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5IiwidHlwIjoiSldUIn0" +
@@ -57,7 +57,7 @@ public class AuthenticatedRequestIT {
 	}
 
 	private void setupAuthentication( final String code ) {
-		STATE = this.configurationProvider.getResourceString( ESI_OAUTH_AUTHORIZATION_STATE );
+		STATE = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE );
 		final String dataSource = "Tranquility".toLowerCase();
 		this.flow = new NeoComOAuth2Flow.Builder().withConfigurationService( this.configurationProvider ).build();
 		this.flow.onStartFlow( code, STATE, dataSource );

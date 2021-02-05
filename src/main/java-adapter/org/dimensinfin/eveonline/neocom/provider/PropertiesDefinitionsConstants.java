@@ -32,13 +32,6 @@ public class PropertiesDefinitionsConstants {
 	// - B A C K E N D   A P I
 	public static final String BACKEND_RETROFIT_SERVER_LOCATION = "P.backend.retrofit.server.location";
 	public static final String BACKEND_RETROFIT_CACHE_FILE_NAME = "P.backend.retrofit.cache.directory.name";
-	// - E S I   O A U T H   A U T H O R I Z A T I O N
-	public static final String ESI_OAUTH_AUTHORIZATION_SERVER_NAME = "P.esi.authorization.server";
-	public static final String ESI_OAUTH_AUTHORIZATION_CONTENT_TYPE = "P.esi.authorization.content.type";
-	public static final String ESI_OAUTH_AUTHORIZATION_AGENT = "P.esi.authorization.agent";
-	public static final String ESI_OAUTH_AUTHORIZATION_STATE = "P.esi.authorization.state";
-	public static final String ESI_OAUTH_AUTHORIZATION_ACCESS_TOKEN = "P.esi.authorization.accesstoken.url";
-	public static final String ESI_OAUTH_AUTHORIZATION_AUTHORIZE = "P.esi.authorization.authorize.url";
 	// - E S I A U T H O R I Z A T I O N - T R A N Q U I L I T Y
 	public static final String ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL = "P.esi.tranquility.authorization.server.url";
 	public static final String ESI_TRANQUILITY_AUTHORIZATION_CLIENTID = "P.esi.tranquility.authorization.clientid";
@@ -47,4 +40,6 @@ public class PropertiesDefinitionsConstants {
 	public static final String ESI_TRANQUILITY_AUTHORIZATION_AGENT = "P.esi.tranquility.authorization.agent";
 	public static final String ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE = "P.esi.tranquility.authorization.content.type";
 	public static final String ESI_TRANQUILITY_AUTHORIZATION_STATE = "P.esi.tranquility.authorization.state";
+	public static final String ESI_TRANQUILITY_AUTHORIZATION_ACCESS_TOKEN = "P.esi.authorization.accesstoken.url";
+	public static final String ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE = "P.esi.authorization.authorize.url";
 }

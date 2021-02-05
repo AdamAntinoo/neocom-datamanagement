@@ -45,9 +45,9 @@ import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsCon
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_CACHE_FILE_NAME;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_SERVER_LOCATION;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.CACHE_DIRECTORY_PATH;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_OAUTH_AUTHORIZATION_ACCESS_TOKEN;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_OAUTH_AUTHORIZATION_AUTHORIZE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_ACCESS_TOKEN;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
@@ -274,10 +274,10 @@ public class RetrofitService {
 				.withState( STATE )
 				.withBaseUrl( SERVER_LOGIN_BASE )
 				.withAccessTokenEndpoint( this.configurationProvider.getResourceString(
-						ESI_OAUTH_AUTHORIZATION_ACCESS_TOKEN,
+						ESI_TRANQUILITY_AUTHORIZATION_ACCESS_TOKEN,
 						DEFAULT_AUTHORIZATION_ACCESS_TOKEN ) )
 				.withAuthorizationBaseUrl( this.configurationProvider.getResourceString(
-						ESI_OAUTH_AUTHORIZATION_AUTHORIZE,
+						ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE,
 						DEFAULT_AUTHORIZATION_AUTHORIZE ) )
 				.build()
 		);
