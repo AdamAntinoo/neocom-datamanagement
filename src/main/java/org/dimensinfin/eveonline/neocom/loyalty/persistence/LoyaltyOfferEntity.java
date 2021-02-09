@@ -5,6 +5,8 @@ import java.util.Objects;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.dimensinfin.eveonline.neocom.database.entities.UpdatableEntity;
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 
@@ -94,6 +96,19 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 
 	public String getTypeName() {
 		return this.typeName;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this )
+				.append( "id", id )
+				.append( "typeName", typeName )
+				.append( "corporationName", corporationName )
+				.append( "lpValue", lpValue )
+				.append( "iskCost", iskCost )
+				.append( "lpCost", lpCost )
+				.append( "price", price )
+				.toString();
 	}
 
 	// - B U I L D E R

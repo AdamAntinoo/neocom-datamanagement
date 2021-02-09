@@ -55,7 +55,7 @@ public class MemoryStoreCacheService implements IStoreCache {
 	}
 
 	public GetUniverseTypesTypeIdOk downloadEsiType( final int typeId ) {
-		LogWrapper.enter( MessageFormat.format( "Type Id: {0}", typeId ) );
+		LogWrapper.enter( MessageFormat.format( "Type Id: {0, number , integer}", typeId ) );
 		try {
 			final Response<GetUniverseTypesTypeIdOk> esiTypeResponse = this.retrofitService
 					.accessUniverseConnector()

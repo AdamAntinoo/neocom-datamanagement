@@ -17,6 +17,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdHisto
 import org.dimensinfin.eveonline.neocom.loyalty.domain.MarketHistoryRecord;
 import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOfferEntity;
 import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOffersRepository;
+import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
@@ -43,6 +44,7 @@ public class LoyaltyService {
 	private final ESIDataService esiDataService;
 	private final LoyaltyOffersRepository loyaltyOffersRepository;
 	private final ResourceFactory resourceFactory;
+	private final MarketService marketService;
 
 	// - C O N F I G U R A T I O N
 	private int regionId = 10000043; // Defaults to Domain (Amarr).
@@ -55,10 +57,12 @@ public class LoyaltyService {
 	@Inject
 	public LoyaltyService( @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) final ESIDataService esiDataService,
 	                       @NotNull @Named(DMDatabaseDependenciesModule.LOYALTYOFFERS_REPOSITORY) final LoyaltyOffersRepository loyaltyOffersRepository,
-	                       @NotNull @Named(DMServicesDependenciesModule.RESOURCE_FACTORY) final ResourceFactory resourceFactory ) {
+	                       @NotNull @Named(DMServicesDependenciesModule.RESOURCE_FACTORY) final ResourceFactory resourceFactory,
+	                       @NotNull @Named(DMServicesDependenciesModule.MARKET_SERVICE) final MarketService marketService ) {
 		this.esiDataService = esiDataService;
 		this.loyaltyOffersRepository = loyaltyOffersRepository;
 		this.resourceFactory = resourceFactory;
+		this.marketService = marketService;
 	}
 
 	// - G E T T E R S   &   S E T T E R S
@@ -92,7 +96,9 @@ public class LoyaltyService {
 							.requireNonNull( this.esiDataService.getMarketsHistoryForRegion(
 									this.regionId, offer.getTypeId()
 							) );
-					if (!marketHistoryEsi.isEmpty()) LogWrapper.info( marketHistoryEsi.get( marketHistoryEsi.size() - 1 ).toString() );
+					if (!marketHistoryEsi.isEmpty()) LogWrapper.info( "Last market history record: " +
+							marketHistoryEsi.get( marketHistoryEsi.size() - 1 ).toString()
+					);
 					return new LoyaltyOfferEntity.Builder()
 							.withOfferId( offer.getOfferId() )
 							.withLoyaltyCorporation( corporationId, loyaltyCorporationName )
@@ -101,10 +107,15 @@ public class LoyaltyService {
 							.withLpCost( offer.getLpCost() )
 							.withQuantity( offer.getQuantity() )
 							.withMarketRegionId( this.regionId )
-							.withPrice( marketHistoryEsi.get( marketHistoryEsi.size() - 1 ).getHighest() )
+							// Use the current lowest market sell price instead the latest trade price
+							.withPrice( this.marketService.getLowestSellPrice(
+									this.esiDataService.getUniverseMarketOrdersForId( this.regionId, offer.getTypeId() ),
+									this.esiDataService.getRegionMarketHub( regionId ).getSolarSystemId()
+							) )
 							.build();
 				} ) // Convert to an entity suitable to be persisted.
 				.peek( loyaltyOffer -> {
+					LogWrapper.info( "Processing offer for type: " + loyaltyOffer.getTypeName() );
 					try {
 						LogWrapper.info( MessageFormat.format(
 								"persisting Loyalty offer: Corporation {0} - {1}->LP Value: {2}",
@@ -155,6 +166,11 @@ public class LoyaltyService {
 				.filter( marketRecord -> marketRecord.isOnDateRange( LocalDate.now() ) ) // Check that the date is on the 15 last days.
 				.filter( marketRecord -> marketRecord.getVolume() > this.minTradeVolume )
 				.collect( Collectors.toList() );
+		LogWrapper.info( MessageFormat.format( "Market history entries: {0} - filtered: {1}",
+				marketHistoryEsi.size(),
+				marketHistory.size() )
+		);
+		LogWrapper.info( "Green state: " + (marketHistory.size() > (this.dateCoveragePct * this.daysInRange) / 100) );
 		return marketHistory.size() > (this.dateCoveragePct * this.daysInRange) / 100;
 	}
 }

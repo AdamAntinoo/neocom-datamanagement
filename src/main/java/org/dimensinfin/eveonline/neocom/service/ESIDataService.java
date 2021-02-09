@@ -406,7 +406,7 @@ public class ESIDataService extends ESIDataProvider {
 
 	@TimeElapsed
 	public List<GetLoyaltyStoresCorporationIdOffers200Ok> getLoyaltyStoresOffers( final Integer corporationId ) {
-		LogWrapper.enter( MessageFormat.format( "corporationId: {0}", corporationId ) );
+		LogWrapper.enter( MessageFormat.format( "corporationId: {0,number,integer}", corporationId ) );
 		try {
 			final Response<List<GetLoyaltyStoresCorporationIdOffers200Ok>> loyaltyOffersResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -426,7 +426,7 @@ public class ESIDataService extends ESIDataProvider {
 
 	@TimeElapsed
 	public List<GetMarketsRegionIdHistory200Ok> getMarketsHistoryForRegion( final Integer regionId, final Integer typeId ) {
-		LogWrapper.enter( MessageFormat.format( "regionId: {0}", regionId ) );
+		LogWrapper.enter( MessageFormat.format( "RegionId: {0,number,integer} - Type: {1, number, integer}", regionId , typeId) );
 		try {
 			final Response<List<GetMarketsRegionIdHistory200Ok>> marketHistoryResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -472,7 +472,7 @@ public class ESIDataService extends ESIDataProvider {
 	 */
 	@TimeElapsed
 	public List<GetMarketsRegionIdOrders200Ok> getUniverseMarketOrdersForId( final Integer regionId, final Integer typeId ) {
-		LogWrapper.enter( MessageFormat.format( "regionId: {0} - typeId: {1}", regionId, typeId ) );
+		LogWrapper.enter( MessageFormat.format( "regionId: {0, number , integer} - typeId: {1, number , integer}", regionId, typeId ) );
 		final List<GetMarketsRegionIdOrders200Ok> returnMarketOrderList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.

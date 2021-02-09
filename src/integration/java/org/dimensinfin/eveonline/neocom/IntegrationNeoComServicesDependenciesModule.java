@@ -9,6 +9,7 @@ import org.dimensinfin.eveonline.neocom.database.NeoComDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOffersRepository;
 import org.dimensinfin.eveonline.neocom.loyalty.service.LoyaltyService;
+import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
@@ -95,6 +96,10 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		bind( LoyaltyService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.LOYALTY_SERVICE ) )
 				.to( LoyaltyService.class )
+				.in( Singleton.class );
+		bind( MarketService.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.MARKET_SERVICE ) )
+				.to( MarketService.class )
 				.in( Singleton.class );
 	}
 }

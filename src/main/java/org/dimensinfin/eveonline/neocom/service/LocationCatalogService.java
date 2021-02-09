@@ -144,7 +144,7 @@ public class LocationCatalogService extends Job {
 	}
 
 	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
-		LogWrapper.enter( MessageFormat.format( "stationId: {0}", stationId ) );
+		LogWrapper.enter( MessageFormat.format( "stationId: {0, number, integer}", stationId ) );
 		try {
 			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -209,7 +209,7 @@ public class LocationCatalogService extends Job {
 		SpaceLocation hit = this.buildUpLocation( locationId );
 		if (null != hit) {
 			this.storeOnCacheLocation( hit );
-			LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2} generated from ESI data.",
+			LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2, number, integer} generated from ESI data.",
 					hits, access, locationId ) );
 			return hit;
 		} else return null;
