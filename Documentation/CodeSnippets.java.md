@@ -36,3 +36,26 @@ doAnswer((i) -> {
 	assertTrue("Pankaj".equals(i.getArgument(0)));
 	return null;
 }).when(emp).setName(anyString());
+
+[INHERITHED BUILDER]
+protected static  class Builder<T extends <InitialClass>>, B extends <InitialClass>.Builder> {
+		protected B actualClassBuilder;
+
+		public Builder() {
+			this.actualClassBuilder = getActualBuilder();
+		}
+
+		protected abstract T getActual();
+
+		protected abstract B getActualBuilder();
+		public B withExtras( final Bundle extras ) {
+			 this.getActual().extras = extras;
+			return this.actualClassBuilder;
+		}
+
+		public T build() {
+			Objects.requireNonNull( this.getActual().locator );
+			Objects.requireNonNull( this.getActual().controllerFactory );
+			return this.getActual();
+		}
+}
