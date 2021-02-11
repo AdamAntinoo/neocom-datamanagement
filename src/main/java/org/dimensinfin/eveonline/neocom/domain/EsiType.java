@@ -93,11 +93,11 @@ public class EsiType extends NeoComNode {
 	}
 
 	/**
-	 * This method evaluates the item name since the technology level is not stored on any repository (up to the moment). The assumption is that
+	 * This method evaluates the type name since the technology level is not stored on any repository (up to the moment). The assumption is that
 	 * all items have Tech I until otherwise detected.
 	 * Tech detection is done on the type name end string.
 	 *
-	 * @return the expected tech level for the item.
+	 * @return the expected tech level for the type.
 	 */
 	public String getTech() {
 		if (this.getName().endsWith( "III" )) return "Tech III";

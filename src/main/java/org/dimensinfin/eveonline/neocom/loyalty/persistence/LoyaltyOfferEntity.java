@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.dimensinfin.eveonline.neocom.database.entities.UpdatableEntity;
@@ -19,8 +18,12 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 	private static final long serialVersionUID = 6772112244501770693L;
 
 	private static String generateOfferIdentifier( final Integer offerId, final Integer marketRegionId ) {
-		return offerId + ":" + marketRegionId;
+		return "UID:" + offerId + ":" + marketRegionId;
 	}
+
+	/**
+	 * The unique id is composed of the offer identifier and the market region identifier so multiple regions can be scanned and persisted.
+	 */
 	@DatabaseField(columnName = "id", id = true, index = true)
 	private String id;
 	@DatabaseField(columnName = "offerId")
@@ -130,11 +133,6 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 			return this.onConstruction;
 		}
 
-		public LoyaltyOfferEntity.Builder withOfferId( final int offerId ) {
-			this.onConstruction.offerId = offerId;
-			return this;
-		}
-
 		public LoyaltyOfferEntity.Builder withIskCost( final long iskCost ) {
 			this.onConstruction.iskCost = iskCost;
 			return this;
@@ -153,6 +151,11 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 
 		public LoyaltyOfferEntity.Builder withMarketRegionId( final int marketRegionId ) {
 			this.onConstruction.marketRegionId = marketRegionId;
+			return this;
+		}
+
+		public LoyaltyOfferEntity.Builder withOfferId( final int offerId ) {
+			this.onConstruction.offerId = offerId;
 			return this;
 		}
 

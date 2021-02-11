@@ -4,7 +4,11 @@ import java.util.Objects;
 
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdShipOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseAncestries200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseBloodlines200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRaces200Ok;
 
 /**
  * This is a full featured Pilot core data record. Adds some data fields that will require new accesses to the ESI backend and some of them will
@@ -46,7 +50,7 @@ public class PilotV1 extends PublicPilotV1 {
 	}
 
 	// - B U I L D E R
-	public static class Builder extends PublicPilotV1.Builder<PublicPilotV1, PublicPilotV1.Builder> {
+	public static class Builder  {
 		private PilotV1 onConstruction;
 
 		// - C O N S T R U C T O R S
@@ -76,6 +80,35 @@ public class PilotV1 extends PublicPilotV1 {
 		public PilotV1.Builder withCurrentShipType( final EsiType currentShipType ) {
 			this.getActual().currentShipType = Objects.requireNonNull( currentShipType );
 			return this;
+		}
+		public PilotV1.Builder withAncestryData( final GetUniverseAncestries200Ok ancestryData ) {
+			if (null != ancestryData) this.getActual().ancestryData = ancestryData;
+			return this;
+		}
+
+		public PilotV1.Builder withBloodlineData( final GetUniverseBloodlines200Ok bloodlineData ) {
+			if (null != bloodlineData) this.getActual().bloodlineData = bloodlineData;
+			return this.getActualBuilder();
+		}
+
+		public PilotV1.Builder withCorporation( final PublicCorporationV1 corporation ) {
+			this.getActual().corporation = Objects.requireNonNull( corporation );
+			return this.getActualBuilder();
+		}
+
+		public PilotV1.Builder withPilotId( final Integer pilotId ) {
+			this.getActual().pilotId = Objects.requireNonNull( pilotId );
+			return this.getActualBuilder();
+		}
+
+		public PilotV1.Builder withPilotPublicData( final GetCharactersCharacterIdOk pilotPublicData ) {
+			this.getActual().pilotPublicData = Objects.requireNonNull( pilotPublicData );
+			return this.getActualBuilder();
+		}
+
+		public PilotV1.Builder withRaceData( final GetUniverseRaces200Ok raceData ) {
+			if (null != raceData) this.getActual().raceData = raceData;
+			return this.getActualBuilder();
 		}
 
 		public PilotV1.Builder withLastKnownLocation( final SpaceLocation lastKnownLocation ) {

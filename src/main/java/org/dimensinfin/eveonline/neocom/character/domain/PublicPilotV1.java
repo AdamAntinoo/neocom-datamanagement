@@ -86,7 +86,11 @@ public class PublicPilotV1 extends NeoComNode {
 		public Builder() {
 		}
 
-		public PublicPilotV1 build() {
+		public T build() {
+			Objects.requireNonNull( this.getActual() );
+			Objects.requireNonNull( this.getActual().pilotId );
+			Objects.requireNonNull( this.getActual().pilotPublicData );
+			Objects.requireNonNull( this.getActual().corporation );
 			return this.getActual();
 		}
 
@@ -120,13 +124,13 @@ public class PublicPilotV1 extends NeoComNode {
 			return this.getActualBuilder();
 		}
 
-		protected T getActual() {
+		private T getActual() {
 			if (null == this.onConstruction)
 				this.onConstruction = (T) new PublicPilotV1();
 			return this.onConstruction;
 		}
 
-		protected B getActualBuilder() {
+		private B getActualBuilder() {
 			return (B) this;
 		}
 	}
