@@ -59,16 +59,22 @@ public class PilotV1 extends PublicPilotV1 {
 		}
 
 		public PilotV1 build() {
+			Objects.requireNonNull( this.getActual().pilotId );
+			Objects.requireNonNull( this.getActual().pilotPublicData );
+			Objects.requireNonNull( this.getActual().corporation );
+			Objects.requireNonNull( this.getActual().lastKnownLocation );
+			Objects.requireNonNull( this.getActual().currentShip );
+			Objects.requireNonNull( this.getActual().currentShipType );
 			return getActual();
 		}
 
-		protected PilotV1 getActual() {
+		private PilotV1 getActual() {
 			if (null == this.onConstruction)
 				this.onConstruction = new PilotV1();
 			return this.onConstruction;
 		}
 
-		protected PilotV1.Builder getActualBuilder() {
+		private PilotV1.Builder getActualBuilder() {
 			return this;
 		}
 
@@ -117,7 +123,8 @@ public class PilotV1 extends PublicPilotV1 {
 		}
 
 		public PilotV1.Builder withTotalSkillPoints( final Long totalSkillpoints ) {
-			if (null != totalSkillpoints) this.onConstruction.totalSkillpoints = totalSkillpoints;
+			if (null != totalSkillpoints)
+				this.onConstruction.totalSkillpoints = totalSkillpoints;
 			return this;
 		}
 
