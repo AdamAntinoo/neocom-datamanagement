@@ -2,11 +2,11 @@ package org.dimensinfin.eveonline.neocom.exception;
 
 public class NeoComRuntimeException extends RuntimeException {
 	private static final long serialVersionUID = 8864888568628860054L;
-	private String jsonClass = "NeoComRuntimeException";
 	private String sourceClass;
 	private String sourceMethod;
-	private Exception rootException;
-	private ErrorInfoCatalog error;
+	private String errorCode = ErrorCodesData.NOT_INTERCEPTED_EXCEPTION;
+	//	private Exception rootException;
+	//	private ErrorInfoCatalog error;
 
 	// - C O N S T R U C T O R S
 	public NeoComRuntimeException() {
@@ -17,8 +17,9 @@ public class NeoComRuntimeException extends RuntimeException {
 		this.sourceClass = stackElement.getClassName();
 	}
 
-	public NeoComRuntimeException( final ErrorInfoCatalog error ) {
-		this.error = error;
+	public NeoComRuntimeException( final ErrorInfoCatalog error, final String... arguments ) {
+		this( error.getErrorMessage( arguments ) );
+		this.errorCode = error.getErrorCode();
 	}
 
 	public NeoComRuntimeException( final String message ) {
@@ -26,20 +27,19 @@ public class NeoComRuntimeException extends RuntimeException {
 	}
 
 	public NeoComRuntimeException( final Exception rootException ) {
-		this();
-//		this.errorInfo = ErrorInfo.NOT_INTERCEPTED_EXCEPTION;
-		this.rootException = rootException;
+		this( rootException.getMessage() );
 	}
 
-	public String getJsonClass() {
-		return jsonClass;
-	}
+	//	public String getMessage() {
+	//		String message = "";
+	//		if (null != super.getMessage()) message = super.getMessage();
+	//		if (null != this.rootException) message = message.concat( ":" ).concat( this.rootException.getMessage() );
+	//		return message;
+	//	}
 
-	public String getMessage() {
-		String message = "";
-		if (null != super.getMessage()) message = super.getMessage();
-		if (null != this.rootException) message = message.concat( ":" ).concat( this.rootException.getMessage() );
-		return message;
+	// - G E T T E R S   &   S E T T E R S
+	public String getErrorCode() {
+		return this.errorCode;
 	}
 
 	public String getSourceClass() {
@@ -49,8 +49,7 @@ public class NeoComRuntimeException extends RuntimeException {
 	public String getSourceMethod() {
 		return this.sourceMethod;
 	}
-
-	public Exception getRootException() {
-		return this.rootException;
-	}
+	//	public Exception getRootException() {
+	//		return this.rootException;
+	//	}
 }

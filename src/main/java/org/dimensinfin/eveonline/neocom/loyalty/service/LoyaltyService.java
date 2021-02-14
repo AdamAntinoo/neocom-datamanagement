@@ -51,7 +51,7 @@ public class LoyaltyService {
 	private int daysInRange = 15; // Number of days on the date range period back from the current date.
 	private int dateCoveragePct = 70; // Percentage of the range days that should have market trades to validate an item.
 	private int minTradeVolume = 5; // Min value on the volume of items traded to validate an order.
-	private int profitLevel = 1000;
+	private int profitLevel = 1200;
 
 	// - C O N S T R U C T O R S
 	@Inject

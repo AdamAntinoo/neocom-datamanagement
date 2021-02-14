@@ -119,6 +119,13 @@ public class EsiType extends NeoComNode {
 
 	public double getVolume() {return this.type.getVolume();}
 
+	public boolean isBlueprint() {
+		if (this.getCategoryName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.BLUEPRINT ))
+			return true;
+		else
+			return false;
+	}
+
 	// - C O R E
 	@Override
 	public int hashCode() {

@@ -51,14 +51,14 @@ public class LoyaltyServiceIT {
 				this.loyaltyOffersRepository,
 				this.resourceFactory,
 				this.marketService )
-//				.setRegionId( 10000002 ) // Jita
-								.setRegionId( 10000043 ) // Amarr
+				.setRegionId( 10000002 ) // Jita
+//								.setRegionId( 10000043 ) // Amarr
 				.setDaysInRange( TEST_LOYALTY_DAYS_IN_RANGE )
 				.setDateCoveragePct( TEST_LOYALTY_RANGE_COVERAGE )
 				.setMinTradeVolume( TEST_LOYALTY_MINIMUM_TRADE_VOLUME );
 		// Test
-				final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000179 ); // 24th - Amarr
-//		final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000182 ); // Tribunal - Minmatar
+//				final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000179 ); // 24th - Amarr
+		final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000182 ); // Tribunal - Minmatar
 		for (LoyaltyOfferEntity offer : offerList.stream()
 				.filter( offer -> offer.getLpValue() > loyaltyService.getProfitLevel() )
 				.sorted( ( of1, of2 ) -> Long.compare( of2.getLpValue(), of1.getLpValue() ) )

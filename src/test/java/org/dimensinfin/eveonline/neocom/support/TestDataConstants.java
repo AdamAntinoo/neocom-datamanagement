@@ -1,5 +1,7 @@
 package org.dimensinfin.eveonline.neocom.support;
 
+import org.joda.time.DateTime;
+
 import org.dimensinfin.eveonline.neocom.domain.IndustryGroup;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
@@ -61,6 +63,7 @@ public class TestDataConstants {
 		public static final IndustryGroup TEST_ESITYPE_INDUSTRYGROUP_NAME = IndustryGroup.COMMODITY;
 		public static final String TEST_ESITYPE_HULLGROUP_NAME = "not-applies";
 		public static final String TEST_ESITYPE_TECH = "Tech I";
+		public static final Float		TEST_ESITYPE_VOLUME = 0.1F;
 	}
 
 	public static final class ResourceConstants {
@@ -83,5 +86,17 @@ public class TestDataConstants {
 		public static final int TEST_LOYALTY_ITEM_ID = 10000030;
 		public static final String TEST_LOYALTY_ITEM_ID_NAME = "-ITEM-NAME-";
 		public static final Double TEST_LOYALTY_ITEM_SELL_PRICE = 123.45;
+	}
+	public static final class PilotConstants {
+		public static final Integer TEST_PUBLIC_PILOT_ID = 91734031;
+		public static final DateTime TEST_PUBLIC_PILOT_BIRTHDATE = DateTime.now();
+		public static final Integer TEST_PUBLIC_PILOT_CORPORATION_ID = 43256785;
+		public static final String TEST_PUBLIC_PILOT_DESCRIPTION = "-DESCRIPTION-";
+		public static final Integer TEST_PUBLIC_PILOT_FACTION_ID = 32;
+		public static final String TEST_PUBLIC_PILOT_NAME = "-NAME-";
+		public static final Float TEST_PUBLIC_PILOT_SECURITY_STATUS = 0.1F;
+		public static final String TEST_PUBLIC_PILOT_TITLE = "-TITLE-";
+		public static final Long TEST_PILOT_SKILL_POINTS= 1436765L;
+		public static final Double TEST_PILOT_WALLET_BALANCE = 432567.0;
 	}
 }
