@@ -210,7 +210,7 @@ public class EsiTypeTest {
 				.withGroup( this.group )
 				.withCategory( this.category )
 				.build();
-		final String expected = "{\"typeId\":11535,\"industryGroup\":\"UNDEFINED\",\"type\":\"Mock for GetUniverseTypesTypeIdOk, hashCode: 1747657461\",\"group\":\"Mock for GetUniverseGroupsGroupIdOk, hashCode: 1120737819\",\"category\":\"Mock for GetUniverseCategoriesCategoryIdOk, hashCode: 433457463\"}";
+		final String expected = "{\"typeId\":11535,\"industryGroup\":\"UNDEFINED\",\"type\":\"Mock for GetUniverseTypesTypeIdOk, hashCode: 1330500972\",\"group\":\"Mock for GetUniverseGroupsGroupIdOk, hashCode: 964740518\",\"category\":\"Mock for GetUniverseCategoriesCategoryIdOk, hashCode: 267794346\"}";
 		final String obtained = esiType.toString();
 		// Assertions
 		Assertions.assertEquals( expected, obtained );

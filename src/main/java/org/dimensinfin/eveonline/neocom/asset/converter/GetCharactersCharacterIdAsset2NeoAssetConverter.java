@@ -91,7 +91,7 @@ public class GetCharactersCharacterIdAsset2NeoAssetConverter implements Converte
 		if (asset.isBlueprint()) return false;
 		if (asset.isShip()) return true;
 		// Use a list of types to set what is a container
-		if (containerTypes.containsKey( asset.getTypeId() ) return true;
+		if (containerTypes.containsKey( asset.getTypeId() ) ) return true;
 		if (asset.getName().contains( "Container" )) return true;
 		return asset.getName().contains( "Wrap" );
 	}
