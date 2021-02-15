@@ -2,6 +2,10 @@ package org.dimensinfin.eveonline.neocom.character.domain;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 
 import org.dimensinfin.eveonline.neocom.domain.NeoComNode;
@@ -25,11 +29,11 @@ public class PublicPilotV1 extends NeoComNode {
 	 * The unique game character identifier assigned at character creation that is going to be used to identify this Pilot.
 	 */
 	protected Integer pilotId;
-	protected GetCharactersCharacterIdOk pilotPublicData;
+	protected transient GetCharactersCharacterIdOk pilotPublicData;
 	protected PublicCorporationV1 corporation;
-	protected GetUniverseRaces200Ok raceData;
-	protected GetUniverseAncestries200Ok ancestryData;
-	protected GetUniverseBloodlines200Ok bloodlineData;
+	protected transient GetUniverseRaces200Ok raceData;
+	protected transient GetUniverseAncestries200Ok ancestryData;
+	protected transient GetUniverseBloodlines200Ok bloodlineData;
 
 	// - C O N S T R U C T O R S
 	protected PublicPilotV1() {}
@@ -78,12 +82,37 @@ public class PublicPilotV1 extends NeoComNode {
 		return PILOT_ICON_URL_PREFIX + this.pilotId + PILOT_ICON_URL_SUFFIX;
 	}
 
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( pilotId ).append( pilotPublicData ).append( corporation )
+				.append( raceData ).append( ancestryData ).append( bloodlineData ).toHashCode();
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof PublicPilotV1)) return false;
+		final PublicPilotV1 that = (PublicPilotV1) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( pilotId, that.pilotId )
+				.append( pilotPublicData, that.pilotPublicData ).append( corporation, that.corporation ).append( raceData, that.raceData )
+				.append( ancestryData, that.ancestryData ).append( bloodlineData, that.bloodlineData ).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "pilotId", pilotId )
+				.append( "corporation", corporation )
+				.toString();
+	}
+
 	// - B U I L D E R
 	public static class Builder<T extends PublicPilotV1, B extends PublicPilotV1.Builder> {
 		private T onConstruction;
 
 		// - C O N S T R U C T O R S
 		public Builder() {
+			super();
 		}
 
 		public T build() {

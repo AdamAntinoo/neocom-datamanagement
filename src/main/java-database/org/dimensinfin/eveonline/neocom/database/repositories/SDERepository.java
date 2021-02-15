@@ -46,7 +46,7 @@ public class SDERepository {
 		final List<Resource> buildJob = new ArrayList<>();
 		try {
 			final ISDEStatement cursor = this.sdeDatabaseService
-					.constructStatement( SELECT_MATERIAL_USAGE, new String[]{ Integer.valueOf( itemId ).toString() } );
+					.constructStatement( SELECT_MATERIAL_USAGE, new String[]{ Integer.toString( itemId ) } );
 			int blueprintId = -1; // Add a blueprint detection to detect BOM for blueprints.
 			while (cursor.moveToNext()) {
 				int materialTypeID = cursor.getInt( BOM_USAGE_MATERIAL_TYPEID_COLINDEX );

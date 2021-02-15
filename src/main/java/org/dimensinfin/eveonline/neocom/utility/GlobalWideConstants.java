@@ -3,6 +3,9 @@ package org.dimensinfin.eveonline.neocom.utility;
 public class GlobalWideConstants {
 	public static final String STACKID_SEPARATOR = "/";
 
+	// - C O N S T R U C T O R S
+	private GlobalWideConstants() {}
+
 	public static final class EveGlobal {
 		public static final String TECH_I = "Tech I";
 		public static final String TECH_II = "Tech II";

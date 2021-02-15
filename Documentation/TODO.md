@@ -5,10 +5,8 @@
 [CLASSES TO COMPLETE UNIT TESTING]
 * MiningExtraction
 * LoyaltyOfferEntity
-* CharacterService
-* GetCharactersCharacterIdLocationToSpaceLocationConverter
 * NeoComRuntimeException
-
+* PublicCorporationV1
 
 
 >* NeoAsset

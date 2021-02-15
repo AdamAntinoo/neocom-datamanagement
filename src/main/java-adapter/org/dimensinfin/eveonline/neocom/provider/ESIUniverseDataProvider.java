@@ -13,18 +13,15 @@ import org.slf4j.LoggerFactory;
 
 import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
-import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AllianceApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CorporationApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApiV2;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsPrices200Ok;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrders200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseAncestries200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseBloodlines200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
@@ -118,6 +115,7 @@ public class ESIUniverseDataProvider {
 		}
 		return null;
 	}
+
 	// - P R O V I D E R   A P I
 	// - C A C H E D   A P I
 	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
@@ -163,14 +161,6 @@ public class ESIUniverseDataProvider {
 			this.downloadPilotFamilyData();
 		return racesCache.get( identifier );
 	}
-
-	//	@Deprecated
-	//	@TimeElapsed
-	//	public GetUniverseSystemsSystemIdOk searchSolarSystem4Id( final int solarSystemId ) {
-	//		//		LogWrapper.info( "SolarSystem: {}", solarSystemId + "" );
-	//		//		return this.storeCacheManager.accessSolarSystem( solarSystemId ).blockingGet();
-	//		return null;
-	//	}
 
 	private void downloadItemPrices() {
 		// Initialize and process the list of market process form the ESI full market data.
@@ -289,7 +279,6 @@ public class ESIUniverseDataProvider {
 			Objects.requireNonNull( this.onConstruction.fileSystemAdapter );
 			Objects.requireNonNull( this.onConstruction.retrofitService );
 			Objects.requireNonNull( this.onConstruction.storeCacheManager );
-//			NeoItem.injectEsiUniverseDataAdapter( this.onConstruction );
 			return this.onConstruction;
 		}
 

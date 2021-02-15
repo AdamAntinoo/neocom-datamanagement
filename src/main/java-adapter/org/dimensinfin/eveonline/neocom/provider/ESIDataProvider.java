@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import org.dimensinfin.annotation.LogEnterExit;
 import org.dimensinfin.annotation.TimeElapsed;
-import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AssetsApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CorporationApi;
@@ -29,6 +28,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSchematicsSc
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCharactersCharacterIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.PostCorporationsCorporationIdAssetsNames200Ok;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -58,7 +58,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public List<GetCharactersCharacterIdFittings200Ok> getCharactersCharacterIdFittings( final Credential credential ) {
-		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
 		try {
 			final Response<List<GetCharactersCharacterIdFittings200Ok>> fittingsResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -86,7 +86,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	 */
 	@TimeElapsed
 	public List<GetCharactersCharacterIdMining200Ok> getCharactersCharacterIdMining( final Credential credential ) {
-		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
 		List<GetCharactersCharacterIdMining200Ok> returnMiningList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
@@ -119,7 +119,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public List<GetCharactersCharacterIdPlanets200Ok> getCharactersCharacterIdPlanets( final Credential credential ) {
-		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
 		try {
 			// Create the request to be returned so it can be called.
 			final Response<List<GetCharactersCharacterIdPlanets200Ok>> planetaryApiResponse = this.retrofitService
@@ -141,7 +141,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	@TimeElapsed
 	public GetCharactersCharacterIdPlanetsPlanetIdOk getCharactersCharacterIdPlanetsPlanetId( final Integer planetId,
 	                                                                                          final Credential credential ) {
-		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
 		try {
 			final Response<GetCharactersCharacterIdPlanetsPlanetIdOk> planetaryApiResponse = this.retrofitService
 					.accessAuthenticatedConnector( credential )
@@ -164,7 +164,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	@TimeElapsed
 	public List<GetCorporationsCorporationIdAssets200Ok> getCorporationsCorporationIdAssets( final Credential credential,
 	                                                                                         final Integer corporationId ) {
-		LogWrapper.enter( CREDENTIAL_LOG_LITERAL+ credential.toString() );
+		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
 		List<GetCorporationsCorporationIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
@@ -218,7 +218,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public GetUniverseSchematicsSchematicIdOk getUniversePlanetarySchematicsById( final int schematicId ) {
-		LogWrapper.enter( MessageFormat.format("Schematic id: {0}", Integer.toString( schematicId ) ));
+		LogWrapper.enter( MessageFormat.format( "Schematic id: {0}", Integer.toString( schematicId ) ) );
 		try {
 			// Create the request to be returned so it can be called.
 			final Response<GetUniverseSchematicsSchematicIdOk> schematicistResponse = this.retrofitService
@@ -238,7 +238,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public GetUniversePlanetsPlanetIdOk getUniversePlanetsPlanetId( final int identifier ) {
-		LogWrapper.enter( MessageFormat.format("Planet identifier: {0}", Integer.toString( identifier )) );
+		LogWrapper.enter( MessageFormat.format( "Planet identifier: {0}", Integer.toString( identifier ) ) );
 		try {
 			final Response<GetUniversePlanetsPlanetIdOk> universeApiResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -259,7 +259,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	@TimeElapsed
 	public GetStatusOk getUniverseStatus( final String server ) {
-		LogWrapper.enter( MessageFormat.format("Server: {0}", server ));
+		LogWrapper.enter( MessageFormat.format( "Server: {0}", server ) );
 		try {
 			String datasource = DEFAULT_ESI_SERVER; // Set the server to the default or to the selected server.
 			if (null != server) datasource = server;
@@ -319,22 +319,6 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 		}
 		return new ArrayList<>();
 	}
-//@Deprecated
-//	@Override
-//	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
-//		return this.storeCacheManager.accessType( itemId ).blockingGet();
-//	}
-
-//	@Override
-//	@TimeElapsed
-//	public GetUniverseCategoriesCategoryIdOk searchItemCategory4Id( final int categoryId ) {
-//		return this.storeCacheManager.accessCategory( categoryId ).blockingGet();
-//	}
-
-//	@Override
-//	public GetUniverseGroupsGroupIdOk searchItemGroup4Id( final int groupId ) {
-//		return this.storeCacheManager.accessGroup( groupId ).blockingGet();
-//	}
 
 	// - B U I L D E R
 	public static class Builder {
@@ -351,8 +335,6 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 			Objects.requireNonNull( this.onConstruction.locationCatalogService );
 			Objects.requireNonNull( this.onConstruction.storeCacheManager );
 			Objects.requireNonNull( this.onConstruction.retrofitService );
-			// Inject the new adapter to the classes that depend on it.
-//			NeoComUpdater.injectsEsiDataAdapter( this.onConstruction );
 			return this.onConstruction;
 		}
 

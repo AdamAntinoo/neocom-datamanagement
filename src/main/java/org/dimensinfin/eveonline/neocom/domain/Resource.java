@@ -91,7 +91,6 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 		int newqty = this.getBaseQuantity() * this.getStackSize();
 		newqty += newResource.getBaseQuantity() * newResource.getStackSize();
 		this.quantity = newqty;
-		//		this.stackSize = 1;
 		return this.quantity;
 	}
 

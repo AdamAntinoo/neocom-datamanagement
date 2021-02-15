@@ -114,7 +114,7 @@ public class LoyaltyService {
 							) )
 							.build();
 				} ) // Convert to an entity suitable to be persisted.
-				.peek( loyaltyOffer -> {
+				.map( loyaltyOffer -> {
 					LogWrapper.info( "Processing offer for type: " + loyaltyOffer.getTypeName() );
 					try {
 						LogWrapper.info( MessageFormat.format(
@@ -127,6 +127,7 @@ public class LoyaltyService {
 					} catch (final SQLException sqle) {
 						LogWrapper.error( sqle );
 					}
+					return loyaltyOffer;
 				} )
 				.collect( Collectors.toList() );
 	}

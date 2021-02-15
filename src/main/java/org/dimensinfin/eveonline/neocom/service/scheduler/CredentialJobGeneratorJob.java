@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.asset.service.AssetDownloadProcessorJob;
@@ -13,11 +14,9 @@ import org.dimensinfin.eveonline.neocom.database.repositories.CredentialReposito
 import org.dimensinfin.eveonline.neocom.database.repositories.MiningRepository;
 import org.dimensinfin.eveonline.neocom.miningextraction.MiningExtractionsProcessJob;
 import org.dimensinfin.eveonline.neocom.miningextraction.service.MiningExtractionDownloader;
-import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
-import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.conf.ISchedulerConfiguration;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
+import org.dimensinfin.logging.LogWrapper;
 
 public class CredentialJobGeneratorJob extends Job {
 	private static final String CRON_SCHEDULE_ASSETS = "-to-be-defined-";
@@ -64,7 +63,7 @@ public class CredentialJobGeneratorJob extends Job {
 	 */
 	@Override
 	public Boolean call() {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		// Read the list of Credentials and process them.
 		for (Credential credential : this.credentialRepository.accessAllCredentials()) {
 			if (Boolean.TRUE.equals( this.schedulerConfiguration.getAllowedToRun() )) {
@@ -95,7 +94,7 @@ public class CredentialJobGeneratorJob extends Job {
 											.build() );
 			}
 		}
-		NeoComLogger.exit();
+		LogWrapper.exit();
 		return true;
 	}
 

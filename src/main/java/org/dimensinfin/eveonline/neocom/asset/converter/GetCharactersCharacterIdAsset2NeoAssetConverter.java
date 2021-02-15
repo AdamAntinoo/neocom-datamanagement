@@ -1,5 +1,8 @@
 package org.dimensinfin.eveonline.neocom.asset.converter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.dimensinfin.eveonline.neocom.asset.domain.AssetTypes;
 import org.dimensinfin.eveonline.neocom.asset.domain.EsiAssets200Ok;
 import org.dimensinfin.eveonline.neocom.database.entities.NeoAsset;
@@ -8,8 +11,42 @@ import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
 
 import retrofit2.Converter;
+
 @Deprecated
 public class GetCharactersCharacterIdAsset2NeoAssetConverter implements Converter<GetCharactersCharacterIdAssets200Ok, NeoAsset> {
+	private static final Map<Integer, Boolean> containerTypes = new HashMap<>();
+
+	static {
+		containerTypes.put( 11488, true );
+		containerTypes.put( 11489, true );
+		containerTypes.put( 11490, true );
+		containerTypes.put( 17363, true );
+		containerTypes.put( 17364, true );
+		containerTypes.put( 17365, true );
+		containerTypes.put( 17366, true );
+		containerTypes.put( 17367, true );
+		containerTypes.put( 17368, true );
+		containerTypes.put( 2263, true );
+		containerTypes.put( 23, true );
+		containerTypes.put( 24445, true );
+		containerTypes.put( 28570, true );
+		containerTypes.put( 3293, true );
+		containerTypes.put( 3296, true );
+		containerTypes.put( 3297, true );
+		containerTypes.put( 33003, true );
+		containerTypes.put( 33005, true );
+		containerTypes.put( 33007, true );
+		containerTypes.put( 33009, true );
+		containerTypes.put( 33011, true );
+		containerTypes.put( 3465, true );
+		containerTypes.put( 3466, true );
+		containerTypes.put( 3467, true );
+		containerTypes.put( 3468, true );
+		containerTypes.put( 41567, true );
+		containerTypes.put( 60, true ); // Asset Safety Wrap
+
+	}
+
 	@Override
 	public NeoAsset convert( final GetCharactersCharacterIdAssets200Ok esiAssetOk ) {
 		final EsiAssets200Ok esiAsset = new GetCharactersCharacterIdAsset2EsiAssets200OkConverter().convert( esiAssetOk );
@@ -54,33 +91,7 @@ public class GetCharactersCharacterIdAsset2NeoAssetConverter implements Converte
 		if (asset.isBlueprint()) return false;
 		if (asset.isShip()) return true;
 		// Use a list of types to set what is a container
-		if (asset.getTypeId() == 11488) return true;
-		if (asset.getTypeId() == 11489) return true;
-		if (asset.getTypeId() == 11490) return true;
-		if (asset.getTypeId() == 17363) return true;
-		if (asset.getTypeId() == 17364) return true;
-		if (asset.getTypeId() == 17365) return true;
-		if (asset.getTypeId() == 17366) return true;
-		if (asset.getTypeId() == 17367) return true;
-		if (asset.getTypeId() == 17368) return true;
-		if (asset.getTypeId() == 2263) return true;
-		if (asset.getTypeId() == 23) return true;
-		if (asset.getTypeId() == 24445) return true;
-		if (asset.getTypeId() == 28570) return true;
-		if (asset.getTypeId() == 3293) return true;
-		if (asset.getTypeId() == 3296) return true;
-		if (asset.getTypeId() == 3297) return true;
-		if (asset.getTypeId() == 33003) return true;
-		if (asset.getTypeId() == 33005) return true;
-		if (asset.getTypeId() == 33007) return true;
-		if (asset.getTypeId() == 33009) return true;
-		if (asset.getTypeId() == 33011) return true;
-		if (asset.getTypeId() == 3465) return true;
-		if (asset.getTypeId() == 3466) return true;
-		if (asset.getTypeId() == 3467) return true;
-		if (asset.getTypeId() == 3468) return true;
-		if (asset.getTypeId() == 41567) return true;
-		if (asset.getTypeId() == 60) return true; // Asset Safety Wrap
+		if (containerTypes.containsKey( asset.getTypeId() ) return true;
 		if (asset.getName().contains( "Container" )) return true;
 		return asset.getName().contains( "Wrap" );
 	}

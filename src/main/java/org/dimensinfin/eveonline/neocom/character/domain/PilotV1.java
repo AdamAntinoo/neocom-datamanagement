@@ -2,6 +2,10 @@ package org.dimensinfin.eveonline.neocom.character.domain;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
@@ -21,7 +25,7 @@ public class PilotV1 extends PublicPilotV1 {
 	private static final long serialVersionUID = -7085010594597508212L;
 	private long totalSkillpoints = 0;
 	private double walletBalance = 0.0;
-	private GetCharactersCharacterIdShipOk currentShip;
+	private transient GetCharactersCharacterIdShipOk currentShip;
 	private EsiType currentShipType;
 	private SpaceLocation lastKnownLocation;
 
@@ -47,6 +51,34 @@ public class PilotV1 extends PublicPilotV1 {
 
 	public double getWalletBalance() {
 		return this.walletBalance;
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof PilotV1)) return false;
+		final PilotV1 pilotV1 = (PilotV1) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( totalSkillpoints, pilotV1.totalSkillpoints )
+				.append( walletBalance, pilotV1.walletBalance ).append( currentShip, pilotV1.currentShip )
+				.append( currentShipType, pilotV1.currentShipType ).append( lastKnownLocation, pilotV1.lastKnownLocation ).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( totalSkillpoints ).append( walletBalance ).append( currentShip )
+				.append( currentShipType ).append( lastKnownLocation ).toHashCode();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this )
+				.append( "totalSkillpoints", totalSkillpoints )
+				.append( "walletBalance", walletBalance )
+				.append( "currentShip", currentShip )
+				.append( "currentShipType", currentShipType )
+				.append( "lastKnownLocation", lastKnownLocation )
+				.append( "pilotId", pilotId )
+				.toString();
 	}
 
 	// - B U I L D E R

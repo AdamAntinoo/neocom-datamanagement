@@ -46,7 +46,11 @@ public class CredentialRepository {
 		try {
 			return this.credentialDao.queryForEq( "dataSource", esiServer.toLowerCase() );
 		} catch (final SQLException sqle) {
-			LogWrapper.error( MessageFormat.format( "Exception reading all Credentials. {0}", esiServer ), sqle );
+			LogWrapper.error( new SQLException( MessageFormat.format(
+					"Exception reading all Credentials. {0} - {1}",
+					esiServer,
+					sqle.getMessage() )
+			) );
 			return new ArrayList<>();
 		}
 	}
@@ -61,25 +65,4 @@ public class CredentialRepository {
 			this.credentialDao.createOrUpdate( record );
 		}
 	}
-
-	//	// - B U I L D E R
-	//	public static class Builder {
-	//		protected CredentialRepository onConstruction;
-	//
-	//		// - C O N S T R U C T O R S
-	//		public Builder() {
-	//			this.onConstruction = new CredentialRepository( neoComDatabaseService );
-	//		}
-	//
-	//		public CredentialRepository build() {
-	//			Objects.requireNonNull( this.onConstruction.credentialDao );
-	//			return this.onConstruction;
-	//		}
-	//
-	//		public Builder withCredentialDao( final Dao<Credential, String> credentialDao ) {
-	//			Objects.requireNonNull( credentialDao );
-	//			this.onConstruction.credentialDao = credentialDao;
-	//			return this;
-	//		}
-	//	}
 }

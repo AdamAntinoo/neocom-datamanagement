@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.dimensinfin.eveonline.neocom.database.entities.UpdatableEntity;
@@ -99,6 +101,25 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 
 	public String getTypeName() {
 		return this.typeName;
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof LoyaltyOfferEntity)) return false;
+		final LoyaltyOfferEntity entity = (LoyaltyOfferEntity) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( typeId, entity.typeId )
+				.append( corporationId, entity.corporationId ).append( id, entity.id ).append( offerId, entity.offerId )
+				.append( typeName, entity.typeName ).append( corporationName, entity.corporationName ).append( lpValue, entity.lpValue )
+				.append( iskCost, entity.iskCost ).append( lpCost, entity.lpCost ).append( quantity, entity.quantity )
+				.append( marketRegionId, entity.marketRegionId ).append( price, entity.price ).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( id ).append( offerId ).append( typeId ).append( typeName )
+				.append( corporationId ).append( corporationName ).append( lpValue ).append( iskCost ).append( lpCost ).append( quantity )
+				.append( marketRegionId ).append( price ).toHashCode();
 	}
 
 	@Override

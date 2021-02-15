@@ -2,6 +2,11 @@ package org.dimensinfin.eveonline.neocom.character.domain;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.dimensinfin.eveonline.neocom.domain.NeoComNode;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
@@ -18,7 +23,7 @@ public class PublicCorporationV1 extends NeoComNode {
 
 	private Integer corporationId;
 	private transient GetCorporationsCorporationIdOk corporationPublicData;
-	private PublicPilotV1 ceoPilotData;
+	private Integer ceoId;
 	private transient GetAlliancesAllianceIdOk alliance;
 
 	// - C O N S T R U C T O R S
@@ -29,8 +34,8 @@ public class PublicCorporationV1 extends NeoComNode {
 		return this.alliance;
 	}
 
-	public PublicPilotV1 getCeoPilotData() {
-		return this.ceoPilotData;
+	public Integer getCeoId() {
+		return ceoId;
 	}
 
 	public Integer getCorporationId() {
@@ -46,6 +51,31 @@ public class PublicCorporationV1 extends NeoComNode {
 		return CORPORATION_ICON_URL_PREFIX + this.corporationId + CORPORATION_ICON_URL_SUFFIX;
 	}
 
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( corporationId ).append( corporationPublicData ).append( ceoId )
+				.append( alliance ).toHashCode();
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof PublicCorporationV1)) return false;
+		final PublicCorporationV1 that = (PublicCorporationV1) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( corporationId, that.corporationId )
+				.append( corporationPublicData, that.corporationPublicData ).append( ceoId, that.ceoId ).append( alliance, that.alliance ).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "corporationId", corporationId )
+				.append( "corporationPublicData", corporationPublicData )
+				.append( "ceoId", ceoId )
+				.append( "alliance", alliance )
+				.toString();
+	}
+
 	// - B U I L D E R
 	public static class Builder {
 		private final PublicCorporationV1 onConstruction;
@@ -59,8 +89,8 @@ public class PublicCorporationV1 extends NeoComNode {
 			return this.onConstruction;
 		}
 
-		public PublicCorporationV1.Builder withCeoPilotData( final PublicPilotV1 ceoPilotData ) {
-			this.onConstruction.ceoPilotData = Objects.requireNonNull( ceoPilotData );
+		public PublicCorporationV1.Builder withCeoPilotId( final Integer ceoId ) {
+			this.onConstruction.ceoId = Objects.requireNonNull( ceoId );
 			return this;
 		}
 

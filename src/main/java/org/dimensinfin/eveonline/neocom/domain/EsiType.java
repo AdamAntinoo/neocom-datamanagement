@@ -8,43 +8,62 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.NonNls;
 
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants;
 
+@NonNls
 public class EsiType extends NeoComNode {
 	public static final String ESI_ICON_URL_PREFIX = "https://image.eveonline.com/Type/";
 	public static final String ESI_ICON_URL_SUFFIX = "_64.png";
 	private static final long serialVersionUID = 1430130141655722687L;
+	@NonNls
 	private static final Map<String, String> hullGroupMap = new HashMap<>();
+	@NonNls
+	private static final String FRIGATE = "frigate";
+	@NonNls
+	private static final String BATTLECRUISER = "battlecruiser";
+	@NonNls
+	private static final String BATTLESHIP = "battleship";
+	@NonNls
+	private static final String DESTROYER = "destroyer";
+	@NonNls
+	private static final String CRUISER = "cruiser";
+	@NonNls
+	private static final String INDUSTRIAL = "industrial";
+	@NonNls
+	private static final String MININGBARGE = "miningBarge";
+	@NonNls
+	private static final String SHUTTLE = "shuttle";
 
 	static {
-		hullGroupMap.put( "Assault Frigate", "frigate" );
-		hullGroupMap.put( "Attack Battlecruiser", "battlecruiser" );
-		hullGroupMap.put( "Battleship", "battleship" );
-		hullGroupMap.put( "Blockade Runner", "battlecruiser" );
-		hullGroupMap.put( "Combat Battlecruiser", "battlecruiser" );
-		hullGroupMap.put( "Combat Recon Ship", "battleship" );
-		hullGroupMap.put( "Command Destroyer", "destroyer" );
-		hullGroupMap.put( "Corvette", "shuttle" );
-		hullGroupMap.put( "Cruiser", "cruiser" );
-		hullGroupMap.put( "Deep Space Transport", "industrial" );
-		hullGroupMap.put( "Destroyer", "destroyer" );
-		hullGroupMap.put( "Exhumer", "miningBarge" );
-		hullGroupMap.put( "Frigate", "frigate" );
-		hullGroupMap.put( "Heavy Assault Cruiser", "cruiser" );
-		hullGroupMap.put( "Industrial", "industrial" );
-		hullGroupMap.put( "Industrial Command Ship", "industrial" );
-		hullGroupMap.put( "Interceptor", "frigate" );
-		hullGroupMap.put( "Interdictor", "frigate" );
-		hullGroupMap.put( "Logistics", "cruiser" );
-		hullGroupMap.put( "Mining Barge", "miningBarge" );
+		hullGroupMap.put( "Assault Frigate", FRIGATE );
+		hullGroupMap.put( "Attack Battlecruiser", BATTLECRUISER );
+		hullGroupMap.put( "Battleship", BATTLESHIP );
+		hullGroupMap.put( "Blockade Runner", BATTLECRUISER );
+		hullGroupMap.put( "Combat Battlecruiser", BATTLECRUISER );
+		hullGroupMap.put( "Combat Recon Ship", BATTLESHIP );
+		hullGroupMap.put( "Command Destroyer", DESTROYER );
+		hullGroupMap.put( "Corvette", SHUTTLE );
+		hullGroupMap.put( "Cruiser", CRUISER );
+		hullGroupMap.put( "Deep Space Transport", INDUSTRIAL );
+		hullGroupMap.put( "Destroyer", DESTROYER );
+		hullGroupMap.put( "Exhumer", MININGBARGE );
+		hullGroupMap.put( "Frigate", FRIGATE );
+		hullGroupMap.put( "Heavy Assault Cruiser", CRUISER );
+		hullGroupMap.put( "Industrial", INDUSTRIAL );
+		hullGroupMap.put( "Industrial Command Ship", INDUSTRIAL );
+		hullGroupMap.put( "Interceptor", FRIGATE );
+		hullGroupMap.put( "Interdictor", FRIGATE );
+		hullGroupMap.put( "Logistics", CRUISER );
+		hullGroupMap.put( "Mining Barge", MININGBARGE );
 		hullGroupMap.put( "Shuttle", "shuttle" );
-		hullGroupMap.put( "Stealth Bomber", "cruiser" );
-		hullGroupMap.put( "Strategic Cruiser", "cruiser" );
-		hullGroupMap.put( "Tactical Destroyer", "destroyer" );
+		hullGroupMap.put( "Stealth Bomber", CRUISER );
+		hullGroupMap.put( "Strategic Cruiser", CRUISER );
+		hullGroupMap.put( "Tactical Destroyer", DESTROYER );
 
 	}
 
@@ -120,10 +139,7 @@ public class EsiType extends NeoComNode {
 	public double getVolume() {return this.type.getVolume();}
 
 	public boolean isBlueprint() {
-		if (this.getCategoryName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.BLUEPRINT ))
-			return true;
-		else
-			return false;
+		return this.getCategoryName().equalsIgnoreCase( GlobalWideConstants.EveGlobal.BLUEPRINT );
 	}
 
 	// - C O R E

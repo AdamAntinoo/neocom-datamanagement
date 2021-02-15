@@ -54,11 +54,7 @@ public enum ErrorInfoCatalog {
 		return this.errorMessage;
 	}
 
-//	@Deprecated
 	public String getErrorMessage( final String... arguments ) {
 		return MessageFormat.format( this.errorMessage, (Object[]) arguments );
 	}
-	//	public String getErrorMessage( final Exception exception, final String... arguments ) {
-	//		return MessageFormat.format( this.errorMessage, (Object) arguments ) + exception;
-	//	}
 }

@@ -10,13 +10,14 @@ import java.util.concurrent.TimeUnit;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import org.jetbrains.annotations.NonNls;
 
-import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.service.scheduler.converter.JobToJobRecordConverter;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.CronScheduleGenerator;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobRecord;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.JobStatus;
+import org.dimensinfin.logging.LogWrapper;
 
 /**
  * The JobScheduler is a singleton instance. It should have a single instance on the whole system where the jobs are registered
@@ -44,7 +45,7 @@ public class JobScheduler {
 		return singleton;
 	}
 
-	private Map<Integer, Job> jobsRegistered = new HashMap<>();
+	private final Map<Integer, Job> jobsRegistered = new HashMap<>();
 	private CronScheduleGenerator cronScheduleGenerator = new HourlyCronScheduleGenerator.Builder().build();
 
 	// - C O N S T R U C T O R S
@@ -65,10 +66,11 @@ public class JobScheduler {
 		this.jobsRegistered.clear();
 	}
 
+	@NonNls
 	public int registerJob( final Job job2Register ) {
 		final Job registration = this.jobsRegistered.put( job2Register.getUniqueIdentifier(), job2Register );
 		if (null == registration)
-			NeoComLogger.info( MessageFormat.format( "Registering job: (#{0}) - {1}",
+			LogWrapper.info( MessageFormat.format( "Registering job: (#{0}) - {1}",
 					job2Register.getUniqueIdentifier() + "",
 					job2Register.getClass().getSimpleName() )
 			);
@@ -94,13 +96,13 @@ public class JobScheduler {
 	}
 
 	public boolean wait4Completion() throws InterruptedException {
-		NeoComLogger.enter();
+		LogWrapper.enter();
 		schedulerExecutor.shutdown();
 		try {
 			schedulerExecutor.awaitTermination( Long.MAX_VALUE, TimeUnit.NANOSECONDS );
 			return true;
 		} finally {
-			NeoComLogger.exit();
+			LogWrapper.exit();
 		}
 	}
 
@@ -110,7 +112,7 @@ public class JobScheduler {
 			schedulerExecutor.submit( job );
 		} catch (final RuntimeException neoe) {
 			job.setStatus( JobStatus.EXCEPTION );
-			NeoComLogger.error( "Runtime exception: {}", neoe );
+			LogWrapper.error( neoe );
 		}
 	}
 }

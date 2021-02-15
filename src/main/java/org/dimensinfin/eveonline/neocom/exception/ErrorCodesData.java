@@ -10,4 +10,5 @@ public class ErrorCodesData {
 	public static final String MINING_REPOSITORY_EXTRACTION_SQL_ERRORCODE = "data.management.mining.repository.extraction.sql.exception";
 	public static final String MINING_REPOSITORY_PERSISTENCE_SQL_ERRORCODE = "data.management.mining.repository.persistence.sql.exception";
 	public static final String AUTHENTICATION_VERIFICATION_ERRORCODE   ="data.management.authentication.verification";
+private ErrorCodesData(){}
 }

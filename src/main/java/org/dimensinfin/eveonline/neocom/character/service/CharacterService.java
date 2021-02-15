@@ -35,8 +35,8 @@ public class CharacterService {
 	// - C O N S T R U C T O R S
 	@Inject
 	public CharacterService( @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) final ESIDataService esiDataService,
-	                          @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
-	                          @NotNull @Named(DMServicesDependenciesModule.RESOURCE_FACTORY) final ResourceFactory resourceFactory ) {
+	                         @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
+	                         @NotNull @Named(DMServicesDependenciesModule.RESOURCE_FACTORY) final ResourceFactory resourceFactory ) {
 		this.esiDataService = esiDataService;
 		this.locationCatalogService = locationCatalogService;
 		this.resourceFactory = resourceFactory;
@@ -47,13 +47,13 @@ public class CharacterService {
 		return new PublicCorporationV1.Builder()
 				.withCorporationId( corporationId )
 				.withCorporationPublicData( publicData )
-				.withCeoPilotData( this.getPilotPublicData( publicData.getCeoId() ) )
+				.withCeoPilotId( publicData.getCeoId() )
 				.build();
 	}
 
 	public PublicPilotV1 getPilotPublicData( final int pilotId ) {
 		final GetCharactersCharacterIdOk publicData = this.esiDataService.getCharactersCharacterId( pilotId );
-		return new PublicPilotV1.Builder<PublicPilotV1, PublicPilotV1.Builder>()
+		return new PublicPilotV1.Builder<>()
 				.withPilotId( pilotId )
 				.withPilotPublicData( publicData )
 				.withRaceData( this.esiDataService.searchSDERace( publicData.getRaceId() ) )
