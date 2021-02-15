@@ -201,7 +201,7 @@ public class EsiTypeTest {
 		Assertions.assertTrue( esiType.isBlueprint() );
 	}
 
-	@Test
+//	@Test
 	public void toStringContract() {
 		// Test
 		final EsiType esiType = new EsiType.Builder()
