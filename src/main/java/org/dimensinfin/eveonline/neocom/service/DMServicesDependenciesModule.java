@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
+import org.dimensinfin.eveonline.neocom.character.service.CharacterService;
 import org.dimensinfin.eveonline.neocom.loyalty.service.LoyaltyService;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 
@@ -13,6 +14,7 @@ public class DMServicesDependenciesModule extends AbstractModule {
 	public static final String RESOURCE_FACTORY = "ResourceFactory";
 	public static final String LOYALTY_SERVICE = "LoyaltyService";
 	public static final String MARKET_SERVICE = "marketService";
+	public static final String CHARACTER_SERVICE = "characterService";
 	public static final String ICONFIGURATION_SERVICE = "IConfigurationService";
 	public static final String IFILE_SYSTEM = "IFileSystem";
 	public static final String ISTORE_CACHE = "IStoreCache";
@@ -45,6 +47,10 @@ public class DMServicesDependenciesModule extends AbstractModule {
 		bind( MarketService.class )
 				.annotatedWith( Names.named( MARKET_SERVICE ) )
 				.to( MarketService.class )
+				.in( Singleton.class );
+		bind( CharacterService.class )
+				.annotatedWith( Names.named( CHARACTER_SERVICE ) )
+				.to( CharacterService.class )
 				.in( Singleton.class );
 	}
 }
