@@ -3,7 +3,7 @@ ext {
     slf4jVersion = '1.7.30'
     jacksonVersion = '2.9.4'
     ormliteVersion = '4.48'
-    retrofitVersion = '2.3.0'
+    retrofitVersion = '2.9.0'
     cacheVersion = '3.1.1'
     jodaTimeVersion = '2.10.5'
 }
@@ -47,8 +47,9 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-json-org:$jacksonVersion"
     // H T T P C L I E N T
+    implementation "com.squareup.okhttp3:okhttp:4.9.1"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion" // HTTP encapsulation and swagger support
-    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1' // Retrofit logs
     implementation 'com.github.scribejava:scribejava-core:5.4.0'
     // D A T A B A S E

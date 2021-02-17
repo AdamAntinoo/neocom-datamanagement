@@ -2,14 +2,17 @@ package org.dimensinfin.eveonline.neocom.auth;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
+import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.utility.Base64;
 import org.dimensinfin.logging.LogWrapper;
 
 import okhttp3.CertificatePinner;
+import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -24,11 +27,12 @@ import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsCon
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
 
 public class NeoComOAuth2Flow {
+	private static final String ACCESS_TOKEN_HOST_HEADER = "login.eveonline.com";
 	protected TokenVerification tokenVerificationStore;
 	// - C O M P O N E N T S
 	private IConfigurationService configurationService;
 
-// - C O N S T R U C T O R S
+	// - C O N S T R U C T O R S
 	private NeoComOAuth2Flow() {}
 
 	public String generateLoginUrl() {
@@ -87,6 +91,9 @@ public class NeoComOAuth2Flow {
 			serviceGetAccessToken = new Retrofit.Builder()
 					.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
 					.addConverterFactory( JacksonConverterFactory.create() )
+					.client( new OkHttpClient.Builder()
+							.connectionSpecs( Arrays.asList( ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS ) )
+							.build() )
 					.build()
 					.create( GetAccessToken.class );
 		} catch (final RuntimeException rte) {
@@ -102,9 +109,10 @@ public class NeoComOAuth2Flow {
 		final String esiAuthenticationServerLoginUrl = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL );
 		final Call<TokenTranslationResponse> request = serviceGetAccessToken.getAccessToken(
 				authorizationContentType,
-				esiAuthenticationServerLoginUrl, // This is the esi login server for /oauth/token call
+				ACCESS_TOKEN_HOST_HEADER, // This is the esi login server for /oauth/token call. WARNING do not add the protocol.
 				"Basic " + peck,
-				tokenRequestBody
+				tokenRequestBody.getGrant_type(),
+				tokenRequestBody.getCode()
 		);
 		// Getting the request response to be stored if valid.
 		try {
@@ -169,7 +177,7 @@ public class NeoComOAuth2Flow {
 	public static class Builder {
 		private NeoComOAuth2Flow onConstruction;
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new NeoComOAuth2Flow();
 		}
@@ -179,9 +187,8 @@ public class NeoComOAuth2Flow {
 			return this.onConstruction;
 		}
 
-		public Builder withConfigurationService( final IConfigurationService configurationService ) {
-			Objects.requireNonNull( configurationService );
-			this.onConstruction.configurationService = configurationService;
+		public NeoComOAuth2Flow.Builder withConfigurationService( final IConfigurationService configurationService ) {
+			this.onConstruction.configurationService = Objects.requireNonNull( configurationService );
 			return this;
 		}
 	}
