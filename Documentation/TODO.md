@@ -1,12 +1,11 @@
-	[DEVELOPMENT FOLLOWUP]
->* NeoComBackendService
->* TokenVerification
-
 [CLASSES TO COMPLETE UNIT TESTING]
 * MiningExtraction
 * LoyaltyOfferEntity
 * NeoComRuntimeException
 * PublicCorporationV1
+* NeoComOAuthFlow
+* HttpUniverseClientFactory
+
 
 
 >* NeoAsset

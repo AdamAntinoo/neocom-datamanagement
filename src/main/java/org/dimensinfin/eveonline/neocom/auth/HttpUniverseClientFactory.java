@@ -10,6 +10,7 @@ import okhttp3.Cache;
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class HttpUniverseClientFactory {
 	private static final String DEFAULT_ESI_LOGIN_BACKEND_HOST = "login.eveonline.com";
@@ -18,7 +19,9 @@ public class HttpUniverseClientFactory {
 	private Integer timeoutSeconds = 60;
 	private File cacheStoreFile;
 	private Long cacheSizeBytes = StorageUnits.GIGABYTES.toBytes( 1 );
+	private boolean logging = false;
 
+	// - C O N S T R U C T O R S
 	private HttpUniverseClientFactory() {}
 
 	private OkHttpClient clientBuilder() {
@@ -36,6 +39,9 @@ public class HttpUniverseClientFactory {
 										.add( DEFAULT_ESI_LOGIN_BACKEND_HOST, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=" )
 										.add( DEFAULT_ESI_LOGIN_BACKEND_HOST, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=" )
 										.build() );
+		if (this.logging)
+			universeClientBuilder.addInterceptor( new HttpLoggingInterceptor()
+					.setLevel( HttpLoggingInterceptor.Level.BASIC ) );
 		// Additional characteristics
 		if (null != this.cacheStoreFile) // If the cache file is not set then deactivate the cache
 			universeClientBuilder.cache( new Cache( this.cacheStoreFile, this.cacheSizeBytes ) );
@@ -46,9 +52,15 @@ public class HttpUniverseClientFactory {
 	public static class Builder {
 		private HttpUniverseClientFactory onConstruction;
 
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new HttpUniverseClientFactory();
 		}
+
+		public OkHttpClient generate() {
+			return this.onConstruction.clientBuilder();
+		}
+
 		public HttpUniverseClientFactory.Builder optionalAgent( final String agent ) {
 			Objects.requireNonNull( agent );
 			this.onConstruction.agent = agent;
@@ -67,14 +79,15 @@ public class HttpUniverseClientFactory {
 			return this;
 		}
 
+		public HttpUniverseClientFactory.Builder optionalLogging( final boolean logging ) {
+			this.onConstruction.logging = logging;
+			return this;
+		}
+
 		public HttpUniverseClientFactory.Builder optionalTimeout( final Integer seconds ) {
 			if (null != seconds)
 				this.onConstruction.timeoutSeconds = seconds;
 			return this;
-		}
-
-		public OkHttpClient generate() {
-			return this.onConstruction.clientBuilder();
 		}
 	}
 }
