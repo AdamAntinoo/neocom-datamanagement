@@ -35,23 +35,46 @@ public class MemoryStoreCacheService implements IStoreCache {
 
 	@Override
 	public Single<GetUniverseCategoriesCategoryIdOk> accessCategory( final int categoryId ) {
-		if (!this.typeCategoryStore.containsKey( categoryId ))
-			this.typeCategoryStore.put( categoryId, this.downloadCategory( categoryId ) );
-		return Single.just( this.typeCategoryStore.get( categoryId ) );
+		if (this.typeCategoryStore.containsKey( categoryId ))
+			return Single.just( this.typeCategoryStore.get( categoryId ) );
+		else {
+			final GetUniverseCategoriesCategoryIdOk category = this.downloadCategory( categoryId );
+			if (null != category) {
+				this.typeCategoryStore.put( categoryId, category );
+				return Single.just( category );
+			} else return Single.never();
+		}
 	}
 
+	/**
+	 * Warning - Make sure the downloaded object that it is inserted on the list is valid.
+	 *
+	 * @param groupId the requested group id
+	 */
 	@Override
 	public Single<GetUniverseGroupsGroupIdOk> accessGroup( final int groupId ) {
-		if (!this.typeGroupStore.containsKey( groupId ))
-			this.typeGroupStore.put( groupId, this.downloadGroup( groupId ) );
-		return Single.just( this.typeGroupStore.get( groupId ) );
+		if (this.typeGroupStore.containsKey( groupId ))
+			return Single.just( this.typeGroupStore.get( groupId ) );
+		else {
+			final GetUniverseGroupsGroupIdOk group = this.downloadGroup( groupId );
+			if (null != group) {
+				this.typeGroupStore.put( groupId, group );
+				return Single.just( group );
+			} else return Single.never();
+		}
 	}
 
 	@Override
 	public Single<GetUniverseTypesTypeIdOk> accessType( final int typeId ) {
-		if (!this.esiTypeStore.containsKey( typeId ))
-			this.esiTypeStore.put( typeId, this.downloadEsiType( typeId ) );
-		return Single.just( this.esiTypeStore.get( typeId ) );
+		if (this.esiTypeStore.containsKey( typeId ))
+			return Single.just( this.esiTypeStore.get( typeId ) );
+		else {
+			final GetUniverseTypesTypeIdOk type = this.downloadEsiType( typeId );
+			if (null != type) {
+				this.esiTypeStore.put( typeId, type );
+				return Single.just( type );
+			} else return Single.never();
+		}
 	}
 
 	public GetUniverseTypesTypeIdOk downloadEsiType( final int typeId ) {
