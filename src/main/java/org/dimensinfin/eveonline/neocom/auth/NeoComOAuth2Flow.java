@@ -91,9 +91,9 @@ public class NeoComOAuth2Flow {
 			serviceGetAccessToken = new Retrofit.Builder()
 					.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
 					.addConverterFactory( JacksonConverterFactory.create() )
-					.client( new OkHttpClient.Builder()
-							.connectionSpecs( Arrays.asList( ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS ) )
-							.build() )
+//					.client( new OkHttpClient.Builder()
+//							.connectionSpecs( Arrays.asList( ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS ) )
+//							.build() )
 					.build()
 					.create( GetAccessToken.class );
 		} catch (final RuntimeException rte) {
