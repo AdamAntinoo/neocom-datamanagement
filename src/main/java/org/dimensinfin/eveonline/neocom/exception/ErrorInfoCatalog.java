@@ -10,6 +10,10 @@ import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.MINING_R
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.RETROFIT_CACHE_FILE_SYSTEM_ERRORCODE;
 
 public enum ErrorInfoCatalog {
+	AUTHENTICATION_FAILURE_ESI_SSO(
+			AUTHENTICATION_VERIFICATION_ERRORCODE,
+			"The access token conversion failed at ESI SSO with message - {0}"
+	),
 	PILOT_NOT_FOUND(
 			CHARACTER_SERVICE_ERRORCODE,
 			"The pilot with identifier {0} is not found on the ESI repository."

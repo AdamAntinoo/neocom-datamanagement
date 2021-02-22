@@ -5,8 +5,8 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
-import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.utility.Base64;
 import org.dimensinfin.logging.LogWrapper;
@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import static org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog.AUTHENTICATION_FAILURE_ESI_SSO;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_LOGIN_HOST;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
@@ -85,17 +86,25 @@ public class NeoComOAuth2Flow {
 		final String authorizationClientid = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
 		final String authorizationSecretKey = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY );
 		final String authorizationContentType = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE );
+		final boolean tlsAuthentication = false;
 		// Get the request.
 		GetAccessToken serviceGetAccessToken;
 		try {
-			serviceGetAccessToken = new Retrofit.Builder()
-					.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
-					.addConverterFactory( JacksonConverterFactory.create() )
-//					.client( new OkHttpClient.Builder()
-//							.connectionSpecs( Arrays.asList( ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS ) )
-//							.build() )
-					.build()
-					.create( GetAccessToken.class );
+			if (tlsAuthentication)
+				serviceGetAccessToken = new Retrofit.Builder()
+						.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
+						.addConverterFactory( JacksonConverterFactory.create() )
+						.client( new OkHttpClient.Builder()
+								.connectionSpecs( Arrays.asList( ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS ) )
+								.build() )
+						.build()
+						.create( GetAccessToken.class );
+			else
+				serviceGetAccessToken = new Retrofit.Builder()
+						.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
+						.addConverterFactory( JacksonConverterFactory.create() )
+						.build()
+						.create( GetAccessToken.class );
 		} catch (final RuntimeException rte) {
 			// Url can miss the protocol name so silently the system fails.
 			LogWrapper.error( rte );
@@ -106,7 +115,6 @@ public class NeoComOAuth2Flow {
 		final String peckString = authorizationClientid + ":" + authorizationSecretKey;
 		String peck = Base64.encodeBytes( peckString.getBytes() ).replaceAll( "\n", "" );
 		store.setPeck( peck );
-		final String esiAuthenticationServerLoginUrl = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL );
 		final Call<TokenTranslationResponse> request = serviceGetAccessToken.getAccessToken(
 				authorizationContentType,
 				ACCESS_TOKEN_HOST_HEADER, // This is the esi login server for /oauth/token call. WARNING do not add the protocol.
@@ -123,12 +131,13 @@ public class NeoComOAuth2Flow {
 			} else {
 				LogWrapper.info( MessageFormat.format( "Response is {0} - {1}.",
 						response.code(),
-						response.message() ) );
+						response.errorBody().string() ) );
+				throw new NeoComRuntimeException( AUTHENTICATION_FAILURE_ESI_SSO.getErrorMessage( response.errorBody().string() ) );
 			}
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
+			throw new NeoComRuntimeException( ioe );
 		}
-		return null;
 	}
 
 	private VerifyCharacterResponse getVerifyCharacterResponse( final TokenVerification store ) {
