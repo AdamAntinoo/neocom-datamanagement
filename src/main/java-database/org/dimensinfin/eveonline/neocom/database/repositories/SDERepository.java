@@ -4,10 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
@@ -88,6 +87,27 @@ public class SDERepository {
 			LogWrapper.exit();
 		}
 		return productTypeId;
+	}
+
+	public String accessSDEVersion() {
+		final String SELECT_VERSION = "SELECT versionNumber " +
+				"FROM version " +
+				"WHERE id = 'CURRENT-VERSION'";
+		final int VERSION_COLINDEX = 1;
+		String version = "UNDEFINED";
+		try {
+			final ISDEStatement cursor = this.sdeDatabaseService
+					.constructStatement( SELECT_VERSION, new String[]{} );
+			while (cursor.moveToNext()) {
+				version = cursor.getString( VERSION_COLINDEX );
+			}
+			cursor.close();
+		} catch (final SQLException sqle) {
+			LogWrapper.error( sqle );
+		} finally {
+			LogWrapper.exit();
+		}
+		return version;
 	}
 
 	public List<Resource> accessSkillRequired( final int itemId ) {

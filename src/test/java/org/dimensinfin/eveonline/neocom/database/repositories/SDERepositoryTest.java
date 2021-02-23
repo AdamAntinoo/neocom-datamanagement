@@ -43,6 +43,26 @@ public class SDERepositoryTest {
 	}
 
 	@Test
+	public void accessSDEVersion() throws SQLException {
+		// Given
+		final String TEST_SDE_VERSION = "-TEST-VERSION-";
+		final ISDEStatement statement = Mockito.mock( ISDEStatement.class );
+		// When
+		Mockito.when( this.sdeDatabaseService.constructStatement( Mockito.anyString(), Mockito.any( String[].class ) ) )
+				.thenReturn( statement );
+		Mockito.when( statement.getString( Mockito.anyInt() ) ).thenReturn( TEST_SDE_VERSION );
+		Mockito.when( statement.moveToNext() )
+				.thenReturn( true )
+				.thenReturn( false );
+		// Test
+		final SDERepository sdeRepository = new SDERepository( this.sdeDatabaseService, this.resourceFactory );
+		final String obtained = sdeRepository.accessSDEVersion();
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertEquals( TEST_SDE_VERSION, obtained );
+	}
+
+	@Test
 	public void accessSkillRequired() throws SQLException {
 		// Given
 		final ISDEStatement statement = Mockito.mock( ISDEStatement.class );
