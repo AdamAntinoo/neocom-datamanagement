@@ -1,4 +1,10 @@
 [CLASSES TO COMPLETE UNIT TESTING]
+* RedisDataStoreImplementation
+* MarketService
+* GetMarketsRegionIdOrdersToMarketOrderConverter*
+* MarketData
+* MarketOrder
+* PricedResource
 * MiningExtraction
 * LoyaltyOfferEntity
 * NeoComRuntimeException
