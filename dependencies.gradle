@@ -17,6 +17,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'com.annimon:stream:1.1.9' // Android compatible streams
     implementation 'com.google.inject:guice:4.2.3' // Google injection library compatible with Android
+    implementation 'org.redisson:redisson:3.15.0' // Redisson Redis client to implements second level cache
+
 }
 
 // - D I M E N S I N F I N

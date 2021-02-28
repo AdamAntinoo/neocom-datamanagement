@@ -1,6 +1,5 @@
 package org.dimensinfin.eveonline.neocom.market.service;
 
-import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +37,9 @@ import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
  * @since 0.20.0
  */
 public class MarketService {
+	public interface LowestSellOrderPassThrough {
+		MarketOrder getLowestSellOrder( final Integer regionId, final Integer typeId );
+	}
 	public static final Integer PREDEFINED_MARKET_REGION_ID = 10000002; // This is the Jita region 'The Forge'
 	public static final Long PREDEFINED_MARKET_HUB_STATION_ID = 60003760L; // This if the Jita 4-4 main trade hub at Caldari Navy Assembly Plant
 	public static final Double MARKET_DEEP_RANGE = 1.05; // The width that will make market prices as 'equivalent'. Represents a 5%
@@ -156,25 +158,15 @@ public class MarketService {
 	private final IDataStore dataStore;
 	private final LocationCatalogService locationCatalogService;
 	private final ESIDataService esiDataService;
-//	private final Method getLowestSellOrderCallback;
-
-	public interface MyInterface {
-		MarketOrder getLowestSellOrder( final Integer regionId, final Integer typeId );
-	}
 
 	// - C O N S T R U C T O R S
 	@Inject
 	public MarketService( @NotNull @Named(DMServicesDependenciesModule.DATA_STORE) final IDataStore dataStore,
 	                      @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
-	                      @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) final ESIDataService esiDataService ) throws NoSuchMethodException {
+	                      @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) final ESIDataService esiDataService ) {
 		this.dataStore = dataStore;
 		this.locationCatalogService = locationCatalogService;
 		this.esiDataService = esiDataService;
-		// Prepare pass-through methods
-//		final Class[] parameterTypes = new Class[2];
-//		parameterTypes[0] = Integer.class;
-//		parameterTypes[1] = Integer.class;
-//		this.getLowestSellOrderCallback = MarketService.class.getMethod( "getLowestSellOrder", parameterTypes[0], parameterTypes[1] );
 	}
 
 	/**
@@ -211,20 +203,15 @@ public class MarketService {
 	 */
 	@Cacheable
 	public double getLowestSellPrice( final Integer regionId, final Integer typeId ) {
-//		final Class[] parameterTypes = new Class[2];
-//		parameterTypes[0] = Integer.class;
-//		parameterTypes[1] = Integer.class;
-//		Method getLowestSellOrderCallback = MarketService.class.getMethod( "getLowestSellOrder", parameterTypes[0], parameterTypes[1] );
 		final MarketOrder order = this.dataStore.accessLowestSellOrder( regionId, typeId,
-				(rid, tid) -> this.getLowestSellOrder( regionId, typeId)
-//				getLowestSellOrderCallback( regionId, typeId )
+				( rid, tid ) -> this.getLowestSellOrder( regionId, typeId )
 		);
 		if (null != order) return order.getPrice();
 		else return 0.0;
 	}
 
 	/**
-	 * Creates a new <code>MarketData</code> record to consolidate the available market data for the requested iten at the requested region.
+	 * Creates a new <code>MarketData</code> record to consolidate the available market data for the requested item at the requested region.
 	 *
 	 * @param regionId the target region where to search for the market data.
 	 * @param typeId   the market item type id to retrieve the data.
@@ -232,7 +219,7 @@ public class MarketService {
 	 */
 	public MarketData getMarketConsolidatedByRegion4ItemId( final Integer regionId, final Integer typeId ) {
 		final Station regionHub = this.getRegionMarketHub( regionId );
-		final List<GetMarketsRegionIdOrders200Ok> sellOrders = this.getMarketHubSellOrders4Id( regionId, typeId );
+		final List<GetMarketsRegionIdOrders200Ok> sellOrders = this.getMarketHubSellOrders4Id( regionHub, typeId );
 		final List<GetMarketsRegionIdOrders200Ok> buyOrders = this.getMarketHubBuyOrders4Id( regionHub, typeId );
 		return new MarketData.Builder()
 				.withTypeId( typeId )
@@ -247,14 +234,13 @@ public class MarketService {
 				.build();
 	}
 
-	public List<GetMarketsRegionIdOrders200Ok> getMarketHubSellOrders4Id( final int regionId, final Integer itemId ) {
-		final Station regionHub = this.getRegionMarketHub( regionId );
-		final List<GetMarketsRegionIdOrders200Ok> orders = this.esiDataService.getUniverseMarketOrdersForId( regionId, itemId );
-		final double priceLimit = this.getLowestSellPrice( regionId, itemId ) * MARKET_DEEP_RANGE;
+	public List<GetMarketsRegionIdOrders200Ok> getMarketHubSellOrders4Id( final Station hub, final Integer itemId ) {
+		final List<GetMarketsRegionIdOrders200Ok> orders = this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId );
+		final double priceLimit = this.getLowestSellPrice( hub.getRegionId(), itemId ) * MARKET_DEEP_RANGE;
 		return orders
 				.stream()
 				.filter( order -> !order.getIsBuyOrder() ) // Filter only SELL orders
-				.filter( order -> order.getSystemId().equals( regionHub.getSolarSystemId() ) ) // Filter only orders for the hub system
+				.filter( order -> order.getSystemId().equals( hub.getSolarSystemId() ) ) // Filter only orders for the hub system
 				.filter( order -> order.getPrice() <= priceLimit )
 				.sorted( Comparator.comparingDouble( GetMarketsRegionIdOrders200Ok::getPrice ) )
 				.collect( Collectors.toList() );
@@ -275,14 +261,6 @@ public class MarketService {
 		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
 		return (Station) location;
 	}
-	//	private double getLowestSellPrice( final List<GetMarketsRegionIdOrders200Ok> orders, final int targetSystem ) {
-	//		double minPrice = Double.MAX_VALUE;
-	//		for (final GetMarketsRegionIdOrders200Ok order : orders) {
-	//			if ((Boolean.TRUE.equals( order.getIsBuyOrder() )) || (order.getSystemId() != targetSystem)) continue;
-	//			if (order.getPrice() < minPrice) minPrice = order.getPrice();
-	//		}
-	//		return minPrice;
-	//	}
 
 	private List<GetMarketsRegionIdOrders200Ok> getMarketHubBuyOrders4Id( final Station hub, final Integer itemId ) {
 		return this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId )

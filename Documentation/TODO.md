@@ -1,5 +1,4 @@
 [CLASSES TO COMPLETE UNIT TESTING]
-* RedisDataStoreImplementation
 * MarketService
 * GetMarketsRegionIdOrdersToMarketOrderConverter*
 * MarketData

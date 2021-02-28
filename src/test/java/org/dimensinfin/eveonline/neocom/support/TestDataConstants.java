@@ -102,4 +102,22 @@ public class TestDataConstants {
 		public static final Long TEST_PILOT_SKILL_POINTS = 1436765L;
 		public static final Double TEST_PILOT_WALLET_BALANCE = 432567.0;
 	}
+
+	public static final class PricedResourceConstants {
+		public static final Integer TEST_RESOURCE_TYPE_ID = 16636;
+		public static final Integer TEST_RESOURCE_QUANTITY = 543;
+		public static final String TEST_RESOURCE_GROUP = "Moon Materials";
+		public static final String TEST_RESOURCE_CATEGORY = "Material";
+		public static final String TEST_RESOURCE_NAME = "Silicates";
+		public static final Double TEST_RESOURCE_VOLUME = 0.5;
+		public static final Double TEST_RESOURCE_PRICE = 76545.98;
+	}
+
+	public static final class MarketOrderConstants {
+		public static final Long TEST_MARKET_ORDER_ID = 4275798L;
+		public static final Integer TEST_MARKET_ORDER_TYPE_ID = 16636;
+		public static final  Double	TEST_MARKET_ORDER_PRICE = 345.98;
+		public static final Integer TEST_MARKET_ORDER_VOLUME_REMAIN = 100;
+		public static final Integer TEST_MARKET_ORDER_VOLUME_TOTAL = 200;
+	}
 }
