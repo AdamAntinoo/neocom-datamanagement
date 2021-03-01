@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.domain;
+package org.dimensinfin.eveonline.neocom.industry.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
-import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.dimensinfin.eveonline.neocom.domain.EsiType.ESI_ICON_URL_PREFIX;
@@ -140,7 +139,7 @@ public class ResourceTest {
 				.build()
 				.setQuantity( TEST_RESOURCE_QUANTITY );
 		// Assertions
-		final String expected = "{\"baseQty\":543,\"name\":\"Silicates\",\"typeId\":16636,\"quantity\":543,\"volume\":0.5,\"price\":0.0,\"jsonClass\":\"Resource\"}";
+		final String expected = "{\"baseQty\":543,\"name\":\"Silicates\",\"typeId\":16636,\"quantity\":543,\"volume\":0.5,\"jsonClass\":\"Resource\"}";
 		Assertions.assertEquals( expected, resource.toString() );
 	}
 }
