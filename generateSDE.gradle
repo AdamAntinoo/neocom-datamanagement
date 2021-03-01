@@ -1,31 +1,60 @@
 // - T A S K S
 ext {
-    sdeRepositoryProjectPath = "$projectDir/src/main/sh"
+    sdeRepositoryProjectPath = "$projectDir/src/integration/sh"
     propertiesPath = "$projectDir/src/main/resources/properties"
     assetsPath = "$projectDir/src/main/resources"
 }
-// Create the sde setup version data with the configured version contents.
-task generateVersionSQL() {
-    group = "build"
-    doLast {
-        println '> Task :NeoCom.DataManagement:generateVersionSQL: generating configuration version file...'
-        new File("$sdeRepositoryProjectPath/setVersion.sql").text = "INSERT INTO `version` VALUES (\'$SDEDatabaseVersion\');"
-    }
+// DOWNLOADSDEDATA
+// - Retrieve from 'fuzzwork' the selected set of SDE files to be used on the SDE load.
+task downloadSDEData(type: Exec) {
+    group = "integration"
+    inputs.property("SDEDatabaseVersion", System.getenv().getOrDefault("SDEDatabaseVersion", ""))
+    inputs.files('src/integration/sh/setVersion.sql')
+            .withPropertyName('SDEVersionName')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.files(layout.projectDirectory.dir('src/integration/sh/setVersion.sql'))
+            .withPropertyName('outputVersion')
+    println "> Task :NeoCom.DataManagement:downloadSDEData: downloading updated SDE contents..."
+    println "> Task :NeoCom.DataManagement:downloadSDEData: $SDEDatabaseVersion"
+    new File("$sdeRepositoryProjectPath/setVersion.sql").text = "INSERT INTO `version` VALUES ('CURRENT-VERSION', \'$SDEDatabaseVersion\');"
+    workingDir "$projectDir/src/integration/sh"
+    commandLine 'bash', './update-sde.sh'
 }
-task generateVersionProperty() {
-    group = "build"
-    doLast {
-        println '> Task :NeoCom.DataManagement:generateVersionProperty: generating version property file...'
-        new File("$propertiesPath/sderepository.properties").text = "P.sde.repository.version=$SDEDatabaseVersion"
-    }
-}
-// Generate the SDE database if does not exist or the version does not match
+
 task generateSDEDatabase(type: Exec) {
-    group = "build"
-    println '> Task :NeoCom.DataManagement:generateSDEDatabase: generating new sde database...'
-    workingDir "$sdeRepositoryProjectPath"
-    commandLine 'sh', './create-sde.sh'
+    group = "integration"
+    inputs.files(fileTree('src/integration/sh/downloads'))
+            .withPropertyName('csvTableContents')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.file(layout.projectDirectory.dir('src/integration/resources/sde.db'))
+            .withPropertyName('outputDb')
+    workingDir "$projectDir/src/integration/sh"
+//    commandLine 'bash', './update-sde.sh'
+    commandLine 'bash', './install-sde.sh'
 }
+
+// Create the sde setup version data with the configured version contents.
+//task generateVersionSQL() {
+//    group = "build"
+//    doLast {
+//        println '> Task :NeoCom.DataManagement:generateVersionSQL: generating configuration version file...'
+//        new File("$sdeRepositoryProjectPath/setVersion.sql").text = "INSERT INTO `version` VALUES (\'$SDEDatabaseVersion\');"
+//    }
+//}
+//task generateVersionProperty() {
+//    group = "build"
+//    doLast {
+//        println '> Task :NeoCom.DataManagement:generateVersionProperty: generating version property file...'
+//        new File("$propertiesPath/sderepository.properties").text = "P.sde.repository.version=$SDEDatabaseVersion"
+//    }
+//}
+// Generate the SDE database if does not exist or the version does not match
+//task generateSDEDatabase(type: Exec) {
+//    group = "build"
+//    println '> Task :NeoCom.DataManagement:generateSDEDatabase: generating new sde database...'
+//    workingDir "$sdeRepositoryProjectPath"
+//    commandLine 'sh', './create-sde.sh'
+//}
 //task copySDEDatabase(type: Copy) {
 //    group = "publishing"
 //    doLast {
@@ -34,6 +63,6 @@ task generateSDEDatabase(type: Exec) {
 //        into "$assetsPath"
 //    }
 //}
-generateSDEDatabase.dependsOn generateVersionSQL
+//generateSDEDatabase.dependsOn generateVersionSQL
 //copySDEDatabase.dependsOn generateSDEDatabase
 //build.dependsOn copySDEDatabase
