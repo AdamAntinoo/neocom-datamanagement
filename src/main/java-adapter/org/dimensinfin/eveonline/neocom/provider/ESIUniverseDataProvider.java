@@ -12,38 +12,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.dimensinfin.annotation.TimeElapsed;
-import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
-import org.dimensinfin.eveonline.neocom.esiswagger.api.AllianceApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CorporationApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsPrices200Ok;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseAncestries200Ok;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseBloodlines200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRaces200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
-import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ACCEPT_LANGUAGE;
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 
 public class ESIUniverseDataProvider {
 	public static final String EN_US = "en-us";
 	protected static final Logger logger = LoggerFactory.getLogger( ESIUniverseDataProvider.class );
 	// - I N T E R N A L   C A C H E S
+	@Deprecated
 	private static final Map<Integer, GetMarketsPrices200Ok> marketDefaultPrices = new HashMap<>( 1200 );
-	private static final Map<Integer, GetUniverseRaces200Ok> racesCache = new HashMap<>();
-	private static final Map<Integer, GetUniverseAncestries200Ok> ancestriesCache = new HashMap<>();
-	private static final Map<Integer, GetUniverseBloodlines200Ok> bloodLinesCache = new HashMap<>();
 	// - C O M P O N E N T S
 	protected IConfigurationService configurationProvider;
 	protected IFileSystem fileSystemAdapter;
@@ -52,38 +41,6 @@ public class ESIUniverseDataProvider {
 
 	// - C O N S T R U C T O R S
 	protected ESIUniverseDataProvider() {}
-
-	// - G E T T E R S   &   S E T T E R S
-	// - A L L I A N C E   P U B L I C   I N F O R M A T I O N
-	public GetAlliancesAllianceIdOk getAlliancesAllianceId( final int identifier ) {
-		try {
-			final Response<GetAlliancesAllianceIdOk> allianceResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( AllianceApi.class )
-					.getAlliancesAllianceId( identifier, DEFAULT_ESI_SERVER, null )
-					.execute();
-			if (allianceResponse.isSuccessful())
-				return allianceResponse.body();
-		} catch (final IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return null;
-	}
-
-	public GetAlliancesAllianceIdIconsOk getAlliancesAllianceIdIcons( final int identifier ) {
-		try {
-			final Response<GetAlliancesAllianceIdIconsOk> allianceResponse = this.retrofitService
-					.accessUniverseConnector()
-					.create( AllianceApi.class )
-					.getAlliancesAllianceIdIcons( identifier, DEFAULT_ESI_SERVER, null )
-					.execute();
-			if (allianceResponse.isSuccessful())
-				return allianceResponse.body();
-		} catch (IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return null;
-	}
 
 	// - C O R P O R A T I O N   P U B L I C   I N F O R M A T I O N
 	public GetCorporationsCorporationIdOk getCorporationsCorporationId( final int identifier ) {
@@ -131,20 +88,6 @@ public class ESIUniverseDataProvider {
 		return this.storeCacheManager.accessGroup( groupId ).blockingGet();
 	}
 
-	// - A N C E S T R Y   D A T A
-	@RequiresNetwork
-	public GetUniverseAncestries200Ok searchSDEAncestry( final int identifier ) {
-		if (ancestriesCache.isEmpty()) // First download the family data.
-			this.downloadPilotFamilyData();
-		return ancestriesCache.get( identifier );
-	}
-
-	@RequiresNetwork
-	public GetUniverseBloodlines200Ok searchSDEBloodline( final int identifier ) {
-		if (bloodLinesCache.isEmpty()) // First download the family data.
-			this.downloadPilotFamilyData();
-		return bloodLinesCache.get( identifier );
-	}
 
 	// - S D E   I N T E R N A L   D A T A
 	public double searchSDEMarketPrice( final int typeId ) {
@@ -155,77 +98,15 @@ public class ESIUniverseDataProvider {
 		else return -1.0;
 	}
 
-	@RequiresNetwork
-	public GetUniverseRaces200Ok searchSDERace( final int identifier ) {
-		if (bloodLinesCache.isEmpty()) // First download the family data.
-			this.downloadPilotFamilyData();
-		return racesCache.get( identifier );
-	}
-
 	private void downloadItemPrices() {
 		// Initialize and process the list of market process form the ESI full market data.
 		final List<GetMarketsPrices200Ok> marketPrices = this.getUniverseMarketsPrices();
 		logger.info( ">> [ESIDataProvider.downloadItemPrices]> Download market prices: {} items", marketPrices.size() );
-		for (GetMarketsPrices200Ok price : marketPrices) {
+		for (final GetMarketsPrices200Ok price : marketPrices) {
 			marketDefaultPrices.put( price.getTypeId(), price );
 		}
 	}
 
-	private synchronized void downloadPilotFamilyData() {
-		// Download race, bloodline and other pilot data.
-		final List<GetUniverseRaces200Ok> racesList = this.getUniverseRaces( DEFAULT_ESI_SERVER );
-		LogWrapper.info( MessageFormat.format( "Download race: {0} items", racesList.size() ) );
-		for (GetUniverseRaces200Ok race : racesList) {
-			racesCache.put( race.getRaceId(), race );
-		}
-		final List<GetUniverseAncestries200Ok> ancestriesList = this.getUniverseAncestries( DEFAULT_ESI_SERVER );
-		LogWrapper.info( MessageFormat.format( "Download ancestries: {0} items", ancestriesList.size() ) );
-		for (GetUniverseAncestries200Ok ancestry : ancestriesList) {
-			ancestriesCache.put( ancestry.getId(), ancestry );
-		}
-		final List<GetUniverseBloodlines200Ok> bloodLineList = this.getUniverseBloodlines( DEFAULT_ESI_SERVER );
-		LogWrapper.info( MessageFormat.format( "Download blood lines: {0} items", bloodLineList.size() ) );
-		for (GetUniverseBloodlines200Ok bloodLine : bloodLineList) {
-			bloodLinesCache.put( bloodLine.getBloodlineId(), bloodLine );
-		}
-	}
-
-	@TimeElapsed
-	private List<GetUniverseAncestries200Ok> getUniverseAncestries( final String datasource ) {
-		try {
-			final Response<List<GetUniverseAncestries200Ok>> ancestriesList = this.retrofitService
-					.accessUniverseConnector()
-					.create( UniverseApi.class )
-					.getUniverseAncestries(
-							DEFAULT_ACCEPT_LANGUAGE,
-							datasource, null, EN_US )
-					.execute();
-			if (ancestriesList.isSuccessful()) return ancestriesList.body();
-			else return new ArrayList<>();
-		} catch (final IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return new ArrayList<>();
-	}
-
-	@TimeElapsed
-	private List<GetUniverseBloodlines200Ok> getUniverseBloodlines( final String datasource ) {
-		try {
-			final Response<List<GetUniverseBloodlines200Ok>> bloodLinesList = this.retrofitService
-					.accessUniverseConnector()
-					.create(
-							UniverseApi.class )
-					.getUniverseBloodlines(
-							DEFAULT_ACCEPT_LANGUAGE,
-							datasource, null, EN_US )
-					.execute();
-			if (bloodLinesList.isSuccessful()) return bloodLinesList.body();
-			else return new ArrayList<>();
-		} catch (final IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return new ArrayList<>();
-	}
 
 	/**
 	 * Go to the ESI api to get the list of market prices. This method does not use other server than the Tranquility
@@ -249,25 +130,9 @@ public class ESIUniverseDataProvider {
 		return new ArrayList<>();
 	}
 
-	@TimeElapsed
-	private List<GetUniverseRaces200Ok> getUniverseRaces( final String datasource ) {
-		try {
-			final Response<List<GetUniverseRaces200Ok>> racesList = this.retrofitService
-					.accessUniverseConnector()
-					.create( UniverseApi.class )
-					.getUniverseRaces( DEFAULT_ACCEPT_LANGUAGE, datasource, null, EN_US )
-					.execute();
-			if (racesList.isSuccessful()) return racesList.body();
-			else return new ArrayList<>();
-		} catch (final IOException ioe) {
-			LogWrapper.error( ioe );
-		}
-		return new ArrayList<>();
-	}
-
 	// - B U I L D E R
 	public static class Builder {
-		private ESIUniverseDataProvider onConstruction;
+		private final ESIUniverseDataProvider onConstruction;
 
 		// - C O N S T R U C T O R S
 		public Builder() {

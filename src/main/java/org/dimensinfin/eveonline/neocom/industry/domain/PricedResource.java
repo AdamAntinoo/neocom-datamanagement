@@ -34,7 +34,7 @@ public class PricedResource extends Resource {
 		}
 
 		public PricedResource.Builder withCategory( final GetUniverseCategoriesCategoryIdOk category ) {
-			this.onConstruction.category = NeoObjects.requireNonNull( category );
+			this.onConstruction.category = NeoObjects.requireNonNull( category, "Null Esi Category while constructing PricedResource" );
 			return this;
 		}
 

@@ -19,9 +19,9 @@ import com.jcabi.aspects.Loggable;
 import org.jetbrains.annotations.NonNls;
 
 import org.dimensinfin.annotation.TimeElapsed;
+import org.dimensinfin.eveonline.neocom.annotation.RequiresNetwork;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
-import org.dimensinfin.eveonline.neocom.domain.space.Station;
+import org.dimensinfin.eveonline.neocom.esiswagger.api.AllianceApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.AssetsApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.CharacterApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.IndustryApi;
@@ -30,7 +30,10 @@ import org.dimensinfin.eveonline.neocom.esiswagger.api.LoyaltyApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.MarketApiV2;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.SkillsApi;
+import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.WalletApi;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdBlueprints200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
@@ -42,7 +45,10 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetLoyaltyStoresCorporationIdOffers200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdHistory200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrders200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseAncestries200Ok;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseBloodlines200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRaces200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
@@ -57,6 +63,10 @@ public class ESIDataService extends ESIDataProvider {
 	@NonNls
 	private static final ResourceBundle i18Bundle = ResourceBundle.getBundle( "i18Properties" );
 	private static final String PILOT_IDENTIFIER_LOG_LITERAL = i18Bundle.getString( "pilot.identifier.literal" );
+	private static final Map<Integer, GetUniverseRaces200Ok> racesCache = new HashMap<>();
+	private static final Map<Integer, GetUniverseAncestries200Ok> ancestriesCache = new HashMap<>();
+	private static final Map<Integer, GetUniverseBloodlines200Ok> bloodLinesCache = new HashMap<>();
+
 	// - C O N S T R U C T O R S
 	@Inject
 	public ESIDataService( @NotNull @Named(DMServicesDependenciesModule.ICONFIGURATION_SERVICE) final IConfigurationService configurationService,
@@ -69,6 +79,37 @@ public class ESIDataService extends ESIDataProvider {
 		this.storeCacheManager = storeCacheManager;
 		this.retrofitService = retrofitService;
 		this.locationCatalogService = locationCatalogService;
+	}
+
+	// - A L L I A N C E   P U B L I C   I N F O R M A T I O N
+	public GetAlliancesAllianceIdOk getAlliancesAllianceId( final int identifier ) {
+		try {
+			final Response<GetAlliancesAllianceIdOk> allianceResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( AllianceApi.class )
+					.getAlliancesAllianceId( identifier, DEFAULT_ESI_SERVER, null )
+					.execute();
+			if (allianceResponse.isSuccessful())
+				return allianceResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	public GetAlliancesAllianceIdIconsOk getAlliancesAllianceIdIcons( final int identifier ) {
+		try {
+			final Response<GetAlliancesAllianceIdIconsOk> allianceResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( AllianceApi.class )
+					.getAlliancesAllianceIdIcons( identifier, DEFAULT_ESI_SERVER, null )
+					.execute();
+			if (allianceResponse.isSuccessful())
+				return allianceResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
 	}
 
 	// - C H A R A C T E R   P U B L I C   I N F O R M A T I O N
@@ -93,7 +134,7 @@ public class ESIDataService extends ESIDataProvider {
 	@TimeElapsed
 	public List<GetCharactersCharacterIdAssets200Ok> getCharactersCharacterIdAssets( final Credential credential ) {
 		LogWrapper.enter( MessageFormat.format( CREDENTIAL_LOG_LITERAL, credential.toString() ) );
-		List<GetCharactersCharacterIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
+		final List<GetCharactersCharacterIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
 			boolean morePages = true;
@@ -131,7 +172,7 @@ public class ESIDataService extends ESIDataProvider {
 	@Cacheable(lifetime = 3600, unit = TimeUnit.SECONDS)
 	public List<GetCharactersCharacterIdBlueprints200Ok> getCharactersCharacterIdBlueprints( final Credential credential ) {
 		LogWrapper.enter( MessageFormat.format( CREDENTIAL_LOG_LITERAL, credential.toString() ) );
-		List<GetCharactersCharacterIdBlueprints200Ok> returnBlueprintList = new ArrayList<>( 1000 );
+		final List<GetCharactersCharacterIdBlueprints200Ok> returnBlueprintList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
 			boolean morePages = true;
@@ -313,7 +354,7 @@ public class ESIDataService extends ESIDataProvider {
 
 	@TimeElapsed
 	public List<GetMarketsRegionIdHistory200Ok> getMarketsHistoryForRegion( final Integer regionId, final Integer typeId ) {
-		LogWrapper.enter( MessageFormat.format( "RegionId: {0,number,integer} - Type: {1, number, integer}", regionId , typeId) );
+		LogWrapper.enter( MessageFormat.format( "RegionId: {0,number,integer} - Type: {1, number, integer}", regionId, typeId ) );
 		try {
 			final Response<List<GetMarketsRegionIdHistory200Ok>> marketHistoryResponse = this.retrofitService
 					.accessUniverseConnector()
@@ -330,22 +371,6 @@ public class ESIDataService extends ESIDataProvider {
 		}
 		return new ArrayList<>();
 	}
-
-//	/**
-//	 * Searches on a predefined table for the match on the Region identifier. This reference table will store the preferred Market Hub for the
-//	 * selected region. If the region value of not found on the reference table then the spacial Jita market is selected as the region hub.
-//	 *
-//	 * There is no check on the type of location that should be reported. If the data table is wrong then there should be a runtime exception.
-//	 *
-//	 * @param regionId the target region to search for the market hub.
-//	 * @return the region's selected market hub predefined on the application. The returned value is a complete <code>Station</code> location record.
-//	 */
-//	public Station getRegionMarketHub( final int regionId ) {
-//		Long hit = regionMarketHubReferenceTable.get( regionId );
-//		if (null == hit) hit = PREDEFINED_MARKET_HUB_STATION_ID;
-//		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
-//		return (Station) location;
-//	}
 
 	// - L O C A T I O N   D E L E G A T I O N
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
@@ -399,5 +424,98 @@ public class ESIDataService extends ESIDataProvider {
 
 	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
 		return this.locationCatalogService.getUniverseSystemById( systemId );
+	}
+
+	@RequiresNetwork
+	public GetUniverseAncestries200Ok searchSDEAncestry( final int identifier ) {
+		if (ancestriesCache.isEmpty()) // First download the family data.
+			this.downloadPilotFamilyData();
+		return ancestriesCache.get( identifier );
+	}
+
+	@RequiresNetwork
+	public GetUniverseBloodlines200Ok searchSDEBloodline( final int identifier ) {
+		if (bloodLinesCache.isEmpty()) // First download the family data.
+			this.downloadPilotFamilyData();
+		return bloodLinesCache.get( identifier );
+	}
+
+	@RequiresNetwork
+	public GetUniverseRaces200Ok searchSDERace( final int identifier ) {
+		if (bloodLinesCache.isEmpty()) // First download the family data.
+			this.downloadPilotFamilyData();
+		return racesCache.get( identifier );
+	}
+
+	private synchronized void downloadPilotFamilyData() {
+		// Download race, bloodline and other pilot data.
+		final List<GetUniverseRaces200Ok> racesList = this.getUniverseRaces( DEFAULT_ESI_SERVER );
+		LogWrapper.info( MessageFormat.format( "Download race: {0} items", racesList.size() ) );
+		for (final GetUniverseRaces200Ok race : racesList) {
+			racesCache.put( race.getRaceId(), race );
+		}
+		final List<GetUniverseAncestries200Ok> ancestriesList = this.getUniverseAncestries( DEFAULT_ESI_SERVER );
+		LogWrapper.info( MessageFormat.format( "Download ancestries: {0} items", ancestriesList.size() ) );
+		for (final GetUniverseAncestries200Ok ancestry : ancestriesList) {
+			ancestriesCache.put( ancestry.getId(), ancestry );
+		}
+		final List<GetUniverseBloodlines200Ok> bloodLineList = this.getUniverseBloodlines( DEFAULT_ESI_SERVER );
+		LogWrapper.info( MessageFormat.format( "Download blood lines: {0} items", bloodLineList.size() ) );
+		for (final GetUniverseBloodlines200Ok bloodLine : bloodLineList) {
+			bloodLinesCache.put( bloodLine.getBloodlineId(), bloodLine );
+		}
+	}
+
+	@TimeElapsed
+	private List<GetUniverseAncestries200Ok> getUniverseAncestries( final String datasource ) {
+		try {
+			final Response<List<GetUniverseAncestries200Ok>> ancestriesList = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseAncestries(
+							DEFAULT_ACCEPT_LANGUAGE,
+							datasource, null, EN_US )
+					.execute();
+			if (ancestriesList.isSuccessful()) return ancestriesList.body();
+			else return new ArrayList<>();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return new ArrayList<>();
+	}
+
+	@TimeElapsed
+	private List<GetUniverseBloodlines200Ok> getUniverseBloodlines( final String datasource ) {
+		try {
+			final Response<List<GetUniverseBloodlines200Ok>> bloodLinesList = this.retrofitService
+					.accessUniverseConnector()
+					.create(
+							UniverseApi.class )
+					.getUniverseBloodlines(
+							DEFAULT_ACCEPT_LANGUAGE,
+							datasource, null, EN_US )
+					.execute();
+			if (bloodLinesList.isSuccessful()) return bloodLinesList.body();
+			else return new ArrayList<>();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return new ArrayList<>();
+	}
+
+	@TimeElapsed
+	private List<GetUniverseRaces200Ok> getUniverseRaces( final String datasource ) {
+		try {
+			final Response<List<GetUniverseRaces200Ok>> racesList = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseRaces( DEFAULT_ACCEPT_LANGUAGE, datasource, null, EN_US )
+					.execute();
+			if (racesList.isSuccessful()) return racesList.body();
+			else return new ArrayList<>();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return new ArrayList<>();
 	}
 }

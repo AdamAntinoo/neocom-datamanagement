@@ -7,6 +7,8 @@
 * NeoComOAuthFlow
 * HttpUniverseClientFactory
 * NeoObjects
+* PilotPreferencesRepository
+* PilotPreferencesEntity
 
 * MarketService
 

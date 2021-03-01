@@ -147,20 +147,6 @@ public class ESIUniverseDataProviderTest extends IntegrationEnvironmentDefinitio
 		} );
 	}
 
-	@Test
-	public void getAlliancesAllianceId() {
-		// Test
-		final ESIUniverseDataProvider provider = new ESIUniverseDataProvider.Builder()
-				.withConfigurationProvider( this.itConfigurationProvider )
-				.withFileSystemAdapter( this.itFileSystemAdapter )
-				.withRetrofitFactory( this.itRetrofitFactory )
-				.withStoreCacheManager( this.itStoreCacheManager )
-				.build();
-		final GetAlliancesAllianceIdOk alliance = provider.getAlliancesAllianceId( allianceId );
-		// Assertions
-		Assertions.assertNotNull( alliance );
-		Assertions.assertEquals( "Silent Infinity", alliance.getName() );
-	}
 
 	@Test
 	public void getCorporationsCorporationId() {
