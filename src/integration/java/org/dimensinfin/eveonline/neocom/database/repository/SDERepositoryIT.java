@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.repositories.SDERepository;
-import org.dimensinfin.eveonline.neocom.domain.Resource;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.support.SBSDEDatabaseService;
 

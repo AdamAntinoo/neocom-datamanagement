@@ -1,4 +1,4 @@
-package org.dimensinfin.eveonline.neocom.domain;
+package org.dimensinfin.eveonline.neocom.industry.domain;
 
 import java.util.Objects;
 
@@ -7,10 +7,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.dimensinfin.eveonline.neocom.utility.IAggregableItem;
+import org.dimensinfin.eveonline.neocom.domain.EsiType;
+import org.dimensinfin.eveonline.neocom.domain.IItemFacet;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.utility.IAggregableItem;
 
 /**
  * The class defines the basic stack of some type of item. It will allow the aggregation of more of the same
@@ -55,6 +57,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 		return this.quantity;
 	}
 
+	@Override
 	public int getQuantity() {
 		return this.quantity;
 	}
@@ -108,7 +111,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 	@Override
 	public boolean equals( final Object o ) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (o == null || this.getClass() != o.getClass()) return false;
 		final Resource resource = (Resource) o;
 		return new EqualsBuilder()
 				.appendSuper( super.equals( o ) )
@@ -118,23 +121,23 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 				.isEquals();
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "baseQty", this.quantity )
+				.append( "name", this.getName() )
+				.append( "typeId", this.getTypeId() )
+				.append( "quantity", this.getQuantity() )
+				.append( "volume", this.getVolume() )
+				.append( "price", this.getPrice() )
+				.append( "jsonClass", this.getJsonClass() )
+				.toString();
+	}
+
 	public int sub( final int count ) {
 		if (count > this.quantity) this.quantity = 0;
 		else this.quantity = this.getQuantity() - Math.max( 0, count );
 		return this.quantity;
-	}
-
-	@Override
-	public String toString() {
-		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
-				.append( "baseQty", quantity )
-				.append( "name", getName() )
-				.append( "typeId", getTypeId() )
-				.append( "quantity", getQuantity() )
-				.append( "volume", getVolume() )
-				.append( "price", getPrice() )
-				.append( "jsonClass", getJsonClass() )
-				.toString();
 	}
 
 	// - B U I L D E R

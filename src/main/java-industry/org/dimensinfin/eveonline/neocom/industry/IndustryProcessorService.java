@@ -6,8 +6,8 @@ import javax.validation.constraints.NotNull;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import org.dimensinfin.eveonline.neocom.domain.Resource;
 import org.dimensinfin.eveonline.neocom.industry.domain.ActionPreference;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.industry.services.IndustrySession;
 
 public class IndustryProcessorService {
@@ -27,12 +27,13 @@ public class IndustryProcessorService {
 	 *
 	 * The processing will take on account the <code>ActionPreference</code> list of preferences loaded to the service with the
 	 * <code>IndustrySession</code>. Any asset management will be done to the local list of assets also managed by the IndustrySession.
+	 *
 	 * @param item the eve item and the quantity to be processed. <code>Resources</code> represent game stacks and have a reference to a esi item
-	 *                and to a count identical copies of the same item on a stack liek structure.
+	 *             and to a count identical copies of the same item on a stack liek structure.
 	 * @return the list of industry/logistics actions that should be executed to get the requested result, or an additional information action
-	 * indicating if the whole count cannot be processed.
+	 * 		indicating if the whole count cannot be processed.
 	 */
-	public List<ActionPreference> process ( final Resource item){
+	public List<ActionPreference> process( final Resource item ) {
 		return null;
 	}
- }
+}

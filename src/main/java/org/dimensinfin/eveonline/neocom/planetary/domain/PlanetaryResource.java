@@ -5,13 +5,15 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.dimensinfin.eveonline.neocom.domain.Resource;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.planetary.PlanetaryResourceTierType;
 
 public class PlanetaryResource extends Resource {
+	private static final long serialVersionUID = 1064106248308798884L;
+
 	// - C O N S T R U C T O R S
 	@Deprecated
 	public PlanetaryResource( final int typeId ) {

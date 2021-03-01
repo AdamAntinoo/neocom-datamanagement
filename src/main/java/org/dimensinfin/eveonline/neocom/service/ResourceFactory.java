@@ -6,9 +6,9 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
-import org.dimensinfin.eveonline.neocom.domain.Resource;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 
 public class ResourceFactory {
 	private final ESIDataService esiDataService;

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import org.dimensinfin.annotation.TimeElapsed;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
-import org.dimensinfin.eveonline.neocom.domain.Resource;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.logging.LogWrapper;
@@ -48,10 +48,10 @@ public class SDERepository {
 					.constructStatement( SELECT_MATERIAL_USAGE, new String[]{ Integer.toString( itemId ) } );
 			int blueprintId = -1; // Add a blueprint detection to detect BOM for blueprints.
 			while (cursor.moveToNext()) {
-				int materialTypeID = cursor.getInt( BOM_USAGE_MATERIAL_TYPEID_COLINDEX );
-				int qty = cursor.getInt( BOM_USAGE_QUANTITY_COLINDEX );
+				final int materialTypeID = cursor.getInt( BOM_USAGE_MATERIAL_TYPEID_COLINDEX );
+				final int qty = cursor.getInt( BOM_USAGE_QUANTITY_COLINDEX );
 				blueprintId = cursor.getInt( BOM_USAGE_TYPEID_COLINDEX );
-				Resource resource = this.resourceFactory.generateResource4Id( materialTypeID, qty );
+				final Resource resource = this.resourceFactory.generateResource4Id( materialTypeID, qty );
 				buildJob.add( resource );
 			}
 			cursor.close();
