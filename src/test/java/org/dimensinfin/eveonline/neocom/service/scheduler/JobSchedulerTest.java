@@ -54,6 +54,17 @@ public class JobSchedulerTest {
 	}
 
 	@Test
+	public void registerAndRunJob() {
+		// Given
+		final Job job = Mockito.mock( Job.class );
+		final JobScheduler schedulerSpy = Mockito.spy( JobScheduler.getJobScheduler() );
+		JobScheduler.getJobScheduler().clear();
+		// Assertions
+		Assertions.assertEquals( 1, schedulerSpy.registerAndRunJob( job ) );
+		Mockito.verify( schedulerSpy, Mockito.times( 1 ) ).scheduleJob( job );
+	}
+
+	@Test
 	public void registerJob() {
 		final String identifier = UUID.fromString( "10596477-3376-4d11-9b68-6213b1cf9bf4" ) + "-TEST-";
 		final Job job = Mockito.mock( Job.class );
@@ -189,6 +200,7 @@ public class JobSchedulerTest {
 	public static class Job4TestRegistration extends Job {
 		private String registration;
 
+		// - G E T T E R S   &   S E T T E R S
 		@Override
 		public int getUniqueIdentifier() {
 			return new HashCodeBuilder( 17, 37 )
@@ -208,7 +220,7 @@ public class JobSchedulerTest {
 		@Override
 		public boolean equals( final Object o ) {
 			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
+			if (o == null || this.getClass() != o.getClass()) return false;
 			final Job4TestRegistration that = (Job4TestRegistration) o;
 			return new EqualsBuilder()
 					.appendSuper( super.equals( o ) )
@@ -219,7 +231,7 @@ public class JobSchedulerTest {
 		@Override
 		public String toString() {
 			return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
-					.append( "registration", registration )
+					.append( "registration", this.registration )
 					.toString();
 		}
 
@@ -232,8 +244,14 @@ public class JobSchedulerTest {
 		public static class Builder extends Job.Builder<Job4TestRegistration, Job4TestRegistration.Builder> {
 			private Job4TestRegistration onConstruction;
 
+			// - C O N S T R U C T O R S
 			public Builder() {
 				this.onConstruction = new Job4TestRegistration();
+			}
+
+			public Job4TestRegistration.Builder withRegistrationTest( final String registration ) {
+				this.onConstruction.registration = registration;
+				return this;
 			}
 
 			@Override
@@ -246,15 +264,11 @@ public class JobSchedulerTest {
 			protected Job4TestRegistration.Builder getActualBuilder() {
 				return this;
 			}
-
-			public Job4TestRegistration.Builder withRegistrationTest( final String registration ) {
-				this.onConstruction.registration = registration;
-				return this;
-			}
 		}
 	}
 
 	private static class Job4TestException extends Job {
+		// - G E T T E R S   &   S E T T E R S
 		@Override
 		public int getUniqueIdentifier() {
 			return new HashCodeBuilder( 17, 37 )
@@ -273,6 +287,7 @@ public class JobSchedulerTest {
 		public static class Builder extends Job.Builder<Job4TestException, Job4TestException.Builder> {
 			private Job4TestException onConstruction;
 
+			// - C O N S T R U C T O R S
 			public Builder() {
 				this.onConstruction = new Job4TestException();
 			}

@@ -9,6 +9,7 @@ import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_
 public class TestDataConstants {
 	public static class ESIDataServiceConstants {
 		public static final Integer TEST_CHARACTER_IDENTIFIER = 91734031;
+		public static final Integer TEST_ALLIANCE_IDENTIFIER = 91734031;
 	}
 
 	public static class CredentialConstants {
@@ -113,10 +114,16 @@ public class TestDataConstants {
 		public static final Double TEST_RESOURCE_PRICE = 76545.98;
 	}
 
+	public static final class MarketServiceConstants {
+		public static final Integer TEST_MARKET_SERVICE_REGION_ID = 10000002;
+		public static final Integer TEST_MARKET_SERVICE_TYPE_ID = 16636;
+	}
+
 	public static final class MarketOrderConstants {
 		public static final Long TEST_MARKET_ORDER_ID = 4275798L;
 		public static final Integer TEST_MARKET_ORDER_TYPE_ID = 16636;
-		public static final  Double	TEST_MARKET_ORDER_PRICE = 345.98;
+		public static final Integer TEST_MARKET_ORDER_SYSTEM_ID = 60003760;
+		public static final Double TEST_MARKET_ORDER_PRICE = 345.98;
 		public static final Integer TEST_MARKET_ORDER_VOLUME_REMAIN = 100;
 		public static final Integer TEST_MARKET_ORDER_VOLUME_TOTAL = 200;
 	}

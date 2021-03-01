@@ -7,14 +7,15 @@ import org.mockito.Mockito;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.dimensinfin.eveonline.neocom.domain.EsiType.ESI_ICON_URL_PREFIX;
 import static org.dimensinfin.eveonline.neocom.domain.EsiType.ESI_ICON_URL_SUFFIX;
-import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_QUANTITY;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_CATEGORY;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_GROUP;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_NAME;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_QUANTITY;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_TYPE_ID;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_VOLUME;
 
@@ -56,7 +57,7 @@ public class ResourceTest {
 		Assertions.assertNotNull( resource );
 	}
 
-//	@Test
+	//	@Test
 	public void equalsContract() {
 		EqualsVerifier.forClass( Resource.class )
 				.usingGetClass().verify();

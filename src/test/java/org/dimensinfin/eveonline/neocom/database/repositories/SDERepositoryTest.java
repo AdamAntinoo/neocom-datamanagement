@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEStatement;
-import org.dimensinfin.eveonline.neocom.domain.Resource;
+import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SDERepositoryConstants.TEST_SDE_REPOSITORY_TYPE_ID;

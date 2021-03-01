@@ -1,7 +1,5 @@
 package org.dimensinfin.eveonline.neocom.service;
 
-import java.util.List;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Before;
@@ -10,12 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.testcontainers.containers.GenericContainer;
 
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrders200Ok;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
@@ -44,40 +38,6 @@ public class ESIUniverseDataProviderIT {
 		this.retrofitService = injector.getInstance( RetrofitService.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
 	}
-
-	@Test
-	public void getAlliancesAllianceId() {
-		// Prepare
-		this.beforeEach();
-		// Test
-		final ESIUniverseDataProvider universeDataProvider = new ESIUniverseDataProvider.Builder()
-				.withConfigurationProvider( this.configurationService )
-				.withFileSystemAdapter( this.fileSystem )
-				.withRetrofitFactory( this.retrofitService )
-				.withStoreCacheManager( this.storeCache )
-				.build();
-		final GetAlliancesAllianceIdOk obtained = universeDataProvider.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
-		// Assertions
-		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( "AFK", obtained.getTicker() );
-		Assertions.assertEquals( "Silent Infinity", obtained.getName() );
-	}
-
-	@Test
-	public void getAlliancesAllianceIdIcons() {
-		// Test
-		final ESIUniverseDataProvider universeDataProvider = new ESIUniverseDataProvider.Builder()
-				.withConfigurationProvider( this.configurationService )
-				.withFileSystemAdapter( this.fileSystem )
-				.withRetrofitFactory( this.retrofitService )
-				.withStoreCacheManager( this.storeCache )
-				.build();
-		final GetAlliancesAllianceIdIconsOk obtained = universeDataProvider.getAlliancesAllianceIdIcons( TEST_ALLIANCE_IDENTIFIER );
-		// Assertions
-		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( "https://images.evetech.net/Alliance/117383987_64.png", obtained.getPx64x64() );
-	}
-
 
 	@Test
 	public void getCorporationsCorporationId() {

@@ -34,28 +34,23 @@ public class Resource extends EsiType implements IItemFacet {
 	protected Resource() {}
 
 	@Deprecated
-	public Resource( final int typeId ) {
+	protected Resource( final int typeId ) {
 		super();
 		this.quantity = 1;
 	}
 
 	@Deprecated
-	public Resource( final int typeId, final int newQty ) {
+	protected Resource( final int typeId, final int newQty ) {
 		this( typeId );
 		this.quantity = newQty;
 	}
 
 	@Deprecated
-	public Resource( final int typeId, final int newQty, final int stackSize ) {
+	protected Resource( final int typeId, final int newQty, final int stackSize ) {
 		this( typeId, newQty * stackSize );
 	}
 
 	// - G E T T E R S   &   S E T T E R S
-	@Deprecated
-	public int getBaseQuantity() {
-		return this.quantity;
-	}
-
 	public int getQuantity() {
 		return this.quantity;
 	}
@@ -128,6 +123,11 @@ public class Resource extends EsiType implements IItemFacet {
 	public int sub( final int count ) {
 		if (count > this.quantity) this.quantity = 0;
 		else this.quantity = this.getQuantity() - Math.max( 0, count );
+		return this.quantity;
+	}
+
+	@Deprecated
+	protected int getBaseQuantity() {
 		return this.quantity;
 	}
 

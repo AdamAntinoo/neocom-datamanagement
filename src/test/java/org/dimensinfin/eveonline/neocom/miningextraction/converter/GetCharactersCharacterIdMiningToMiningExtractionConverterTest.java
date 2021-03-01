@@ -6,15 +6,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.domain.EsiType;
-import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
-import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
 import org.dimensinfin.eveonline.neocom.database.entities.MiningExtractionEntity;
-import org.dimensinfin.eveonline.neocom.domain.NeoItem;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceConstellationImplementation;
+import org.dimensinfin.eveonline.neocom.domain.EsiType;
+import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceSystemImplementation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdMining200Ok;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
+import org.dimensinfin.eveonline.neocom.miningextraction.domain.MiningExtraction;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 
 public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
@@ -24,11 +23,11 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 	public void convertFailure() {
 		// Given
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
-		final ResourceFactory resourceFactory=Mockito.mock(ResourceFactory.class);
+		final ResourceFactory resourceFactory = Mockito.mock( ResourceFactory.class );
 		final int ownerId = DEFAULT_MINING_OWNER_IDENTIFIER;
 		final LocalDate processingDate = LocalDate.now();
 		final GetCharactersCharacterIdMining200Ok mining200Ok = Mockito.mock( GetCharactersCharacterIdMining200Ok.class );
-		final SpaceConstellationImplementation spaceLocation = Mockito.mock( SpaceConstellationImplementation.class );
+		final SpaceLocationImplementation spaceLocation = Mockito.mock( SpaceLocationImplementation.class );
 		// When
 		Mockito.when( mining200Ok.getTypeId() ).thenReturn( 17459 );
 		Mockito.when( mining200Ok.getDate() ).thenReturn( new LocalDate( "2018-06-01" ) );
@@ -49,13 +48,13 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 	public void convertSuccessPastDate() {
 		// Given
 		final LocationCatalogService locationCatalogService = Mockito.mock( LocationCatalogService.class );
-//		final ResourceFactory resourceFactory=Mockito.mock(ResourceFactory.class);
+		//		final ResourceFactory resourceFactory=Mockito.mock(ResourceFactory.class);
 		final int ownerId = DEFAULT_MINING_OWNER_IDENTIFIER;
 		final LocalDate processingDate = LocalDate.now();
 		final GetCharactersCharacterIdMining200Ok mining200Ok = Mockito.mock( GetCharactersCharacterIdMining200Ok.class );
 		final SpaceSystemImplementation spaceLocation = Mockito.mock( SpaceSystemImplementation.class );
 		final ResourceFactory resourceFactory = Mockito.mock( ResourceFactory.class );
-//		ResourceFactory.setSingleton( resourceFactory );
+		//		ResourceFactory.setSingleton( resourceFactory );
 		final EsiType neoItem = Mockito.mock( EsiType.class );
 		// When
 		Mockito.when( mining200Ok.getTypeId() ).thenReturn( 17459 );
@@ -67,7 +66,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Mockito.when( resourceFactory.generateType4Id( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 17459 );
 		Mockito.when( neoItem.getName() ).thenReturn( "Piroxeres" );
-//		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
+		//		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
 		Mockito.when( neoItem.getVolume() ).thenReturn( 0.01 );
 		Mockito.when( neoItem.getTypeIconURL() ).thenReturn( "http://17459.png" );
 		Mockito.when( spaceLocation.getSolarSystemName() ).thenReturn( "Esescama" );
@@ -88,7 +87,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Assertions.assertEquals( "Esescama", miningExtraction.getSystemName() );
 		Assertions.assertEquals( "http://17459.png", miningExtraction.getURLForItem() );
 		Assertions.assertEquals( 0.01, miningExtraction.getVolume() );
-//		Assertions.assertEquals( 432.56, miningExtraction.getPrice() );
+		//		Assertions.assertEquals( 432.56, miningExtraction.getPrice() );
 	}
 
 	@Test
@@ -100,7 +99,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		final GetCharactersCharacterIdMining200Ok mining200Ok = Mockito.mock( GetCharactersCharacterIdMining200Ok.class );
 		final SpaceSystemImplementation spaceLocation = Mockito.mock( SpaceSystemImplementation.class );
 		final ResourceFactory resourceFactory = Mockito.mock( ResourceFactory.class );
-//		ResourceFactory.setSingleton( resourceFactory );
+		//		ResourceFactory.setSingleton( resourceFactory );
 		final EsiType neoItem = Mockito.mock( EsiType.class );
 		// When
 		Mockito.when( mining200Ok.getTypeId() ).thenReturn( 17459 );
@@ -112,7 +111,7 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Mockito.when( resourceFactory.generateType4Id( Mockito.anyInt() ) ).thenReturn( neoItem );
 		Mockito.when( neoItem.getTypeId() ).thenReturn( 17459 );
 		Mockito.when( neoItem.getName() ).thenReturn( "Piroxeres" );
-//		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
+		//		Mockito.when( neoItem.getPrice() ).thenReturn( 432.56 );
 		Mockito.when( neoItem.getVolume() ).thenReturn( 0.01 );
 		Mockito.when( neoItem.getTypeIconURL() ).thenReturn( "http://17459.png" );
 		Mockito.when( spaceLocation.getSolarSystemName() ).thenReturn( "Esescama" );
@@ -130,13 +129,14 @@ public class GetCharactersCharacterIdMiningToMiningExtractionConverterTest {
 		Assertions.assertEquals( 17459, miningExtraction.getTypeId() );
 		Assertions.assertEquals( DEFAULT_MINING_OWNER_IDENTIFIER, miningExtraction.getOwnerId() );
 		Assertions.assertEquals( calculatedId, miningExtraction.getId() );
-		Assertions.assertEquals( LocalDate.now().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ), miningExtraction.getExtractionDateName() );
+		Assertions
+				.assertEquals( LocalDate.now().toString( MiningExtractionEntity.EXTRACTION_DATE_FORMAT ), miningExtraction.getExtractionDateName() );
 		Assertions.assertEquals( LocalDateTime.now().getHourOfDay(), miningExtraction.getExtractionHour() );
 		Assertions.assertEquals( 30001669, miningExtraction.getLocationId() );
 		Assertions.assertEquals( "Piroxeres", miningExtraction.getResourceName() );
 		Assertions.assertEquals( "Esescama", miningExtraction.getSystemName() );
 		Assertions.assertEquals( "http://17459.png", miningExtraction.getURLForItem() );
 		Assertions.assertEquals( 0.01, miningExtraction.getVolume() );
-//		Assertions.assertEquals( 432.56, miningExtraction.getPrice() );
+		//		Assertions.assertEquals( 432.56, miningExtraction.getPrice() );
 	}
 }

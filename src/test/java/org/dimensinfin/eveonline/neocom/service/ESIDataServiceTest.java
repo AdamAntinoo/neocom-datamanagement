@@ -15,11 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateSerializer;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
-import org.dimensinfin.eveonline.neocom.domain.space.Station;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdAssets200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdBlueprints200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
@@ -37,7 +34,9 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStat
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
+import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateSerializer;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -50,6 +49,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static okhttp3.mock.MediaTypes.MEDIATYPE_JSON;
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_ACCOUNT_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ESIDataServiceConstants.TEST_ALLIANCE_IDENTIFIER;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ESIDataServiceConstants.TEST_CHARACTER_IDENTIFIER;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_AGENT;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_BASE_URL;
@@ -84,11 +84,43 @@ public class ESIDataServiceTest {
 		// - HTTP access mock
 		this.universeClientBuilder = new OkHttpClient.Builder()
 				.addInterceptor( chain -> {
-					Request.Builder builder = chain.request().newBuilder()
+					final Request.Builder builder = chain.request().newBuilder()
 							.addHeader( "User-Agent", TEST_RETROFIT_AGENT );
 					return chain.proceed( builder.build() );
 				} )
 				.readTimeout( TEST_RETROFIT_TIMEOUT, TimeUnit.SECONDS );
+	}
+
+	@Test
+	public void getAlliancesAllianceId() {
+		// Given
+		final GetAlliancesAllianceIdOk testAlliance = new GetAlliancesAllianceIdOk();
+		testAlliance.setName( "Silent Infinity" );
+		final String serializedGetAlliancesAllianceIdOk = this.gson.toJson( testAlliance );
+		final MockInterceptor interceptor = new MockInterceptor();
+		interceptor.addRule()
+				.get()
+				.url( "http://localhost/alliances/" + TEST_ALLIANCE_IDENTIFIER + "/?datasource=tranquility" )
+				.answer( request -> new Response.Builder()
+						.code( 200 )
+						.body( ResponseBody.create( MEDIATYPE_JSON, serializedGetAlliancesAllianceIdOk ) )
+				);
+		final OkHttpClient httpClient = this.universeClientBuilder.addInterceptor( interceptor ).build();
+		// When
+		Mockito.when( this.retrofitService.accessUniverseConnector() )
+				.thenReturn( this.getNewUniverseConnector( httpClient ) );
+		// Test
+		final ESIDataService esiDataService = new ESIDataService(
+				this.configurationService,
+				this.fileSystem,
+				this.storeCacheManager,
+				this.retrofitService,
+				this.locationCatalogService );
+		final GetAlliancesAllianceIdOk obtained = esiDataService.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertTrue( obtained instanceof GetAlliancesAllianceIdOk );
+		Assertions.assertEquals( "Silent Infinity", obtained.getName() );
 	}
 
 	@Test
@@ -589,37 +621,37 @@ public class ESIDataServiceTest {
 		Assertions.assertTrue( obtained.size() > 0 );
 	}
 
-	@Test
-	public void getRegionMarketHub() {
-		// Given
-		final Integer ESI_DATA_JITA_REGION_ID = 10000002;
-		final String ESI_DATA_JITA_REGION_NAME = "The Forge";
-		final Long ESI_DATA_JITA_STATION_ID = 10000002L;
-		final String ESI_DATA_JITA_STATION_NAME = "The Forge";
-		final Station jitaLocation = Mockito.mock( Station.class );
-		// When
-		Mockito.when( this.locationCatalogService.searchLocation4Id( Mockito.anyLong() ) ).thenReturn( jitaLocation );
-		Mockito.when( jitaLocation.getLocationType() ).thenReturn( LocationIdentifierType.STATION );
-		Mockito.when( jitaLocation.getRegionId() ).thenReturn( ESI_DATA_JITA_REGION_ID );
-		Mockito.when( jitaLocation.getRegionName() ).thenReturn( ESI_DATA_JITA_REGION_NAME );
-		Mockito.when( jitaLocation.getStationId() ).thenReturn( ESI_DATA_JITA_STATION_ID );
-		Mockito.when( jitaLocation.getStationName() ).thenReturn( ESI_DATA_JITA_STATION_NAME );
-		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final Station obtained = esiDataService.getRegionMarketHub( 10000015 );
-		// Assertions
-		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( LocationIdentifierType.STATION, obtained.getLocationType() );
-		Assertions.assertEquals( ESI_DATA_JITA_REGION_ID, obtained.getRegionId() );
-		Assertions.assertEquals( ESI_DATA_JITA_REGION_NAME, obtained.getRegionName() );
-		Assertions.assertEquals( ESI_DATA_JITA_STATION_ID, obtained.getStationId() );
-		Assertions.assertEquals( ESI_DATA_JITA_STATION_NAME, obtained.getStationName() );
-	}
+	//	@Test
+	//	public void getRegionMarketHub() {
+	//		// Given
+	//		final Integer ESI_DATA_JITA_REGION_ID = 10000002;
+	//		final String ESI_DATA_JITA_REGION_NAME = "The Forge";
+	//		final Long ESI_DATA_JITA_STATION_ID = 10000002L;
+	//		final String ESI_DATA_JITA_STATION_NAME = "The Forge";
+	//		final Station jitaLocation = Mockito.mock( Station.class );
+	//		// When
+	//		Mockito.when( this.locationCatalogService.searchLocation4Id( Mockito.anyLong() ) ).thenReturn( jitaLocation );
+	//		Mockito.when( jitaLocation.getLocationType() ).thenReturn( LocationIdentifierType.STATION );
+	//		Mockito.when( jitaLocation.getRegionId() ).thenReturn( ESI_DATA_JITA_REGION_ID );
+	//		Mockito.when( jitaLocation.getRegionName() ).thenReturn( ESI_DATA_JITA_REGION_NAME );
+	//		Mockito.when( jitaLocation.getStationId() ).thenReturn( ESI_DATA_JITA_STATION_ID );
+	//		Mockito.when( jitaLocation.getStationName() ).thenReturn( ESI_DATA_JITA_STATION_NAME );
+	//		// Test
+	//		final ESIDataService esiDataService = new ESIDataService(
+	//				this.configurationService,
+	//				this.fileSystem,
+	//				this.storeCacheManager,
+	//				this.retrofitService,
+	//				this.locationCatalogService );
+	//		final Station obtained = esiDataService.getRegionMarketHub( 10000015 );
+	//		// Assertions
+	//		Assertions.assertNotNull( obtained );
+	//		Assertions.assertEquals( LocationIdentifierType.STATION, obtained.getLocationType() );
+	//		Assertions.assertEquals( ESI_DATA_JITA_REGION_ID, obtained.getRegionId() );
+	//		Assertions.assertEquals( ESI_DATA_JITA_REGION_NAME, obtained.getRegionName() );
+	//		Assertions.assertEquals( ESI_DATA_JITA_STATION_ID, obtained.getStationId() );
+	//		Assertions.assertEquals( ESI_DATA_JITA_STATION_NAME, obtained.getStationName() );
+	//	}
 
 	@Test
 	public void getUniverseConstellationById() {
@@ -645,11 +677,11 @@ public class ESIDataServiceTest {
 		final Integer TEST_MARKET_REGION_ID = 10000043;
 		final Integer TEST_MARKET_TYPE_ID = 11535;
 		final Long TEST_ESI_CHARACTER_LOCATION_ID = 30002516L;
-		final List<GetMarketsRegionIdOrders200Ok>testRegionOrders=new ArrayList<>();
-		final GetMarketsRegionIdOrders200Ok  order =new GetMarketsRegionIdOrders200Ok();
+		final List<GetMarketsRegionIdOrders200Ok> testRegionOrders = new ArrayList<>();
+		final GetMarketsRegionIdOrders200Ok order = new GetMarketsRegionIdOrders200Ok();
 		order.setIsBuyOrder( true );
 		order.setLocationId( (long) TEST_ESI_CHARACTER_LOCATION_ID );
-		testRegionOrders.add(order);
+		testRegionOrders.add( order );
 		final String serializedGetMarketsRegionIdOrders = this.gson.toJson( testRegionOrders );
 		final MockInterceptor interceptor = new MockInterceptor();
 		interceptor.addRule()
@@ -668,7 +700,7 @@ public class ESIDataServiceTest {
 				);
 		final OkHttpClient httpClient = this.universeClientBuilder.addInterceptor( interceptor ).build();
 		// When
-		Mockito.when( this.retrofitService.accessUniverseConnector( ) )
+		Mockito.when( this.retrofitService.accessUniverseConnector() )
 				.thenReturn( this.getNewUniverseConnector( httpClient ) );
 		// Test
 		final ESIDataService esiDataService = new ESIDataService(

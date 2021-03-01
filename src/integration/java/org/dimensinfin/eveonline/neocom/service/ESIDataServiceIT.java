@@ -12,6 +12,8 @@ import org.testcontainers.containers.GenericContainer;
 
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdIconsOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
@@ -21,6 +23,7 @@ import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_SCOPE;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.CredentialConstants.TEST_CREDENTIAL_UNIQUE_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ESIDataServiceConstants.TEST_ALLIANCE_IDENTIFIER;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ESIDataServiceConstants.TEST_CHARACTER_IDENTIFIER;
 
 public class ESIDataServiceIT {
@@ -65,6 +68,37 @@ public class ESIDataServiceIT {
 		//						esiDataSimulator.getContainerIpAddress() +
 		//						":" +
 		//						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
+	}
+
+	@Test
+	public void getAlliancesAllianceId() {
+		// Prepare
+		this.beforeEach();
+		// Test
+		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
+				this.fileSystem,
+				this.storeCache,
+				this.retrofitService,
+				this.locationCatalogService );
+		final GetAlliancesAllianceIdOk obtained = esiDataService.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertEquals( "AFK", obtained.getTicker() );
+		Assertions.assertEquals( "Silent Infinity", obtained.getName() );
+	}
+
+	@Test
+	public void getAlliancesAllianceIdIcons() {
+		// Test
+		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
+				this.fileSystem,
+				this.storeCache,
+				this.retrofitService,
+				this.locationCatalogService );
+		final GetAlliancesAllianceIdIconsOk obtained = esiDataService.getAlliancesAllianceIdIcons( TEST_ALLIANCE_IDENTIFIER );
+		// Assertions
+		Assertions.assertNotNull( obtained );
+		Assertions.assertEquals( "https://images.evetech.net/Alliance/117383987_64.png", obtained.getPx64x64() );
 	}
 
 	@Test

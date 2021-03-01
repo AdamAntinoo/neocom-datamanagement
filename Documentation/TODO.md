@@ -9,6 +9,8 @@
 * NeoObjects
 * PilotPreferencesRepository
 * PilotPreferencesEntity
+* ESIDataService
+* Resource
 
 * MarketService
 
