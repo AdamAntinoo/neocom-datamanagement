@@ -66,6 +66,19 @@ public class JobScheduler {
 		this.jobsRegistered.clear();
 	}
 
+	/**
+	 * Register the job on the Scheduler registry and also execute the job a first time out of its schedule. The job will be added to the execution
+	 * queue for a first time execution.
+	 *
+	 * @param job2Register the job instance to register and run.
+	 * @return the number of jobs registered.
+	 */
+	public int registerAndRunJob( final Job job2Register ) {
+		this.registerJob( job2Register );
+		this.scheduleJob( job2Register );
+		return this.jobsRegistered.size();
+	}
+
 	@NonNls
 	public int registerJob( final Job job2Register ) {
 		final Job registration = this.jobsRegistered.put( job2Register.getUniqueIdentifier(), job2Register );
