@@ -109,9 +109,8 @@ public class LoyaltyService {
 							.withMarketRegionId( this.regionId )
 							// Use the current lowest market sell price instead the latest trade price
 							.withPrice( this.marketService.getLowestSellPrice(
-									this.esiDataService.getUniverseMarketOrdersForId( this.regionId, offer.getTypeId() ),
-									this.esiDataService.getRegionMarketHub( regionId ).getSolarSystemId()
-							) )
+									this.regionId, offer.getTypeId() )
+							 )
 							.build();
 				} ) // Convert to an entity suitable to be persisted.
 				.map( loyaltyOffer -> {

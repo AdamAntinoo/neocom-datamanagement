@@ -9,7 +9,7 @@ public class NeoComRuntimeException extends RuntimeException {
 	//	private ErrorInfoCatalog error;
 
 	// - C O N S T R U C T O R S
-	public NeoComRuntimeException() {
+	private NeoComRuntimeException() {
 		super();
 		final StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 		final StackTraceElement stackElement = stacktrace[3]; // This is to check if we are using Dalvik

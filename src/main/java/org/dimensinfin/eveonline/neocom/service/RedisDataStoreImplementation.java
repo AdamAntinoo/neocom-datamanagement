@@ -32,14 +32,15 @@ public class RedisDataStoreImplementation implements IDataStore {
 	}
 
 	@Override
-	public MarketOrder accessLowestSellOrder( final Integer regionId, final Integer typeId, final MarketService.MyInterface lowestSellOrderReloadMethod ) {
+	public MarketOrder accessLowestSellOrder( final Integer regionId, final Integer typeId, final MarketService.LowestSellOrderPassThrough lowestSellOrderReloadMethod ) {
+		final String uniqueLSOKey = this.generateLowestSellOrderUniqueId( regionId, typeId );
 		final RMapCache<String, MarketOrder> LSOMap = this.redisClient.getMapCache( LOWEST_SELL_ORDER_MAP );
-		final MarketOrder entry = LSOMap.get( this.generateLowestSellOrderUniqueId( regionId, typeId ) );
+		final MarketOrder entry = LSOMap.get( uniqueLSOKey );
 		if (null == entry) { // The data is not on the cache. Fetch it from the service and update the cache.
 			final MarketOrder order;
 			try {
 				order = Objects.requireNonNull( lowestSellOrderReloadMethod.getLowestSellOrder( regionId, typeId ) );
-				LSOMap.put( LOWEST_SELL_ORDER_MAP, order, LOWEST_SELL_ORDER_TTL, TimeUnit.SECONDS );
+				LSOMap.put( uniqueLSOKey, order, LOWEST_SELL_ORDER_TTL, TimeUnit.SECONDS );
 				return order;
 			} catch (final NullPointerException exception) {
 				throw new NeoComRuntimeException( "There is no Lowest Sell Order available" );
