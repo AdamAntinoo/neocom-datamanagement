@@ -1,8 +1,4 @@
 [CLASSES TO COMPLETE UNIT TESTING]
-* MarketService
-* GetMarketsRegionIdOrdersToMarketOrderConverter*
-* MarketData
-* MarketOrder
 * PricedResource
 * MiningExtraction
 * LoyaltyOfferEntity
@@ -11,6 +7,7 @@
 * NeoComOAuthFlow
 * HttpUniverseClientFactory
 
+* MarketService
 
 
 >* NeoAsset

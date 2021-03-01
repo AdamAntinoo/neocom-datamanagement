@@ -13,14 +13,15 @@ public class DMServicesDependenciesModule extends AbstractModule {
 	public static final String ESIDATA_SERVICE = "ESIDataService";
 	public static final String RESOURCE_FACTORY = "ResourceFactory";
 	public static final String LOYALTY_SERVICE = "LoyaltyService";
-	public static final String MARKET_SERVICE = "marketService";
-	public static final String CHARACTER_SERVICE = "characterService";
+	public static final String MARKET_SERVICE = "MarketService";
+	public static final String CHARACTER_SERVICE = "CharacterService";
 	public static final String ICONFIGURATION_SERVICE = "IConfigurationService";
 	public static final String IFILE_SYSTEM = "IFileSystem";
 	public static final String ISTORE_CACHE = "IStoreCache";
 	public static final String LOCATION_CATALOG_SERVICE = "LocationCatalogService";
 	public static final String ISDE_DATABASE_SERVICE = "ISDEDatabaseService";
 	public static final String NEOCOM_DATABASE_SERVICE = "NeoComDatabaseService";
+	public static final String DATA_STORE="IDataStore";
 
 	@Override
 	protected void configure() {
@@ -51,6 +52,10 @@ public class DMServicesDependenciesModule extends AbstractModule {
 		bind( CharacterService.class )
 				.annotatedWith( Names.named( CHARACTER_SERVICE ) )
 				.to( CharacterService.class )
+				.in( Singleton.class );
+		bind( IDataStore.class )
+				.annotatedWith( Names.named( DATA_STORE ) )
+				.to( RedisDataStoreImplementation.class )
 				.in( Singleton.class );
 	}
 }

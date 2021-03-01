@@ -235,9 +235,8 @@ public class MarketService {
 	}
 
 	public List<GetMarketsRegionIdOrders200Ok> getMarketHubSellOrders4Id( final Station hub, final Integer itemId ) {
-		final List<GetMarketsRegionIdOrders200Ok> orders = this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId );
 		final double priceLimit = this.getLowestSellPrice( hub.getRegionId(), itemId ) * MARKET_DEEP_RANGE;
-		return orders
+		return this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId )
 				.stream()
 				.filter( order -> !order.getIsBuyOrder() ) // Filter only SELL orders
 				.filter( order -> order.getSystemId().equals( hub.getSolarSystemId() ) ) // Filter only orders for the hub system

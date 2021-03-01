@@ -124,7 +124,7 @@ public class MarketData {
 		}
 
 		/**
-		 * Calculate the sell market deep that is the accumulated volume ofr all orders inside a price range. By default the price range is set to the
+		 * Calculate the sell market deep that is the accumulated volume for all orders inside a price range. By default the price range is set to the
 		 * 5% of the best sell value.
 		 *
 		 * @param sellOrders the orders where to search for the data values.

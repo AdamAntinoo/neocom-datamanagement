@@ -54,122 +54,9 @@ import org.dimensinfin.logging.LogWrapper;
 import retrofit2.Response;
 
 public class ESIDataService extends ESIDataProvider {
-	public static final Long PREDEFINED_MARKET_HUB_STATION_ID = 60003760L;
 	@NonNls
 	private static final ResourceBundle i18Bundle = ResourceBundle.getBundle( "i18Properties" );
-	private static final Map<Integer, Long> regionMarketHubReferenceTable = new HashMap<>();
 	private static final String PILOT_IDENTIFIER_LOG_LITERAL = i18Bundle.getString( "pilot.identifier.literal" );
-
-	static {
-		regionMarketHubReferenceTable.put( 10000001, 60003760L );
-		regionMarketHubReferenceTable.put( 10000002, 60003760L );
-		regionMarketHubReferenceTable.put( 10000003, 60003760L );
-		regionMarketHubReferenceTable.put( 10000004, 60003760L );
-		regionMarketHubReferenceTable.put( 10000005, 60003760L );
-		regionMarketHubReferenceTable.put( 10000006, 60003760L );
-		regionMarketHubReferenceTable.put( 10000007, 60003760L );
-		regionMarketHubReferenceTable.put( 10000008, 60003760L );
-		regionMarketHubReferenceTable.put( 10000009, 60003760L );
-		regionMarketHubReferenceTable.put( 10000010, 60003760L );
-		regionMarketHubReferenceTable.put( 10000011, 60003760L );
-		regionMarketHubReferenceTable.put( 10000012, 60003760L );
-		regionMarketHubReferenceTable.put( 10000013, 60003760L );
-		regionMarketHubReferenceTable.put( 10000014, 60003760L );
-		regionMarketHubReferenceTable.put( 10000015, 60003760L );
-		regionMarketHubReferenceTable.put( 10000016, 60003760L );
-		regionMarketHubReferenceTable.put( 10000017, 60003760L );
-		regionMarketHubReferenceTable.put( 10000018, 60003760L );
-		regionMarketHubReferenceTable.put( 10000019, 60003760L );
-		regionMarketHubReferenceTable.put( 10000020, 60008494L ); // Defaults to Amarr
-		regionMarketHubReferenceTable.put( 10000021, 60003760L );
-		regionMarketHubReferenceTable.put( 10000022, 60003760L );
-		regionMarketHubReferenceTable.put( 10000023, 60003760L );
-		regionMarketHubReferenceTable.put( 10000025, 60003760L );
-		regionMarketHubReferenceTable.put( 10000027, 60003760L );
-		regionMarketHubReferenceTable.put( 10000028, 60003760L );
-		regionMarketHubReferenceTable.put( 10000029, 60003760L );
-		regionMarketHubReferenceTable.put( 10000030, 60004588L ); // Defaults to Rens
-		regionMarketHubReferenceTable.put( 10000031, 60003760L );
-		regionMarketHubReferenceTable.put( 10000032, 60003760L );
-		regionMarketHubReferenceTable.put( 10000033, 60003760L );
-		regionMarketHubReferenceTable.put( 10000034, 60003760L );
-		regionMarketHubReferenceTable.put( 10000035, 60003760L );
-		regionMarketHubReferenceTable.put( 10000036, 60003760L );
-		regionMarketHubReferenceTable.put( 10000037, 60003760L );
-		regionMarketHubReferenceTable.put( 10000038, 60003760L );
-		regionMarketHubReferenceTable.put( 10000039, 60003760L );
-		regionMarketHubReferenceTable.put( 10000040, 60003760L );
-		regionMarketHubReferenceTable.put( 10000041, 60003760L );
-		regionMarketHubReferenceTable.put( 10000042, 60005686L ); // Defaults to Hek
-		regionMarketHubReferenceTable.put( 10000043, 60008494L ); // Defaults to Amarr
-		regionMarketHubReferenceTable.put( 10000044, 60003760L );
-		regionMarketHubReferenceTable.put( 10000045, 60003760L );
-		regionMarketHubReferenceTable.put( 10000046, 60003760L );
-		regionMarketHubReferenceTable.put( 10000047, 60003760L );
-		regionMarketHubReferenceTable.put( 10000048, 60003760L );
-		regionMarketHubReferenceTable.put( 10000049, 60003760L );
-		regionMarketHubReferenceTable.put( 10000050, 60003760L );
-		regionMarketHubReferenceTable.put( 10000051, 60003760L );
-		regionMarketHubReferenceTable.put( 10000052, 60003760L );
-		regionMarketHubReferenceTable.put( 10000053, 60003760L );
-		regionMarketHubReferenceTable.put( 10000054, 60003760L );
-		regionMarketHubReferenceTable.put( 10000055, 60003760L );
-		regionMarketHubReferenceTable.put( 10000056, 60003760L );
-		regionMarketHubReferenceTable.put( 10000057, 60003760L );
-		regionMarketHubReferenceTable.put( 10000058, 60003760L );
-		regionMarketHubReferenceTable.put( 10000059, 60003760L );
-		regionMarketHubReferenceTable.put( 10000060, 60003760L );
-		regionMarketHubReferenceTable.put( 10000061, 60003760L );
-		regionMarketHubReferenceTable.put( 10000062, 60003760L );
-		regionMarketHubReferenceTable.put( 10000063, 60003760L );
-		regionMarketHubReferenceTable.put( 10000064, 60003760L );
-		regionMarketHubReferenceTable.put( 10000065, 60003760L );
-		regionMarketHubReferenceTable.put( 10000066, 60003760L );
-		regionMarketHubReferenceTable.put( 10000067, 60003760L );
-		regionMarketHubReferenceTable.put( 10000068, 60003760L );
-		regionMarketHubReferenceTable.put( 10000069, 60003760L );
-		regionMarketHubReferenceTable.put( 10000070, 60003760L );
-		regionMarketHubReferenceTable.put( 11000001, 60003760L );
-		regionMarketHubReferenceTable.put( 11000002, 60003760L );
-		regionMarketHubReferenceTable.put( 11000003, 60003760L );
-		regionMarketHubReferenceTable.put( 11000004, 60003760L );
-		regionMarketHubReferenceTable.put( 11000005, 60003760L );
-		regionMarketHubReferenceTable.put( 11000006, 60003760L );
-		regionMarketHubReferenceTable.put( 11000007, 60003760L );
-		regionMarketHubReferenceTable.put( 11000008, 60003760L );
-		regionMarketHubReferenceTable.put( 11000009, 60003760L );
-		regionMarketHubReferenceTable.put( 11000010, 60003760L );
-		regionMarketHubReferenceTable.put( 11000011, 60003760L );
-		regionMarketHubReferenceTable.put( 11000012, 60003760L );
-		regionMarketHubReferenceTable.put( 11000013, 60003760L );
-		regionMarketHubReferenceTable.put( 11000014, 60003760L );
-		regionMarketHubReferenceTable.put( 11000015, 60003760L );
-		regionMarketHubReferenceTable.put( 11000016, 60003760L );
-		regionMarketHubReferenceTable.put( 11000017, 60003760L );
-		regionMarketHubReferenceTable.put( 11000018, 60003760L );
-		regionMarketHubReferenceTable.put( 11000019, 60003760L );
-		regionMarketHubReferenceTable.put( 11000020, 60003760L );
-		regionMarketHubReferenceTable.put( 11000021, 60003760L );
-		regionMarketHubReferenceTable.put( 11000022, 60003760L );
-		regionMarketHubReferenceTable.put( 11000023, 60003760L );
-		regionMarketHubReferenceTable.put( 11000024, 60003760L );
-		regionMarketHubReferenceTable.put( 11000025, 60003760L );
-		regionMarketHubReferenceTable.put( 11000026, 60003760L );
-		regionMarketHubReferenceTable.put( 11000027, 60003760L );
-		regionMarketHubReferenceTable.put( 11000028, 60003760L );
-		regionMarketHubReferenceTable.put( 11000029, 60003760L );
-		regionMarketHubReferenceTable.put( 11000030, 60003760L );
-		regionMarketHubReferenceTable.put( 11000031, 60003760L );
-		regionMarketHubReferenceTable.put( 11000032, 60003760L );
-		regionMarketHubReferenceTable.put( 11000033, 60003760L );
-		regionMarketHubReferenceTable.put( 12000001, 60003760L );
-		regionMarketHubReferenceTable.put( 12000002, 60003760L );
-		regionMarketHubReferenceTable.put( 12000003, 60003760L );
-		regionMarketHubReferenceTable.put( 12000004, 60003760L );
-		regionMarketHubReferenceTable.put( 12000005, 60003760L );
-		regionMarketHubReferenceTable.put( 13000001, 60003760L );
-	}
-
 	// - C O N S T R U C T O R S
 	@Inject
 	public ESIDataService( @NotNull @Named(DMServicesDependenciesModule.ICONFIGURATION_SERVICE) final IConfigurationService configurationService,
@@ -444,21 +331,21 @@ public class ESIDataService extends ESIDataProvider {
 		return new ArrayList<>();
 	}
 
-	/**
-	 * Searches on a predefined table for the match on the Region identifier. This reference table will store the preferred Market Hub for the
-	 * selected region. If the region value of not found on the reference table then the spacial Jita market is selected as the region hub.
-	 *
-	 * There is no check on the type of location that should be reported. If the data table is wrong then there should be a runtime exception.
-	 *
-	 * @param regionId the target region to search for the market hub.
-	 * @return the region's selected market hub predefined on the application. The returned value is a complete <code>Station</code> location record.
-	 */
-	public Station getRegionMarketHub( final int regionId ) {
-		Long hit = regionMarketHubReferenceTable.get( regionId );
-		if (null == hit) hit = PREDEFINED_MARKET_HUB_STATION_ID;
-		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
-		return (Station) location;
-	}
+//	/**
+//	 * Searches on a predefined table for the match on the Region identifier. This reference table will store the preferred Market Hub for the
+//	 * selected region. If the region value of not found on the reference table then the spacial Jita market is selected as the region hub.
+//	 *
+//	 * There is no check on the type of location that should be reported. If the data table is wrong then there should be a runtime exception.
+//	 *
+//	 * @param regionId the target region to search for the market hub.
+//	 * @return the region's selected market hub predefined on the application. The returned value is a complete <code>Station</code> location record.
+//	 */
+//	public Station getRegionMarketHub( final int regionId ) {
+//		Long hit = regionMarketHubReferenceTable.get( regionId );
+//		if (null == hit) hit = PREDEFINED_MARKET_HUB_STATION_ID;
+//		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
+//		return (Station) location;
+//	}
 
 	// - L O C A T I O N   D E L E G A T I O N
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
