@@ -12,7 +12,6 @@ import org.dimensinfin.eveonline.neocom.domain.IItemFacet;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
-import org.dimensinfin.eveonline.neocom.utility.IAggregableItem;
 
 /**
  * The class defines the basic stack of some type of item. It will allow the aggregation of more of the same
@@ -27,7 +26,7 @@ import org.dimensinfin.eveonline.neocom.utility.IAggregableItem;
  *
  * @author Adam Antinoo
  */
-public class Resource extends EsiType implements IAggregableItem, IItemFacet {
+public class Resource extends EsiType implements IItemFacet {
 	private static final long serialVersionUID = -1722630075425980171L;
 	protected int quantity;
 
@@ -57,7 +56,6 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 		return this.quantity;
 	}
 
-	@Override
 	public int getQuantity() {
 		return this.quantity;
 	}
@@ -68,12 +66,6 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 	}
 
 	// - I A G G R E G A B L E I T E M
-	@Deprecated
-	@Override
-	public double getPrice() {
-		return 0.0;
-	}
-
 	@Deprecated
 	public int getStackSize() {
 		return 1;
@@ -129,7 +121,6 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 				.append( "typeId", this.getTypeId() )
 				.append( "quantity", this.getQuantity() )
 				.append( "volume", this.getVolume() )
-				.append( "price", this.getPrice() )
 				.append( "jsonClass", this.getJsonClass() )
 				.toString();
 	}
@@ -172,6 +163,7 @@ public class Resource extends EsiType implements IAggregableItem, IItemFacet {
 			return this;
 		}
 
+		@Deprecated
 		public Resource.Builder withTypeId( final Integer typeId ) {
 			this.onConstruction.typeId = Objects.requireNonNull( typeId );
 			return this;
