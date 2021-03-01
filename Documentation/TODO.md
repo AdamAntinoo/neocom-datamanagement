@@ -6,6 +6,7 @@
 * PublicCorporationV1
 * NeoComOAuthFlow
 * HttpUniverseClientFactory
+* NeoObjects
 
 * MarketService
 
