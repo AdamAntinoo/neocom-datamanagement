@@ -35,6 +35,7 @@ jobs:
       - save_cache:
           paths:
             - ~/project/.gradle
+            - ~/project/gradle
           key: v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
 
   compile-datamanagement-job:
@@ -45,23 +46,25 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
-            - v1-dependencies-
       - run:
           name: DATAMANAGEMENT - Compile the current library code
           command: |
-            ./gradlew compileJava
+            ./gradlew classes
 
   test-datamanagement-job:
-    docker:
-      - image: circleci/openjdk:11-jdk
-        environment:
-          _JAVA_OPTIONS: "-Xmx3g"
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
+      - run:
+          name: DATAMANAGEMENT - Validate the CI machine configuration
+          command: |
+            ./gradlew --version
+            sudo snap install figlet
+            sudo snap install redis
       - run:
           name: DATAMANAGEMENT - Unit Testing application
           command: |
