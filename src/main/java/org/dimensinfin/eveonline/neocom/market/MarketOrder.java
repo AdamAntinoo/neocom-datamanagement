@@ -34,10 +34,6 @@ public class MarketOrder implements Serializable {
 		return this.orderId;
 	}
 
-	public boolean isBuyOrder() {
-		return this.isBuyOrder;
-	}
-
 	public double getPrice() {
 		return this.price;
 	}
@@ -58,6 +54,10 @@ public class MarketOrder implements Serializable {
 		return this.volumeTotal;
 	}
 
+	public boolean isBuyOrder() {
+		return this.isBuyOrder;
+	}
+
 	// - B U I L D E R
 	public static class Builder {
 		private final MarketOrder onConstruction;
@@ -76,7 +76,7 @@ public class MarketOrder implements Serializable {
 			this.onConstruction.orderId = orderData.getOrderId();
 			this.onConstruction.price = orderData.getPrice();
 			this.onConstruction.typeId = orderData.getTypeId();
-			this.onConstruction.isBuyOrder=orderData.getIsBuyOrder();
+			this.onConstruction.isBuyOrder = orderData.getIsBuyOrder();
 			this.onConstruction.volumeRemain = orderData.getVolumeRemain();
 			this.onConstruction.volumeTotal = orderData.getVolumeTotal();
 			return this;
