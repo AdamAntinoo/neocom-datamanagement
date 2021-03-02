@@ -11,6 +11,8 @@
 * PilotPreferencesEntity
 * ESIDataService
 * Resource
+* Fitting
+* FittingV2
 
 * MarketService
 

@@ -12,7 +12,7 @@ public class Fitting extends NeoComNode {
 	private static final long serialVersionUID = 2267335283642321303L;
 
 	private GetCharactersCharacterIdFittings200Ok fittingDescription;
-	private List<FittingItem> items = new ArrayList<>();
+	private final List<FittingItem> items = new ArrayList<>();
 	private transient NeoItem shipItem = null;
 
 	// - C O N S T R U C T O R S
@@ -23,6 +23,15 @@ public class Fitting extends NeoComNode {
 
 	public Integer getFittingId() {return this.fittingDescription.getFittingId();}
 
+	@RequiresNetwork
+	public String getGroupName() {return this.shipItem.getGroupName();}
+
+	public String getHullGroup() {return this.shipItem.getHullGroup();}
+
+	public List<FittingItem> getItems() {
+		return this.items;
+	}
+
 	public String getName() {return this.fittingDescription.getName();}
 
 	public NeoItem getShipItem() {
@@ -31,16 +40,7 @@ public class Fitting extends NeoComNode {
 
 	public Integer getShipTypeId() {return this.fittingDescription.getShipTypeId();}
 
-	@RequiresNetwork
-	public String getGroupName() {return this.shipItem.getGroupName();}
-
-	public String getHullGroup() {return this.shipItem.getHullGroup();}
-
 	public String getURLForItem() {return this.shipItem.getTypeIconURL();}
-
-	public List<FittingItem> getItems() {
-		return this.items;
-	}
 
 	/**
 	 * During the transformation this method will be called with the original list of items that are encoded in location and in
@@ -52,8 +52,11 @@ public class Fitting extends NeoComNode {
 	@RequiresNetwork
 	private void downloadFittingItems( final GetCharactersCharacterIdFittings200Ok fittingData ) {
 		this.items.clear();
-		for (CharacterscharacterIdfittingsItems item : fittingData.getItems()) {
-			final FittingItem newitem = new FittingItem.Builder().withFittingItem( item ).build();
+		for (final CharacterscharacterIdfittingsItems item : fittingData.getItems()) {
+			final FittingItem newitem = new FittingItem.Builder()
+					.withFittingData( item )
+					//					.withType(  )
+					.build();
 			this.items.add( newitem );
 		}
 	}
@@ -67,8 +70,9 @@ public class Fitting extends NeoComNode {
 
 	// - B U I L D E R
 	public static class Builder {
-		private Fitting onConstruction;
+		private final Fitting onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new Fitting();
 		}
