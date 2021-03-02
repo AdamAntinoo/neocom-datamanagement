@@ -67,7 +67,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							credential.getDataSource(), null, null )
 					.execute();
 			if (fittingsResponse.isSuccessful()) return fittingsResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -87,7 +87,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	@TimeElapsed
 	public List<GetCharactersCharacterIdMining200Ok> getCharactersCharacterIdMining( final Credential credential ) {
 		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
-		List<GetCharactersCharacterIdMining200Ok> returnMiningList = new ArrayList<>( 1000 );
+		final List<GetCharactersCharacterIdMining200Ok> returnMiningList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
 			boolean morePages = true;
@@ -109,7 +109,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					if (Objects.requireNonNull( industryApiResponse.body() ).isEmpty()) morePages = false;
 				}
 			}
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -130,7 +130,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							credential.getDataSource().toLowerCase(), null, null )
 					.execute();
 			if (planetaryApiResponse.isSuccessful()) return planetaryApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -152,7 +152,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							credential.getDataSource().toLowerCase(), null )
 					.execute();
 			if (planetaryApiResponse.isSuccessful()) return planetaryApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -165,7 +165,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 	public List<GetCorporationsCorporationIdAssets200Ok> getCorporationsCorporationIdAssets( final Credential credential,
 	                                                                                         final Integer corporationId ) {
 		LogWrapper.enter( CREDENTIAL_LOG_LITERAL + credential.toString() );
-		List<GetCorporationsCorporationIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
+		final List<GetCorporationsCorporationIdAssets200Ok> returnAssetList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
 			boolean morePages = true;
@@ -186,7 +186,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					if (Objects.requireNonNull( assetsApiResponse.body() ).isEmpty()) morePages = false;
 				}
 			}
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -208,7 +208,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							null, null )
 					.execute();
 			if (divisionsResponse.isSuccessful()) return divisionsResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -228,7 +228,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							schematicId, DEFAULT_ESI_SERVER, null )
 					.execute();
 			if (schematicistResponse.isSuccessful()) return schematicistResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -249,7 +249,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 									.toLowerCase(),
 							null ).execute();
 			if (universeApiResponse.isSuccessful()) return universeApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -268,7 +268,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 					.create( StatusApi.class )
 					.getStatus( datasource.toLowerCase(), null ).execute();
 			if (statusApiResponse.isSuccessful()) return statusApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -290,7 +290,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							null )
 					.execute();
 			if (assetsApiResponse.isSuccessful()) return assetsApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -312,7 +312,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 							null )
 					.execute();
 			if (assetsApiResponse.isSuccessful()) return assetsApiResponse.body();
-		} catch (IOException | RuntimeException ioe) {
+		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
 			LogWrapper.exit();
@@ -322,7 +322,7 @@ public class ESIDataProvider extends ESIUniverseDataProvider {
 
 	// - B U I L D E R
 	public static class Builder {
-		private ESIDataProvider onConstruction;
+		private final ESIDataProvider onConstruction;
 
 		// - C O N S T R U C T O R S
 		public Builder() {

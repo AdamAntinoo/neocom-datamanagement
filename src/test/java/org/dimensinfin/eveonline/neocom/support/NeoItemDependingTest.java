@@ -7,11 +7,12 @@ import org.dimensinfin.eveonline.neocom.domain.NeoItem;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
-import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 
+@Deprecated
 public class NeoItemDependingTest {
 	// -  C O M P O N E N T S
-	protected ESIUniverseDataProvider esiUniverseDataProvider;
+	protected ESIDataService esiDataService;
 
 	@BeforeEach
 	void setUp() {
@@ -22,13 +23,13 @@ public class NeoItemDependingTest {
 		final GetUniverseCategoriesCategoryIdOk category = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
 		Mockito.when( category.getCategoryId() ).thenReturn( 4 );
 		Mockito.when( category.getName() ).thenReturn( "Material" );
-		this.esiUniverseDataProvider = Mockito.mock( ESIUniverseDataProvider.class );
-		Mockito.when( this.esiUniverseDataProvider.searchEsiItem4Id( Mockito.anyInt() ) )
+		this.esiDataService = Mockito.mock( ESIDataService.class );
+		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) )
 				.thenReturn( esiItem );
-		Mockito.when( this.esiUniverseDataProvider.searchItemGroup4Id( Mockito.anyInt() ) )
+		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) )
 				.thenReturn( group );
-		Mockito.when( this.esiUniverseDataProvider.searchItemCategory4Id( Mockito.anyInt() ) )
+		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) )
 				.thenReturn( category );
-		NeoItem.injectEsiUniverseDataAdapter( this.esiUniverseDataProvider );
+		NeoItem.injectEsiUniverseDataAdapter( this.esiDataService );
 	}
 }

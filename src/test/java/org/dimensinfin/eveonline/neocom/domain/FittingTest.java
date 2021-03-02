@@ -13,11 +13,11 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
-import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 
 public class FittingTest {
 	private NeoItem item4Test;
-	private ESIUniverseDataProvider esiUniverseDataProvider;
+	private ESIDataService esiDataService;
 
 	@Test
 	public void buildComplete() {
@@ -30,7 +30,7 @@ public class FittingTest {
 
 	@Test
 	public void buildMissingWithA() {
-		NullPointerException thrown = Assertions.assertThrows( NullPointerException.class,
+		final NullPointerException thrown = Assertions.assertThrows( NullPointerException.class,
 				() -> new Fitting.Builder()
 						.withFittingData( null )
 						.build(),
@@ -40,7 +40,7 @@ public class FittingTest {
 
 	@Test
 	public void buildMissingWithB() {
-		NullPointerException thrown = Assertions.assertThrows( NullPointerException.class,
+		final NullPointerException thrown = Assertions.assertThrows( NullPointerException.class,
 				() -> new Fitting.Builder()
 						.build(),
 				"Expected Fitting.Builder() to throw null verification, but it didn't." );
@@ -104,13 +104,13 @@ public class FittingTest {
 		final GetUniverseCategoriesCategoryIdOk category = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
 		Mockito.when( category.getCategoryId() ).thenReturn( 6 );
 		Mockito.when( category.getName() ).thenReturn( "Ship" );
-		this.esiUniverseDataProvider = Mockito.mock( ESIUniverseDataProvider.class );
-		Mockito.when( this.esiUniverseDataProvider.searchEsiItem4Id( Mockito.anyInt() ) )
+		this.esiDataService = Mockito.mock( ESIDataService.class );
+		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) )
 				.thenReturn( esiItem );
-		Mockito.when( this.esiUniverseDataProvider.searchItemGroup4Id( Mockito.anyInt() ) )
+		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) )
 				.thenReturn( group );
-		Mockito.when( this.esiUniverseDataProvider.searchItemCategory4Id( Mockito.anyInt() ) )
+		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) )
 				.thenReturn( category );
-		NeoItem.injectEsiUniverseDataAdapter( this.esiUniverseDataProvider );
+		NeoItem.injectEsiUniverseDataAdapter( this.esiDataService );
 	}
 }

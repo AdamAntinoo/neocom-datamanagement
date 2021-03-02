@@ -28,7 +28,7 @@ public class EsiAssets200Ok2NeoAssetConverterTest extends NeoItemDependingTest {
 		final GetUniverseCategoriesCategoryIdOk category = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
 		Mockito.when( category.getCategoryId() ).thenReturn( 4 );
 		Mockito.when( category.getName() ).thenReturn( "Ship" );
-		Mockito.when( esiUniverseDataProvider.searchItemCategory4Id( Mockito.anyInt() ) )
+		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) )
 				.thenReturn( category );
 		Assertions.assertTrue( new EsiAssets200Ok2NeoAssetConverter().convert( esiConversion1 ).isContainer() );
 	}

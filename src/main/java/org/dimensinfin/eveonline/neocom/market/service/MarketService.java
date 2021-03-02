@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -40,6 +41,7 @@ public class MarketService {
 	public interface LowestSellOrderPassThrough {
 		MarketOrder getLowestSellOrder( final Integer regionId, final Integer typeId );
 	}
+
 	public static final Integer PREDEFINED_MARKET_REGION_ID = 10000002; // This is the Jita region 'The Forge'
 	public static final Long PREDEFINED_MARKET_HUB_STATION_ID = 60003760L; // This if the Jita 4-4 main trade hub at Caldari Navy Assembly Plant
 	public static final Double MARKET_DEEP_RANGE = 1.05; // The width that will make market prices as 'equivalent'. Represents a 5%
@@ -180,17 +182,29 @@ public class MarketService {
 	 * @return the market entry with the lowest sell price.
 	 */
 	public MarketOrder getLowestSellOrder( final Integer regionId, final Integer typeId ) {
-		MarketOrder targetOrder = null;
-		double minPrice = Double.MAX_VALUE;
+		//		MarketOrder targetOrder = null;
+		final AtomicDouble minPrice = new AtomicDouble( Double.MAX_VALUE );
 		final long targetSystem = regionMarketHubReferenceTable.getOrDefault( regionId, PREDEFINED_MARKET_HUB_STATION_ID );
-		for (final GetMarketsRegionIdOrders200Ok order : this.esiDataService.getUniverseMarketOrdersForId( regionId, typeId )) {
-			if ((Boolean.TRUE.equals( order.getIsBuyOrder() )) || (order.getSystemId() != targetSystem)) continue;
-			if (order.getPrice() < minPrice) {
-				minPrice = order.getPrice();
-				targetOrder = new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( order );
-			}
-		}
-		return targetOrder;
+		final List<MarketOrder> targetOrders = this.esiDataService.getUniverseMarketOrdersForId( regionId, typeId )
+				.stream()
+				.filter( order -> !order.getIsBuyOrder() )
+				.filter( order -> order.getLocationId() == targetSystem )
+				.filter( order -> order.getPrice() < minPrice.get() )
+				.map( order -> {
+					minPrice.set( order.getPrice() );
+					return new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( order );
+				} )
+				.collect( Collectors.toList() );
+		if (targetOrders.isEmpty()) return null;
+		else return targetOrders.get( 0 );
+		//		for (final GetMarketsRegionIdOrders200Ok order : this.esiDataService.getUniverseMarketOrdersForId( regionId, typeId )) {
+		//			if ((Boolean.TRUE.equals( order.getIsBuyOrder() )) || (order.getSystemId() != targetSystem)) continue;
+		//			if (order.getPrice() < minPrice) {
+		//				minPrice = order.getPrice();
+		//				targetOrder = new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( order );
+		//			}
+		//		}
+		//		return targetOrder;
 	}
 
 	/**

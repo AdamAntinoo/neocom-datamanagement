@@ -52,6 +52,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRaces200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
@@ -60,6 +61,10 @@ import org.dimensinfin.logging.LogWrapper;
 import retrofit2.Response;
 
 public class ESIDataService extends ESIDataProvider {
+	public interface EsiItemPassThrough {
+		GetUniverseTypesTypeIdOk downloadEsiType( final int typeId );
+	}
+
 	@NonNls
 	private static final ResourceBundle i18Bundle = ResourceBundle.getBundle( "i18Properties" );
 	private static final String PILOT_IDENTIFIER_LOG_LITERAL = i18Bundle.getString( "pilot.identifier.literal" );
@@ -67,18 +72,22 @@ public class ESIDataService extends ESIDataProvider {
 	private static final Map<Integer, GetUniverseAncestries200Ok> ancestriesCache = new HashMap<>();
 	private static final Map<Integer, GetUniverseBloodlines200Ok> bloodLinesCache = new HashMap<>();
 
+	private final IDataStore dataStore;
+
 	// - C O N S T R U C T O R S
 	@Inject
 	public ESIDataService( @NotNull @Named(DMServicesDependenciesModule.ICONFIGURATION_SERVICE) final IConfigurationService configurationService,
 	                       @NotNull @Named(DMServicesDependenciesModule.IFILE_SYSTEM) final IFileSystem fileSystem,
-	                       @NotNull @Named(DMServicesDependenciesModule.ISTORE_CACHE) final IStoreCache storeCacheManager,
 	                       @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) final RetrofitService retrofitService,
-	                       @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService ) {
+	                       @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
+	                       @NotNull @Named(DMServicesDependenciesModule.ISTORE_CACHE) final IStoreCache storeCache,
+	                       @NotNull @Named(DMServicesDependenciesModule.DATA_STORE) final IDataStore dataStore ) {
 		this.configurationProvider = configurationService;
 		this.fileSystemAdapter = fileSystem;
-		this.storeCacheManager = storeCacheManager;
 		this.retrofitService = retrofitService;
 		this.locationCatalogService = locationCatalogService;
+		this.storeCacheManager = storeCache;
+		this.dataStore = dataStore;
 	}
 
 	// - A L L I A N C E   P U B L I C   I N F O R M A T I O N
@@ -384,7 +393,7 @@ public class ESIDataService extends ESIDataProvider {
 	 */
 	@TimeElapsed
 	public List<GetMarketsRegionIdOrders200Ok> getUniverseMarketOrdersForId( final Integer regionId, final Integer typeId ) {
-		LogWrapper.enter( MessageFormat.format( "regionId: {0, number , integer} - typeId: {1, number , integer}", regionId, typeId ) );
+		LogWrapper.enter( MessageFormat.format( "regionId: {0,number,#} - typeId: {1,number,#}", regionId, typeId ) );
 		final List<GetMarketsRegionIdOrders200Ok> returnMarketOrderList = new ArrayList<>( 1000 );
 		try {
 			// This request is paged. There can be more pages than one. The size limit seems to be 1000 but test for error.
@@ -426,6 +435,12 @@ public class ESIDataService extends ESIDataProvider {
 		return this.locationCatalogService.getUniverseSystemById( systemId );
 	}
 
+	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int typeId ) {
+		return this.dataStore.accessEsiItem4Id( typeId,
+				( tid ) -> this.downloadEsiType( typeId )
+		);
+	}
+
 	@RequiresNetwork
 	public GetUniverseAncestries200Ok searchSDEAncestry( final int identifier ) {
 		if (ancestriesCache.isEmpty()) // First download the family data.
@@ -445,6 +460,25 @@ public class ESIDataService extends ESIDataProvider {
 		if (bloodLinesCache.isEmpty()) // First download the family data.
 			this.downloadPilotFamilyData();
 		return racesCache.get( identifier );
+	}
+
+	private GetUniverseTypesTypeIdOk downloadEsiType( final int typeId ) {
+		LogWrapper.enter( MessageFormat.format( "Type Id: {0,number,#}", typeId ) );
+		try {
+			final Response<GetUniverseTypesTypeIdOk> esiTypeResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseTypesTypeId( typeId,
+							ESIDataProvider.DEFAULT_ACCEPT_LANGUAGE,
+							ESIDataProvider.DEFAULT_ESI_SERVER, null, null )
+					.execute();
+			if (esiTypeResponse.isSuccessful()) return esiTypeResponse.body();
+		} catch (final IOException | RuntimeException ioe) {
+			LogWrapper.error( ioe );
+		} finally {
+			LogWrapper.exit();
+		}
+		return null;
 	}
 
 	private synchronized void downloadPilotFamilyData() {

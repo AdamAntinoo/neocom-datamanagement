@@ -78,7 +78,7 @@ public class EsiType extends NeoComNode {
 
 	// - G E T T E R S   &   S E T T E R S
 	public GetUniverseCategoriesCategoryIdOk getCategory() {
-		return category;
+		return this.category;
 	}
 
 	public String getCategoryName() {
@@ -86,7 +86,7 @@ public class EsiType extends NeoComNode {
 	}
 
 	public GetUniverseGroupsGroupIdOk getGroup() {
-		return group;
+		return this.group;
 	}
 
 	public String getGroupName() {
@@ -252,6 +252,7 @@ public class EsiType extends NeoComNode {
 			return this;
 		}
 
+		@Deprecated
 		public EsiType.Builder withTypeId( final Integer typeId ) {
 			this.onConstruction.typeId = Objects.requireNonNull( typeId );
 			return this;

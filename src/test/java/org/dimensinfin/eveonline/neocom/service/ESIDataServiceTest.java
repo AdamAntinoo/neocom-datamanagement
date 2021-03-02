@@ -71,6 +71,8 @@ public class ESIDataServiceTest {
 	private IStoreCache storeCacheManager;
 	private RetrofitService retrofitService;
 	private LocationCatalogService locationCatalogService;
+	private IDataStore dataStore;
+	private ESIDataService esiDataService;
 
 	private OkHttpClient.Builder universeClientBuilder;
 
@@ -81,6 +83,16 @@ public class ESIDataServiceTest {
 		this.storeCacheManager = Mockito.mock( IStoreCache.class );
 		this.retrofitService = Mockito.mock( RetrofitService.class );
 		this.locationCatalogService = Mockito.mock( LocationCatalogService.class );
+		this.storeCacheManager = Mockito.mock( IStoreCache.class );
+		this.dataStore = Mockito.mock( IDataStore.class );
+		this.esiDataService = new ESIDataService(
+				this.configurationService,
+				this.fileSystem,
+				this.retrofitService,
+				this.locationCatalogService,
+				this.storeCacheManager,
+				this.dataStore );
+
 		// - HTTP access mock
 		this.universeClientBuilder = new OkHttpClient.Builder()
 				.addInterceptor( chain -> {
@@ -109,14 +121,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.retrofitService.accessUniverseConnector() )
 				.thenReturn( this.getNewUniverseConnector( httpClient ) );
-		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetAlliancesAllianceIdOk obtained = esiDataService.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
+		final GetAlliancesAllianceIdOk obtained = this.esiDataService.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertTrue( obtained instanceof GetAlliancesAllianceIdOk );
@@ -144,13 +149,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetCharactersCharacterIdOk obtained = esiDataService.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
+		final GetCharactersCharacterIdOk obtained = this.esiDataService.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertTrue( obtained instanceof GetCharactersCharacterIdOk );
@@ -189,13 +188,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdAssets200Ok> obtained = esiDataService.getCharactersCharacterIdAssets( credential );
+		final List<GetCharactersCharacterIdAssets200Ok> obtained = this.esiDataService.getCharactersCharacterIdAssets( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( 2, obtained.size() );
@@ -208,13 +201,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.retrofitService.accessUniverseConnector() ).thenThrow( RuntimeException.class );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdAssets200Ok> obtained = esiDataService.getCharactersCharacterIdAssets( credential );
+		final List<GetCharactersCharacterIdAssets200Ok> obtained = this.esiDataService.getCharactersCharacterIdAssets( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( 0, obtained.size() );
@@ -252,13 +239,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdBlueprints200Ok> obtained = esiDataService.getCharactersCharacterIdBlueprints( credential );
+		final List<GetCharactersCharacterIdBlueprints200Ok> obtained = this.esiDataService.getCharactersCharacterIdBlueprints( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( 2, obtained.size() );
@@ -271,13 +252,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.retrofitService.accessUniverseConnector() ).thenThrow( RuntimeException.class );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdBlueprints200Ok> obtained = esiDataService.getCharactersCharacterIdBlueprints( credential );
+		final List<GetCharactersCharacterIdBlueprints200Ok> obtained = this.esiDataService.getCharactersCharacterIdBlueprints( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( 0, obtained.size() );
@@ -290,13 +265,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.retrofitService.accessUniverseConnector() ).thenThrow( RuntimeException.class );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		Assertions.assertNull( esiDataService.getCharactersCharacterId( characterId ) );
+		Assertions.assertNull( this.esiDataService.getCharactersCharacterId( characterId ) );
 	}
 
 	@Test
@@ -326,13 +295,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdIndustryJobs200Ok> obtained = esiDataService.getCharactersCharacterIdIndustryJobs( credential );
+		final List<GetCharactersCharacterIdIndustryJobs200Ok> obtained = this.esiDataService.getCharactersCharacterIdIndustryJobs( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( 1, obtained.size() );
@@ -365,13 +328,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetCharactersCharacterIdLocationOk obtained = esiDataService.getCharactersCharacterIdLocation( credential );
+		final GetCharactersCharacterIdLocationOk obtained = this.esiDataService.getCharactersCharacterIdLocation( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( TEST_ESI_CHARACTER_LOCATION_SYSTEM_ID, obtained.getSolarSystemId() );
@@ -411,13 +368,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdOrders200Ok> obtained = esiDataService.getCharactersCharacterIdOrders( credential );
+		final List<GetCharactersCharacterIdOrders200Ok> obtained = this.esiDataService.getCharactersCharacterIdOrders( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( 1, obtained.size() );
@@ -450,13 +401,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetCharactersCharacterIdShipOk obtained = esiDataService.getCharactersCharacterIdShip( credential );
+		final GetCharactersCharacterIdShipOk obtained = this.esiDataService.getCharactersCharacterIdShip( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( TEST_ESI_CHARACTER_SHIP_NAME, obtained.getShipName() );
@@ -486,13 +431,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetCharactersCharacterIdSkillsOk obtained = esiDataService.getCharactersCharacterIdSkills( credential );
+		final GetCharactersCharacterIdSkillsOk obtained = this.esiDataService.getCharactersCharacterIdSkills( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( TEST_ESI_CHARACTER_TOTAL_SP, obtained.getTotalSp() );
@@ -521,13 +460,7 @@ public class ESIDataServiceTest {
 		Mockito.when( credential.getAccountId() ).thenReturn( TEST_CREDENTIAL_ACCOUNT_ID );
 		Mockito.when( credential.getDataSource() ).thenReturn( DEFAULT_ESI_SERVER );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final Double obtained = esiDataService.getCharactersCharacterIdWallet( credential );
+		final Double obtained = this.esiDataService.getCharactersCharacterIdWallet( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( TEST_ESI_CHARACTER_WALLET_AMOUNT, obtained, 0.01 );
@@ -567,13 +500,7 @@ public class ESIDataServiceTest {
 		Mockito.when( this.retrofitService.accessUniverseConnector() )
 				.thenReturn( this.getNewUniverseConnector( httpClient ) );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetLoyaltyStoresCorporationIdOffers200Ok> obtained = esiDataService.getLoyaltyStoresOffers( TEST_LOYALTY_CORPORATION_ID );
+		final List<GetLoyaltyStoresCorporationIdOffers200Ok> obtained = this.esiDataService.getLoyaltyStoresOffers( TEST_LOYALTY_CORPORATION_ID );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertTrue( obtained.size() > 0 );
@@ -607,13 +534,7 @@ public class ESIDataServiceTest {
 		Mockito.when( this.retrofitService.accessUniverseConnector() )
 				.thenReturn( this.getNewUniverseConnector( httpClient ) );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetMarketsRegionIdHistory200Ok> obtained = esiDataService.getMarketsHistoryForRegion(
+		final List<GetMarketsRegionIdHistory200Ok> obtained = this.esiDataService.getMarketsHistoryForRegion(
 				TEST_MARKET_REGION_ID, TEST_MARKET_TYPE_ID
 		);
 		// Assertions
@@ -660,13 +581,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.locationCatalogService.getUniverseConstellationById( Mockito.anyInt() ) ).thenReturn( constellation );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetUniverseConstellationsConstellationIdOk obtained = esiDataService.getUniverseConstellationById( 10000015 );
+		final GetUniverseConstellationsConstellationIdOk obtained = this.esiDataService.getUniverseConstellationById( 10000015 );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 	}
@@ -703,13 +618,7 @@ public class ESIDataServiceTest {
 		Mockito.when( this.retrofitService.accessUniverseConnector() )
 				.thenReturn( this.getNewUniverseConnector( httpClient ) );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetMarketsRegionIdOrders200Ok> obtained = esiDataService
+		final List<GetMarketsRegionIdOrders200Ok> obtained = this.esiDataService
 				.getUniverseMarketOrdersForId( TEST_MARKET_REGION_ID, TEST_MARKET_TYPE_ID );
 		// Assertions
 		Assertions.assertNotNull( obtained );
@@ -723,13 +632,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.locationCatalogService.getUniverseRegionById( Mockito.anyInt() ) ).thenReturn( region );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetUniverseRegionsRegionIdOk obtained = esiDataService.getUniverseRegionById( 10000015 );
+		final GetUniverseRegionsRegionIdOk obtained = this.esiDataService.getUniverseRegionById( 10000015 );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 	}
@@ -741,13 +644,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.locationCatalogService.getUniverseStationById( Mockito.anyInt() ) ).thenReturn( station );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetUniverseStationsStationIdOk obtained = esiDataService.getUniverseStationById( 10000015 );
+		final GetUniverseStationsStationIdOk obtained = this.esiDataService.getUniverseStationById( 10000015 );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 	}
@@ -759,13 +656,7 @@ public class ESIDataServiceTest {
 		// When
 		Mockito.when( this.locationCatalogService.getUniverseSystemById( Mockito.anyInt() ) ).thenReturn( system );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService(
-				this.configurationService,
-				this.fileSystem,
-				this.storeCacheManager,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetUniverseSystemsSystemIdOk obtained = esiDataService.getUniverseSystemById( 10000015 );
+		final GetUniverseSystemsSystemIdOk obtained = this.esiDataService.getUniverseSystemById( 10000015 );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 	}

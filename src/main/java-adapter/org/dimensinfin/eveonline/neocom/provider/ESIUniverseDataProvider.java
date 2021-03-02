@@ -19,7 +19,6 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporat
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsPrices200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.logging.LogWrapper;
@@ -75,10 +74,6 @@ public class ESIUniverseDataProvider {
 
 	// - P R O V I D E R   A P I
 	// - C A C H E D   A P I
-	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int itemId ) {
-		return this.storeCacheManager.accessType( itemId ).blockingGet();
-	}
-
 	@TimeElapsed
 	public GetUniverseCategoriesCategoryIdOk searchItemCategory4Id( final int categoryId ) {
 		return this.storeCacheManager.accessCategory( categoryId ).blockingGet();

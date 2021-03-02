@@ -9,7 +9,7 @@ import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_
 public class TestDataConstants {
 	public static class ESIDataServiceConstants {
 		public static final Integer TEST_CHARACTER_IDENTIFIER = 91734031;
-		public static final Integer TEST_ALLIANCE_IDENTIFIER = 91734031;
+		public static final Integer TEST_ALLIANCE_IDENTIFIER = 117383987;
 	}
 
 	public static class CredentialConstants {

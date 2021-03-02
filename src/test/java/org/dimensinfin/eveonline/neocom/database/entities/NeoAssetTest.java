@@ -12,33 +12,14 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
-import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 
 public class NeoAssetTest {
 	private GetUniverseTypesTypeIdOk esiItem;
 	private GetUniverseGroupsGroupIdOk esiGroup;
 	private GetUniverseCategoriesCategoryIdOk esiCategory;
 	private NeoItem neoItem;
-	private ESIUniverseDataProvider esiDataProvider;
-
-	@Before
-	public void setUp() throws Exception {
-		this.esiItem = Mockito.mock( GetUniverseTypesTypeIdOk.class );
-		Mockito.when( this.esiItem.getGroupId() ).thenReturn( 321 );
-		Mockito.when( this.esiItem.getName() ).thenReturn( "Tritanium" );
-		this.esiGroup = Mockito.mock( GetUniverseGroupsGroupIdOk.class );
-		Mockito.when( this.esiGroup.getGroupId() ).thenReturn( 18 );
-		Mockito.when( this.esiGroup.getName() ).thenReturn( "Mineral" );
-		Mockito.when( this.esiGroup.getCategoryId() ).thenReturn( 654 );
-		this.esiCategory = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
-		Mockito.when( this.esiCategory.getCategoryId() ).thenReturn( 4 );
-		Mockito.when( this.esiCategory.getName() ).thenReturn( "Material" );
-		this.esiDataProvider = Mockito.mock( ESIUniverseDataProvider.class );
-		Mockito.when( this.esiDataProvider.searchEsiItem4Id( Mockito.anyInt() ) ).thenReturn( this.esiItem );
-		Mockito.when( this.esiDataProvider.searchItemGroup4Id( Mockito.anyInt() ) ).thenReturn( this.esiGroup );
-		Mockito.when( this.esiDataProvider.searchItemCategory4Id( Mockito.anyInt() ) ).thenReturn( this.esiCategory );
-		NeoItem.injectEsiUniverseDataAdapter( this.esiDataProvider );
-	}
+	private ESIDataService esiDataService;
 
 	@Test
 	public void gettersContract() {
@@ -66,5 +47,24 @@ public class NeoAssetTest {
 		Assertions.assertEquals( 0.01, asset.getVolume(), 0.01 );
 		Assertions.assertEquals( false, asset.isBlueprint() );
 		Assertions.assertEquals( "https://image.eveonline.com/Type/34_64.png", asset.getURLForItem() );
+	}
+
+	@Before
+	public void setUp() throws Exception {
+		this.esiItem = Mockito.mock( GetUniverseTypesTypeIdOk.class );
+		Mockito.when( this.esiItem.getGroupId() ).thenReturn( 321 );
+		Mockito.when( this.esiItem.getName() ).thenReturn( "Tritanium" );
+		this.esiGroup = Mockito.mock( GetUniverseGroupsGroupIdOk.class );
+		Mockito.when( this.esiGroup.getGroupId() ).thenReturn( 18 );
+		Mockito.when( this.esiGroup.getName() ).thenReturn( "Mineral" );
+		Mockito.when( this.esiGroup.getCategoryId() ).thenReturn( 654 );
+		this.esiCategory = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
+		Mockito.when( this.esiCategory.getCategoryId() ).thenReturn( 4 );
+		Mockito.when( this.esiCategory.getName() ).thenReturn( "Material" );
+		this.esiDataService = Mockito.mock( ESIDataService.class );
+		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) ).thenReturn( this.esiItem );
+		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) ).thenReturn( this.esiGroup );
+		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) ).thenReturn( this.esiCategory );
+		NeoItem.injectEsiUniverseDataAdapter( this.esiDataService );
 	}
 }
