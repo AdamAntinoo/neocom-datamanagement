@@ -28,10 +28,10 @@ jobs:
       - image: circleci/openjdk:11-jdk
     steps:
       - checkout
-      - run: 
+      - run:
           name: DATAMANAGEMENT - Get and cache the compilation dependencies
           command: |
-            ./gradlew dependencies
+            ./gradlew dependencies --refresh-dependencies
       - save_cache:
           paths:
             - ~/project/.gradle
@@ -44,12 +44,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
+            - v1-dependencies-
       - run:
           name: DATAMANAGEMENT - Compile the current library code
           command: |
-            ./gradlew classes
+            ./gradlew compileJava
 
   test-datamanagement-job:
     docker:
@@ -61,15 +61,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
       - run:
           name: DATAMANAGEMENT - Unit Testing application
           command: |
             ./gradlew test
       - store_test_results:
           path: ~/project/build/test-results/test
-      - store_artifacts:  
+      - store_artifacts:
           path: ~/project/build/libs
       - save_cache:
           paths:
@@ -84,17 +83,18 @@ jobs:
       - restore_cache:
           keys:
             - v1-build-{{ checksum "~/project/build.gradle" }}
-            - v1-build-
       - run:
           name: DATAMANAGEMENT - Validate the CI machine configuration
           command: |
             ./gradlew --version
             sudo snap install figlet
+            sudo snap install redis
       - run:
           name: DATAMANAGEMENT - Prepare the installation for the SDE database
           working_directory: src/integration/sh
           command: |
             ./update-sde.sh
+            ./install-sde.sh
       - run:
           name: DATAMANAGEMENT - Generate build resources and get them ready
           command: |
@@ -126,11 +126,11 @@ jobs:
       - restore_cache:
           keys:
             - v1-build-{{ checksum "~/project/build.gradle" }}
-            - v1-build-
       - run:
           name: DATAMANAGEMENT - Update SonarQube statistics
-#          environment:
-#            SONAR_TOKEN: 43aa5854943b217594aaefa3fd33c6e0cb83d24e
+          environment:
+            SONAR_TOKEN: 852b9705880c9090a25e0d76440c1585c5d03fe4
+            sonar.login: 852b9705880c9090a25e0d76440c1585c5d03fe4
           command: |
             ./gradlew sonarqube
 
@@ -148,6 +148,7 @@ jobs:
           command: |
             ./gradlew --version
             sudo snap install figlet
+            sudo snap install redis
       - run:
           name: DATAMANAGEMENT - Generate the SDE database
           working_directory: src/integration/sh
