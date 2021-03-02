@@ -69,7 +69,7 @@ public class NeoItem extends NeoComNode implements IItemFacet {
 	@RequiresNetwork
 	private void loadup() {
 		try {
-			this.item = esiUniverseDataProvider.searchEsiItem4Id(this.id);
+//			this.item = esiUniverseDataProvider.searchEsiItem4Id(this.id);
 			Objects.requireNonNull(this.item);
 			this.group = esiUniverseDataProvider.searchItemGroup4Id(this.item.getGroupId());
 			Objects.requireNonNull(this.group);

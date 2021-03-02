@@ -6,77 +6,100 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.esiswagger.model.CharacterscharacterIdfittingsItems;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
-import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
-import org.dimensinfin.eveonline.neocom.service.ESIDataService;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.FittingItemConstants.TEST_FITTING_ITEM_FLAG;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.FittingItemConstants.TEST_FITTING_ITEM_QUANTITY;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.FittingItemConstants.TEST_FITTING_ITEM_TYPE_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.FittingItemConstants.TEST_FITTING_ITEM_TYPE_NAME;
 
 public class FittingItemTest {
-	//	private NeoItem item4Test;
-	private ESIDataService esiDataService;
+	private CharacterscharacterIdfittingsItems fittingData;
+	private EsiType esiType;
+
+	@BeforeEach
+	public void beforeEach() {
+		this.fittingData = Mockito.mock( CharacterscharacterIdfittingsItems.class );
+		this.esiType = Mockito.mock( EsiType.class );
+	}
 
 	@Test
-	public void buildComplete() {
-		final CharacterscharacterIdfittingsItems fittingData = Mockito.mock( CharacterscharacterIdfittingsItems.class );
+	public void buildContract() {
 		final FittingItem fittingItem = new FittingItem.Builder()
-				.withFittingItem( fittingData )
+				.withFittingData( this.fittingData )
+				.withType( this.esiType )
 				.build();
 		Assertions.assertNotNull( fittingItem );
 	}
 
 	@Test
-	public void buildMissingWithA() {
-		final NullPointerException thrown = Assertions.assertThrows( NullPointerException.class,
-				() -> new FittingItem.Builder()
-						.withFittingItem( null )
-						.build(),
-				"Expected FittingItem.Builder() to throw null verification, but it didn't." );
-
+	public void buildFailureMissingWith() {
+		Assertions.assertThrows( NullPointerException.class, () -> {
+			new FittingItem.Builder()
+					.withType( this.esiType )
+					.build();
+		} );
+		Assertions.assertThrows( NullPointerException.class, () -> {
+			new FittingItem.Builder()
+					.withFittingData( this.fittingData )
+					.build();
+		} );
 	}
 
 	@Test
-	public void buildMissingWithB() {
-		final NullPointerException thrown = Assertions.assertThrows( NullPointerException.class,
-				() -> new FittingItem.Builder()
-						.build(),
-				"Expected FittingItem.Builder() to throw null verification, but it didn't." );
+	public void buildFailureNull() {
+		Assertions.assertThrows( NullPointerException.class, () -> {
+			new FittingItem.Builder()
+					.withFittingData( null )
+					.withType( this.esiType )
+					.build();
+		} );
+		Assertions.assertThrows( NullPointerException.class, () -> {
+			new FittingItem.Builder()
+					.withFittingData( this.fittingData )
+					.withType( null )
+					.build();
+		} );
+	}
 
+	@Test
+	public void equalsContract() {
+		EqualsVerifier.forClass( FittingItem.class )
+				.suppress( Warning.NONFINAL_FIELDS )
+				.usingGetClass().verify();
 	}
 
 	@Test
 	public void gettersContract() {
-		final CharacterscharacterIdfittingsItems fittingData = Mockito.mock( CharacterscharacterIdfittingsItems.class );
-		Mockito.when( fittingData.getTypeId() ).thenReturn( 12056 );
-		Mockito.when( fittingData.getFlag() ).thenReturn( CharacterscharacterIdfittingsItems.FlagEnum.CARGO );
-		Mockito.when( fittingData.getQuantity() ).thenReturn( 2 );
+		// When
+		Mockito.when( this.fittingData.getFlag() ).thenReturn( TEST_FITTING_ITEM_FLAG );
+		Mockito.when( this.fittingData.getQuantity() ).thenReturn( TEST_FITTING_ITEM_QUANTITY );
+		Mockito.when( this.fittingData.getTypeId() ).thenReturn( TEST_FITTING_ITEM_TYPE_ID );
+		Mockito.when( this.esiType.getName() ).thenReturn( TEST_FITTING_ITEM_TYPE_NAME );
+		// Test
 		final FittingItem fittingItem = new FittingItem.Builder()
-				.withFittingItem( fittingData )
+				.withFittingData( this.fittingData )
+				.withType( this.esiType )
 				.build();
-		Assertions.assertNotNull( fittingItem );
-
-		Assertions.assertEquals( 12056, fittingItem.getTypeId() );
-		Assertions.assertEquals( CharacterscharacterIdfittingsItems.FlagEnum.CARGO, fittingItem.getFlag() );
-		Assertions.assertEquals( 2, fittingItem.getQuantity() );
-		Assertions.assertEquals( "10MN Afterburner I", fittingItem.getTypeName() );
+		// Assertions
+		Assertions.assertEquals( TEST_FITTING_ITEM_FLAG, fittingItem.getFlag() );
+		Assertions.assertEquals( TEST_FITTING_ITEM_QUANTITY, fittingItem.getQuantity() );
+		Assertions.assertEquals( TEST_FITTING_ITEM_TYPE_ID, fittingItem.getTypeId() );
+		Assertions.assertEquals( TEST_FITTING_ITEM_TYPE_NAME, fittingItem.getTypeName() );
 	}
 
-	@BeforeEach
-	public void setUp() {
-		final GetUniverseTypesTypeIdOk esiItem = Mockito.mock( GetUniverseTypesTypeIdOk.class );
-		Mockito.when( esiItem.getName() ).thenReturn( "10MN Afterburner I" );
-		final GetUniverseGroupsGroupIdOk group = Mockito.mock( GetUniverseGroupsGroupIdOk.class );
-		Mockito.when( group.getGroupId() ).thenReturn( 46 );
-		Mockito.when( group.getName() ).thenReturn( "Propulsion Module" );
-		final GetUniverseCategoriesCategoryIdOk category = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
-		Mockito.when( category.getCategoryId() ).thenReturn( 7 );
-		Mockito.when( category.getName() ).thenReturn( "Module" );
-		this.esiDataService = Mockito.mock( ESIDataService.class );
-		//		Mockito.when( this.esiUniverseDataProvider.searchEsiItem4Id( Mockito.anyInt() ) )
-		//				.thenReturn( esiItem );
-		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) )
-				.thenReturn( group );
-		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) )
-				.thenReturn( category );
-		NeoItem.injectEsiUniverseDataAdapter( this.esiDataService );
+	//	@Test
+	public void toStringContract() {
+		// Test
+		final FittingItem fittingItem = new FittingItem.Builder()
+				.withFittingData( this.fittingData )
+				.withType( this.esiType )
+				.build();
+		final String expected = "";
+		final String obtained = fittingItem.toString();
+		// Assertions
+		Assertions.assertEquals( expected, obtained );
+
 	}
 }

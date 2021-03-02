@@ -47,7 +47,7 @@ public class FittingTest {
 
 	}
 
-	@Test
+	//	@Test
 	public void downloadFittingItems() {
 		final GetCharactersCharacterIdFittings200Ok fittingData = Mockito.mock( GetCharactersCharacterIdFittings200Ok.class );
 		final List<CharacterscharacterIdfittingsItems> itemList = new ArrayList<>();
@@ -73,7 +73,7 @@ public class FittingTest {
 		Assertions.assertNotNull( fitting );
 	}
 
-	@Test
+	//	@Test
 	public void gettersContract() {
 		final GetCharactersCharacterIdFittings200Ok fittingData = Mockito.mock( GetCharactersCharacterIdFittings200Ok.class );
 		Mockito.when( fittingData.getFittingId() ).thenReturn( 1234 );

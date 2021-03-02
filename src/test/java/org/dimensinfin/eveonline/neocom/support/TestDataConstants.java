@@ -3,6 +3,7 @@ package org.dimensinfin.eveonline.neocom.support;
 import org.joda.time.DateTime;
 
 import org.dimensinfin.eveonline.neocom.domain.IndustryGroup;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.CharacterscharacterIdfittingsItems;
 
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
 
@@ -126,5 +127,13 @@ public class TestDataConstants {
 		public static final Double TEST_MARKET_ORDER_PRICE = 345.98;
 		public static final Integer TEST_MARKET_ORDER_VOLUME_REMAIN = 100;
 		public static final Integer TEST_MARKET_ORDER_VOLUME_TOTAL = 200;
+	}
+
+	public static final class FittingItemConstants {
+		public static final CharacterscharacterIdfittingsItems.FlagEnum TEST_FITTING_ITEM_FLAG =
+				CharacterscharacterIdfittingsItems.FlagEnum.HISLOT6;
+		public static final Integer TEST_FITTING_ITEM_QUANTITY = 2;
+		public static final Integer TEST_FITTING_ITEM_TYPE_ID = 12056;
+		public static final String TEST_FITTING_ITEM_TYPE_NAME = "10MN Afterburner I";
 	}
 }

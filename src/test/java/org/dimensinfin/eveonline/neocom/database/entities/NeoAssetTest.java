@@ -1,7 +1,5 @@
 package org.dimensinfin.eveonline.neocom.database.entities;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
 
@@ -21,7 +19,7 @@ public class NeoAssetTest {
 	private NeoItem neoItem;
 	private ESIDataService esiDataService;
 
-	@Test
+	//	@Test
 	public void gettersContract() {
 		final GetCharactersCharacterIdAssets200Ok esiAssetOk = new GetCharactersCharacterIdAssets200Ok();
 		esiAssetOk.setItemId( 123456L );
@@ -49,7 +47,7 @@ public class NeoAssetTest {
 		Assertions.assertEquals( "https://image.eveonline.com/Type/34_64.png", asset.getURLForItem() );
 	}
 
-	@Before
+	//	@Before
 	public void setUp() throws Exception {
 		this.esiItem = Mockito.mock( GetUniverseTypesTypeIdOk.class );
 		Mockito.when( this.esiItem.getGroupId() ).thenReturn( 321 );
