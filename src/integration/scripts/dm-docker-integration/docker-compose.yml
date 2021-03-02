@@ -1,0 +1,36 @@
+# INTEGRATION - Docker Composer components
+# PROJECT CODE - 53
+#
+# Docker composer automatically creates a network. The container host matches the container name. To differentiate and create single
+#   networks use a directory name that should be unique. The recommended format is: <project>-docker-<environment>
+#
+# The integration environment will use a real OAuth authentication and also will deal directly with the ESI SSO and backend services.
+#   All mocks are disabled and the calls will progress to real services with real data, but the backend repository and the applications
+#   will run in local and not in the Heroku servers.
+#
+# The list of project ports is next:
+#   5310 - apisimulator-esi-oauth [INTEGRATION]
+#   5320 - apisimulator-esi-data [INTEGRATION]
+
+version: '3.8'
+
+services:
+  datamanagement-integration-apisimulator-esi-oauth:
+    container_name: datamanagement-integration-apisimulator-esi-oauth
+    image: apimastery/apisimulator:1.8
+    ports:
+      - "5310:6090"
+    volumes:
+      # WARNING - Use full absolute paths to make this work.
+      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esioauth-simulation:/esioauth-simulation
+    command: "bin/apisimulator start /esioauth-simulation -p 6090"
+
+  datamanagement-integration-apisimulator-esi-data:
+    container_name: datamanagement-integration-apisimulator-esi-data
+    image: apimastery/apisimulator
+    ports:
+      - "5320:6090"
+    volumes:
+      # WARNING - Use full absolute paths to make this work.
+      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esidata-simulation:/esidata-simulation
+    command: "bin/apisimulator start /esidata-simulation -p 6090"

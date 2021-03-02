@@ -14,11 +14,13 @@ task downloadSDEData(type: Exec) {
             .withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.files(layout.projectDirectory.dir('src/integration/sh/setVersion.sql'))
             .withPropertyName('outputVersion')
-    println "> Task :NeoCom.DataManagement:downloadSDEData: downloading updated SDE contents..."
-    println "> Task :NeoCom.DataManagement:downloadSDEData: $SDEDatabaseVersion"
-    new File("$sdeRepositoryProjectPath/setVersion.sql").text = "INSERT INTO `version` VALUES ('CURRENT-VERSION', \'$SDEDatabaseVersion\');"
     workingDir "$projectDir/src/integration/sh"
     commandLine 'bash', './update-sde.sh'
+    doLast {
+        println "> Task :NeoCom.DataManagement:downloadSDEData: downloading updated SDE contents..."
+        println "> Task :NeoCom.DataManagement:downloadSDEData: $SDEDatabaseVersion"
+        new File("$sdeRepositoryProjectPath/setVersion.sql").text = "INSERT INTO `version` VALUES ('CURRENT-VERSION', \'$SDEDatabaseVersion\');"
+    }
 }
 
 task generateSDEDatabase(type: Exec) {
@@ -29,7 +31,6 @@ task generateSDEDatabase(type: Exec) {
     outputs.file(layout.projectDirectory.dir('src/integration/resources/sde.db'))
             .withPropertyName('outputDb')
     workingDir "$projectDir/src/integration/sh"
-//    commandLine 'bash', './update-sde.sh'
     commandLine 'bash', './install-sde.sh'
 }
 

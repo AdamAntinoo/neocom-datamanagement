@@ -41,7 +41,7 @@ public class LoyaltyServiceIT {
 		neocomDatabaseService.onCreate( neocomDatabaseService.getConnectionSource() );
 	}
 
-	@Test
+	//	@Test
 	public void checkLoyaltyOfferGeneration() throws SQLException {
 		// Prepare
 		this.beforeEach();
@@ -52,14 +52,14 @@ public class LoyaltyServiceIT {
 				this.resourceFactory,
 				this.marketService )
 				.setRegionId( 10000002 ) // Jita
-//								.setRegionId( 10000043 ) // Amarr
+				//								.setRegionId( 10000043 ) // Amarr
 				.setDaysInRange( TEST_LOYALTY_DAYS_IN_RANGE )
 				.setDateCoveragePct( TEST_LOYALTY_RANGE_COVERAGE )
 				.setMinTradeVolume( TEST_LOYALTY_MINIMUM_TRADE_VOLUME );
 		// Test
-//				final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000179 ); // 24th - Amarr
+		//				final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000179 ); // 24th - Amarr
 		final List<LoyaltyOfferEntity> offerList = loyaltyService.processOffers( 1000182 ); // Tribunal - Minmatar
-		for (LoyaltyOfferEntity offer : offerList.stream()
+		for (final LoyaltyOfferEntity offer : offerList.stream()
 				.filter( offer -> offer.getLpValue() > loyaltyService.getProfitLevel() )
 				.sorted( ( of1, of2 ) -> Long.compare( of2.getLpValue(), of1.getLpValue() ) )
 				.collect( Collectors.toList() ))
@@ -74,7 +74,7 @@ public class LoyaltyServiceIT {
 		Assertions.assertTrue( this.loyaltyOffersRepository.searchOffers4Corporation( TEST_LOYALTY_CORPORATION_ID ).size() == 0 );
 		// Process offers.
 		final LoyaltyService loyaltyService = new LoyaltyService( this.esiDataService, this.loyaltyOffersRepository, this.resourceFactory,
-				marketService )
+				this.marketService )
 				.setRegionId( TEST_LOYALTY_MARKET_HUB_REGION_ID )
 				.setDaysInRange( TEST_LOYALTY_DAYS_IN_RANGE )
 				.setDateCoveragePct( TEST_LOYALTY_RANGE_COVERAGE )

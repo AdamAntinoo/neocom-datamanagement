@@ -42,6 +42,9 @@ public class ESIDataServiceIT {
 	private IStoreCache storeCache;
 	private RetrofitService retrofitService;
 	private LocationCatalogService locationCatalogService;
+	private IDataStore dataStore;
+	private ESIDataService esiDataService;
+
 	private GenericContainer<?> esiAuthenticationSimulator;
 	private GenericContainer<?> esiDataSimulator;
 
@@ -53,8 +56,9 @@ public class ESIDataServiceIT {
 		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
 		this.configurationService = injector.getInstance( SBConfigurationService.class );
 		this.fileSystem = injector.getInstance( SBFileSystemAdapter.class );
-		this.retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
-		this.storeCache = new MemoryStoreCacheService( this.retrofitService );
+		this.retrofitService = injector.getInstance( RetrofitService.class );
+		this.dataStore = injector.getInstance( RedisDataStoreImplementation.class );
+		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
 		this.locationCatalogService = new LocationCatalogService( this.retrofitService );
 		// Update the retrofit port configurations.
 		//		LogWrapper.info( "Update configuration." );
@@ -68,19 +72,20 @@ public class ESIDataServiceIT {
 		//						esiDataSimulator.getContainerIpAddress() +
 		//						":" +
 		//						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
+		this.esiDataService = new ESIDataService(
+				this.configurationService,
+				this.fileSystem,
+				this.retrofitService,
+				this.locationCatalogService,
+				this.storeCache,
+				this.dataStore );
 	}
 
 	@Test
 	public void getAlliancesAllianceId() {
 		// Prepare
 		this.beforeEach();
-		// Test
-		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
-				this.fileSystem,
-				this.storeCache,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetAlliancesAllianceIdOk obtained = esiDataService.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
+		final GetAlliancesAllianceIdOk obtained = this.esiDataService.getAlliancesAllianceId( TEST_ALLIANCE_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( "AFK", obtained.getTicker() );
@@ -89,16 +94,16 @@ public class ESIDataServiceIT {
 
 	@Test
 	public void getAlliancesAllianceIdIcons() {
-		// Test
-		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
-				this.fileSystem,
-				this.storeCache,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetAlliancesAllianceIdIconsOk obtained = esiDataService.getAlliancesAllianceIdIcons( TEST_ALLIANCE_IDENTIFIER );
+		// Prepare
+		this.beforeEach();
+		final GetAlliancesAllianceIdIconsOk obtained = this.esiDataService.getAlliancesAllianceIdIcons( TEST_ALLIANCE_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( "https://images.evetech.net/Alliance/117383987_64.png", obtained.getPx64x64() );
+	}
+
+	@Test
+	public void getAlliancesAllianceIdNotFound() {
 	}
 
 	@Test
@@ -106,12 +111,7 @@ public class ESIDataServiceIT {
 		// Prepare
 		this.beforeEach();
 		// Test
-		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
-				this.fileSystem,
-				this.storeCache,
-				this.retrofitService,
-				this.locationCatalogService );
-		final GetCharactersCharacterIdOk obtained = esiDataService.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
+		final GetCharactersCharacterIdOk obtained = this.esiDataService.getCharactersCharacterId( TEST_CHARACTER_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertEquals( "Zach Zender", obtained.getName() );
@@ -133,12 +133,12 @@ public class ESIDataServiceIT {
 		//		Mockito.when( this.retrofitFactory.accessUniverseConnector() ).thenReturn()
 		Mockito.when( job.getJobId() ).thenReturn( TEST_INDUSTRY_JOBS_JOB_ID );
 		// Test
-		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
-				this.fileSystem,
-				this.storeCache,
-				this.retrofitService,
-				this.locationCatalogService );
-		final List<GetCharactersCharacterIdIndustryJobs200Ok> obtained = esiDataService.getCharactersCharacterIdIndustryJobs( credential );
+		//		final ESIDataService esiDataService = new ESIDataService( this.configurationService,
+		//				this.fileSystem,
+		//				this.storeCache,
+		//				this.retrofitService,
+		//				this.locationCatalogService );
+		final List<GetCharactersCharacterIdIndustryJobs200Ok> obtained = this.esiDataService.getCharactersCharacterIdIndustryJobs( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertTrue( obtained.size() > 0 );

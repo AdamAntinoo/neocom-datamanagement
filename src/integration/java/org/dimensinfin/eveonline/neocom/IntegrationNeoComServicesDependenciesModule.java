@@ -14,9 +14,11 @@ import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
+import org.dimensinfin.eveonline.neocom.service.IDataStore;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
+import org.dimensinfin.eveonline.neocom.service.RedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.support.IntegrationNeoComDatabaseService;
@@ -40,64 +42,68 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		if (null == appDirectory) appDirectory = "appDir";
 		if (null == sdeDatabasePath) sdeDatabasePath = "/src/integration/resources/sde.db";
 		if (null == neocomDatabasePath) neocomDatabasePath = "jdbc:sqlite:neocom.db";
-		bind( String.class )
+		this.bind( String.class )
 				.annotatedWith( Names.named( "PropertiesDirectory" ) )
 				.toInstance( propDirectory );
-		bind( String.class )
+		this.bind( String.class )
 				.annotatedWith( Names.named( "ApplicationDirectory" ) )
 				.toInstance( appDirectory );
-		bind( String.class )
+		this.bind( String.class )
 				.annotatedWith( Names.named( "SDEDatabasePath" ) )
 				.toInstance( sdeDatabasePath );
-		bind( String.class )
+		this.bind( String.class )
 				.annotatedWith( Names.named( "NeoComDatabasePath" ) )
 				.toInstance( neocomDatabasePath );
 
-		bind( IConfigurationService.class )
+		this.bind( IConfigurationService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ICONFIGURATION_SERVICE ) )
 				.to( SBConfigurationService.class )
 				.in( Singleton.class );
-		bind( IFileSystem.class )
+		this.bind( IFileSystem.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.IFILE_SYSTEM ) )
 				.to( SBFileSystemAdapter.class )
 				.in( Singleton.class );
-		bind( IStoreCache.class )
+		this.bind( IStoreCache.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ISTORE_CACHE ) )
 				.to( MemoryStoreCacheService.class )
 				.in( Singleton.class );
-		bind( RetrofitService.class )
+		this.bind( RetrofitService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.RETROFIT_SERVICE ) )
 				.to( RetrofitService.class )
 				.in( Singleton.class );
-		bind( LocationCatalogService.class )
+		this.bind( LocationCatalogService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE ) )
 				.to( LocationCatalogService.class )
 				.in( Singleton.class );
-		bind( ESIDataService.class )
+		this.bind( ESIDataService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ESIDATA_SERVICE ) )
 				.to( ESIDataService.class )
 				.in( Singleton.class );
-		bind( ResourceFactory.class )
+		this.bind( ResourceFactory.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.RESOURCE_FACTORY ) )
 				.to( ResourceFactory.class )
 				.in( Singleton.class );
-		bind( ISDEDatabaseService.class )
+		this.bind( ISDEDatabaseService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ISDE_DATABASE_SERVICE ) )
 				.to( SBSDEDatabaseService.class )
 				.in( Singleton.class );
-		bind( NeoComDatabaseService.class )
+		this.bind( NeoComDatabaseService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE ) )
 				.to( IntegrationNeoComDatabaseService.class )
 				.in( Singleton.class );
-		bind( LoyaltyOffersRepository.class )
+		this.bind( LoyaltyOffersRepository.class )
 				.annotatedWith( Names.named( DMDatabaseDependenciesModule.LOYALTYOFFERS_REPOSITORY ) )
 				.to( LoyaltyOffersRepository.class )
 				.in( Singleton.class );
-		bind( LoyaltyService.class )
+		this.bind( LoyaltyService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.LOYALTY_SERVICE ) )
 				.to( LoyaltyService.class )
 				.in( Singleton.class );
-		bind( MarketService.class )
+		this.bind( IDataStore.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.DATA_STORE ) )
+				.to( RedisDataStoreImplementation.class )
+				.in( Singleton.class );
+		this.bind( MarketService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.MARKET_SERVICE ) )
 				.to( MarketService.class )
 				.in( Singleton.class );
