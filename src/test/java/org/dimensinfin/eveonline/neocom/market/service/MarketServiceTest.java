@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
-import org.dimensinfin.eveonline.neocom.domain.space.Station;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrders200Ok;
-import org.dimensinfin.eveonline.neocom.market.MarketData;
 import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.converter.GetMarketsRegionIdOrdersToMarketOrderConverter;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
@@ -116,7 +114,7 @@ public class MarketServiceTest {
 		Mockito.when( this.dataStore.accessLowestSellOrder( Mockito.anyInt(), Mockito.anyInt(),
 				Mockito.any( MarketService.LowestSellOrderPassThrough.class ) ) ).thenReturn( order );
 		// Test
-		final MarketService marketService = new MarketService( dataStore, this.locationCatalogService, this.esiDataService );
+		final MarketService marketService = new MarketService( this.dataStore, this.locationCatalogService, this.esiDataService );
 		final double obtained = marketService.getLowestSellPrice( TEST_MARKET_SERVICE_REGION_ID, TEST_MARKET_SERVICE_TYPE_ID );
 		// Assertions
 		final double expected = 200.0;
@@ -124,60 +122,4 @@ public class MarketServiceTest {
 		Assertions.assertEquals( expected, obtained );
 	}
 
-	/**
-	 * This test requires a lot of mock data and it is best suited for Integration against a real scenery.
-	 */
-//	@Test
-	public void getMarketConsolidatedByRegion4ItemId() {
-		// Test
-		final MarketService marketService = new MarketService( dataStore, this.locationCatalogService, this.esiDataService );
-		final MarketData obtained = marketService
-				.getMarketConsolidatedByRegion4ItemId( TEST_MARKET_SERVICE_REGION_ID, TEST_MARKET_SERVICE_TYPE_ID );
-		// Assertions
-		Assertions.assertNotNull( obtained );
-	}
-
-//	@Test
-	public void getMarketHubSellOrders4Id() {
-		// Given
-		final Integer TARGET_SYSTEM_ID = 321543;
-		final Integer TARGET_REGION_ID = 1000002;
-		final Long TEST_ORDER_ID = 123456L;
-		final Integer ITEM_ID = 123;
-		final Station regionHub = Mockito.mock( Station.class );
-		final List<GetMarketsRegionIdOrders200Ok> orders = new ArrayList<>();
-		final GetMarketsRegionIdOrders200Ok order1 = new GetMarketsRegionIdOrders200Ok();
-		order1.setIsBuyOrder( true );
-		order1.setSystemId( TARGET_SYSTEM_ID );
-		order1.setPrice( 100.0 );
-		orders.add( order1 );
-		final GetMarketsRegionIdOrders200Ok order2 = new GetMarketsRegionIdOrders200Ok();
-		order2.setIsBuyOrder( true );
-		order2.setSystemId( TARGET_SYSTEM_ID );
-		order2.setPrice( 200.0 );
-		orders.add( order2 );
-		final GetMarketsRegionIdOrders200Ok order3 = new GetMarketsRegionIdOrders200Ok();
-		order3.setOrderId( TEST_ORDER_ID );
-		order3.setIsBuyOrder( false );
-		order3.setSystemId( TARGET_SYSTEM_ID );
-		order3.setPrice( 200.0 );
-		orders.add( order3 );
-		final GetMarketsRegionIdOrders200Ok order4 = new GetMarketsRegionIdOrders200Ok();
-		order4.setIsBuyOrder( true );
-		order4.setSystemId( TARGET_SYSTEM_ID + 1 );
-		order4.setPrice( 200.0 );
-		orders.add( order4 );
-		// When
-		//		Mockito.when( this.ma.getRegionMarketHub( TARGET_REGION_ID ) ).thenReturn( regionHub );
-		Mockito.when( this.esiDataService.getUniverseMarketOrdersForId( Mockito.anyInt(), Mockito.anyInt() ) )
-				.thenReturn( orders );
-		Mockito.when( regionHub.getSolarSystemId() ).thenReturn( TARGET_SYSTEM_ID );
-		// Test
-		final MarketService marketService = new MarketService( dataStore, this.locationCatalogService, this.esiDataService );
-		final List<GetMarketsRegionIdOrders200Ok> obtained = marketService.getMarketHubSellOrders4Id( regionHub, ITEM_ID );
-		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( 1, obtained.size() );
-		Assertions.assertEquals( 200.0, obtained.get( 0 ).getPrice(), 0.1 );
-		Assertions.assertEquals( TEST_ORDER_ID, obtained.get( 0 ).getOrderId() );
-	}
 }
