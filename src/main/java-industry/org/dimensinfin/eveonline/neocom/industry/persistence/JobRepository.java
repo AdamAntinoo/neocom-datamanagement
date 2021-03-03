@@ -15,7 +15,7 @@ public class JobRepository {
 	private final Dao<JobEntity, String> industryJobDao;
 
 	// - C O N S T R U C T O R S
-	public JobRepository( final @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) NeoComDatabaseService neoComDatabaseService ) throws SQLException {
+	public JobRepository( final @NotNull @Named(DMServicesDependenciesModule.INEOCOM_DATABASE_SERVICE) NeoComDatabaseService neoComDatabaseService ) throws SQLException {
 		this.industryJobDao = neoComDatabaseService.getIndustryJobDao();
 	}
 

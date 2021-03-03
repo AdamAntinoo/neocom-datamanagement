@@ -28,7 +28,7 @@ public class LoyaltyOffersRepository {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public LoyaltyOffersRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) throws SQLException {
+	public LoyaltyOffersRepository( @NotNull @Named(DMServicesDependenciesModule.INEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) throws SQLException {
 		this.loyaltyOfferDao = neoComDatabaseService.getLoyaltyOfferDao();
 	}
 

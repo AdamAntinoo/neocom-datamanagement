@@ -12,7 +12,6 @@ import com.google.inject.name.Named;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import org.dimensinfin.eveonline.neocom.utility.AccessStatistics;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
@@ -25,6 +24,8 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStat
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
+import org.dimensinfin.eveonline.neocom.utility.AccessStatistics;
+import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
@@ -50,11 +51,11 @@ public class LocationCatalogService extends Job {
 	}
 
 	private static final AccessStatistics locationsCacheStatistics = new AccessStatistics();
-	private static Map<Long, SpaceLocation> locationCache = new HashMap<>();
+	private static final Map<Long, SpaceLocation> locationCache = new HashMap<>();
 	// - C O M P O N E N T S
 	private final RetrofitService retrofitService;
 
-	private Map<String, Integer> locationTypeCounters = new HashMap<>();
+	private final Map<String, Integer> locationTypeCounters = new HashMap<>();
 
 	// - C O N S T R U C T O R S
 	@Inject
@@ -103,7 +104,7 @@ public class LocationCatalogService extends Job {
 
 	// - S T O R A G E
 	public int cleanLocationsCache() {
-		final int contentCount =   locationCache.size();
+		final int contentCount = locationCache.size();
 		locationCache.clear();
 		return contentCount;
 	}
@@ -120,7 +121,7 @@ public class LocationCatalogService extends Job {
 					.execute();
 			if (systemResponse.isSuccessful())
 				return systemResponse.body();
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
 		}
 		return null;
@@ -137,7 +138,7 @@ public class LocationCatalogService extends Job {
 							DEFAULT_ESI_SERVER.toLowerCase(), null, null )
 					.execute();
 			if (systemResponse.isSuccessful()) return systemResponse.body();
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
 		}
 		return null;
@@ -171,7 +172,7 @@ public class LocationCatalogService extends Job {
 					.execute();
 			if (systemResponse.isSuccessful())
 				return systemResponse.body();
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
 		}
 		return null;
@@ -206,7 +207,7 @@ public class LocationCatalogService extends Job {
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
-		SpaceLocation hit = this.buildUpLocation( locationId );
+		final SpaceLocation hit = this.buildUpLocation( locationId );
 		if (null != hit) {
 			this.storeOnCacheLocation( hit );
 			LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2, number, integer} generated from ESI data.",
@@ -220,7 +221,7 @@ public class LocationCatalogService extends Job {
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
-		SpaceLocation hit = this.buildUpStructure( locationId, credential );
+		final SpaceLocation hit = this.buildUpStructure( locationId, credential );
 		if (null != hit) {
 			this.storeOnCacheLocation( hit );
 			LogWrapper.info( MessageFormat.format(
@@ -263,14 +264,18 @@ public class LocationCatalogService extends Job {
 							.build() );
 		}
 		if (locationId < 61000000) { // Can be a game station
-			final GetUniverseStationsStationIdOk station = Objects.requireNonNull( this
-					.getUniverseStationById( locationId.intValue() ) );
-			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this
-					.getUniverseSystemById( station.getSystemId() ) );
-			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
-					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
-			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
-					.getUniverseRegionById( constellation.getRegionId() ) );
+			final GetUniverseStationsStationIdOk station = NeoObjects.requireNonNull( this
+							.getUniverseStationById( locationId.intValue() ),
+					"ESI Station should not be null while creating Location." );
+			final GetUniverseSystemsSystemIdOk solarSystem = NeoObjects.requireNonNull( this
+							.getUniverseSystemById( station.getSystemId() ),
+					"ESI Solar System should not be null while creating Location." );
+			final GetUniverseConstellationsConstellationIdOk constellation = NeoObjects.requireNonNull( this
+							.getUniverseConstellationById( solarSystem.getConstellationId() ),
+					"ESI Constellation should not be null while creating Location." );
+			final GetUniverseRegionsRegionIdOk region = NeoObjects.requireNonNull( this
+							.getUniverseRegionById( constellation.getRegionId() ),
+					"ESI Region should not be null while creating Location." );
 			return this.storeOnCacheLocation(
 					new SpaceLocationImplementation.Builder()
 							.withRegion( region )
@@ -319,9 +324,9 @@ public class LocationCatalogService extends Job {
 	}
 
 	private SpaceLocation searchOnMemoryCache( final Long locationId ) {
-		int access = locationsCacheStatistics.accountAccess( true );
+		final int access = locationsCacheStatistics.accountAccess( true );
 		//		this.lastLocationAccess = LocationCacheAccessType.MEMORY_ACCESS;
-		int hits = locationsCacheStatistics.getHits();
+		final int hits = locationsCacheStatistics.getHits();
 		LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2} found at cache.",
 				hits, access, locationId ) );
 		return locationCache.get( locationId );

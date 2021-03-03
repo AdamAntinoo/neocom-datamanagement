@@ -81,7 +81,7 @@ public class ESIDataService extends ESIDataProvider {
 	                       @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) final RetrofitService retrofitService,
 	                       @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
 	                       @NotNull @Named(DMServicesDependenciesModule.ISTORE_CACHE) final IStoreCache storeCache,
-	                       @NotNull @Named(DMServicesDependenciesModule.DATA_STORE) final IDataStore dataStore ) {
+	                       @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) final IDataStore dataStore ) {
 		this.configurationProvider = configurationService;
 		this.fileSystemAdapter = fileSystem;
 		this.retrofitService = retrofitService;
