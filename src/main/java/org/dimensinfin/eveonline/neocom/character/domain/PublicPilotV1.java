@@ -29,11 +29,11 @@ public class PublicPilotV1 extends NeoComNode {
 	 * The unique game character identifier assigned at character creation that is going to be used to identify this Pilot.
 	 */
 	protected Integer pilotId;
-	protected transient GetCharactersCharacterIdOk pilotPublicData;
+	protected GetCharactersCharacterIdOk pilotPublicData;
 	protected PublicCorporationV1 corporation;
-	protected transient GetUniverseRaces200Ok raceData;
-	protected transient GetUniverseAncestries200Ok ancestryData;
-	protected transient GetUniverseBloodlines200Ok bloodlineData;
+	protected GetUniverseRaces200Ok raceData;
+	protected GetUniverseAncestries200Ok ancestryData;
+	protected GetUniverseBloodlines200Ok bloodlineData;
 
 	// - C O N S T R U C T O R S
 	protected PublicPilotV1() {}
@@ -84,8 +84,9 @@ public class PublicPilotV1 extends NeoComNode {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( pilotId ).append( pilotPublicData ).append( corporation )
-				.append( raceData ).append( ancestryData ).append( bloodlineData ).toHashCode();
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.pilotId ).append( this.pilotPublicData ).append(
+				this.corporation )
+				.append( this.raceData ).append( this.ancestryData ).append( this.bloodlineData ).toHashCode();
 	}
 
 	@Override
@@ -93,16 +94,16 @@ public class PublicPilotV1 extends NeoComNode {
 		if (this == o) return true;
 		if (!(o instanceof PublicPilotV1)) return false;
 		final PublicPilotV1 that = (PublicPilotV1) o;
-		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( pilotId, that.pilotId )
-				.append( pilotPublicData, that.pilotPublicData ).append( corporation, that.corporation ).append( raceData, that.raceData )
-				.append( ancestryData, that.ancestryData ).append( bloodlineData, that.bloodlineData ).isEquals();
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.pilotId, that.pilotId )
+				.append( this.pilotPublicData, that.pilotPublicData ).append( this.corporation, that.corporation ).append( this.raceData, that.raceData )
+				.append( this.ancestryData, that.ancestryData ).append( this.bloodlineData, that.bloodlineData ).isEquals();
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
-				.append( "pilotId", pilotId )
-				.append( "corporation", corporation )
+				.append( "pilotId", this.pilotId )
+				.append( "corporation", this.corporation )
 				.toString();
 	}
 

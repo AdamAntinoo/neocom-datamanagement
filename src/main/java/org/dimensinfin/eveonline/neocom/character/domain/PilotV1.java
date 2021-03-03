@@ -25,7 +25,7 @@ public class PilotV1 extends PublicPilotV1 {
 	private static final long serialVersionUID = -7085010594597508212L;
 	private long totalSkillpoints = 0;
 	private double walletBalance = 0.0;
-	private transient GetCharactersCharacterIdShipOk currentShip;
+	private GetCharactersCharacterIdShipOk currentShip;
 	private EsiType currentShipType;
 	private SpaceLocation lastKnownLocation;
 
@@ -54,35 +54,36 @@ public class PilotV1 extends PublicPilotV1 {
 	}
 
 	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.totalSkillpoints ).append( this.walletBalance ).append(
+				this.currentShip )
+				.append( this.currentShipType ).append( this.lastKnownLocation ).toHashCode();
+	}
+
+	@Override
 	public boolean equals( final Object o ) {
 		if (this == o) return true;
 		if (!(o instanceof PilotV1)) return false;
 		final PilotV1 pilotV1 = (PilotV1) o;
-		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( totalSkillpoints, pilotV1.totalSkillpoints )
-				.append( walletBalance, pilotV1.walletBalance ).append( currentShip, pilotV1.currentShip )
-				.append( currentShipType, pilotV1.currentShipType ).append( lastKnownLocation, pilotV1.lastKnownLocation ).isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( totalSkillpoints ).append( walletBalance ).append( currentShip )
-				.append( currentShipType ).append( lastKnownLocation ).toHashCode();
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.totalSkillpoints, pilotV1.totalSkillpoints )
+				.append( this.walletBalance, pilotV1.walletBalance ).append( this.currentShip, pilotV1.currentShip )
+				.append( this.currentShipType, pilotV1.currentShipType ).append( this.lastKnownLocation, pilotV1.lastKnownLocation ).isEquals();
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder( this )
-				.append( "totalSkillpoints", totalSkillpoints )
-				.append( "walletBalance", walletBalance )
-				.append( "currentShip", currentShip )
-				.append( "currentShipType", currentShipType )
-				.append( "lastKnownLocation", lastKnownLocation )
-				.append( "pilotId", pilotId )
+				.append( "totalSkillpoints", this.totalSkillpoints )
+				.append( "walletBalance", this.walletBalance )
+				.append( "currentShip", this.currentShip )
+				.append( "currentShipType", this.currentShipType )
+				.append( "lastKnownLocation", this.lastKnownLocation )
+				.append( "pilotId", this.pilotId )
 				.toString();
 	}
 
 	// - B U I L D E R
-	public static class Builder  {
+	public static class Builder {
 		private PilotV1 onConstruction;
 
 		// - C O N S T R U C T O R S
@@ -97,28 +98,9 @@ public class PilotV1 extends PublicPilotV1 {
 			Objects.requireNonNull( this.getActual().lastKnownLocation );
 			Objects.requireNonNull( this.getActual().currentShip );
 			Objects.requireNonNull( this.getActual().currentShipType );
-			return getActual();
+			return this.getActual();
 		}
 
-		private PilotV1 getActual() {
-			if (null == this.onConstruction)
-				this.onConstruction = new PilotV1();
-			return this.onConstruction;
-		}
-
-		private PilotV1.Builder getActualBuilder() {
-			return this;
-		}
-
-		public PilotV1.Builder withCurrentShip( final GetCharactersCharacterIdShipOk currentShip ) {
-			this.getActual().currentShip = Objects.requireNonNull( currentShip );
-			return this;
-		}
-
-		public PilotV1.Builder withCurrentShipType( final EsiType currentShipType ) {
-			this.getActual().currentShipType = Objects.requireNonNull( currentShipType );
-			return this;
-		}
 		public PilotV1.Builder withAncestryData( final GetUniverseAncestries200Ok ancestryData ) {
 			if (null != ancestryData) this.getActual().ancestryData = ancestryData;
 			return this;
@@ -132,6 +114,21 @@ public class PilotV1 extends PublicPilotV1 {
 		public PilotV1.Builder withCorporation( final PublicCorporationV1 corporation ) {
 			this.getActual().corporation = Objects.requireNonNull( corporation );
 			return this.getActualBuilder();
+		}
+
+		public PilotV1.Builder withCurrentShip( final GetCharactersCharacterIdShipOk currentShip ) {
+			this.getActual().currentShip = Objects.requireNonNull( currentShip );
+			return this;
+		}
+
+		public PilotV1.Builder withCurrentShipType( final EsiType currentShipType ) {
+			this.getActual().currentShipType = Objects.requireNonNull( currentShipType );
+			return this;
+		}
+
+		public PilotV1.Builder withLastKnownLocation( final SpaceLocation lastKnownLocation ) {
+			this.getActual().lastKnownLocation = Objects.requireNonNull( lastKnownLocation );
+			return this;
 		}
 
 		public PilotV1.Builder withPilotId( final Integer pilotId ) {
@@ -149,11 +146,6 @@ public class PilotV1 extends PublicPilotV1 {
 			return this.getActualBuilder();
 		}
 
-		public PilotV1.Builder withLastKnownLocation( final SpaceLocation lastKnownLocation ) {
-			this.getActual().lastKnownLocation = Objects.requireNonNull( lastKnownLocation );
-			return this;
-		}
-
 		public PilotV1.Builder withTotalSkillPoints( final Long totalSkillpoints ) {
 			if (null != totalSkillpoints)
 				this.onConstruction.totalSkillpoints = totalSkillpoints;
@@ -163,6 +155,16 @@ public class PilotV1 extends PublicPilotV1 {
 		public PilotV1.Builder withWalletBalance( final Double walletBalance ) {
 			if (null != walletBalance)
 				this.onConstruction.walletBalance = walletBalance;
+			return this;
+		}
+
+		private PilotV1 getActual() {
+			if (null == this.onConstruction)
+				this.onConstruction = new PilotV1();
+			return this.onConstruction;
+		}
+
+		private PilotV1.Builder getActualBuilder() {
 			return this;
 		}
 	}

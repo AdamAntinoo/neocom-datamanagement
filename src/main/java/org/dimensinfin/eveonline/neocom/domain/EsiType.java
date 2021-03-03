@@ -69,9 +69,9 @@ public class EsiType extends NeoComNode {
 
 	protected int typeId = -1;
 	protected IndustryGroup industryGroup = IndustryGroup.UNDEFINED;
-	protected transient GetUniverseTypesTypeIdOk type;
-	protected transient GetUniverseGroupsGroupIdOk group;
-	protected transient GetUniverseCategoriesCategoryIdOk category;
+	protected GetUniverseTypesTypeIdOk type;
+	protected GetUniverseGroupsGroupIdOk group;
+	protected GetUniverseCategoriesCategoryIdOk category;
 
 	// - C O N S T R U C T O R S
 	protected EsiType() {}

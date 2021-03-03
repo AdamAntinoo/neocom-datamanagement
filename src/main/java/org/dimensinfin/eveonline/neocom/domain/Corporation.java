@@ -18,33 +18,16 @@ public class Corporation extends UpdatableNode {
 	private static final long CORPORATION_CACHE_TIME = TimeUnit.HOURS.toMillis( 12 );
 
 	private Integer corporationId;
-	private transient GetCorporationsCorporationIdOk corporationPublicData;
+	private GetCorporationsCorporationIdOk corporationPublicData;
 	private Pilot ceoPilotData;
-	private transient GetAlliancesAllianceIdOk alliance;
+	private GetAlliancesAllianceIdOk alliance;
 
 	// - C O N S T R U C T O R S
 	private Corporation() {}
 
-	// - V I R T U A L S
-	public String getUrl4Icon() {
-		return "http://image.eveonline.com/Corporation/" + this.corporationId + "_64.png";
-	}
+	// - G E T T E R S   &   S E T T E R S
 
 	// - I C O L L A B O R A T I O N
-
-	// - G E T T E R S   &   S E T T E R S
-	public Integer getCorporationId() {
-		return corporationId;
-	}
-
-	public GetCorporationsCorporationIdOk getCorporationPublicData() {
-		return this.corporationPublicData;
-	}
-
-	public Pilot getCeoPilotData() {
-		return this.ceoPilotData;
-	}
-
 	public GetAlliancesAllianceIdOk getAlliance() {
 		return this.alliance;
 	}
@@ -54,6 +37,23 @@ public class Corporation extends UpdatableNode {
 		if (null != this.corporationPublicData)
 			return this.corporationPublicData.getAllianceId();
 		else return -1; // This code is unreacheable.
+	}
+
+	public Pilot getCeoPilotData() {
+		return this.ceoPilotData;
+	}
+
+	public Integer getCorporationId() {
+		return this.corporationId;
+	}
+
+	public GetCorporationsCorporationIdOk getCorporationPublicData() {
+		return this.corporationPublicData;
+	}
+
+	// - V I R T U A L S
+	public String getUrl4Icon() {
+		return "http://image.eveonline.com/Corporation/" + this.corporationId + "_64.png";
 	}
 
 	/**
@@ -73,8 +73,9 @@ public class Corporation extends UpdatableNode {
 
 	// - B U I L D E R
 	public static class Builder {
-		private Corporation onConstruction;
+		private final Corporation onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new Corporation();
 		}

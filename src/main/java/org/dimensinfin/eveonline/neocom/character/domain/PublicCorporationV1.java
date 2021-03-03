@@ -22,9 +22,9 @@ public class PublicCorporationV1 extends NeoComNode {
 	private static final long serialVersionUID = 981323756290749600L;
 
 	private Integer corporationId;
-	private transient GetCorporationsCorporationIdOk corporationPublicData;
+	private GetCorporationsCorporationIdOk corporationPublicData;
 	private Integer ceoId;
-	private transient GetAlliancesAllianceIdOk alliance;
+	private GetAlliancesAllianceIdOk alliance;
 
 	// - C O N S T R U C T O R S
 	private PublicCorporationV1() {}
@@ -35,7 +35,7 @@ public class PublicCorporationV1 extends NeoComNode {
 	}
 
 	public Integer getCeoId() {
-		return ceoId;
+		return this.ceoId;
 	}
 
 	public Integer getCorporationId() {
@@ -53,8 +53,9 @@ public class PublicCorporationV1 extends NeoComNode {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( corporationId ).append( corporationPublicData ).append( ceoId )
-				.append( alliance ).toHashCode();
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.corporationId ).append( this.corporationPublicData ).append(
+				this.ceoId )
+				.append( this.alliance ).toHashCode();
 	}
 
 	@Override
@@ -62,17 +63,17 @@ public class PublicCorporationV1 extends NeoComNode {
 		if (this == o) return true;
 		if (!(o instanceof PublicCorporationV1)) return false;
 		final PublicCorporationV1 that = (PublicCorporationV1) o;
-		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( corporationId, that.corporationId )
-				.append( corporationPublicData, that.corporationPublicData ).append( ceoId, that.ceoId ).append( alliance, that.alliance ).isEquals();
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.corporationId, that.corporationId )
+				.append( this.corporationPublicData, that.corporationPublicData ).append( this.ceoId, that.ceoId ).append( this.alliance, that.alliance ).isEquals();
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
-				.append( "corporationId", corporationId )
-				.append( "corporationPublicData", corporationPublicData )
-				.append( "ceoId", ceoId )
-				.append( "alliance", alliance )
+				.append( "corporationId", this.corporationId )
+				.append( "corporationPublicData", this.corporationPublicData )
+				.append( "ceoId", this.ceoId )
+				.append( "alliance", this.alliance )
 				.toString();
 	}
 

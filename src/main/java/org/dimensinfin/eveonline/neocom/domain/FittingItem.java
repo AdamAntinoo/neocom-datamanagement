@@ -12,8 +12,8 @@ import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 
 public class FittingItem extends NeoComNode {
 	private static final long serialVersionUID = -8828866322219643759L;
-	private transient CharacterscharacterIdfittingsItems fittingDefinition;
-	private transient EsiType fittingType;
+	private CharacterscharacterIdfittingsItems fittingDefinition;
+	private EsiType fittingType;
 
 	// - C O N S T R U C T O R S
 	private FittingItem() {}

@@ -10,10 +10,9 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterI
 
 public class Fitting extends NeoComNode {
 	private static final long serialVersionUID = 2267335283642321303L;
-
-	private GetCharactersCharacterIdFittings200Ok fittingDescription;
 	private final List<FittingItem> items = new ArrayList<>();
-	private transient NeoItem shipItem = null;
+	private GetCharactersCharacterIdFittings200Ok fittingDescription;
+	private NeoItem shipItem = null;
 
 	// - C O N S T R U C T O R S
 	private Fitting() {}
@@ -72,7 +71,7 @@ public class Fitting extends NeoComNode {
 	public static class Builder {
 		private final Fitting onConstruction;
 
-// - C O N S T R U C T O R S
+		// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new Fitting();
 		}

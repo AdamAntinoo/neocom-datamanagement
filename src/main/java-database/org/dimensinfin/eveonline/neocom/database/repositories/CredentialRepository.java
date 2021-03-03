@@ -22,7 +22,7 @@ public class CredentialRepository {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public CredentialRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) {
+	public CredentialRepository( @NotNull @Named(DMServicesDependenciesModule.INEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) {
 		try {
 			this.credentialDao = Objects.requireNonNull( neoComDatabaseService ).getCredentialDao();
 		} catch (final SQLException sqle) {
@@ -32,7 +32,7 @@ public class CredentialRepository {
 	}
 
 	public List<Credential> accessAllCredentials() {
-		List<Credential> credentialList = new ArrayList<>();
+		final List<Credential> credentialList = new ArrayList<>();
 		try {
 			return this.credentialDao.queryForAll();
 		} catch (final SQLException sqle) {

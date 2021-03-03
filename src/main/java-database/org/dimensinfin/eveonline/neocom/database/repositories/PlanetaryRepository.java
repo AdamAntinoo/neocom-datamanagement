@@ -1,6 +1,5 @@
 package org.dimensinfin.eveonline.neocom.database.repositories;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +19,7 @@ import org.dimensinfin.logging.LogWrapper;
  * data
  * storage to process optimizations.
  */
-public class PlanetaryRepository implements Serializable {
-	private static final long serialVersionUID = 7406787994714386613L;
+public class PlanetaryRepository {
 	private static final String SELECT_SCHEMATICS4OUTPUT = "SELECT ps.schematicID, ps.schematicName, ps.cycleTime, pstms.typeId, pstms.quantity, pstms.isInput"
 			+ " FROM   planetSchematicsTypeMap pstmt, planetSchematicsTypeMap pstms, planetSchematics ps"
 			+ " WHERE  pstmt.typeId = ?"
@@ -32,10 +30,10 @@ public class PlanetaryRepository implements Serializable {
 			+ " FROM  planetSchematics ps, planetSchematicsTypeMap psm"
 			+ " WHERE ps.schematicID = ?"
 			+ " AND   psm.schematicID = ps.schematicID";
-	private static Logger logger = LoggerFactory.getLogger( PlanetaryRepository.class );
+	private static final Logger logger = LoggerFactory.getLogger( PlanetaryRepository.class );
 	// - S C H E M A T I C S 4 I D
 	// - C O M P O N E N T S
-	private transient ISDEDatabaseAdapter sdeDatabaseAdapter;
+	private ISDEDatabaseAdapter sdeDatabaseAdapter;
 
 	public List<Schematics> searchSchematics4Id( final Integer schematicId ) {
 		logger.info( ">< [PlanetaryRepository.searchSchematics4Id]> typeId: {}", schematicId );
@@ -44,7 +42,7 @@ public class PlanetaryRepository implements Serializable {
 		final int SCHEMATICS4ID_RESOURCETYPEID_COLINDEX = 3;
 		final int SCHEMATICS4ID_QUANTITY_COLINDEX = 4;
 		final int SCHEMATICS4ID_ISINPUT_COLINDEX = 5;
-		List<Schematics> scheList = new ArrayList<>();
+		final List<Schematics> scheList = new ArrayList<>();
 		try {
 			final ISDEStatement cursor = this.sdeDatabaseAdapter
 					.constructStatement( SELECT_SCHEMATICS4ID, new String[]{ schematicId.toString() } );
@@ -75,7 +73,7 @@ public class PlanetaryRepository implements Serializable {
 		final int SCHEMATICS4OUTPUT_RESOURCETYPEID_COLINDEX = 4;
 		final int SCHEMATICS4OUTPUT_QUANTITY_COLINDEX = 5;
 		final int SCHEMATICS4OUTPUT_ISINPUT_COLINDEX = 6;
-		List<Schematics> scheList = new ArrayList<>();
+		final List<Schematics> scheList = new ArrayList<>();
 		try {
 			final ISDEStatement cursor = this.sdeDatabaseAdapter
 					.constructStatement( SELECT_SCHEMATICS4OUTPUT, new String[]{ Integer.toString( targetId ) } );
@@ -101,8 +99,9 @@ public class PlanetaryRepository implements Serializable {
 
 	// - B U I L D E R
 	public static class Builder {
-		private PlanetaryRepository onConstruction;
+		private final PlanetaryRepository onConstruction;
 
+// - C O N S T R U C T O R S
 		public Builder() {
 			this.onConstruction = new PlanetaryRepository();
 		}

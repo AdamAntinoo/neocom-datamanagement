@@ -32,11 +32,11 @@ public class AssetRepository {
 	private static final String ASSET_ID = "assetId";
 	private static final String ASSETS_READ_LOG_MESSAGE = "Assets read: {0}";
 	private final NeoComDatabaseService neoComDatabaseService;
-	private Dao<NeoAsset, UUID> assetDao;
+	private final Dao<NeoAsset, UUID> assetDao;
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public AssetRepository( @NotNull @Named(DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) throws SQLException {
+	public AssetRepository( @NotNull @Named(DMServicesDependenciesModule.INEOCOM_DATABASE_SERVICE) final NeoComDatabaseService neoComDatabaseService ) throws SQLException {
 		this.neoComDatabaseService = neoComDatabaseService;
 		this.assetDao = this.neoComDatabaseService.getAssetDao();
 	}
@@ -52,9 +52,9 @@ public class AssetRepository {
 		try {
 			TransactionManager.callInTransaction( connection4Transaction, () -> {
 				// Remove all assets that do not have a valid owner.
-				final DeleteBuilder<NeoAsset, UUID> deleteBuilder = assetDao.deleteBuilder();
+				final DeleteBuilder<NeoAsset, UUID> deleteBuilder = this.assetDao.deleteBuilder();
 				deleteBuilder.where().eq( OWNER_ID, (pilotIdentifier * -1) );
-				int count = deleteBuilder.delete();
+				final int count = deleteBuilder.delete();
 				LogWrapper.info( MessageFormat.format( "Invalid assets cleared for owner {}: {}",
 						(pilotIdentifier * -1), count ) );
 				return null;
@@ -72,15 +72,15 @@ public class AssetRepository {
 	public List<NeoAsset> findAllByOwnerId( final Integer ownerId ) {
 		Objects.requireNonNull( ownerId );
 		try {
-			QueryBuilder<NeoAsset, UUID> queryBuilder = this.assetDao.queryBuilder();
-			Where<NeoAsset, UUID> where = queryBuilder.where();
+			final QueryBuilder<NeoAsset, UUID> queryBuilder = this.assetDao.queryBuilder();
+			final Where<NeoAsset, UUID> where = queryBuilder.where();
 			where.eq( OWNER_ID, ownerId );
-			final List<NeoAsset> assetList = assetDao.query( queryBuilder.prepare() );
+			final List<NeoAsset> assetList = this.assetDao.query( queryBuilder.prepare() );
 			LogWrapper.info( MessageFormat.format( ASSETS_READ_LOG_MESSAGE, assetList.size() ) );
 			return Stream.of( assetList )
 					.map( this::assetReconstructor )
 					.collect( Collectors.toList() );
-		} catch (java.sql.SQLException sqle) {
+		} catch (final java.sql.SQLException sqle) {
 			LogWrapper.error( sqle );
 			return new ArrayList<>();
 		}
@@ -93,7 +93,7 @@ public class AssetRepository {
 			LogWrapper.info( MessageFormat.format( ASSETS_READ_LOG_MESSAGE, assetList.size() ) );
 			if (!assetList.isEmpty()) return assetList.get( 0 );
 			else return null;
-		} catch (java.sql.SQLException sqle) {
+		} catch (final java.sql.SQLException sqle) {
 			LogWrapper.error( sqle );
 			return null;
 		}
