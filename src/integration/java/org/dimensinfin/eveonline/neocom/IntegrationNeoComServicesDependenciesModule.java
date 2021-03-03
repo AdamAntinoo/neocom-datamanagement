@@ -22,6 +22,7 @@ import org.dimensinfin.eveonline.neocom.service.RedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.support.IntegrationNeoComDatabaseService;
+import org.dimensinfin.eveonline.neocom.support.MarketServiceReconfigurer;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
 import org.dimensinfin.eveonline.neocom.support.SBSDEDatabaseService;
@@ -38,6 +39,7 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		String appDirectory = System.getProperty( ENV_APPLICATION_DIRECTORY );
 		String sdeDatabasePath = System.getProperty( SDE_DATABASE );
 		String neocomDatabasePath = System.getProperty( NEOCOM_DATABASE );
+		final String redisDatabaseUrl = "redis://localhost:6379";
 		if (null == propDirectory) propDirectory = "/src/integration/resources/properties";
 		if (null == appDirectory) appDirectory = "appDir";
 		if (null == sdeDatabasePath) sdeDatabasePath = "/src/integration/resources/sde.db";
@@ -54,6 +56,9 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 		this.bind( String.class )
 				.annotatedWith( Names.named( "NeoComDatabasePath" ) )
 				.toInstance( neocomDatabasePath );
+		this.bind( String.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.REDIS_DATABASE_URL ) )
+				.toInstance( redisDatabaseUrl );
 
 		this.bind( IConfigurationService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.ICONFIGURATION_SERVICE ) )
@@ -88,7 +93,7 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.to( SBSDEDatabaseService.class )
 				.in( Singleton.class );
 		this.bind( NeoComDatabaseService.class )
-				.annotatedWith( Names.named( DMServicesDependenciesModule.NEOCOM_DATABASE_SERVICE ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.INEOCOM_DATABASE_SERVICE ) )
 				.to( IntegrationNeoComDatabaseService.class )
 				.in( Singleton.class );
 		this.bind( LoyaltyOffersRepository.class )
@@ -100,12 +105,17 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.to( LoyaltyService.class )
 				.in( Singleton.class );
 		this.bind( IDataStore.class )
-				.annotatedWith( Names.named( DMServicesDependenciesModule.DATA_STORE ) )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.IDATA_STORE ) )
 				.to( RedisDataStoreImplementation.class )
 				.in( Singleton.class );
 		this.bind( MarketService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.MARKET_SERVICE ) )
 				.to( MarketService.class )
+				.in( Singleton.class );
+
+		this.bind( MarketServiceReconfigurer.class )
+				.annotatedWith( Names.named( "Reconfigurer" ) )
+				.to( MarketServiceReconfigurer.class )
 				.in( Singleton.class );
 	}
 }

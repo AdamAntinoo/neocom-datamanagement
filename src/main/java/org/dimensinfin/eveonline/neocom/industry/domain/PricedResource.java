@@ -17,7 +17,7 @@ public class PricedResource extends Resource {
 	}
 
 	public double getMarketPrice() {
-		return this.marketData.getBestSellOrder().getPrice();
+		return this.marketData.getBestSellPrice();
 	}
 
 	// - B U I L D E R

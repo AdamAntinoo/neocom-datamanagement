@@ -66,95 +66,6 @@ response:
 
 ---
 
-simlet: universe-groups-10
-
-request:
-  - method: GET
-  - uriPath: /universe/groups/10/
-
-response:
-  from: template
-  status: 200
-  headers:
-    - "Content-Type: application/json"
-  body: |+
-    {
-      "category_id": 2,
-      "group_id": 10,
-      "name": "Stargate",
-      "published": false,
-      "types": [
-        16,
-        17,
-        3873,
-        3874,
-        3875,
-        3876,
-        3877,
-        12292,
-        29624,
-        29625,
-        29626,
-        29627,
-        29628,
-        29629,
-        29630,
-        29631,
-        29632,
-        29633,
-        29634,
-        29635
-      ]
-    }
-
----
-
-simlet: universe-categories-20
-
-request:
-  - method: GET
-  - uriPath: /universe/categories/20/
-
-response:
-  from: template
-  status: 200
-  headers:
-    - "Content-Type: application/json"
-  body: |+
-    {
-      "category_id": 20,
-      "groups": [
-        300,
-        303,
-        304,
-        721,
-        738,
-        739,
-        740,
-        741,
-        742,
-        743,
-        744,
-        745,
-        746,
-        747,
-        748,
-        749,
-        750,
-        751,
-        783,
-        1228,
-        1229,
-        1230,
-        1231,
-        1730
-      ],
-      "name": "Implant",
-      "published": true
-    }
-
----
-
 simlet: universe-types-34
 
 request:
@@ -746,3 +657,905 @@ response:
   body:
     type: text
     file: "${sim.path}/esiresponses/characters.92223647.industry.jobs.json"
+
+---
+
+simlet: universe-groups-10
+
+request:
+  - method: GET
+  - uriPath: /universe/groups/10/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "category_id": 2,
+      "group_id": 10,
+      "name": "Stargate",
+      "published": false,
+      "types": [
+        16,
+        17,
+        3873,
+        3874,
+        3875,
+        3876,
+        3877,
+        12292,
+        29624,
+        29625,
+        29626,
+        29627,
+        29628,
+        29629,
+        29630,
+        29631,
+        29632,
+        29633,
+        29634,
+        29635
+      ]
+    }
+
+---
+
+simlet: universe-categories-20
+
+request:
+  - method: GET
+  - uriPath: /universe/categories/20/
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "category_id": 20,
+      "groups": [
+        300,
+        303,
+        304,
+        721,
+        738,
+        739,
+        740,
+        741,
+        742,
+        743,
+        744,
+        745,
+        746,
+        747,
+        748,
+        749,
+        750,
+        751,
+        783,
+        1228,
+        1229,
+        1230,
+        1231,
+        1730
+      ],
+      "name": "Implant",
+      "published": true
+    }
+
+---
+
+simlet: market-service-orders
+
+request:
+  - method: GET
+  - uriPathPattern: "/markets/10000002/orders/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 1
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body:
+    type: text
+    file: "${sim.path}/esiresponses/market.service.orders.json"
+
+---
+
+simlet: market-service-orders
+
+request:
+  - method: GET
+  - uriPathPattern: "/markets/10000002/orders/"
+  - where: uriQueryParameter
+    named: "page"
+    equals: 2
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    []
+
+---
+
+simlet: universe-stations-60003760
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/stations/60003760/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "max_dockable_ship_volume": 50000000,
+      "name": "Jita IV - Moon 4 - Caldari Navy Assembly Plant",
+      "office_rental_cost": 1726491750,
+      "owner": 1000035,
+      "position": {
+        "x": -107303362560,
+        "y": -18744975360,
+        "z": 436489052160
+      },
+      "race_id": 1,
+      "reprocessing_efficiency": 0.5,
+      "reprocessing_stations_take": 0.05,
+      "services": [
+          "bounty-missions",
+          "courier-missions",
+          "reprocessing-plant",
+          "market",
+          "repair-facilities",
+          "factory",
+          "fitting",
+          "news",
+          "insurance",
+          "docking",
+          "office-rental",
+          "loyalty-point-store",
+          "navy-offices",
+          "security-offices"
+      ],
+      "station_id": 60003760,
+      "system_id": 30000142,
+      "type_id": 52678
+    }
+
+---
+
+simlet: universe-stations-60008494
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/stations/60008494/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "max_dockable_ship_volume": 50000000,
+      "name": "Amarr VIII (Oris) - Emperor Family Academy",
+      "office_rental_cost": 508012285,
+      "owner": 1000086,
+      "position": {
+        "x": -518583951360,
+        "y": 30256619520,
+        "z": 1042895708160
+      },
+      "race_id": 4,
+      "reprocessing_efficiency": 0.5,
+      "reprocessing_stations_take": 0.05,
+      "services": [
+          "bounty-missions",
+          "courier-missions",
+          "interbus",
+          "reprocessing-plant",
+          "market",
+          "stock-exchange",
+          "cloning",
+          "repair-facilities",
+          "factory",
+          "fitting",
+          "news",
+          "insurance",
+          "docking",
+          "office-rental",
+          "loyalty-point-store",
+          "navy-offices",
+          "security-offices"
+      ],
+      "station_id": 60008494,
+      "system_id": 30002187,
+      "type_id": 1932
+    }
+
+---
+
+simlet: universe-stations-60004588
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/stations/60004588/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "max_dockable_ship_volume": 50000000,
+      "name": "Rens VI - Moon 8 - Brutor Tribe Treasury",
+      "office_rental_cost": 195265620,
+      "owner": 1000049,
+      "position": {
+        "x": 178699591680,
+        "y": -18290565120,
+        "z": 505828270080
+      },
+      "race_id": 2,
+      "reprocessing_efficiency": 0.5,
+      "reprocessing_stations_take": 0.05,
+      "services": [
+          "bounty-missions",
+          "courier-missions",
+          "interbus",
+          "reprocessing-plant",
+          "market",
+          "stock-exchange",
+          "cloning",
+          "fitting",
+          "news",
+          "insurance",
+          "docking",
+          "office-rental",
+          "loyalty-point-store",
+          "navy-offices",
+          "security-offices"
+      ],
+      "station_id": 60004588,
+      "system_id": 30002510,
+      "type_id": 2498
+    }
+
+---
+
+simlet: universe-systems-30000142
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/systems/30000142/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellation_id": 20000020,
+      "name": "Jita",
+      "planets": [
+        {
+          "planet_id": 40009077
+        },
+        {
+          "planet_id": 40009078
+        },
+        {
+          "moons": [
+              40009081
+          ],
+          "planet_id": 40009080
+        },
+        {
+          "moons": [
+              40009083,
+              40009084,
+              40009085,
+              40009087,
+              40009088,
+              40009089,
+              40009090,
+              40009091,
+              40009092,
+              40009093,
+              40009094,
+              40009097
+          ],
+          "planet_id": 40009082
+        },
+        {
+          "moons": [
+              40009099,
+              40009100,
+              40009101,
+              40009102,
+              40009103,
+              40009104,
+              40009105,
+              40009106,
+              40009107,
+              40009108,
+              40009109,
+              40009110,
+              40009111,
+              40009112,
+              40009113,
+              40009114,
+              40009115
+          ],
+          "planet_id": 40009098
+        },
+        {
+          "moons": [
+              40009118
+          ],
+          "planet_id": 40009116
+        },
+        {
+          "moons": [
+              40009121,
+              40009122
+          ],
+          "planet_id": 40009119
+        },
+        {
+          "planet_id": 40009123
+        }
+      ],
+      "position": {
+        "x": -129064861734878260,
+        "y": 60755306909963630,
+        "z": 117469227060090290
+      },
+      "security_class": "B",
+      "security_status": 0.9459131360054016,
+      "star_id": 40009076,
+      "stargates": [
+          50001248,
+          50001249,
+          50001250,
+          50013876,
+          50013913,
+          50013921,
+          50013928
+      ],
+      "stations": [
+          60000361,
+          60000364,
+          60000451,
+          60000463,
+          60002953,
+          60002959,
+          60003055,
+          60003460,
+          60003463,
+          60003466,
+          60003469,
+          60003757,
+          60003760,
+          60004423
+      ],
+      "system_id": 30000142
+    }
+
+
+---
+
+simlet: universe-systems-30002187
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/systems/30002187/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellation_id": 20000322,
+      "name": "Amarr",
+      "planets": [
+        {
+          "planet_id": 40139384
+        },
+        {
+          "asteroid_belts": [
+              40139386
+          ],
+          "planet_id": 40139385
+        },
+        {
+          "asteroid_belts": [
+              40139388
+          ],
+          "planet_id": 40139387
+        },
+        {
+          "asteroid_belts": [
+              40139390
+          ],
+          "planet_id": 40139389
+        },
+        {
+          "asteroid_belts": [
+              40139392
+          ],
+          "moons": [
+              40139393
+          ],
+          "planet_id": 40139391
+        },
+        {
+          "asteroid_belts": [
+              40139395
+          ],
+          "moons": [
+              40139396,
+              40139397
+          ],
+          "planet_id": 40139394
+        },
+        {
+          "asteroid_belts": [
+              40139399
+          ],
+          "moons": [
+              40139400,
+              40139401,
+              40139402
+          ],
+          "planet_id": 40139398
+        },
+        {
+          "asteroid_belts": [
+              40139404,
+              40139407,
+              40139416,
+              40139418,
+              40139420,
+              40139422,
+              40139423
+          ],
+          "moons": [
+              40139405,
+              40139406,
+              40139408,
+              40139409,
+              40139410,
+              40139411,
+              40139412,
+              40139413,
+              40139414,
+              40139415,
+              40139417,
+              40139419,
+              40139421
+          ],
+          "planet_id": 40139403
+        },
+        {
+          "asteroid_belts": [
+              40139425,
+              40139426
+          ],
+          "moons": [
+              40139427,
+              40139428,
+              40139429,
+              40139430,
+              40139431,
+              40139432,
+              40139433,
+              40139434,
+              40139435,
+              40139436,
+              40139437,
+              40139438,
+              40139439
+          ],
+          "planet_id": 40139424
+        }
+      ],
+      "position": {
+        "x": -204748707250008930,
+        "y": 40238379936571420,
+        "z": -57621278902421040
+      },
+      "security_class": "A",
+      "security_status": 1,
+      "star_id": 40139383,
+      "stargates": [
+          50000621,
+          50000622,
+          50000623,
+          50000625,
+          50013733,
+          50013735
+      ],
+      "stations": [
+          60002569,
+          60008494,
+          60008950
+      ],
+      "system_id": 30002187
+    }
+
+---
+
+simlet: universe-systems-30002510
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/systems/30002510/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellation_id": 20000367,
+      "name": "Rens",
+      "planets": [
+        {
+          "moons": [
+              40159631
+          ],
+          "planet_id": 40159630
+        },
+        {
+          "moons": [
+              40159633
+          ],
+          "planet_id": 40159632
+        },
+        {
+          "moons": [
+              40159635
+          ],
+          "planet_id": 40159634
+        },
+        {
+          "moons": [
+              40159637
+          ],
+          "planet_id": 40159636
+        },
+        {
+          "moons": [
+              40159639,
+              40159640
+          ],
+          "planet_id": 40159638
+        },
+        {
+          "moons": [
+              40159643,
+              40159644,
+              40159645,
+              40159646,
+              40159647,
+              40159648,
+              40159649,
+              40159650,
+              40159651,
+              40159652,
+              40159653,
+              40159654
+          ],
+          "planet_id": 40159641
+        },
+        {
+          "moons": [
+              40159656,
+              40159657,
+              40159659,
+              40159661,
+              40159662,
+              40159663,
+              40159664,
+              40159665,
+              40159666,
+              40159667,
+              40159669,
+              40159670,
+              40159671,
+              40159672,
+              40159673,
+              40159674,
+              40159675,
+              40159676,
+              40159678,
+              40159679,
+              40159680
+          ],
+          "planet_id": 40159655
+        },
+        {
+          "moons": [
+              40159682,
+              40159683,
+              40159684
+          ],
+          "planet_id": 40159681
+        },
+        {
+          "moons": [
+              40159686,
+              40159687,
+              40159688,
+              40159689,
+              40159690,
+              40159691
+          ],
+          "planet_id": 40159685
+        }
+      ],
+      "position": {
+        "x": -99122341090967100,
+        "y": 40335100631489176,
+        "z": -2867728819583846
+      },
+      "security_class": "D",
+      "security_status": 0.8945818543434143,
+      "star_id": 40159629,
+      "stargates": [
+          50001823,
+          50001824,
+          50014078
+      ],
+      "stations": [
+          60004588,
+          60004594,
+          60005725,
+          60009106,
+          60012721,
+          60012724,
+          60012727
+      ],
+      "system_id": 30002510
+    }
+
+---
+
+simlet: universe-constellations-20000020
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/constellations/20000020/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellation_id": 20000020,
+      "name": "Kimotoro",
+      "position": {
+        "x": -134996400468185440,
+        "y": 64999452632293260,
+        "z": 103325617317521340
+      },
+      "region_id": 10000002,
+      "systems": [
+          30000139,
+          30000140,
+          30000141,
+          30000142,
+          30000143,
+          30000144,
+          30000145
+      ]
+    }
+
+---
+
+simlet: universe-constellations-20000322
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/constellations/20000322/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellation_id": 20000322,
+      "name": "Throne Worlds",
+      "position": {
+        "x": -215258326880235520,
+        "y": 36295414299807550,
+        "z": -66569981807256650
+      },
+      "region_id": 10000043,
+      "systems": [
+          30002187,
+          30002188,
+          30002189,
+          30002190,
+          30002191,
+          30002192,
+          30002193,
+          30002194,
+          30002195,
+          30002196
+      ]
+    }
+
+---
+
+simlet: universe-constellations-20000367
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/constellations/20000367/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellation_id": 20000367,
+      "name": "Ortner",
+      "position": {
+        "x": -102443018585216160,
+        "y": 41967542491658110,
+        "z": -3279331427389417
+      },
+      "region_id": 10000030,
+      "systems": [
+          30002505,
+          30002506,
+          30002507,
+          30002508,
+          30002509,
+          30002510,
+          30002511,
+          30012505
+      ]
+    }
+
+---
+
+simlet: universe-regions-10000002
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/regions/10000002/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellations": [
+          20000017,
+          20000018,
+          20000019,
+          20000020,
+          20000021,
+          20000022,
+          20000023,
+          20000024,
+          20000025,
+          20000026,
+          20000027,
+          20000028,
+          20000029
+      ],
+      "description": "\"The greater the State becomes, the greater humanity under it flourishes.\"",
+      "name": "The Forge",
+      "region_id": 10000002
+    }
+
+---
+
+simlet: universe-regions-10000043
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/regions/10000043/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellations": [
+          20000322,
+          20000323,
+          20000324,
+          20000325,
+          20000326,
+          20000327,
+          20000328,
+          20000329,
+          20000330,
+          20000331,
+          20000332,
+          20000333,
+          20000334,
+          20000507,
+          20000508,
+          20000509,
+          20000510,
+          20000511,
+          20000512,
+          20000513,
+          20000514,
+          20000515,
+          20000516,
+          20000517,
+          20000518,
+          20000519
+      ],
+      "description": "\"In God's name, the Amarr have reclaimed the entirety of our world. Now, blessed with the divine mandate of God, we spread our reach unto other worlds. From nearby Hedion, to the distant Misaba, to the burning southern star Penirgman, and all lands in-between. They are our birthright, our duty, our Domain.\"\r\n\r\n<i>- Emperor Heideran III, 21290 AD upon the opening of the first stargate since the collapse. </i>",
+      "name": "Domain",
+      "region_id": 10000043
+    }
+
+---
+
+simlet: universe-regions-10000030
+
+request:
+  - method: GET
+  - uriPathPattern: "/universe/regions/10000030/"
+
+response:
+  from: template
+  status: 200
+  headers:
+    - "Content-Type: application/json"
+  body: |+
+    {
+      "constellations": [
+          20000367,
+          20000368,
+          20000369,
+          20000370,
+          20000371,
+          20000372,
+          20000373,
+          20000374,
+          20000375,
+          20000376,
+          20000377,
+          20000378
+      ],
+      "description": "\"Never Again\"",
+      "name": "Heimatar",
+      "region_id": 10000030
+    }

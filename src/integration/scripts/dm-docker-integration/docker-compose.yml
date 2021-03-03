@@ -15,15 +15,15 @@
 version: '3.8'
 
 services:
-  datamanagement-integration-apisimulator-esi-oauth:
-    container_name: datamanagement-integration-apisimulator-esi-oauth
-    image: apimastery/apisimulator:1.8
-    ports:
-      - "5310:6090"
-    volumes:
-      # WARNING - Use full absolute paths to make this work.
-      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esioauth-simulation:/esioauth-simulation
-    command: "bin/apisimulator start /esioauth-simulation -p 6090"
+  #  datamanagement-integration-apisimulator-esi-oauth:
+  #    container_name: datamanagement-integration-apisimulator-esi-oauth
+  #    image: apimastery/apisimulator:1.8
+  #    ports:
+  #      - "5310:6090"
+  #    volumes:
+  #      # WARNING - Use full absolute paths to make this work.
+  #      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esioauth-simulation:/esioauth-simulation
+  #    command: "bin/apisimulator start /esioauth-simulation -p 6090"
 
   datamanagement-integration-apisimulator-esi-data:
     container_name: datamanagement-integration-apisimulator-esi-data

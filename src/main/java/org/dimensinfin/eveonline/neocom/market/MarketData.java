@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.market;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,10 +13,15 @@ import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 import static org.dimensinfin.eveonline.neocom.market.service.MarketService.MARKET_DEEP_RANGE;
 
 /**
+ * Converts ESI market data into a suitable data container that has meaning on the front end.
+ * Best sell and best buy orders can be empty if the market selected has no player operations. So prices in such cases do not have value and that
+ * supposes a problem at the serialization step or storage.
+ *
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.20.0
  */
-public class MarketData {
+public class MarketData implements Serializable {
+	private static final long serialVersionUID = 2265789863342148968L;
 	private Integer typeId;
 	private Station regionHub;
 	@Nullable
@@ -36,9 +42,19 @@ public class MarketData {
 		return this.bestBuyOrder;
 	}
 
+	public double getBestBuyPrice() {
+		if (null == this.bestBuyOrder) return 0.0;
+		else return this.bestBuyOrder.getPrice();
+	}
+
 	@Nullable
 	public MarketOrder getBestSellOrder() {
 		return this.bestSellOrder;
+	}
+
+	public double getBestSellPrice() {
+		if (null == this.bestSellOrder) return 0.0;
+		else return this.bestSellOrder.getPrice();
 	}
 
 	public double getMarketWidth() {
@@ -77,6 +93,7 @@ public class MarketData {
 
 		public MarketData build() {
 			Objects.requireNonNull( this.onConstruction.typeId );
+			Objects.requireNonNull( this.onConstruction.regionHub );
 			this.onConstruction.marketWidth = this.calculateMarketWidth( this.onConstruction.bestSellOrder, this.onConstruction.bestBuyOrder );
 			return this.onConstruction;
 		}
@@ -97,9 +114,11 @@ public class MarketData {
 		}
 
 		public MarketData.Builder withSellOrders( final List<GetMarketsRegionIdOrders200Ok> sellOrders ) {
-			this.onConstruction.sellOrders = Objects.requireNonNull( sellOrders );
-			this.onConstruction.sellDeep = this.calculateSellDeep( this.onConstruction.sellOrders );
-			this.onConstruction.sellAverage = this.calculateSellAverage( this.onConstruction.sellOrders );
+			if (null != sellOrders) {
+				this.onConstruction.sellOrders = sellOrders;
+				this.onConstruction.sellDeep = this.calculateSellDeep( this.onConstruction.sellOrders );
+				this.onConstruction.sellAverage = this.calculateSellAverage( this.onConstruction.sellOrders );
+			}
 			return this;
 		}
 
@@ -108,6 +127,9 @@ public class MarketData {
 			return this;
 		}
 
+		/**
+		 * Calculates the market width that is the difference between the lowest sell price and the highest buy price.
+		 */
 		private double calculateMarketWidth( final MarketOrder sellOrder, final MarketOrder buyOrder ) {
 			if (null == sellOrder) return -1.0;
 			if (null == buyOrder) return -1.0;

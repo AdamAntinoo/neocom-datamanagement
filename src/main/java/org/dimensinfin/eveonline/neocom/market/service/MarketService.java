@@ -163,7 +163,7 @@ public class MarketService {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public MarketService( @NotNull @Named(DMServicesDependenciesModule.DATA_STORE) final IDataStore dataStore,
+	public MarketService( @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) final IDataStore dataStore,
 	                      @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
 	                      @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) final ESIDataService esiDataService ) {
 		this.dataStore = dataStore;
@@ -182,29 +182,21 @@ public class MarketService {
 	 * @return the market entry with the lowest sell price.
 	 */
 	public MarketOrder getLowestSellOrder( final Integer regionId, final Integer typeId ) {
-		//		MarketOrder targetOrder = null;
 		final AtomicDouble minPrice = new AtomicDouble( Double.MAX_VALUE );
 		final long targetSystem = regionMarketHubReferenceTable.getOrDefault( regionId, PREDEFINED_MARKET_HUB_STATION_ID );
-		final List<MarketOrder> targetOrders = this.esiDataService.getUniverseMarketOrdersForId( regionId, typeId )
+		GetMarketsRegionIdOrders200Ok targetOrder = null;
+		for (final GetMarketsRegionIdOrders200Ok order : this.esiDataService.getUniverseMarketOrdersForId( regionId, typeId )
 				.stream()
 				.filter( order -> !order.getIsBuyOrder() )
 				.filter( order -> order.getLocationId() == targetSystem )
-				.filter( order -> order.getPrice() < minPrice.get() )
-				.map( order -> {
-					minPrice.set( order.getPrice() );
-					return new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( order );
-				} )
-				.collect( Collectors.toList() );
-		if (targetOrders.isEmpty()) return null;
-		else return targetOrders.get( 0 );
-		//		for (final GetMarketsRegionIdOrders200Ok order : this.esiDataService.getUniverseMarketOrdersForId( regionId, typeId )) {
-		//			if ((Boolean.TRUE.equals( order.getIsBuyOrder() )) || (order.getSystemId() != targetSystem)) continue;
-		//			if (order.getPrice() < minPrice) {
-		//				minPrice = order.getPrice();
-		//				targetOrder = new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( order );
-		//			}
-		//		}
-		//		return targetOrder;
+				.collect( Collectors.toList() )) {
+			if (order.getPrice() < minPrice.get()) {
+				minPrice.set( order.getPrice() );
+				targetOrder = order;
+			}
+		}
+		if (null == targetOrder) return null;
+		else return new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( targetOrder );
 	}
 
 	/**
@@ -232,20 +224,29 @@ public class MarketService {
 	 * @return a new <code>MarketData</code> instance with the consolidated ESI market data.
 	 */
 	public MarketData getMarketConsolidatedByRegion4ItemId( final Integer regionId, final Integer typeId ) {
-		final Station regionHub = this.getRegionMarketHub( regionId );
+		final Station regionHub = this.getRegionMarketHub( regionId ); // Get the hub system to use in the filters.
 		final List<GetMarketsRegionIdOrders200Ok> sellOrders = this.getMarketHubSellOrders4Id( regionHub, typeId );
 		final List<GetMarketsRegionIdOrders200Ok> buyOrders = this.getMarketHubBuyOrders4Id( regionHub, typeId );
 		return new MarketData.Builder()
 				.withTypeId( typeId )
 				.withRegionHub( regionHub )
+				.withSellOrders( sellOrders )
 				.withBestSellOrder( sellOrders.isEmpty() ?
 						null :
 						new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( sellOrders.get( 0 ) ) )
-				.withSellOrders( sellOrders )
 				.withBestBuyOrder( buyOrders.isEmpty() ?
 						null :
 						new GetMarketsRegionIdOrdersToMarketOrderConverter( this.locationCatalogService ).convert( buyOrders.get( 0 ) ) )
 				.build();
+	}
+
+	public List<GetMarketsRegionIdOrders200Ok> getMarketHubBuyOrders4Id( final Station hub, final Integer itemId ) {
+		return this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId )
+				.stream()
+				.filter( GetMarketsRegionIdOrders200Ok::getIsBuyOrder )
+				.filter( order -> order.getLocationId().equals( hub.getLocationId() ) ) // Filter only orders for the hub system
+				.sorted( Comparator.comparingDouble( GetMarketsRegionIdOrders200Ok::getPrice ) )
+				.collect( Collectors.toList() );
 	}
 
 	public List<GetMarketsRegionIdOrders200Ok> getMarketHubSellOrders4Id( final Station hub, final Integer itemId ) {
@@ -253,7 +254,7 @@ public class MarketService {
 		return this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId )
 				.stream()
 				.filter( order -> !order.getIsBuyOrder() ) // Filter only SELL orders
-				.filter( order -> order.getSystemId().equals( hub.getSolarSystemId() ) ) // Filter only orders for the hub system
+				.filter( order -> order.getLocationId().equals( hub.getLocationId() ) ) // Filter only orders for the hub system
 				.filter( order -> order.getPrice() <= priceLimit )
 				.sorted( Comparator.comparingDouble( GetMarketsRegionIdOrders200Ok::getPrice ) )
 				.collect( Collectors.toList() );
@@ -273,14 +274,5 @@ public class MarketService {
 		if (null == hit) hit = PREDEFINED_MARKET_HUB_STATION_ID;
 		final SpaceLocation location = this.locationCatalogService.searchLocation4Id( hit );
 		return (Station) location;
-	}
-
-	private List<GetMarketsRegionIdOrders200Ok> getMarketHubBuyOrders4Id( final Station hub, final Integer itemId ) {
-		return this.esiDataService.getUniverseMarketOrdersForId( hub.getRegionId(), itemId )
-				.stream()
-				.filter( GetMarketsRegionIdOrders200Ok::getIsBuyOrder )
-				.filter( order -> order.getSystemId().equals( hub.getSolarSystemId() ) ) // Filter only orders for the hub system
-				.sorted( Comparator.comparingDouble( GetMarketsRegionIdOrders200Ok::getPrice ) )
-				.collect( Collectors.toList() );
 	}
 }
