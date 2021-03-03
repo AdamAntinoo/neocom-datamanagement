@@ -1,5 +1,5 @@
 [CLASSES TO COMPLETE UNIT TESTING]
-* PricedResource
+* NeoObjects
 * MiningExtraction
 * LoyaltyOfferEntity
 * NeoComRuntimeException
@@ -10,11 +10,11 @@
 * PilotPreferencesRepository
 * PilotPreferencesEntity
 * ESIDataService
-* Resource
 * Fitting
 * FittingV2
 
-* MarketService
+## Pending Fitting refactoring
+* Resource
 
 
 >* NeoAsset

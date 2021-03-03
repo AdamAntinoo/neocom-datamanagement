@@ -37,7 +37,6 @@ jobs:
             - ~/project/.gradle
             - ~/project/gradle
           key: v1-dependencies-{{ checksum "~/project/dependencies.gradle" }}
-
   compile-datamanagement-job:
     docker:
       - image: circleci/openjdk:11-jdk
@@ -67,6 +66,8 @@ jobs:
             sudo snap install redis
       - run:
           name: DATAMANAGEMENT - Unit Testing application
+          environment:
+            REDIS_URL: "redis://localhost:6379"
           command: |
             ./gradlew test
       - store_test_results:
@@ -111,6 +112,7 @@ jobs:
           environment:
             PROPERTIES_DIRECTORY: "/src/integration/resources/properties"
             APPLICATION_DIRECTORY: "appDirectory"
+            REDIS_URL: "redis://localhost:6379"
           command: |
             ./gradlew test integrationTest jacocoTestReport
       - store_test_results:
@@ -120,7 +122,7 @@ jobs:
             - ~/project/.gradle
             - ~/project/build
             - ~/project/coverage
-          key: v1-build-{{ checksum "~/project/build.gradle" }}
+          key: v1-coverage-{{ checksum "~/project/build.gradle" }}
   quality-sonarcloud-backend:
     docker:
       - image: circleci/openjdk:11-jdk
@@ -128,7 +130,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-build-{{ checksum "~/project/build.gradle" }}
+            - v1-coverage-{{ checksum "~/project/build.gradle" }}
       - run:
           name: DATAMANAGEMENT - Update SonarQube statistics
           environment:
