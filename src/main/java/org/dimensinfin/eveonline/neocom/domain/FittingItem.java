@@ -29,11 +29,9 @@ public class FittingItem extends NeoComNode {
 		return this.fittingType.getName();
 	}
 
-	// - C O R E
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() )
-				.toHashCode();
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.fittingDefinition ).append( this.fittingType ).toHashCode();
 	}
 
 	@Override
@@ -41,8 +39,8 @@ public class FittingItem extends NeoComNode {
 		if (this == o) return true;
 		if (!(o instanceof FittingItem)) return false;
 		final FittingItem that = (FittingItem) o;
-		return new EqualsBuilder().appendSuper( super.equals( o ) )
-				.isEquals();
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.fittingDefinition, that.fittingDefinition )
+				.append( this.fittingType, that.fittingType ).isEquals();
 	}
 
 	@Override

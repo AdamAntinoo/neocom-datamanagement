@@ -124,6 +124,7 @@ public class EsiTypeTest {
 	public void equalsContract() {
 		EqualsVerifier.forClass( EsiType.class )
 				.suppress( Warning.NONFINAL_FIELDS )
+				.withIgnoredFields( "type", "group", "category" )
 				.usingGetClass().verify();
 	}
 
@@ -201,7 +202,7 @@ public class EsiTypeTest {
 		Assertions.assertTrue( esiType.isBlueprint() );
 	}
 
-//	@Test
+	//	@Test
 	public void toStringContract() {
 		// Test
 		final EsiType esiType = new EsiType.Builder()
