@@ -28,7 +28,7 @@ dependencies {
 
 // - N E O C O M   L I B R A R I E S
 dependencies {
-    implementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
+    implementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.6'
 }
 
 dependencies {

@@ -1,5 +1,10 @@
 package org.dimensinfin.eveonline.neocom.industry.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
@@ -18,6 +23,32 @@ public class PricedResource extends Resource {
 
 	public double getMarketPrice() {
 		return this.marketData.getBestSellPrice();
+	}
+
+	// - C O R E
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.price ).append( this.marketData ).toHashCode();
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if (this == o) return true;
+		if (!(o instanceof PricedResource)) return false;
+		final PricedResource that = (PricedResource) o;
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.price, that.price )
+				.append( this.marketData, that.marketData ).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "typeId", this.typeId )
+				.append( "industryGroup", this.industryGroup )
+				.append( "price", this.price )
+				.append( "marketData", this.marketData )
+				.append( "quantity", this.quantity )
+				.toString();
 	}
 
 	// - B U I L D E R

@@ -1,20 +1,23 @@
 [CLASSES TO COMPLETE UNIT TESTING]
 * NeoObjects
 * MiningExtraction
-* LoyaltyOfferEntity
 * NeoComRuntimeException
-* PublicCorporationV1
 * NeoComOAuthFlow
 * HttpUniverseClientFactory
 * NeoObjects
 * PilotPreferencesRepository
 * PilotPreferencesEntity
 * ESIDataService
-* Fitting
-* FittingV2
 
 ## Pending Fitting refactoring
+* CorporationV1
+* Fitting
+* FittingV2
 * Resource
+
+[CLASSES TO COVERAGE WITH INTEGRATION TESTS]
+* HttpAuthenticatedClientFactory
+*
 
 
 >* NeoAsset

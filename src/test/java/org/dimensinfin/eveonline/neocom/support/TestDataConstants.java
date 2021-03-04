@@ -140,4 +140,10 @@ public class TestDataConstants {
 		public static final Integer TEST_FITTING_ITEM_TYPE_ID = 12056;
 		public static final String TEST_FITTING_ITEM_TYPE_NAME = "10MN Afterburner I";
 	}
+
+	public static final class CorporationsConstants {
+		public static final Integer TEST_CORPORATION_ID = 1427661573;
+		public static final Integer TEST_CORPORATION_CEO_ID = 93813310;
+
+	}
 }

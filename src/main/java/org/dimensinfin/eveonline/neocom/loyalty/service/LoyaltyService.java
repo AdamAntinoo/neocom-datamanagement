@@ -47,11 +47,11 @@ public class LoyaltyService {
 	private final MarketService marketService;
 
 	// - C O N F I G U R A T I O N
-	private int regionId = 10000043; // Defaults to Domain (Amarr).
+	private int regionId = 10000002; // Defaults to The Forge (Jita).
 	private int daysInRange = 15; // Number of days on the date range period back from the current date.
 	private int dateCoveragePct = 70; // Percentage of the range days that should have market trades to validate an item.
-	private int minTradeVolume = 5; // Min value on the volume of items traded to validate an order.
-	private int profitLevel = 1200;
+	private int minTradeVolume = 8; // Min value on the volume of items traded to validate an order.
+	private final int profitLevel = 1200;
 
 	// - C O N S T R U C T O R S
 	@Inject
@@ -110,7 +110,7 @@ public class LoyaltyService {
 							// Use the current lowest market sell price instead the latest trade price
 							.withPrice( this.marketService.getLowestSellPrice(
 									this.regionId, offer.getTypeId() )
-							 )
+							)
 							.build();
 				} ) // Convert to an entity suitable to be persisted.
 				.map( loyaltyOffer -> {

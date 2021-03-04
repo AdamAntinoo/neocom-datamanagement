@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NonNls;
 
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
@@ -70,6 +71,7 @@ public class PilotV1 extends PublicPilotV1 {
 				.append( this.currentShipType, pilotV1.currentShipType ).append( this.lastKnownLocation, pilotV1.lastKnownLocation ).isEquals();
 	}
 
+	@NonNls
 	@Override
 	public String toString() {
 		return new ToStringBuilder( this )

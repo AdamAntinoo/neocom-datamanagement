@@ -10,6 +10,7 @@ import org.dimensinfin.eveonline.neocom.industry.domain.ActionPreference;
 import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.industry.services.IndustrySession;
 
+@Deprecated
 public class IndustryProcessorService {
 	@Inject
 	@Named("IndustrySession")

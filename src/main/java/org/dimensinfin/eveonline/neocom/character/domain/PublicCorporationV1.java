@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.NonNls;
 
 import org.dimensinfin.eveonline.neocom.domain.NeoComNode;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
@@ -16,6 +17,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporat
  * @since 0.20.0
  */
 public class PublicCorporationV1 extends NeoComNode {
+	@NonNls
 	public static final String CORPORATION_ICON_URL_PREFIX = "http://image.eveonline.com/Corporation/";
 	public static final String CORPORATION_ICON_URL_SUFFIX = "_64.png";
 
@@ -64,7 +66,8 @@ public class PublicCorporationV1 extends NeoComNode {
 		if (!(o instanceof PublicCorporationV1)) return false;
 		final PublicCorporationV1 that = (PublicCorporationV1) o;
 		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.corporationId, that.corporationId )
-				.append( this.corporationPublicData, that.corporationPublicData ).append( this.ceoId, that.ceoId ).append( this.alliance, that.alliance ).isEquals();
+				.append( this.corporationPublicData, that.corporationPublicData ).append( this.ceoId, that.ceoId )
+				.append( this.alliance, that.alliance ).isEquals();
 	}
 
 	@Override
@@ -88,6 +91,11 @@ public class PublicCorporationV1 extends NeoComNode {
 
 		public PublicCorporationV1 build() {
 			return this.onConstruction;
+		}
+
+		public PublicCorporationV1.Builder withAlliance( final GetAlliancesAllianceIdOk alliance ) {
+			if (null != alliance) this.onConstruction.alliance = alliance;
+			return this;
 		}
 
 		public PublicCorporationV1.Builder withCeoPilotId( final Integer ceoId ) {

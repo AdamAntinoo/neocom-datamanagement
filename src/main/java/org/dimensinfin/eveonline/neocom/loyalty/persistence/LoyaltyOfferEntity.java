@@ -18,11 +18,6 @@ import org.dimensinfin.eveonline.neocom.domain.EsiType;
 @DatabaseTable(tableName = "neocom.LoyaltyOffers")
 public class LoyaltyOfferEntity extends UpdatableEntity {
 	private static final long serialVersionUID = 6772112244501770693L;
-
-	private static String generateOfferIdentifier( final Integer offerId, final Integer marketRegionId ) {
-		return "UID:" + offerId + ":" + marketRegionId;
-	}
-
 	/**
 	 * The unique id is composed of the offer identifier and the market region identifier so multiple regions can be scanned and persisted.
 	 */
@@ -104,34 +99,36 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 	}
 
 	@Override
+	public int hashCode() {
+		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.id ).append( this.offerId ).append( this.typeId ).append(
+				this.typeName )
+				.append( this.corporationId ).append( this.corporationName ).append( this.lpValue ).append( this.iskCost ).append( this.lpCost ).append(
+						this.quantity )
+				.append( this.marketRegionId ).append( this.price ).toHashCode();
+	}
+
+	@Override
 	public boolean equals( final Object o ) {
 		if (this == o) return true;
 		if (!(o instanceof LoyaltyOfferEntity)) return false;
 		final LoyaltyOfferEntity entity = (LoyaltyOfferEntity) o;
-		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( typeId, entity.typeId )
-				.append( corporationId, entity.corporationId ).append( id, entity.id ).append( offerId, entity.offerId )
-				.append( typeName, entity.typeName ).append( corporationName, entity.corporationName ).append( lpValue, entity.lpValue )
-				.append( iskCost, entity.iskCost ).append( lpCost, entity.lpCost ).append( quantity, entity.quantity )
-				.append( marketRegionId, entity.marketRegionId ).append( price, entity.price ).isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( id ).append( offerId ).append( typeId ).append( typeName )
-				.append( corporationId ).append( corporationName ).append( lpValue ).append( iskCost ).append( lpCost ).append( quantity )
-				.append( marketRegionId ).append( price ).toHashCode();
+		return new EqualsBuilder().appendSuper( super.equals( o ) ).append( this.typeId, entity.typeId )
+				.append( this.corporationId, entity.corporationId ).append( this.id, entity.id ).append( this.offerId, entity.offerId )
+				.append( this.typeName, entity.typeName ).append( this.corporationName, entity.corporationName ).append( this.lpValue, entity.lpValue )
+				.append( this.iskCost, entity.iskCost ).append( this.lpCost, entity.lpCost ).append( this.quantity, entity.quantity )
+				.append( this.marketRegionId, entity.marketRegionId ).append( this.price, entity.price ).isEquals();
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder( this )
-				.append( "id", id )
-				.append( "typeName", typeName )
-				.append( "corporationName", corporationName )
-				.append( "lpValue", lpValue )
-				.append( "iskCost", iskCost )
-				.append( "lpCost", lpCost )
-				.append( "price", price )
+				.append( "id", this.id )
+				.append( "typeName", this.typeName )
+				.append( "corporationName", this.corporationName )
+				.append( "lpValue", this.lpValue )
+				.append( "iskCost", this.iskCost )
+				.append( "lpCost", this.lpCost )
+				.append( "price", this.price )
 				.toString();
 	}
 
@@ -147,7 +144,7 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 		public LoyaltyOfferEntity build() {
 			Objects.requireNonNull( this.onConstruction.offerId );
 			Objects.requireNonNull( this.onConstruction.marketRegionId );
-			this.onConstruction.id = generateOfferIdentifier( this.onConstruction.offerId, this.onConstruction.marketRegionId );
+			this.onConstruction.id = this.generateOfferIdentifier( this.onConstruction.offerId, this.onConstruction.marketRegionId );
 			this.onConstruction.lpValue = (int) Math
 					.round( ((this.onConstruction.quantity * this.onConstruction.price) - this.onConstruction.iskCost) /
 							this.onConstruction.lpCost );
@@ -195,6 +192,10 @@ public class LoyaltyOfferEntity extends UpdatableEntity {
 			this.onConstruction.typeId = type.getTypeId();
 			this.onConstruction.typeName = type.getName();
 			return this;
+		}
+
+		private String generateOfferIdentifier( final Integer offerId, final Integer marketRegionId ) {
+			return "UID:" + offerId + ":" + marketRegionId;
 		}
 	}
 }
