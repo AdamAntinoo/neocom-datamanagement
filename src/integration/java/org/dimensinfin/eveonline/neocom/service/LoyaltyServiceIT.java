@@ -80,8 +80,8 @@ public class LoyaltyServiceIT {
 				.setDateCoveragePct( TEST_LOYALTY_RANGE_COVERAGE )
 				.setMinTradeVolume( TEST_LOYALTY_MINIMUM_TRADE_VOLUME );
 		// Test
-		loyaltyService.processOffers( TEST_LOYALTY_CORPORATION_ID );
+		final List<LoyaltyOfferEntity> offers = loyaltyService.processOffers( TEST_LOYALTY_CORPORATION_ID );
 		// Assertions
-		Assertions.assertTrue( this.loyaltyOffersRepository.searchOffers4Corporation( TEST_LOYALTY_CORPORATION_ID ).size() > 0 );
+		Assertions.assertTrue( offers.size() > 0 );
 	}
 }

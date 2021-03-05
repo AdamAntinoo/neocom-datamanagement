@@ -114,7 +114,9 @@ jobs:
             APPLICATION_DIRECTORY: "appDirectory"
             REDIS_URL: "redis://localhost:6379"
           command: |
-            ./gradlew test integrationTest jacocoTestReport
+            ./gradlew test
+            ./gradlew integrationTest --info
+            ./gradlew jacocoTestReport
       - store_test_results:
           path: ~/project/build/test-results
       - save_cache:

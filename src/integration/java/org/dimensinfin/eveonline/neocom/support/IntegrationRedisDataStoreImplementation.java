@@ -1,6 +1,8 @@
-package org.dimensinfin.eveonline.neocom.service;
+package org.dimensinfin.eveonline.neocom.support;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
@@ -19,8 +21,12 @@ import org.redisson.config.Config;
 
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
+import org.dimensinfin.eveonline.neocom.industry.domain.ProcessedBlueprint;
 import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
+import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
+import org.dimensinfin.eveonline.neocom.service.ESIDataService;
+import org.dimensinfin.eveonline.neocom.service.IDataStore;
 import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -28,13 +34,15 @@ import org.dimensinfin.logging.LogWrapper;
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.20.0
  */
-public class RedisDataStoreImplementation implements IDataStore {
-	protected static final String REDIS_SEPARATOR = ":";
-	protected static final ObjectMapper neocomObjectMapper = new ObjectMapper();
-	protected static final JsonJacksonCodec codec = new JsonJacksonCodec( neocomObjectMapper );
-	protected static final String LOWEST_SELL_ORDER_MAP = "LSO";
-	protected static final String ESITYPE_CACHE_NAME = "ESIT";
-	protected static final Integer LOWEST_SELL_ORDER_TTL = 300;
+public class IntegrationRedisDataStoreImplementation implements IDataStore {
+	private static final String REDIS_SEPARATOR = ":";
+	private static final ObjectMapper neocomObjectMapper = new ObjectMapper();
+	private static final JsonJacksonCodec codec = new JsonJacksonCodec( neocomObjectMapper );
+	private static final String LOWEST_SELL_ORDER_MAP = "LSO";
+	private static final String ESITYPE_CACHE_NAME = "ESIT";
+	private static final Integer LOWEST_SELL_ORDER_TTL = 300;
+	private static final String COST_INDEX_BLUEPRINTS_CACHE_NAME = "BCI";
+	private static final Integer COST_INDEX_BLUEPRINTS_TTL = 12;
 
 	static {
 		neocomObjectMapper.registerModule( new JodaModule() );
@@ -44,7 +52,7 @@ public class RedisDataStoreImplementation implements IDataStore {
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public RedisDataStoreImplementation( @NotNull @Named(DMServicesDependenciesModule.REDIS_DATABASE_URL) final String redisAddress ) {
+	public IntegrationRedisDataStoreImplementation( @NotNull @Named(DMServicesDependenciesModule.REDIS_DATABASE_URL) final String redisAddress ) {
 		final Config config = new Config();
 		config.useSingleServer().setAddress( redisAddress );
 		this.redisClient = Redisson.create( config );
@@ -104,8 +112,37 @@ public class RedisDataStoreImplementation implements IDataStore {
 		return entry;
 	}
 
-	public void clearAll() {
-		//		this.redisClient.de
+	/**
+	 * Return the list of Processed Blueprints that have the BOM along with the price and cost. If the list is empty that means that the pilot has
+	 * no blueprints or that the processing task has not been run and there are no updated blueprint data.
+	 * The store uses a single key per pilot to store the complete list of processed blueprints in JSON coded format.
+	 * The blueprint data generator is a background process that will scan the list of blueprints and the update the store.
+	 */
+	@Override
+	public List<ProcessedBlueprint> accessProcessedBlueprints( final Integer pilotId ) {
+		final String uniqueLSOKey = this.generateBlueprintCostIndexUniqueId( pilotId );
+		final RMapCache<String, ProcessedBlueprint> BCIMap = this.redisClient.getMapCache( uniqueLSOKey, codec );
+		try {
+			return new ArrayList<>( BCIMap.values() );
+		} catch (final RuntimeException rte) {
+			LogWrapper.error( rte );
+			return new ArrayList<>();
+		}
+	}
+
+	@Override
+	public void updateProcessedBlueprint( final Integer pilotId, final ProcessedBlueprint blueprint ) {
+		final String uniqueLSOKey = this.generateBlueprintCostIndexUniqueId( pilotId );
+		final RMapCache<String, ProcessedBlueprint> BCIMap = this.redisClient.getMapCache( uniqueLSOKey, codec );
+		try {
+			BCIMap.put( uniqueLSOKey + REDIS_SEPARATOR + blueprint.getBlueprintTypeId(), blueprint );
+		} catch (final RuntimeException rte) {
+			LogWrapper.error( rte );
+		}
+	}
+
+	private String generateBlueprintCostIndexUniqueId( final Integer pilotId ) {
+		return COST_INDEX_BLUEPRINTS_CACHE_NAME + REDIS_SEPARATOR + pilotId;
 	}
 
 	private String generateEsiItemUniqueId( final Integer typeId ) {

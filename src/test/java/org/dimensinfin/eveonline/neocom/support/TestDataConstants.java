@@ -146,4 +146,8 @@ public class TestDataConstants {
 		public static final Integer TEST_CORPORATION_CEO_ID = 93813310;
 
 	}
+
+	public static class ProcessedBlueprintConstants {
+		public static final Integer TEST_PROCESSED_BLUEPRINT_ID = 31717;
+	}
 }

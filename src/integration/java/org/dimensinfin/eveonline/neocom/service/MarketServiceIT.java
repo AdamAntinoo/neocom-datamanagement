@@ -10,6 +10,7 @@ import org.dimensinfin.eveonline.neocom.domain.space.Station;
 import org.dimensinfin.eveonline.neocom.market.MarketData;
 import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
+import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.support.MarketServiceReconfigurer;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -25,7 +26,7 @@ public class MarketServiceIT {
 	public void beforeEach() {
 		LogWrapper.enter();
 		final Injector injector = Guice.createInjector( new IntegrationNeoComServicesDependenciesModule() );
-		this.dataStore = injector.getInstance( RedisDataStoreImplementation.class );
+		this.dataStore = injector.getInstance( IntegrationRedisDataStoreImplementation.class );
 		this.locationCatalogService = injector.getInstance( LocationCatalogService.class );
 		this.esiDataService = injector.getInstance( ESIDataService.class );
 		final MarketServiceReconfigurer marketServiceReconfigurer = injector.getInstance( MarketServiceReconfigurer.class );

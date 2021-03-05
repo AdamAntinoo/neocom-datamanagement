@@ -18,10 +18,10 @@ import org.dimensinfin.eveonline.neocom.service.IDataStore;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
-import org.dimensinfin.eveonline.neocom.service.RedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.support.IntegrationNeoComDatabaseService;
+import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.support.MarketServiceReconfigurer;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
@@ -104,13 +104,14 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.annotatedWith( Names.named( DMServicesDependenciesModule.LOYALTY_SERVICE ) )
 				.to( LoyaltyService.class )
 				.in( Singleton.class );
-		this.bind( IDataStore.class )
-				.annotatedWith( Names.named( DMServicesDependenciesModule.IDATA_STORE ) )
-				.to( RedisDataStoreImplementation.class )
-				.in( Singleton.class );
 		this.bind( MarketService.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.MARKET_SERVICE ) )
 				.to( MarketService.class )
+				.in( Singleton.class );
+
+		this.bind( IDataStore.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.IDATA_STORE ) )
+				.to( IntegrationRedisDataStoreImplementation.class )
 				.in( Singleton.class );
 
 		this.bind( MarketServiceReconfigurer.class )

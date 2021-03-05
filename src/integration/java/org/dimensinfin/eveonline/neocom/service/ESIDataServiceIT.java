@@ -17,6 +17,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdO
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
+import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
 
@@ -57,21 +58,9 @@ public class ESIDataServiceIT {
 		this.configurationService = injector.getInstance( SBConfigurationService.class );
 		this.fileSystem = injector.getInstance( SBFileSystemAdapter.class );
 		this.retrofitService = injector.getInstance( RetrofitService.class );
-		this.dataStore = injector.getInstance( RedisDataStoreImplementation.class );
+		this.dataStore = injector.getInstance( IntegrationRedisDataStoreImplementation.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
 		this.locationCatalogService = new LocationCatalogService( this.retrofitService );
-		// Update the retrofit port configurations.
-		//		LogWrapper.info( "Update configuration." );
-		//		this.configurationService.setProperty( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
-		//				"http://" +
-		//						esiAuthenticationSimulator.getContainerIpAddress() +
-		//						":" +
-		//						esiAuthenticationSimulator.getMappedPort( ESI_AUTHENTICATION_UNITTESTING_PORT ) );
-		//		this.configurationService.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
-		//				"http://" +
-		//						esiDataSimulator.getContainerIpAddress() +
-		//						":" +
-		//						esiDataSimulator.getMappedPort( ESI_DATA_UNITTESTING_PORT ) );
 		this.esiDataService = new ESIDataService(
 				this.configurationService,
 				this.fileSystem,
