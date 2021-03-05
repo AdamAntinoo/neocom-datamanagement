@@ -19,7 +19,7 @@ public class HttpUniverseClientFactory {
 	private Integer timeoutSeconds = 60;
 	private File cacheStoreFile;
 	private Long cacheSizeBytes = StorageUnits.GIGABYTES.toBytes( 1 );
-	private boolean logging = false;
+	private boolean logging = true;
 
 	// - C O N S T R U C T O R S
 	private HttpUniverseClientFactory() {}
@@ -28,7 +28,7 @@ public class HttpUniverseClientFactory {
 		final OkHttpClient.Builder universeClientBuilder =
 				new OkHttpClient.Builder()
 						.addInterceptor( chain -> {
-							Request.Builder builder = chain.request().newBuilder()
+							final Request.Builder builder = chain.request().newBuilder()
 									.addHeader( "User-Agent", this.agent );
 							return chain.proceed( builder.build() );
 						} )
@@ -39,9 +39,11 @@ public class HttpUniverseClientFactory {
 										.add( DEFAULT_ESI_LOGIN_BACKEND_HOST, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=" )
 										.add( DEFAULT_ESI_LOGIN_BACKEND_HOST, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=" )
 										.build() );
-		if (this.logging)
-			universeClientBuilder.addInterceptor( new HttpLoggingInterceptor()
-					.setLevel( HttpLoggingInterceptor.Level.BASIC ) );
+		if (this.logging) {
+			final HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
+			logInterceptor.level( HttpLoggingInterceptor.Level.BASIC );
+			universeClientBuilder.addInterceptor( logInterceptor );
+		}
 		// Additional characteristics
 		if (null != this.cacheStoreFile) // If the cache file is not set then deactivate the cache
 			universeClientBuilder.cache( new Cache( this.cacheStoreFile, this.cacheSizeBytes ) );
@@ -50,7 +52,7 @@ public class HttpUniverseClientFactory {
 
 	// - B U I L D E R
 	public static class Builder {
-		private HttpUniverseClientFactory onConstruction;
+		private final HttpUniverseClientFactory onConstruction;
 
 		// - C O N S T R U C T O R S
 		public Builder() {

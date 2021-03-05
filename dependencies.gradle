@@ -10,8 +10,8 @@ ext {
 
 // - C O R E
 dependencies {
-    compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
-    compileOnly "org.slf4j:slf4j-log4j12:$slf4jVersion"
+//    implementation "org.slf4j:slf4j-api:$slf4jVersion"
+    implementation "org.slf4j:slf4j-log4j12:$slf4jVersion"
     implementation "org.jetbrains:annotations:20.1.0"
     implementation "joda-time:joda-time:$jodaTimeVersion" // Use this library for support on Android systems
     implementation 'org.apache.commons:commons-lang3:3.9'
@@ -48,7 +48,7 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-json-org:$jacksonVersion"
     // H T T P C L I E N T
-    implementation "com.squareup.okhttp3:okhttp:4.9.1"
+//    implementation "com.squareup.okhttp3:okhttp:4.9.1"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion" // HTTP encapsulation and swagger support
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1' // Retrofit logs
@@ -91,8 +91,8 @@ test {
 
 // - I N T E G R A T I O N   T E S T I N G
 dependencies {
-//    integrationImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-//    integrationImplementation 'org.junit.vintage:junit-vintage-engine:5.7.0'
+//    integrationImplementation "org.slf4j:slf4j-api:$slf4jVersion"
+//    integrationImplementation "org.slf4j:slf4j-log4j12:$slf4jVersion"
     integrationImplementation "com.j256.ormlite:ormlite-jdbc:$ormliteVersion"
     integrationImplementation "org.xerial:sqlite-jdbc:3.25.2"
 }
