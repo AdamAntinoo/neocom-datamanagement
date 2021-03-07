@@ -14,5 +14,9 @@ public interface IDataStore {
 
 	List<ProcessedBlueprint> accessProcessedBlueprints( final Integer pilotId );
 
+	ProcessedBlueprint accessProcessedBlueprintsByUID( final Integer pilotId, final String blueprintUID );
+
+	String generateBlueprintCostIndexUniqueId( final Integer pilotId );
+
 	void updateProcessedBlueprint( final Integer pilotId, final ProcessedBlueprint blueprint );
 }

@@ -89,5 +89,10 @@ public class PricedResource extends Resource {
 			if (null != price) this.onConstruction.price = price;
 			return this;
 		}
+
+		public PricedResource.Builder withQuantity( final Integer quantity ) {
+			if (null != quantity) this.onConstruction.quantity = quantity;
+			return this;
+		}
 	}
 }

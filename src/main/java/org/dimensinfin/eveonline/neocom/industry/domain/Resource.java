@@ -28,7 +28,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
  */
 public class Resource extends EsiType implements IItemFacet {
 	private static final long serialVersionUID = -1722630075425980171L;
-	protected int quantity;
+	protected Integer quantity = 1;
 
 	// - C O N S T R U C T O R S
 	protected Resource() {}
@@ -90,8 +90,6 @@ public class Resource extends EsiType implements IItemFacet {
 		return new HashCodeBuilder( 17, 37 )
 				.appendSuper( super.hashCode() )
 				.append( this.quantity )
-				//				.append( this.stackSize )
-				//				.append( this.neoItemDelegate.getTypeId() )
 				.toHashCode();
 	}
 
@@ -160,6 +158,11 @@ public class Resource extends EsiType implements IItemFacet {
 
 		public Resource.Builder withItemType( final GetUniverseTypesTypeIdOk item ) {
 			this.onConstruction.type = Objects.requireNonNull( item );
+			return this;
+		}
+
+		public Resource.Builder withQuantity( final Integer quantity ) {
+			if (null != quantity) this.onConstruction.quantity = quantity;
 			return this;
 		}
 
