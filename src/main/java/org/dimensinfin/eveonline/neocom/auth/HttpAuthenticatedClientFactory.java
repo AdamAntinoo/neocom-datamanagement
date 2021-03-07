@@ -38,18 +38,18 @@ public class HttpAuthenticatedClientFactory {
 
 	private OkHttpClient clientBuilder() {
 		final HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
-		logInterceptor.setLevel( HttpLoggingInterceptor.Level.BASIC );
+		logInterceptor.level( HttpLoggingInterceptor.Level.BASIC );
 		final OkHttpClient.Builder authenticatedClientBuilder = new OkHttpClient.Builder()
 				.addInterceptor( chain -> {
-					Request.Builder builder = chain.request().newBuilder()
+					final Request.Builder builder = chain.request().newBuilder()
 							.addHeader( "User-Agent", this.agent );
 					return chain.proceed( builder.build() );
 				} )
-				.addInterceptor( logInterceptor )
+				//				.addInterceptor( logInterceptor )
 				.addInterceptor( chain -> {
 					if (StringUtils.isBlank( this.getRefreshToken() ))
 						return chain.proceed( chain.request() );
-					Request.Builder builder = chain.request().newBuilder();
+					final Request.Builder builder = chain.request().newBuilder();
 					final TokenTranslationResponse token = this.neoComOAuth20.fromRefresh( this.getRefreshToken() );
 					if (null != token)
 						builder.addHeader( "Authorization", "Bearer " + token.getAccessToken() );
@@ -62,7 +62,7 @@ public class HttpAuthenticatedClientFactory {
 					if (r.isSuccessful())
 						return r;
 					if (r.body().string().contains( "invalid_token" )) {
-						this.neoComOAuth20.fromRefresh( getRefreshToken() );
+						this.neoComOAuth20.fromRefresh( this.getRefreshToken() );
 						r = chain.proceed( chain.request() );
 					}
 					return r;
@@ -82,7 +82,7 @@ public class HttpAuthenticatedClientFactory {
 
 	// - B U I L D E R
 	public static class Builder {
-		private HttpAuthenticatedClientFactory onConstruction;
+		private final HttpAuthenticatedClientFactory onConstruction;
 
 		// - C O N S T R U C T O R S
 		public Builder() {

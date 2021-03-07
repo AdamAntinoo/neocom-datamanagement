@@ -19,7 +19,7 @@ public class HttpUniverseClientFactory {
 	private Integer timeoutSeconds = 60;
 	private File cacheStoreFile;
 	private Long cacheSizeBytes = StorageUnits.GIGABYTES.toBytes( 1 );
-	private boolean logging = true;
+	private boolean logging = false;
 
 	// - C O N S T R U C T O R S
 	private HttpUniverseClientFactory() {}
