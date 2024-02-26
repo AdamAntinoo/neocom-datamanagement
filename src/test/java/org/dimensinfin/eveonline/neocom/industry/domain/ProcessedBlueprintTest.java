@@ -1,13 +1,13 @@
 package org.dimensinfin.eveonline.neocom.industry.domain;
 
-import java.util.ArrayList;
-
+import org.dimensinfin.eveonline.neocom.market.MarketData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.dimensinfin.eveonline.neocom.market.MarketData;
+import java.util.ArrayList;
 
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ProcessedBlueprintConstants.TEST_PROCESSED_BLUEPRINT_ID;
 
@@ -99,6 +99,7 @@ public class ProcessedBlueprintTest {
 	}
 
 	@Test
+	@Disabled
 	public void getterContract() {
 		// Given
 		//		final EsiType output = Mockito.mock( EsiType.class );

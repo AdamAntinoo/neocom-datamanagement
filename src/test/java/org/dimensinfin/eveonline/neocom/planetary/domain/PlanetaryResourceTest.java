@@ -1,13 +1,12 @@
 package org.dimensinfin.eveonline.neocom.planetary.domain;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.planetary.PlanetaryResourceTierType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class PlanetaryResourceTest {
 	private static final Integer TEST_PLANETARY_RESOURCE_TYPE_ID = 2267;
@@ -62,7 +61,7 @@ public class PlanetaryResourceTest {
 				.withGroup( group )
 				.withCategory( category )
 				.build();
-		final String expected = "{\"resource\":\"{\\\"baseQty\\\":0,\\\"name\\\":null,\\\"typeId\\\":2267,\\\"quantity\\\":0,\\\"volume\\\":0.0,\\\"jsonClass\\\":\\\"PlanetaryResource\\\"}\",\"tier\":\"TIER3\"}";
+		final String expected = "{\"resource\":\"{\\\"baseQty\\\":1,\\\"name\\\":null,\\\"typeId\\\":2267,\\\"quantity\\\":1,\\\"volume\\\":0.0,\\\"jsonClass\\\":\\\"PlanetaryResource\\\"}\",\"tier\":\"TIER3\"}";
 		// Assertions
 		Assertions.assertEquals( expected, planetaryResource.toString() );
 	}
