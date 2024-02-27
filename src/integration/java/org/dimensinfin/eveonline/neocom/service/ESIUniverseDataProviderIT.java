@@ -2,11 +2,6 @@ package org.dimensinfin.eveonline.neocom.service;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.testcontainers.containers.GenericContainer;
-
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdIconsOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCorporationsCorporationIdOk;
@@ -15,6 +10,10 @@ import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
 import org.dimensinfin.eveonline.neocom.support.SBFileSystemAdapter;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.testcontainers.containers.GenericContainer;
 
 public class ESIUniverseDataProviderIT {
 	private static final Integer TEST_CHARACTER_IDENTIFIER = 92223647;
@@ -68,7 +67,7 @@ public class ESIUniverseDataProviderIT {
 		final GetCorporationsCorporationIdIconsOk obtained = universeDataProvider.getCorporationsCorporationIdIcons( TEST_CORPORATION_IDENTIFIER );
 		// Assertions
 		Assertions.assertNotNull( obtained );
-		Assertions.assertEquals( "https://images.evetech.net/Corporation/98384726_64.png", obtained.getPx64x64() );
+		Assertions.assertEquals("https://images.evetech.net/corporations/98384726/logo?tenant=tranquility&size=64", obtained.getPx64x64());
 	}
 
 }

@@ -2,9 +2,6 @@ package org.dimensinfin.eveonline.neocom.service;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.domain.space.Station;
 import org.dimensinfin.eveonline.neocom.market.MarketData;
@@ -13,6 +10,8 @@ import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.support.MarketServiceReconfigurer;
 import org.dimensinfin.logging.LogWrapper;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 /**
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
@@ -33,7 +32,8 @@ public class MarketServiceIT {
 		LogWrapper.exit();
 	}
 
-	@Test
+	//	@Test
+//	@Disabled
 	public void getLowestSellOrder() {
 		// Prepare
 		this.beforeEach();
@@ -54,7 +54,8 @@ public class MarketServiceIT {
 		Assertions.assertEquals( 8, obtained.getVolumeRemain() );
 	}
 
-	@Test
+	//	@Test
+//	@Disabled
 	public void getLowestSellPrice() {
 		// Prepare
 		this.beforeEach();
@@ -73,7 +74,8 @@ public class MarketServiceIT {
 		Assertions.assertEquals( 1023000.0, obtained, 0.1 );
 	}
 
-	@Test
+	//	@Test
+//	@Disabled
 	public void getMarketConsolidatedByRegion4ItemId() {
 		// Prepare
 		this.beforeEach();

@@ -28,7 +28,7 @@ dependencies {
 
 // - N E O C O M   L I B R A R I E S
 dependencies {
-    implementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.6'
+    implementation 'com.github.AdamAntinoo:neocom-java-core:0.20.6'
 }
 
 dependencies {
@@ -71,7 +71,7 @@ dependencies {
     testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.0'
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.10'
     // N E O C O M
-    testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:esi.swagger-api:0.20.0'
+    testImplementation 'com.github.AdamAntinoo:neocom-java-core:0.20.6'
 //    testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
     // T E S T   F R A M E W O R K
     testImplementation "org.testcontainers:testcontainers:1.15.0-rc2"

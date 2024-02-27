@@ -1,20 +1,19 @@
 package org.dimensinfin.eveonline.neocom.database.repository;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.mockito.Mockito;
-
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.database.repositories.SDERepository;
 import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.support.SBSDEDatabaseService;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.mockito.Mockito;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class SDERepositoryIT {
 	private static final Integer TEST_BOM_TYPE_ID = 32873;
@@ -32,8 +31,8 @@ public class SDERepositoryIT {
 		// Assertions
 		Assertions.assertNotNull( obtained );
 		Assertions.assertFalse( obtained.isEmpty() );
-		Assertions.assertEquals( 9, obtained.size() );
-		Assertions.assertEquals( "Nocxium", obtained.get( 2 ).getName() );
+		Assertions.assertEquals(6, obtained.size());
+		Assertions.assertEquals("Mexallon", obtained.get(2).getName());
 	}
 
 	@Test

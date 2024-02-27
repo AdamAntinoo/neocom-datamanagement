@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
     id 'project-report'
     id 'idea'
-    id "org.sonarqube" version "3.1.1"
+    id "org.sonarqube" version "3.1.2"
 }
 
 // - P R O J E C T   D E F I N I T I O N
@@ -23,7 +23,10 @@ repositories {
     mavenCentral()
     google()
     jcenter()
-    maven { url 'https://jitpack.io' }
+    maven {
+        url "https://jitpack.io"
+        credentials { username "jp_uha0bg6va9ql3ol6n297erb8l2" }
+    }
 }
 
 // - S O U R C E S
