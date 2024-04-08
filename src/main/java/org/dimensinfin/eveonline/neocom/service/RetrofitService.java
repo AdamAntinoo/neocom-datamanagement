@@ -1,5 +1,30 @@
 package org.dimensinfin.eveonline.neocom.service;
 
+import com.google.gson.GsonBuilder;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import net.troja.eve.esi.ApiClient;
+import net.troja.eve.esi.ApiClientBuilder;
+import net.troja.eve.esi.auth.OAuth;
+import org.dimensinfin.annotation.LogEnterExit;
+import org.dimensinfin.eveonline.neocom.auth.*;
+import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
+import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
+import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
+import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
+import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
+import org.dimensinfin.logging.LogWrapper;
+import org.jetbrains.annotations.NonNls;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import retrofit2.Converter;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,58 +32,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import javax.validation.constraints.NotNull;
 
-import com.google.gson.GsonBuilder;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import org.jetbrains.annotations.NonNls;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
-import org.dimensinfin.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.auth.ESIStore;
-import org.dimensinfin.eveonline.neocom.auth.HttpAuthenticatedClientFactory;
-import org.dimensinfin.eveonline.neocom.auth.HttpBackendClientFactory;
-import org.dimensinfin.eveonline.neocom.auth.HttpUniverseClientFactory;
-import org.dimensinfin.eveonline.neocom.auth.NeoComOAuth20;
-import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
-import org.dimensinfin.eveonline.neocom.database.entities.Credential;
-import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
-import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
-import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
-import org.dimensinfin.logging.LogWrapper;
-
-import retrofit2.Converter;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import static org.dimensinfin.eveonline.neocom.auth.HttpBackendClientFactory.DEFAULT_NEOCOM_BACKEND_HOST;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_NAME;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_SIZE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_STATE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_AGENT;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_TIMEOUT;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_CACHE_FILE_NAME;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_SERVER_LOCATION;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.CACHE_DIRECTORY_PATH;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_ACCESS_TOKEN;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_NAME;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_SIZE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_STATE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_AGENT;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_LOCATION;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_TIMEOUT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.*;
 
 public class RetrofitService {
 	public static final Converter.Factory GSON_CONVERTER_FACTORY =
@@ -248,7 +224,7 @@ public class RetrofitService {
 		return hitConnector;
 	}
 
-	protected NeoComOAuth20 getConfiguredOAuth( final Credential credential ) {
+	protected OAuth getConfiguredOAuth( final Credential credential ) {
 		final String scopes = Objects.requireNonNull( credential.getScope() );
 		final String SERVER_LOGIN_BASE = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
 				DEFAULT_ESI_OAUTH_LOGIN_SERVER );
@@ -257,30 +233,32 @@ public class RetrofitService {
 		final String CALLBACK = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CALLBACK );
 		final String AGENT = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_AGENT, DEFAULT_RETROFIT_AGENT );
 		final String STATE = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE );
-		// Verify that the constants have values. Otherwise launch exception.
+		// Verify that the constants have values. Otherwise, launch exception.
 		if (null == CLIENT_ID || CLIENT_ID.isEmpty())
 			throw new NeoComRuntimeException( ErrorInfoCatalog.MANDATORY_CONFIGURATION_PROPERTY_EMPTY.getErrorMessage() );
 		if (SECRET_KEY.isEmpty())
 			throw new NeoComRuntimeException( ErrorInfoCatalog.MANDATORY_CONFIGURATION_PROPERTY_EMPTY.getErrorMessage() );
 		if (CALLBACK.isEmpty())
 			throw new NeoComRuntimeException( ErrorInfoCatalog.MANDATORY_CONFIGURATION_PROPERTY_EMPTY.getErrorMessage() );
-		return Objects.requireNonNull( new NeoComOAuth20.Builder()
-				.withClientId( CLIENT_ID )
-				.withClientKey( SECRET_KEY )
-				.withCallback( CALLBACK )
-				.withAgent( AGENT )
-				.withStore( ESIStore.DEFAULT )
-				.withScopes( scopes )
-				.withState( STATE )
-				.withBaseUrl( SERVER_LOGIN_BASE )
-				.withAccessTokenEndpoint( this.configurationProvider.getResourceString(
-						ESI_TRANQUILITY_AUTHORIZATION_ACCESS_TOKEN,
-						DEFAULT_AUTHORIZATION_ACCESS_TOKEN ) )
-				.withAuthorizationBaseUrl( this.configurationProvider.getResourceString(
-						ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE,
-						DEFAULT_AUTHORIZATION_AUTHORIZE ) )
-				.build()
-		);
+		final ApiClient client = new ApiClientBuilder().clientID(CLIENT_ID).build();
+		return  (OAuth) client.getAuthentication("evesso");
+//		return Objects.requireNonNull( new NeoComOAuth20.Builder()
+//				.withClientId( CLIENT_ID )
+//				.withClientKey( SECRET_KEY )
+//				.withCallback( CALLBACK )
+//				.withAgent( AGENT )
+//				.withStore( ESIStore.DEFAULT )
+//				.withScopes( scopes )
+//				.withState( STATE )
+//				.withBaseUrl( SERVER_LOGIN_BASE )
+//				.withAccessTokenEndpoint( this.configurationProvider.getResourceString(
+//						ESI_TRANQUILITY_AUTHORIZATION_ACCESS_TOKEN,
+//						DEFAULT_AUTHORIZATION_ACCESS_TOKEN ) )
+//				.withAuthorizationBaseUrl( this.configurationProvider.getResourceString(
+//						ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE,
+//						DEFAULT_AUTHORIZATION_AUTHORIZE ) )
+//				.build()
+//		);
 	}
 
 	/**

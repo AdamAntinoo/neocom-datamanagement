@@ -7,19 +7,27 @@
 *.db
 *.log
 
+# - Mac OS Database files
+.DS_Store
+
 # - IntelliJ ignorable configuration project files
 .idea/caches/
 .idea/libraries/
 .idea/sonarlint/
+.idea/shelf/
 .idea/workspace.xml
 .idea/gradle.xml
 .idea/modules.xml
 .idea/sonarIssues.xml
 .idea/sonarlint-state.xml
 .idea/misc.xml
+.idea/uiDesigner.xml
 
 # - Build ignorable files
 .gradle
 build/
 coverage/
 out/
+
+# - Common ignoravle files
+deps.txt
