@@ -1,36 +1,32 @@
 package org.dimensinfin.eveonline.neocom.integration;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.GsonBuilder;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.dimensinfin.eveonline.neocom.auth.ESIStore;
 import org.dimensinfin.eveonline.neocom.auth.NeoComOAuth20;
 import org.dimensinfin.eveonline.neocom.auth.NeoComOAuth2Flow;
 import org.dimensinfin.eveonline.neocom.auth.TokenVerification;
-import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
-import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
+import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.*;
 
 public class AuthenticatedRequestIT {
 	private static final String CURRENT_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5IiwidHlwIjoiSldUIn0" +
@@ -64,14 +60,13 @@ public class AuthenticatedRequestIT {
 	}
 
 	private void setupEnvironment() throws IOException {
-//		this.configurationProvider = new TestConfigurationService.Builder()
-//				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
+		this.configurationProvider = new TestConfigurationService("/src/test/resources/properties.unittest");
 	}
-
-	//	@Test
+@Disabled
+		@Test
 	void createAuthenticatedClient() throws IOException {
 		this.setupEnvironment();
-		this.setupAuthentication( "0Cw8DQXo_0C3OgPYQPMnHg" );
+		this.setupAuthentication( "98eb8d31c5d24649ba4f7eb015596fbd" );
 		final TokenVerification tokenStore = this.flow.onTranslationStep();
 		final Long structureId = 1031243921503L;
 		final String esiDataServerLocation = "https://esi.evetech.net/latest/";
