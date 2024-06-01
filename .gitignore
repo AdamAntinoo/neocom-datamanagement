@@ -1,3 +1,6 @@
+# Mac OS
+.DS_Store
+
 # - Android Studio configuration
 *.iml
 *.ppm
@@ -13,6 +16,7 @@
 .idea/modules.xml
 .idea/sonarIssues.xml
 .idea/sonarlint-state.xml
+.idea/misc.xml
 
 # - Build ignorable files
 .gradle
