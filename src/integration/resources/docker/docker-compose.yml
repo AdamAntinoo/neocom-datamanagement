@@ -19,7 +19,7 @@ services:
       - "5310:6090"
     volumes:
       # WARNING - Use full absolute paths to make this work.
-      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esioauth-simulation:/esioauth-simulation
+      - ../esioauth-simulation:/esioauth-simulation
     command: "bin/apisimulator start /esioauth-simulation -p 6090"
 
   apisimulator-esi-data:
@@ -29,5 +29,5 @@ services:
       - "5320:6090"
     volumes:
       # WARNING - Use full absolute paths to make this work.
-      - /home/adam/Development/NeoCom0.20/NeoCom-DataManagement/src/integration/resources/esidata-simulation:/esidata-simulation
+      - ../esidata-simulation:/esidata-simulation
     command: "bin/apisimulator start /esidata-simulation -p 6090"

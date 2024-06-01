@@ -42,6 +42,10 @@ public class MarketData implements Serializable {
 		return this.bestBuyOrder;
 	}
 
+	public Station getRegionHub() {
+		return this.regionHub;
+	}
+
 	public double getBestBuyPrice() {
 		if (null == this.bestBuyOrder) return 0.0;
 		else return this.bestBuyOrder.getPrice();
