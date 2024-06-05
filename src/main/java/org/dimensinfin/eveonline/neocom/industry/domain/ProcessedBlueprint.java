@@ -4,80 +4,48 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.dimensinfin.eveonline.neocom.domain.EsiType;
+import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.market.MarketData;
 import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
 public class ProcessedBlueprint implements Serializable {
 	private static final long serialVersionUID = 1702676060995319018L;
-	private int blueprintTypeId;
-	private PricedResource blueprint;
-	private PricedResource output;
-	private MarketData outputMarketData;
-	private List<PricedResource> bom = new ArrayList<>();
+	private int typeId;
+	private EsiType blueprintItem;
+	private SpaceLocation location;
+	@Builder.Default
+	private int materialEfficiency = 0;
+	@Builder.Default
+	private int timeEfficiency = 0;
+	private int outputTypeId;
+	private EsiType outputItem;
+	private Double manufactureCost;
+	private Double outputCost;
+	private List<Resource> bom;
+	@Builder.Default
+	private Double index = 0.0;
 
-	// - C O N S T R U C T O R S
-	private ProcessedBlueprint() {}
-
-	// - G E T T E R S   &   S E T T E R S
-	public PricedResource getBlueprint() {
-		return this.blueprint;
-	}
-
-	public int getBlueprintTypeId() {
-		return this.blueprintTypeId;
-	}
-
-	public List<PricedResource> getBom() {
-		return this.bom;
-	}
-
-	public double getManufactureCost() {
-		return this.bom.stream().mapToDouble( resource -> resource.getMarketPrice() ).sum();
-	}
-
-	public PricedResource getOutput() {
-		return this.output;
-	}
-
-	public MarketData getOutputMarketData() {
-		return this.outputMarketData;
-	}
-
-	// - B U I L D E R
-	public static class Builder {
-		private final ProcessedBlueprint onConstruction;
-
-		// - C O N S T R U C T O R S
-		public Builder() {
-			this.onConstruction = new ProcessedBlueprint();
-		}
-
-		public ProcessedBlueprint build() {
-			NeoObjects.requireNonNull( this.onConstruction.blueprint );
-			NeoObjects.requireNonNull( this.onConstruction.output );
-			NeoObjects.requireNonNull( this.onConstruction.outputMarketData );
-			return this.onConstruction;
-		}
-
-		public ProcessedBlueprint.Builder withBOM( final List<PricedResource> resources ) {
-			this.onConstruction.bom = NeoObjects.requireNonNull( resources );
-			return this;
-		}
-
-		public ProcessedBlueprint.Builder withBlueprint( final PricedResource blueprint ) {
-			this.onConstruction.blueprint = NeoObjects.requireNonNull( blueprint );
-			this.onConstruction.blueprintTypeId = this.onConstruction.blueprint.getTypeId();
-			return this;
-		}
-
-		public ProcessedBlueprint.Builder withOutput( final PricedResource output ) {
-			this.onConstruction.output = NeoObjects.requireNonNull( output );
-			return this;
-		}
-
-		public ProcessedBlueprint.Builder withOutputMarketData( final MarketData outputMarketData ) {
-			this.onConstruction.outputMarketData = NeoObjects.requireNonNull( outputMarketData );
-			return this;
-		}
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this, ToStringStyle.JSON_STYLE )
+				.append( "typeId", typeId )
+				.append( "blueprintItem", blueprintItem )
+				.append( "location", location )
+				.append( "materialEfficiency", materialEfficiency )
+				.append( "timeEfficiency", timeEfficiency )
+				.append( "outputTypeId", outputTypeId )
+				.append( "outputItem", outputItem )
+				.append( "bom", bom )
+				.append( "index", index )
+				.toString();
 	}
 }
