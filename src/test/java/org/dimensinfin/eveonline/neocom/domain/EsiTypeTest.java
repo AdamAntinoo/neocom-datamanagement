@@ -2,12 +2,14 @@ package org.dimensinfin.eveonline.neocom.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCategoryIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.support.InstanceGenerator;
 import org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -202,7 +204,39 @@ public class EsiTypeTest {
 		Assertions.assertTrue( esiType.isBlueprint() );
 	}
 
-	//	@Test
+	@Test
+	void whenThetypeIsNotAShip_thenNotApplies() {
+		// Given
+		final EsiType esiType = new EsiType.Builder()
+				.withTypeId( TEST_ESITYPE_ID )
+				.withItemType( this.type )
+				.withGroup( new InstanceGenerator().getEsiGroup() )
+				.withCategory( new InstanceGenerator().getEsiCategory() )
+				.build();
+		// Then
+		Assertions.assertEquals( "not-applies", esiType.getHullGroup() );
+	}
+
+	@Test
+	void whenThetypeIsAShip_thenHullType() {
+		// Given
+		final GetUniverseGroupsGroupIdOk group = Mockito.mock( GetUniverseGroupsGroupIdOk.class );
+		final GetUniverseCategoriesCategoryIdOk category = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
+		// When
+		Mockito.when( group.getName() ).thenReturn( "Attack Battlecruiser" );
+		Mockito.when( category.getName() ).thenReturn( "Ship" );
+		final EsiType esiType = new EsiType.Builder()
+				.withTypeId( TEST_ESITYPE_ID )
+				.withItemType( this.type )
+				.withGroup( group )
+				.withCategory( category )
+				.build();
+		// Then
+		Assertions.assertEquals( "battlecruiser", esiType.getHullGroup() );
+	}
+
+	@Disabled
+	@Test
 	public void toStringContract() {
 		// Test
 		final EsiType esiType = new EsiType.Builder()
@@ -211,7 +245,7 @@ public class EsiTypeTest {
 				.withGroup( this.group )
 				.withCategory( this.category )
 				.build();
-		final String expected = "{\"typeId\":11535,\"industryGroup\":\"UNDEFINED\",\"type\":\"Mock for GetUniverseTypesTypeIdOk, hashCode: 1330500972\",\"group\":\"Mock for GetUniverseGroupsGroupIdOk, hashCode: 964740518\",\"category\":\"Mock for GetUniverseCategoriesCategoryIdOk, hashCode: 267794346\"}";
+		final String expected = "{\"typeId\":11535,\"industryGroup\":\"UNDEFINED\",\"type\":\"Mock for GetUniverseTypesTypeIdOk, hashCode: 1959758632\",\"group\":\"Mock for GetUniverseGroupsGroupIdOk, hashCode: 495857386\",\"category\":\"Mock for GetUniverseCategoriesCategoryIdOk, hashCode: 2124731287\"}";
 		final String obtained = esiType.toString();
 		// Assertions
 		Assertions.assertEquals( expected, obtained );

@@ -60,7 +60,7 @@ public class ESIDataServiceIT {
 		this.retrofitService = injector.getInstance( RetrofitService.class );
 		this.dataStore = injector.getInstance( IntegrationRedisDataStoreImplementation.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
-		this.locationCatalogService = new LocationCatalogService( this.retrofitService );
+		this.locationCatalogService = new LocationCatalogService( this.retrofitService , this.dataStore);
 		this.esiDataService = new ESIDataService(
 				this.configurationService,
 				this.fileSystem,

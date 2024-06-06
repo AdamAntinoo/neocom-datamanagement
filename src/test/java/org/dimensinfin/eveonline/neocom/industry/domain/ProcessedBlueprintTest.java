@@ -1,119 +1,152 @@
 package org.dimensinfin.eveonline.neocom.industry.domain;
 
-import org.dimensinfin.eveonline.neocom.market.MarketData;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
+import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
+import org.dimensinfin.eveonline.neocom.support.PojoTest;
 
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ProcessedBlueprintConstants.TEST_PROCESSED_BLUEPRINT_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_LOCATION_ID;
 
 public class ProcessedBlueprintTest {
 	private static final String TEST_OUTPUT_NAME = "-TEST_OUTPUT_NAME-";
 	private PricedResource blueprint;
 	private PricedResource output;
-	private MarketData marketData;
+	private SpaceLocation location;
 
 	@BeforeEach
 	public void beforeEach() {
 		this.blueprint = Mockito.mock( PricedResource.class );
 		this.output = Mockito.mock( PricedResource.class );
-		this.marketData = Mockito.mock( MarketData.class );
+		this.location = Mockito.mock( SpaceLocation.class );
 	}
 
 	@Test
 	public void buildContract() {
-		final ProcessedBlueprint processedBlueprint = new ProcessedBlueprint.Builder()
-				.withBlueprint( this.blueprint )
-				.withBOM( new ArrayList<>() )
-				.withOutput( this.output )
-				.withOutputMarketData( this.marketData )
-				.build();
+		final ProcessedBlueprint processedBlueprint = this.getProcessedBlueprint();
 		Assertions.assertNotNull( processedBlueprint );
 	}
 
 	@Test
 	public void buildFailureMissingWidth() {
-		//		final EsiType output = Mockito.mock( EsiType.class );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBOM( new ArrayList<>() )
-					.withOutput( this.output )
-					.withOutputMarketData( this.marketData )
+			ProcessedBlueprint.builder()
+					.withBlueprintItem( this.blueprint )
+					.withLocation( this.location )
+					.withOutputItem( this.output )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBlueprint( this.blueprint )
-					.withBOM( new ArrayList<>() )
-					.withOutputMarketData( this.marketData )
+			ProcessedBlueprint.builder()
+					.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+					.withLocation( this.location )
+					.withOutputItem( this.output )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBlueprint( this.blueprint )
-					.withBOM( new ArrayList<>() )
-					.withOutput( this.output )
+			ProcessedBlueprint.builder()
+					.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+					.withBlueprintItem( this.blueprint )
+					.withOutputItem( this.output )
+					.withBom( new ArrayList<>() )
+					.build();
+		} );
+		Assertions.assertThrows( NullPointerException.class, () -> {
+			ProcessedBlueprint.builder()
+					.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+					.withBlueprintItem( this.blueprint )
+					.withLocation( this.location )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 	}
 
 	@Test
 	public void buildFailureNull() {
-		//		final EsiType output = Mockito.mock( EsiType.class );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBlueprint( null )
-					.withBOM( new ArrayList<>() )
-					.withOutput( this.output )
-					.withOutputMarketData( this.marketData )
+			ProcessedBlueprint.builder()
+					.withTypeId( null )
+					.withBlueprintItem( this.blueprint )
+					.withLocation( this.location )
+					.withOutputItem( this.output )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBlueprint( this.blueprint )
-					.withBOM( null )
-					.withOutput( this.output )
-					.withOutputMarketData( this.marketData )
+			ProcessedBlueprint.builder()
+					.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+					.withBlueprintItem( null )
+					.withLocation( this.location )
+					.withOutputItem( this.output )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBlueprint( this.blueprint )
-					.withBOM( new ArrayList<>() )
-					.withOutput( null )
-					.withOutputMarketData( this.marketData )
+			ProcessedBlueprint.builder()
+					.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+					.withBlueprintItem( this.blueprint )
+					.withLocation( null )
+					.withOutputItem( this.output )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 		Assertions.assertThrows( NullPointerException.class, () -> {
-			new ProcessedBlueprint.Builder()
-					.withBlueprint( this.blueprint )
-					.withBOM( new ArrayList<>() )
-					.withOutput( this.output )
-					.withOutputMarketData( null )
+			ProcessedBlueprint.builder()
+					.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+					.withBlueprintItem( this.blueprint )
+					.withLocation( this.location )
+					.withOutputItem( null )
+					.withBom( new ArrayList<>() )
 					.build();
 		} );
 	}
 
 	@Test
-	@Disabled
 	public void getterContract() {
-		// Given
-		//		final EsiType output = Mockito.mock( EsiType.class );
 		// When
-		Mockito.when( this.output.getName() ).thenReturn( TEST_OUTPUT_NAME );
+		Mockito.when( this.location.getLocationId() ).thenReturn( TEST_LOCATION_ID );
 		// Test
-		final ProcessedBlueprint processedBlueprint = new ProcessedBlueprint.Builder()
-				.withBlueprint( this.blueprint )
-				.withBOM( new ArrayList<>() )
-				.withOutput( this.output )
-				.build();
+		final ProcessedBlueprint processedBlueprint = this.getProcessedBlueprint();
 		// Assertions
-		Assertions.assertEquals( TEST_PROCESSED_BLUEPRINT_ID, processedBlueprint.getBlueprintTypeId() );
-		Assertions.assertNotNull( processedBlueprint.getBom() );
-		Assertions.assertEquals( TEST_OUTPUT_NAME, processedBlueprint.getOutput().getName() );
+		Assertions.assertEquals(
+				TEST_LOCATION_ID + ":" + TEST_PROCESSED_BLUEPRINT_ID,
+				processedBlueprint.getStorageUniqueId()
+		);
+	}
+
+	public ProcessedBlueprint getProcessedBlueprint() {
+		return ProcessedBlueprint.builder()
+				.withTypeId( TEST_PROCESSED_BLUEPRINT_ID )
+				.withBlueprintItem( this.blueprint )
+				.withLocation( this.location )
+				.withOutputItem( this.output )
+				.withBom( new ArrayList<>() )
+				.build();
+
+	}
+
+	@Test
+	void getters_contract() {
+		PojoTest.validateGetters( ProcessedBlueprint.class );
+	}
+
+	@Test
+	@Disabled
+	void toString_contract() {
+		// Given
+		final ProcessedBlueprint processedBlueprint = this.getProcessedBlueprint();
+		final String expected = "{\"typeId\":7765,\"blueprintItem\":\"Mock for PricedResource, hashCode: 1086323658\",\"location\":\"Mock for SpaceLocation, hashCode: 1391119179\",\"materialEfficiency\":0,\"timeEfficiency\":0,\"outputTypeId\":0,\"outputItem\":\"Mock for PricedResource, hashCode: 710220387\",\"manufactureCost\":null,\"outputCost\":null,\"bom\":[],\"index\":0.0}";
+		// When
+		final String obtained = processedBlueprint.toString();
+		// Then
+		Assertions.assertEquals( expected, obtained );
 	}
 }
