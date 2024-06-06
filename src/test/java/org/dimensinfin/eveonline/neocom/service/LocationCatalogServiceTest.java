@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
-import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.domain.space.Structure;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
@@ -36,6 +35,7 @@ import static okhttp3.mock.MediaTypes.MEDIATYPE_JSON;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_AGENT;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_BASE_URL;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_TIMEOUT;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_ACCESIBLE_STRUCTURE_LOCATION_ID;
 
 public class LocationCatalogServiceTest {
 	public static final Converter.Factory GSON_CONVERTER_FACTORY =
@@ -102,7 +102,7 @@ public class LocationCatalogServiceTest {
 	@Test
 	void lookupLocation4Id_for_nonCached_structure_accesible() {
 		// Given
-		final LocationIdentifier locationIdentifier = new InstanceGenerator().getAccesibleStructureLocationIdentifier();
+		final Long locationIdentifier = TEST_ACCESIBLE_STRUCTURE_LOCATION_ID;
 		final Credential credential = new InstanceGenerator().getCredential();
 		final LocationCatalogService locationCatalogService = this.getLocationCatalogService();
 		final GetUniverseStructuresStructureIdOk accessibleStructure = new GetUniverseStructuresStructureIdOk()
@@ -127,7 +127,7 @@ public class LocationCatalogServiceTest {
 		final MockInterceptor interceptor = new MockInterceptor();
 		interceptor.addRule()
 				.get()
-				.url( TEST_RETROFIT_BASE_URL + "/universe/structures/" + locationIdentifier.getSpaceIdentifier() + "/?datasource=tranquility" )
+				.url( TEST_RETROFIT_BASE_URL + "/universe/structures/" + locationIdentifier + "/?datasource=tranquility" )
 				.answer( request -> new Response.Builder()
 						.code( 200 )
 						.body( ResponseBody.create( MEDIATYPE_JSON, serializedGetUniverseStructuresStructureIdOk ) )
