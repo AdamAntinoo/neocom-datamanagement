@@ -54,9 +54,5 @@ public class DMServicesDependenciesModule extends AbstractModule {
 				.annotatedWith( Names.named( CHARACTER_SERVICE ) )
 				.to( CharacterService.class )
 				.in( Singleton.class );
-		//		this.bind( IDataStore.class )
-		//				.annotatedWith( Names.named( IDATA_STORE ) )
-		//				.to( RedisDataStoreImplementation.class )
-		//				.in( Singleton.class );
 	}
 }

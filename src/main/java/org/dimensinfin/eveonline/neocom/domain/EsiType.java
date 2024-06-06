@@ -128,6 +128,7 @@ public class EsiType extends NeoComNode {
 		return this.type;
 	}
 
+	@Deprecated
 	public String getTypeIconURL() {
 		return ESI_ICON_URL_PREFIX + this.getTypeId() + ESI_ICON_URL_SUFFIX;
 	}

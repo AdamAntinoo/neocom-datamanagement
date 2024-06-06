@@ -9,28 +9,33 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
-import org.dimensinfin.eveonline.neocom.market.MarketData;
-import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
+import org.dimensinfin.eveonline.neocom.service.IDataStore;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
-@Builder
+@Builder(setterPrefix = "with")
 public class ProcessedBlueprint implements Serializable {
 	private static final long serialVersionUID = 1702676060995319018L;
-	private int typeId;
+	@NonNull
+	private Integer typeId;
+	@NonNull
 	private EsiType blueprintItem;
+	@NonNull
 	private SpaceLocation location;
 	@Builder.Default
 	private int materialEfficiency = 0;
 	@Builder.Default
 	private int timeEfficiency = 0;
 	private int outputTypeId;
+	@NonNull
 	private EsiType outputItem;
 	private Double manufactureCost;
 	private Double outputCost;
-	private List<Resource> bom;
+	@Builder.Default
+	private List<Resource> bom=new ArrayList<>();
 	@Builder.Default
 	private Double index = 0.0;
 
@@ -44,8 +49,13 @@ public class ProcessedBlueprint implements Serializable {
 				.append( "timeEfficiency", timeEfficiency )
 				.append( "outputTypeId", outputTypeId )
 				.append( "outputItem", outputItem )
+				.append( "manufactureCost", manufactureCost )
+				.append( "outputCost", outputCost )
 				.append( "bom", bom )
 				.append( "index", index )
 				.toString();
+	}
+	public String getStorageUniqueId(){
+		return this.getLocation().getLocationId() + IDataStore.REDIS_SEPARATOR + this.getTypeId();
 	}
 }

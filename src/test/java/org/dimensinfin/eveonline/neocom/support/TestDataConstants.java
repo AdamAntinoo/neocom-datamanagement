@@ -26,6 +26,7 @@ public class TestDataConstants {
 	}
 
 	public static final class SpaceLocationConstants {
+		public static final Long TEST_LOCATION_ID = 60008494L;
 		public static final Integer TEST_REGION_ID = 1000043;
 		public static final String TEST_REGION_NAME = "Domain";
 		public static final Integer TEST_CONSTELLATION_ID = 20000322;
@@ -42,6 +43,7 @@ public class TestDataConstants {
 		public static final Integer TEST_CORPORATION_ID = 98384726;
 		public static final String TEST_CORPORATION_NAME = "Industrias Machaque";
 		public static final Integer TEST_CORPORATION_OWNER_ID = 98384726;
+		public static final Long TEST_ACCESIBLE_STRUCTURE_LOCATION_ID=64000001L;
 	}
 
 	public static final class PilotPreferencesConstants {
@@ -150,4 +152,5 @@ public class TestDataConstants {
 	public static class ProcessedBlueprintConstants {
 		public static final Integer TEST_PROCESSED_BLUEPRINT_ID = 31717;
 	}
+
 }

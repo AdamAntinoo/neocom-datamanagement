@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import javax.validation.constraints.NotNull;
 
 import com.google.inject.Inject;
@@ -34,11 +35,10 @@ import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_
 
 /**
  * The location catalog service will be used to define Eve Online space locations. It is able to understand their different contents depending on the
- * type of location.
- * Locations should be cached and have a simple Object dump process registered on the scheduler that saves the current location list every minute.
- * Locations already defined are read back from the storage at creation time.
- * Heroku implementations will not have available storage space so the serialization and recovery should be an injectable dependency module that
- * can change the storage implementation depending on the target environment. By default then the location list is not persisted.
+ * type of location. Locations should be cached and have a simple Object dump process registered on the scheduler that saves the current location list
+ * every minute. Locations already defined are read back from the storage at creation time. Heroku implementations will not have available storage
+ * space so the serialization and recovery should be an injectable dependency module that can change the storage implementation depending on the
+ * target environment. By default then the location list is not persisted.
  *
  * Now Locations are completely normalized and just depend on two class implementations. Storage can then be done into a database instance.
  *
@@ -46,24 +46,30 @@ import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_
  * @since 0.19.0
  */
 public class LocationCatalogService extends Job {
+	@Deprecated
 	public enum LocationCacheAccessType {
 		NOT_FOUND, GENERATED, DATABASE_ACCESS, MEMORY_ACCESS
 	}
 
 	private static final AccessStatistics locationsCacheStatistics = new AccessStatistics();
+	@Deprecated
 	private static final Map<Long, SpaceLocation> locationCache = new HashMap<>();
 	// - C O M P O N E N T S
 	private final RetrofitService retrofitService;
+	private final IDataStore dataStore;
 
 	private final Map<String, Integer> locationTypeCounters = new HashMap<>();
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public LocationCatalogService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService ) {
+	public LocationCatalogService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService,
+	                               final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStore dataStore ) {
 		this.retrofitService = retrofitService;
+		this.dataStore = dataStore;
 	}
 
 	// - G E T T E R S   &   S E T T E R S
+	@Deprecated
 	public Map<String, Integer> getLocationTypeCounters() {
 		return this.locationTypeCounters;
 	}
@@ -85,8 +91,8 @@ public class LocationCatalogService extends Job {
 
 	@Override
 	public boolean equals( final Object o ) {
-		if (this == o) return true;
-		if (!(o instanceof LocationCatalogService)) return false;
+		if ( this == o ) return true;
+		if ( !(o instanceof LocationCatalogService) ) return false;
 		final LocationCatalogService that = (LocationCatalogService) o;
 		return new EqualsBuilder().appendSuper( super.equals( o ) )
 				.append( this.locationTypeCounters, that.locationTypeCounters ).isEquals();
@@ -119,7 +125,7 @@ public class LocationCatalogService extends Job {
 							DEFAULT_ACCEPT_LANGUAGE,
 							DEFAULT_ESI_SERVER, null, null )
 					.execute();
-			if (systemResponse.isSuccessful())
+			if ( systemResponse.isSuccessful() )
 				return systemResponse.body();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -137,7 +143,7 @@ public class LocationCatalogService extends Job {
 							DEFAULT_ACCEPT_LANGUAGE,
 							DEFAULT_ESI_SERVER.toLowerCase(), null, null )
 					.execute();
-			if (systemResponse.isSuccessful()) return systemResponse.body();
+			if ( systemResponse.isSuccessful() ) return systemResponse.body();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
 		}
@@ -152,7 +158,7 @@ public class LocationCatalogService extends Job {
 					.create( UniverseApi.class )
 					.getUniverseStationsStationId( stationId, DEFAULT_ESI_SERVER, null )
 					.execute();
-			if (stationResponse.isSuccessful())
+			if ( stationResponse.isSuccessful() )
 				return stationResponse.body();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -170,7 +176,7 @@ public class LocationCatalogService extends Job {
 							, DEFAULT_ACCEPT_LANGUAGE
 							, DEFAULT_ESI_SERVER, null, null )
 					.execute();
-			if (systemResponse.isSuccessful())
+			if ( systemResponse.isSuccessful() )
 				return systemResponse.body();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -181,9 +187,8 @@ public class LocationCatalogService extends Job {
 	// - S E A R C H   L O C A T I O N   A P I
 
 	/**
-	 * Use a single place where to search for locations if we know a full location identifier. It will detect if the location is a space or
-	 * structure location and search for the right record.
-	 * This method is used for Pilot and structure locations.
+	 * Use a single place where to search for locations if we know a full location identifier. It will detect if the location is a space or structure
+	 * location and search for the right record. This method is used for Pilot and structure locations.
 	 *
 	 * @param locationId full location identifier obtained from any asset with the full location identifier.
 	 * @param credential the pilot Credential to be used to access the list of structures. Not all structures are available and it is a secured
@@ -191,9 +196,47 @@ public class LocationCatalogService extends Job {
 	 * @return a SpaceLocation record with the complete location data identifiers and descriptions.
 	 */
 	public SpaceLocation searchLocation4Id( final LocationIdentifier locationId, final Credential credential ) {
-		if (locationId.getSpaceIdentifier() > 64e6)
+		if ( locationId.getSpaceIdentifier() > 64e6 )
 			return this.searchStructure4Id( locationId.getSpaceIdentifier(), credential );
 		else return this.searchLocation4Id( locationId.getSpaceIdentifier() );
+	}
+
+	/**
+	 * New search methosd the uses a Redis cache and that returns empty Optional in case the location cannot be constructed. Nulls should be avoided.
+	 *
+	 * @param locationId full location identifier obtained from any asset with the full location identifier.
+	 * @param credential the pilot Credential to be used to access the list of structures. Not all structures are available and it is a secured
+	 *                   endpoint.
+	 * @return a SpaceLocation record with the complete location data identifiers and descriptions. Or Optional.empty() if the location cannot be
+	 * 		constructed.
+	 */
+	public Optional<SpaceLocation> lookupLocation4Id( final LocationIdentifier locationId, final Credential credential ) {
+		if ( locationId.getSpaceIdentifier() > 64e6 ) {
+			// - This is a corporation structure so needs additional scope privileges to be accessible.
+			final String locationCacheId = credential.getAccountId() + IDataStore.REDIS_SEPARATOR + locationId.getSpaceIdentifier();
+			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
+			if ( target.isPresent() ) return target;
+			else {
+				final SpaceLocation location = this.buildUpStructure( locationId.getSpaceIdentifier(), credential );
+				if ( Objects.isNull( location ) ) return Optional.empty();
+				else {
+					this.dataStore.updateLocation( locationCacheId, location );
+					return Optional.of( location );
+				}
+			}
+		} else {
+			final String locationCacheId = locationId.getSpaceIdentifier().toString();
+			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
+			if ( target.isPresent() ) return target;
+			else {
+				final SpaceLocation location = this.buildUpLocation( locationId.getSpaceIdentifier() );
+				if ( Objects.isNull( location ) ) return Optional.empty();
+				else {
+					this.dataStore.updateLocation( locationCacheId, location );
+					return Optional.of( location );
+				}
+			}
+		}
 	}
 
 	/**
@@ -203,12 +246,12 @@ public class LocationCatalogService extends Job {
 	 * @return a SpaceLocation with the correct fields filled. Can be Region or Constellation or Space or Station.
 	 */
 	public SpaceLocation searchLocation4Id( final Long locationId ) {
-		if (locationCache.containsKey( locationId ))
+		if ( locationCache.containsKey( locationId ) )
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
 		final SpaceLocation hit = this.buildUpLocation( locationId );
-		if (null != hit) {
+		if ( null != hit ) {
 			this.storeOnCacheLocation( hit );
 			LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2, number, integer} generated from ESI data.",
 					hits, access, locationId ) );
@@ -217,12 +260,12 @@ public class LocationCatalogService extends Job {
 	}
 
 	public SpaceLocation searchStructure4Id( final Long locationId, final Credential credential ) {
-		if (locationCache.containsKey( locationId ))
+		if ( locationCache.containsKey( locationId ) )
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
 		final SpaceLocation hit = this.buildUpStructure( locationId, credential );
-		if (null != hit) {
+		if ( null != hit ) {
 			this.storeOnCacheLocation( hit );
 			LogWrapper.info( MessageFormat.format(
 					"[HIT-{0,number,integer}/{1,number,integer} ] Location {2,number,integer} generated from Public Structure Data.",
@@ -233,13 +276,13 @@ public class LocationCatalogService extends Job {
 
 	// - C A C H E   M A N A G E M E N T
 	private SpaceLocation buildUpLocation( final Long locationId ) {
-		if (locationId < 20000000) { // Can be a Region
+		if ( locationId < 20000000 ) { // Can be a Region
 			return this.storeOnCacheLocation(
 					new SpaceLocationImplementation.Builder()
 							.withRegion( Objects.requireNonNull( this.getUniverseRegionById( locationId.intValue() ) ) )
 							.build() );
 		}
-		if (locationId < 30000000) { // Can be a Constellation
+		if ( locationId < 30000000 ) { // Can be a Constellation
 			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
 					.getUniverseConstellationById( locationId.intValue() ) );
 			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
@@ -250,7 +293,7 @@ public class LocationCatalogService extends Job {
 							.withConstellation( constellation )
 							.build() );
 		}
-		if (locationId < 40000000) { // Can be a system
+		if ( locationId < 40000000 ) { // Can be a system
 			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.getUniverseSystemById( locationId.intValue() ) );
 			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
 					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
@@ -263,7 +306,7 @@ public class LocationCatalogService extends Job {
 							.withSolarSystem( solarSystem )
 							.build() );
 		}
-		if (locationId < 61000000) { // Can be a game station
+		if ( locationId < 61000000 ) { // Can be a game station
 			final GetUniverseStationsStationIdOk station = NeoObjects.requireNonNull( this
 							.getUniverseStationById( locationId.intValue() ),
 					"ESI Station should not be null while creating Location." );
@@ -288,19 +331,25 @@ public class LocationCatalogService extends Job {
 	}
 
 	private SpaceLocation buildUpStructure( final Long locationId, final Credential credential ) {
-		final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull( this.search200OkStructureById( locationId, credential ) );
-		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this
-				.getUniverseSystemById( locationId.intValue() ) );
-		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
-				.getUniverseConstellationById( solarSystem.getConstellationId() ) );
-		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
-				.getUniverseRegionById( constellation.getRegionId() ) );
+		final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull(
+				this.search200OkStructureById( locationId, credential )
+		);
+		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull(
+				this.getUniverseSystemById( locationId.intValue() )
+		);
+		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull(
+				this.getUniverseConstellationById( solarSystem.getConstellationId() )
+		);
+		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull(
+				this.getUniverseRegionById( constellation.getRegionId() )
+		);
 		return this.storeOnCacheLocation(
 				new Structure.Builder()
 						.withRegion( region )
 						.withConstellation( constellation )
 						.withSolarSystem( solarSystem )
 						.withStructure( locationId, structure )
+						.withCorporation( 1,"-TEST-CORPORATION-" )
 						.build() );
 	}
 
@@ -312,7 +361,7 @@ public class LocationCatalogService extends Job {
 					.getUniverseStructuresStructureId( structureId,
 							credential.getDataSource().toLowerCase(), null, null )
 					.execute();
-			if (universeResponse.isSuccessful()) {
+			if ( universeResponse.isSuccessful() ) {
 				return universeResponse.body();
 			}
 		} catch (final IOException ioe) {
@@ -333,7 +382,7 @@ public class LocationCatalogService extends Job {
 	}
 
 	private SpaceLocation storeOnCacheLocation( final SpaceLocation entry ) {
-		if (null != entry) {
+		if ( null != entry ) {
 			locationCache.put( entry.getLocationId(), entry );
 			//			this.dirtyCache = true;
 		}
