@@ -210,14 +210,14 @@ public class LocationCatalogService extends Job {
 	 * @return a SpaceLocation record with the complete location data identifiers and descriptions. Or Optional.empty() if the location cannot be
 	 * 		constructed.
 	 */
-	public Optional<SpaceLocation> lookupLocation4Id( final LocationIdentifier locationId, final Credential credential ) {
-		if ( locationId.getSpaceIdentifier() > 64e6 ) {
+	public Optional<SpaceLocation> lookupLocation4Id( final Long locationId, final Credential credential ) {
+		if ( locationId > 64e6 ) {
 			// - This is a corporation structure so needs additional scope privileges to be accessible.
-			final String locationCacheId = credential.getAccountId() + IDataStore.REDIS_SEPARATOR + locationId.getSpaceIdentifier();
+			final String locationCacheId = credential.getAccountId() + IDataStore.REDIS_SEPARATOR + locationId;
 			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
 			if ( target.isPresent() ) return target;
 			else {
-				final SpaceLocation location = this.buildUpStructure( locationId.getSpaceIdentifier(), credential );
+				final SpaceLocation location = this.buildUpStructure( locationId, credential );
 				if ( Objects.isNull( location ) ) return Optional.empty();
 				else {
 					this.dataStore.updateLocation( locationCacheId, location );
@@ -225,11 +225,11 @@ public class LocationCatalogService extends Job {
 				}
 			}
 		} else {
-			final String locationCacheId = locationId.getSpaceIdentifier().toString();
+			final String locationCacheId = locationId.toString();
 			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
 			if ( target.isPresent() ) return target;
 			else {
-				final SpaceLocation location = this.buildUpLocation( locationId.getSpaceIdentifier() );
+				final SpaceLocation location = this.buildUpLocation( locationId );
 				if ( Objects.isNull( location ) ) return Optional.empty();
 				else {
 					this.dataStore.updateLocation( locationCacheId, location );
