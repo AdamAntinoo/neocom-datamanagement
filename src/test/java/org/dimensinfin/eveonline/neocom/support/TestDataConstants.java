@@ -43,7 +43,7 @@ public class TestDataConstants {
 		public static final Integer TEST_CORPORATION_ID = 98384726;
 		public static final String TEST_CORPORATION_NAME = "Industrias Machaque";
 		public static final Integer TEST_CORPORATION_OWNER_ID = 98384726;
-		public static final Long TEST_ACCESIBLE_STRUCTURE_LOCATION_ID=64000001L;
+		public static final Long TEST_ACCESIBLE_STRUCTURE_LOCATION_ID = 64000001L;
 	}
 
 	public static final class PilotPreferencesConstants {
@@ -67,6 +67,8 @@ public class TestDataConstants {
 		public static final String TEST_ESITYPE_HULLGROUP_NAME = "not-applies";
 		public static final String TEST_ESITYPE_TECH = "Tech I";
 		public static final Float TEST_ESITYPE_VOLUME = 0.1F;
+		public static final Integer TEST_GROUP_ID = 54;
+		public static final Integer TEST_CATEGORY_ID = 12;
 	}
 
 	public static final class ResourceConstants {

@@ -84,25 +84,25 @@ public class StationImplementation extends NeoComNode implements Station {
 			this.onConstruction = new StationImplementation();
 		}
 
-		public StationImplementation.Builder withRegion( final GetUniverseRegionsRegionIdOk region ) {
+		public Builder withRegion( final GetUniverseRegionsRegionIdOk region ) {
 			Objects.requireNonNull( region );
 			this.region = region;
 			return this;
 		}
 
-		public StationImplementation.Builder withConstellation( final GetUniverseConstellationsConstellationIdOk constellation ) {
+		public Builder withConstellation( final GetUniverseConstellationsConstellationIdOk constellation ) {
 			Objects.requireNonNull( constellation );
 			this.constellation = constellation;
 			return this;
 		}
 
-		public StationImplementation.Builder withSolarSystem( final GetUniverseSystemsSystemIdOk solarSystem ) {
+		public Builder withSolarSystem( final GetUniverseSystemsSystemIdOk solarSystem ) {
 			Objects.requireNonNull( solarSystem );
 			this.solarSystem = solarSystem;
 			return this;
 		}
 
-		public StationImplementation.Builder withStation( final GetUniverseStationsStationIdOk station ) {
+		public Builder withStation( final GetUniverseStationsStationIdOk station ) {
 			Objects.requireNonNull( station );
 			this.station = station;
 			return this;
