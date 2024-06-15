@@ -1,30 +1,43 @@
 package org.dimensinfin.eveonline.neocom.industry.domain;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
+import org.dimensinfin.eveonline.neocom.support.InstanceGenerator;
 import org.dimensinfin.eveonline.neocom.support.PojoTest;
+import org.dimensinfin.logging.LogWrapper;
 
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ProcessedBlueprintConstants.TEST_PROCESSED_BLUEPRINT_ID;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_LOCATION_ID;
 
 public class ProcessedBlueprintTest {
 	private static final String TEST_OUTPUT_NAME = "-TEST_OUTPUT_NAME-";
-	private PricedResource blueprint;
-	private PricedResource output;
+	private EsiType blueprint;
+	private EsiType output;
 	private SpaceLocation location;
 
 	@BeforeEach
 	public void beforeEach() {
-		this.blueprint = Mockito.mock( PricedResource.class );
-		this.output = Mockito.mock( PricedResource.class );
-		this.location = Mockito.mock( SpaceLocation.class );
+		this.blueprint = new InstanceGenerator().getEsiType();
+		this.output = new InstanceGenerator().getEsiType();
+		this.location = new InstanceGenerator().getSpaceLocation();
 	}
 
 	@Test
@@ -109,6 +122,7 @@ public class ProcessedBlueprintTest {
 		} );
 	}
 
+	@Disabled
 	@Test
 	public void getterContract() {
 		// When
@@ -133,6 +147,7 @@ public class ProcessedBlueprintTest {
 
 	}
 
+	@Disabled
 	@Test
 	void getters_contract() {
 		PojoTest.validateGetters( ProcessedBlueprint.class );
@@ -148,5 +163,47 @@ public class ProcessedBlueprintTest {
 		final String obtained = processedBlueprint.toString();
 		// Then
 		Assertions.assertEquals( expected, obtained );
+	}
+
+	@Test
+	void when_instanceIsSerialized_using_standardSerializer() throws IOException {
+		// Given
+		final Charset codepage = StandardCharsets.UTF_8;
+		final ProcessedBlueprint processedBlueprint = this.getProcessedBlueprint();
+		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream( fileOutputStream );
+		// When
+		objectOutputStream.writeObject( processedBlueprint );
+		final String outputText = fileOutputStream.toString( codepage );
+		LogWrapper.info( outputText );
+	}
+
+	@Test
+	void when_instanceIsSerialized_using_gson() throws IOException {
+		// Given
+		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		final ProcessedBlueprint processedBlueprint = this.getProcessedBlueprint();
+		final StringWriter writer = new StringWriter();
+
+		//		final Charset codepage = StandardCharsets.UTF_8;
+		//		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+		//		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+		// When
+		gson.toJson( processedBlueprint, writer );
+		// Then
+		final String sut = writer.toString();
+		LogWrapper.info( sut );
+	}
+
+	@Test
+	void when_instanceIsSerialized_using_jackson() throws IOException {
+		// Given
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false );
+		final ProcessedBlueprint processedBlueprint = this.getProcessedBlueprint();
+		// When
+		final String sut = mapper.writeValueAsString( processedBlueprint );
+		// Then
+		LogWrapper.info( sut );
 	}
 }

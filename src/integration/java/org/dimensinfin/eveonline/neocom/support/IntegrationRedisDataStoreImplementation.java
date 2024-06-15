@@ -20,6 +20,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 
+import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
@@ -31,6 +32,8 @@ import org.dimensinfin.eveonline.neocom.service.ESIDataService;
 import org.dimensinfin.eveonline.neocom.service.IDataStore;
 import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 import org.dimensinfin.logging.LogWrapper;
+
+import static org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants.REDIS_SEPARATOR;
 
 /**
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
@@ -61,6 +64,16 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 		final Config config = new Config();
 		config.useSingleServer().setAddress( redisAddress );
 		this.redisClient = Redisson.create( config );
+	}
+
+	@Override
+	public Optional<EsiType> accessEsiType4Id( final int typeId ) {
+		return Optional.empty();
+	}
+
+	@Override
+	public EsiType storeEsiType4Id( final EsiType target ) {
+		return target;
 	}
 
 	@Override
@@ -137,13 +150,23 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 
 	// TODO - Check the case when the blueprint is not found. Start to use Optionals.
 	@Override
-	public ProcessedBlueprint accessProcessedBlueprintsByUID( Integer pilotId, String blueprintUID ) {
+	public Optional<ProcessedBlueprint> accessProcessedBlueprintsByUID( Integer pilotId, String blueprintUID ) {
 		final String uniqueLSOKey = this.generateBlueprintCostIndexUniqueId( pilotId );
 		final RMapCache<String, ProcessedBlueprint> BCIMap = this.redisClient.getMapCache( uniqueLSOKey, codec );
 		ProcessedBlueprint blueprint = BCIMap.get( blueprintUID );
-		return blueprint;
+		return Optional.ofNullable( blueprint );
 	}
 
+	/**
+	 * Processed Blueprints have to be shared between different architectures (Java, Typescript), then the serialization should be compatible to allow
+	 * the data to be used on all the platforms. The selected format is the same to be used on the REST services.
+	 *
+	 * This data is stored on the Redis database under the Data Map named COST_INDEX_BLUEPRINTS_CACHE_NAME and the pilot identifier. That will get a
+	 * single Redis record with all the set of blueprints for this pilot, where we can locate a single blueprint by it unique identifier.
+	 *
+	 * @param pilotId   the pilot identifier that requires this data
+	 * @param blueprint the blueprint to be stored/updated on the Redis repository.
+	 */
 	@Override
 	public void updateProcessedBlueprint( final Integer pilotId, final ProcessedBlueprint blueprint ) {
 		final String uniqueLSOKey = this.generateBlueprintCostIndexUniqueId( pilotId );

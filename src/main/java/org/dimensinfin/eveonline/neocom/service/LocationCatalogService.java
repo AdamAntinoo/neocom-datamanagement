@@ -32,6 +32,7 @@ import org.dimensinfin.logging.LogWrapper;
 import retrofit2.Response;
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ACCEPT_LANGUAGE;
 import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_ESI_SERVER;
+import static org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants.REDIS_SEPARATOR;
 
 /**
  * The location catalog service will be used to define Eve Online space locations. It is able to understand their different contents depending on the
@@ -213,7 +214,7 @@ public class LocationCatalogService extends Job {
 	public Optional<SpaceLocation> lookupLocation4Id( final Long locationId, final Credential credential ) {
 		if ( locationId > 64e6 ) {
 			// - This is a corporation structure so needs additional scope privileges to be accessible.
-			final String locationCacheId = credential.getAccountId() + IDataStore.REDIS_SEPARATOR + locationId;
+			final String locationCacheId = credential.getAccountId() + REDIS_SEPARATOR + locationId;
 			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
 			if ( target.isPresent() ) return target;
 			else {

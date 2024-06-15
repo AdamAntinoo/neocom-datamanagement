@@ -2,6 +2,7 @@ package org.dimensinfin.eveonline.neocom.utility;
 
 public class GlobalWideConstants {
 	public static final String STACKID_SEPARATOR = "/";
+	public static final String REDIS_SEPARATOR=":";
 
 	// - C O N S T R U C T O R S
 	private GlobalWideConstants() {}
@@ -34,5 +35,22 @@ public class GlobalWideConstants {
 	public static final class LocationRoles {
 		public static final String REFINE = "REFINE";
 		public static final String ADVANCEDINDUSTRY = "Advanced Industry";
+	}
+
+	// - D A T A    S T O R E   K E Y S
+	public static final class DataStoreKeys {
+		@Deprecated
+		public static final String LOWEST_SELL_ORDER_MAP = "LSO";
+		@Deprecated
+		public static final Integer LOWEST_SELL_ORDER_TTL = 300;
+		// - ESI Types
+		public static final String ESI_TYPE_KEY_NAME="TYP";
+		public static final Integer ESI_TYPE_KEY_TTL = -1;
+		// - Locations
+		public static final String SPACE_LOCATIONS_KEY_NAME = "SPL";
+		public static final Integer SPACE_LOCATIONS_CACHE_TTL = 12;
+		// - Extended Blueprints
+		public static final String EXTENDED_BLUEPRINTS_KEY_NAME = "ECM";
+		public static final Integer EXTENDED_BLUEPRINTS_TTL = 12;
 	}
 }

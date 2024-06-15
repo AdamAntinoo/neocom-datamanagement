@@ -1,5 +1,6 @@
 package org.dimensinfin.eveonline.neocom.domain;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,7 +17,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdO
 import org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants;
 
 @NonNls
-public class EsiType extends NeoComNode {
+public class EsiType extends NeoComNode implements Serializable {
 	public static final String ESI_ICON_URL_PREFIX = "https://image.eveonline.com/Type/";
 	public static final String ESI_ICON_URL_SUFFIX = "_64.png";
 	private static final long serialVersionUID = 1430130141655722687L;

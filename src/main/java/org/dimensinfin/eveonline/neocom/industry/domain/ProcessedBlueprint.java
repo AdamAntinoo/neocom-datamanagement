@@ -9,11 +9,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
-import org.dimensinfin.eveonline.neocom.service.IDataStore;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import static org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants.REDIS_SEPARATOR;
 
 @Getter
 @Builder(setterPrefix = "with")
@@ -56,6 +56,6 @@ public class ProcessedBlueprint implements Serializable {
 				.toString();
 	}
 	public String getStorageUniqueId(){
-		return this.getLocation().getLocationId() + IDataStore.REDIS_SEPARATOR + this.getTypeId();
+		return this.getLocation().getLocationId() + REDIS_SEPARATOR + this.getTypeId();
 	}
 }

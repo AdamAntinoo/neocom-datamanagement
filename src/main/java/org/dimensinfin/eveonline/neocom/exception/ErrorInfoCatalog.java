@@ -8,7 +8,7 @@ import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.CHARACTE
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.INVALID_LOCATION_TYPE_ERRORCODE;
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.MINING_REPOSITORY_EXTRACTION_SQL_ERRORCODE;
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.RETROFIT_CACHE_FILE_SYSTEM_ERRORCODE;
-
+@Deprecated
 public enum ErrorInfoCatalog {
 	AUTHENTICATION_FAILURE_ESI_SSO(
 			AUTHENTICATION_VERIFICATION_ERRORCODE,

@@ -16,6 +16,7 @@
       <option name="ignoreAssignedToConstants" value="false" />
       <option name="ignoreToString" value="false" />
       <option name="nonNlsCommentPattern" value="NON-NLS" />
+      <option name="ignoreAllButNls" value="true" />
     </inspection_tool>
     <inspection_tool class="StringConcatenation" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreAsserts" value="false" />
