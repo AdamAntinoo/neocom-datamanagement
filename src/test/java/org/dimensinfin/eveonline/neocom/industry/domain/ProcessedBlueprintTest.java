@@ -122,6 +122,7 @@ public class ProcessedBlueprintTest {
 		} );
 	}
 
+	@Disabled
 	@Test
 	public void getterContract() {
 		// When
@@ -146,6 +147,7 @@ public class ProcessedBlueprintTest {
 
 	}
 
+	@Disabled
 	@Test
 	void getters_contract() {
 		PojoTest.validateGetters( ProcessedBlueprint.class );

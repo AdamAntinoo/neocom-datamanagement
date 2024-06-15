@@ -72,8 +72,8 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 	}
 
 	@Override
-	public EsiType storeEsiType4Id( final int typeId, final EsiType target ) {
-		return null;
+	public EsiType storeEsiType4Id( final EsiType target ) {
+		return target;
 	}
 
 	@Override
@@ -158,13 +158,13 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 	}
 
 	/**
-	 * Processed Blueprints have to be shared between different architectures (Java, Typescript), then the serialization should be compatible to allow the data to be used
-	 * on all the platforms. The selected format is the same to be used on the REST services.
+	 * Processed Blueprints have to be shared between different architectures (Java, Typescript), then the serialization should be compatible to allow
+	 * the data to be used on all the platforms. The selected format is the same to be used on the REST services.
 	 *
-	 * This data is stored on the Redis database under the Data Map named COST_INDEX_BLUEPRINTS_CACHE_NAME and the pilot identifier. That will get a single Redis record with
-	 * all the set of blueprints for this pilot, where we can locate a single blueprint by it unique identifier.
+	 * This data is stored on the Redis database under the Data Map named COST_INDEX_BLUEPRINTS_CACHE_NAME and the pilot identifier. That will get a
+	 * single Redis record with all the set of blueprints for this pilot, where we can locate a single blueprint by it unique identifier.
 	 *
-	 * @param pilotId the pilot identifier that requires this data
+	 * @param pilotId   the pilot identifier that requires this data
 	 * @param blueprint the blueprint to be stored/updated on the Redis repository.
 	 */
 	@Override
