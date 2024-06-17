@@ -41,7 +41,7 @@ public class ResourceFactoryTest {
 		final GetUniverseGroupsGroupIdOk esiGroup = Mockito.mock( GetUniverseGroupsGroupIdOk.class );
 		final GetUniverseCategoriesCategoryIdOk esiCategory = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
 		// When
-		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) ).thenReturn( esiItem );
+		Mockito.when( this.esiDataService.searchEsiUniverseType4Id( Mockito.anyInt() ) ).thenReturn( esiItem );
 		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) ).thenReturn( esiGroup );
 		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) ).thenReturn( esiCategory );
 		Mockito.when( esiItem.getTypeId() ).thenReturn( TEST_RESOURCE_TYPE_ID );
@@ -68,7 +68,7 @@ public class ResourceFactoryTest {
 		final GetUniverseGroupsGroupIdOk esiGroup = Mockito.mock( GetUniverseGroupsGroupIdOk.class );
 		final GetUniverseCategoriesCategoryIdOk esiCategory = Mockito.mock( GetUniverseCategoriesCategoryIdOk.class );
 		// When
-		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) ).thenReturn( esiItem );
+		Mockito.when( this.esiDataService.searchEsiUniverseType4Id( Mockito.anyInt() ) ).thenReturn( esiItem );
 		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) ).thenReturn( esiGroup );
 		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) ).thenReturn( esiCategory );
 		Mockito.when( esiItem.getTypeId() ).thenReturn( TEST_RESOURCE_TYPE_ID );

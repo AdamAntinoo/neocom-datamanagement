@@ -60,7 +60,7 @@ public class NeoAssetTest {
 		Mockito.when( this.esiCategory.getCategoryId() ).thenReturn( 4 );
 		Mockito.when( this.esiCategory.getName() ).thenReturn( "Material" );
 		this.esiDataService = Mockito.mock( ESIDataService.class );
-		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) ).thenReturn( this.esiItem );
+		Mockito.when( this.esiDataService.searchEsiUniverseType4Id( Mockito.anyInt() ) ).thenReturn( this.esiItem );
 		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) ).thenReturn( this.esiGroup );
 		Mockito.when( this.esiDataService.searchItemCategory4Id( Mockito.anyInt() ) ).thenReturn( this.esiCategory );
 		NeoItem.injectEsiUniverseDataAdapter( this.esiDataService );

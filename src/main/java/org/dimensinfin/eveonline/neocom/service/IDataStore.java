@@ -11,14 +11,14 @@ import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 
 public interface IDataStore {
-	String TYPE_KEY = "TYP";
-	String LOCATION_KEY ="LOC";
-	String EXTENDED_BLUEPRINT_KEY="EBM";
+//	String TYPE_KEY = "TYP";
+//	String LOCATION_KEY ="LOC";
+//	String EXTENDED_BLUEPRINT_KEY="EBM";
 
 	Optional<EsiType> accessEsiType4Id( final int typeId );
 	EsiType storeEsiType4Id( final EsiType target );
 
-	GetUniverseTypesTypeIdOk accessEsiItem4Id( final int typeId, final ESIDataService.EsiItemPassThrough esiItemPassThrough );
+	GetUniverseTypesTypeIdOk accessEsiUniverseItem4Id( final int typeId, final ESIDataService.EsiItemPassThrough esiItemPassThrough );
 
 	MarketOrder accessLowestSellOrder( final Integer regionId, final Integer typeId, final MarketService.LowestSellOrderPassThrough lowestSellOrderReloadMethod );
 

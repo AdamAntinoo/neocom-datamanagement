@@ -24,7 +24,7 @@ public class NeoItemDependingTest {
 		Mockito.when( category.getCategoryId() ).thenReturn( 4 );
 		Mockito.when( category.getName() ).thenReturn( "Material" );
 		this.esiDataService = Mockito.mock( ESIDataService.class );
-		Mockito.when( this.esiDataService.searchEsiItem4Id( Mockito.anyInt() ) )
+		Mockito.when( this.esiDataService.searchEsiUniverseType4Id( Mockito.anyInt() ) )
 				.thenReturn( esiItem );
 		Mockito.when( this.esiDataService.searchItemGroup4Id( Mockito.anyInt() ) )
 				.thenReturn( group );
