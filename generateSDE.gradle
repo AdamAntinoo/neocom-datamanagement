@@ -24,6 +24,7 @@ task downloadSDEData(type: Exec) {
 }
 
 task generateSDEDatabase(type: Exec) {
+    dependsOn(processIntegrationResources)
     group = "integration"
     inputs.files(fileTree('src/integration/sh/downloads'))
             .withPropertyName('csvTableContents')

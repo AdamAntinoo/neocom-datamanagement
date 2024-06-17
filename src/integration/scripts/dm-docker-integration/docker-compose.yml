@@ -12,8 +12,6 @@
 #   5310 - apisimulator-esi-oauth [INTEGRATION]
 #   5320 - apisimulator-esi-data [INTEGRATION]
 
-version: '3.8'
-
 services:
   #  datamanagement-integration-apisimulator-esi-oauth:
   #    container_name: datamanagement-integration-apisimulator-esi-oauth

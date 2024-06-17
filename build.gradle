@@ -5,6 +5,14 @@ plugins {
     id 'project-report'
     id 'idea'
     id "org.sonarqube" version "3.0"
+    id 'com.avast.gradle.docker-compose' version "0.14.2"
+}
+allprojects {
+    apply plugin: 'java'
+
+    tasks.withType(Copy).all {
+        duplicatesStrategy 'exclude'
+    }
 }
 
 // - P R O J E C T   D E F I N I T I O N
@@ -56,6 +64,10 @@ sourceSets {
 
 // - C O N F I G U R A T I O N S
 configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    integrationImplementation.extendsFrom implementation
     integrationImplementation.extendsFrom testImplementation
     integrationRuntime.extendsFrom testRuntime
 }
@@ -63,6 +75,7 @@ configurations {
 // - D E P E N D E N C I E S
 apply from: './dependencies.gradle'
 apply from: './generateSDE.gradle'
+//apply from: './testing-integration.gradle'
 // - C O V E R A G E
 apply from: './jacoco.gradle'
 // - P U B L I S H I N G
@@ -85,10 +98,20 @@ sonarqube {
 // - I N T E G R A T I O N   T E S T S
 task integrationTest(type: Test) {
     group = 'integration'
+    description = 'Runs integration tests agains a set of docker containers that replace real services.'
+    useJUnitPlatform()
+    mustRunAfter test
     testClassesDirs = sourceSets.integration.output.classesDirs
     classpath = sourceSets.integration.runtimeClasspath
 }
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
+check.dependsOn integrationTest // check is an internal step on the gradle world.
 integrationTest.dependsOn downloadSDEData
 integrationTest.dependsOn generateSDEDatabase
+
+dockerCompose {
+    integration {
+        // Define the docker compose file for integration testing
+        useComposeFiles = ["${projectDir}/src/integration/scripts/dm-docker-integration/docker-compose.yml"]
+        isRequiredBy(integrationTest)
+    }
+}
