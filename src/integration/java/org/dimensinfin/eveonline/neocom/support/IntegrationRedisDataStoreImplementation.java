@@ -78,7 +78,7 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 
 	@Override
 	@Nullable
-	public GetUniverseTypesTypeIdOk accessEsiItem4Id( final int typeId, final ESIDataService.EsiItemPassThrough esiItemPassThrough ) {
+	public GetUniverseTypesTypeIdOk accessEsiUniverseItem4Id( final int typeId, final ESIDataService.EsiItemPassThrough esiItemPassThrough ) {
 		final RBucket<GetUniverseTypesTypeIdOk> esiIBucket = this.redisClient
 				.getBucket( this.generateEsiItemUniqueId( typeId ), new JsonJacksonCodec() );
 		if ( null == esiIBucket.get() ) {

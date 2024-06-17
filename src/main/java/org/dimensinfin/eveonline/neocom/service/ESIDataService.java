@@ -435,8 +435,8 @@ public class ESIDataService extends ESIDataProvider {
 		return this.locationCatalogService.getUniverseSystemById( systemId );
 	}
 
-	public GetUniverseTypesTypeIdOk searchEsiItem4Id( final int typeId ) {
-		return this.dataStore.accessEsiItem4Id( typeId,
+	public GetUniverseTypesTypeIdOk searchEsiUniverseType4Id( final int typeId ) {
+		return this.dataStore.accessEsiUniverseItem4Id( typeId,
 				( tid ) -> this.downloadEsiType( typeId )
 		);
 	}

@@ -25,7 +25,7 @@ public class ResourceFactory {
 	}
 
 	public Resource generateResource4Id( final int typeId, final int quantity ) {
-		final GetUniverseTypesTypeIdOk item = this.esiDataService.searchEsiItem4Id( typeId );
+		final GetUniverseTypesTypeIdOk item = this.esiDataService.searchEsiUniverseType4Id( typeId );
 		final GetUniverseGroupsGroupIdOk group = this.esiDataService.searchItemGroup4Id( item.getGroupId() );
 		return new Resource.Builder()
 				.withTypeId( typeId )
@@ -50,7 +50,7 @@ public class ResourceFactory {
 		final Optional<EsiType> cachedType = this.dataStore.accessEsiType4Id( typeId );
 		if (cachedType.isPresent() )return cachedType.get();
 		// - Not found on cache or stale.
-		final GetUniverseTypesTypeIdOk item = this.esiDataService.searchEsiItem4Id( typeId );
+		final GetUniverseTypesTypeIdOk item = this.esiDataService.searchEsiUniverseType4Id( typeId );
 		final GetUniverseGroupsGroupIdOk group = this.esiDataService.searchItemGroup4Id( item.getGroupId() );
 		final EsiType target = new EsiType.Builder()
 				.withTypeId( typeId )

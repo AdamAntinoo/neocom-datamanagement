@@ -43,6 +43,9 @@ public class GlobalWideConstants {
 		public static final String LOWEST_SELL_ORDER_MAP = "LSO";
 		@Deprecated
 		public static final Integer LOWEST_SELL_ORDER_TTL = 300;
+		// - Universe ESI Types
+		public static final String ESI_UNIVERSE_TYPE_KEY_NAME="UTY";
+		public static final Integer ESI_UNIVERSE_TYPE_KEY_TTL = -1;
 		// - ESI Types
 		public static final String ESI_TYPE_KEY_NAME="TYP";
 		public static final Integer ESI_TYPE_KEY_TTL = -1;
