@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 
@@ -16,17 +15,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.LocationIdentifier;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
-import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocationImplementation;
-import org.dimensinfin.eveonline.neocom.domain.space.Structure;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.utility.AccessStatistics;
-import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
@@ -58,15 +55,19 @@ public class LocationCatalogService extends Job {
 	// - C O M P O N E N T S
 	private final RetrofitService retrofitService;
 	private final IDataStore dataStore;
+	private final ILocationFactoryPort locationFactory;
 
 	private final Map<String, Integer> locationTypeCounters = new HashMap<>();
 
 	// - C O N S T R U C T O R S
 	@Inject
 	public LocationCatalogService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService,
-	                               final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStore dataStore ) {
+	                               final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStore dataStore,
+	                               final @NotNull @Named(DMServicesDependenciesModule.LOCATION_FACTORY) ILocationFactoryPort locationFactory
+	) {
 		this.retrofitService = retrofitService;
 		this.dataStore = dataStore;
+		this.locationFactory = locationFactory;
 	}
 
 	// - G E T T E R S   &   S E T T E R S
@@ -85,11 +86,13 @@ public class LocationCatalogService extends Job {
 	}
 
 	// - C O R E
+	@Deprecated
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder( 17, 37 ).appendSuper( super.hashCode() ).append( this.locationTypeCounters ).toHashCode();
 	}
 
+	@Deprecated
 	@Override
 	public boolean equals( final Object o ) {
 		if ( this == o ) return true;
@@ -99,6 +102,7 @@ public class LocationCatalogService extends Job {
 				.append( this.locationTypeCounters, that.locationTypeCounters ).isEquals();
 	}
 
+	@Deprecated
 	@Override
 	public Boolean call() {
 		LogWrapper.enter();
@@ -110,12 +114,14 @@ public class LocationCatalogService extends Job {
 	}
 
 	// - S T O R A G E
+	@Deprecated
 	public int cleanLocationsCache() {
 		final int contentCount = locationCache.size();
 		locationCache.clear();
 		return contentCount;
 	}
 
+	@Deprecated
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
 		try {
 			// Create the request to be returned so it can be called.
@@ -134,6 +140,7 @@ public class LocationCatalogService extends Job {
 		return null;
 	}
 
+	@Deprecated
 	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
 		try {
 			// Create the request to be returned so it can be called.
@@ -151,6 +158,7 @@ public class LocationCatalogService extends Job {
 		return null;
 	}
 
+	@Deprecated
 	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
 		LogWrapper.enter( MessageFormat.format( "stationId: {0, number, integer}", stationId ) );
 		try {
@@ -167,6 +175,7 @@ public class LocationCatalogService extends Job {
 		return null;
 	}
 
+	@Deprecated
 	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
 		try {
 			// Create the request to be returned so it can be called.
@@ -191,11 +200,16 @@ public class LocationCatalogService extends Job {
 	 * Use a single place where to search for locations if we know a full location identifier. It will detect if the location is a space or structure
 	 * location and search for the right record. This method is used for Pilot and structure locations.
 	 *
+	 * This method is deprecated in favor to use <code>access</code> methods that will return <code>Optional</code> and will not deal with null
+	 * values.
+	 *
 	 * @param locationId full location identifier obtained from any asset with the full location identifier.
 	 * @param credential the pilot Credential to be used to access the list of structures. Not all structures are available and it is a secured
 	 *                   endpoint.
 	 * @return a SpaceLocation record with the complete location data identifiers and descriptions.
+	 * @deprecated
 	 */
+	@Deprecated
 	public SpaceLocation searchLocation4Id( final LocationIdentifier locationId, final Credential credential ) {
 		if ( locationId.getSpaceIdentifier() > 64e6 )
 			return this.searchStructure4Id( locationId.getSpaceIdentifier(), credential );
@@ -203,7 +217,8 @@ public class LocationCatalogService extends Job {
 	}
 
 	/**
-	 * New search methosd the uses a Redis cache and that returns empty Optional in case the location cannot be constructed. Nulls should be avoided.
+	 * New search method the uses the Data Store cache and that returns empty Optional in case the location cannot be constructed. Nulls should be
+	 * avoided.
 	 *
 	 * @param locationId full location identifier obtained from any asset with the full location identifier.
 	 * @param credential the pilot Credential to be used to access the list of structures. Not all structures are available and it is a secured
@@ -217,26 +232,14 @@ public class LocationCatalogService extends Job {
 			final String locationCacheId = credential.getAccountId() + REDIS_SEPARATOR + locationId;
 			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
 			if ( target.isPresent() ) return target;
-			else {
-				final SpaceLocation location = this.buildUpStructure( locationId, credential );
-				if ( Objects.isNull( location ) ) return Optional.empty();
-				else {
-					this.dataStore.updateLocation( locationCacheId, location );
-					return Optional.of( location );
-				}
-			}
+			final Optional<SpaceLocation> location = this.locationFactory.buildUpStructure4Pilot( locationId, credential );
+			return location.map( spaceLocation -> this.dataStore.updateLocation( locationCacheId, spaceLocation ) );
 		} else {
 			final String locationCacheId = locationId.toString();
 			final Optional<SpaceLocation> target = this.dataStore.accessLocation( locationCacheId );
 			if ( target.isPresent() ) return target;
-			else {
-				final SpaceLocation location = this.buildUpLocation( locationId );
-				if ( Objects.isNull( location ) ) return Optional.empty();
-				else {
-					this.dataStore.updateLocation( locationCacheId, location );
-					return Optional.of( location );
-				}
-			}
+			final Optional<SpaceLocation> location = this.locationFactory.buildUpLocation4LocationId( locationId );
+			return location.map( spaceLocation -> this.dataStore.updateLocation( locationCacheId, spaceLocation ) );
 		}
 	}
 
@@ -251,12 +254,12 @@ public class LocationCatalogService extends Job {
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
-		final SpaceLocation hit = this.buildUpLocation( locationId );
-		if ( null != hit ) {
-			this.storeOnCacheLocation( hit );
+		final Optional<SpaceLocation> hit = this.locationFactory.buildUpLocation4LocationId( locationId );
+		if ( hit.isPresent() ) {
+			this.storeOnCacheLocation( hit.get() );
 			LogWrapper.info( MessageFormat.format( "[HIT-{0}/{1} ] Location {2, number, integer} generated from ESI data.",
 					hits, access, locationId ) );
-			return hit;
+			return hit.get();
 		} else return null;
 	}
 
@@ -265,94 +268,104 @@ public class LocationCatalogService extends Job {
 			return this.searchOnMemoryCache( locationId );
 		final int access = locationsCacheStatistics.accountAccess( false );
 		final int hits = locationsCacheStatistics.getHits();
-		final SpaceLocation hit = this.buildUpStructure( locationId, credential );
-		if ( null != hit ) {
-			this.storeOnCacheLocation( hit );
+		final Optional<SpaceLocation> hit = this.locationFactory.buildUpStructure4Pilot( locationId, credential );
+		if ( hit.isPresent() ) {
+			this.storeOnCacheLocation( hit.get() );
 			LogWrapper.info( MessageFormat.format(
 					"[HIT-{0,number,integer}/{1,number,integer} ] Location {2,number,integer} generated from Public Structure Data.",
 					hits, access, locationId ) );
-			return hit;
+			return hit.get();
 		} else return null;
 	}
 
 	// - C A C H E   M A N A G E M E N T
-	private SpaceLocation buildUpLocation( final Long locationId ) {
-		if ( locationId < 20000000 ) { // Can be a Region
-			return this.storeOnCacheLocation(
-					new SpaceLocationImplementation.Builder()
-							.withRegion( Objects.requireNonNull( this.getUniverseRegionById( locationId.intValue() ) ) )
-							.build() );
-		}
-		if ( locationId < 30000000 ) { // Can be a Constellation
-			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
-					.getUniverseConstellationById( locationId.intValue() ) );
-			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
-					.getUniverseRegionById( constellation.getRegionId() ) );
-			return this.storeOnCacheLocation(
-					new SpaceLocationImplementation.Builder()
-							.withRegion( region )
-							.withConstellation( constellation )
-							.build() );
-		}
-		if ( locationId < 40000000 ) { // Can be a system
-			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.getUniverseSystemById( locationId.intValue() ) );
-			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
-					.getUniverseConstellationById( solarSystem.getConstellationId() ) );
-			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
-					.getUniverseRegionById( constellation.getRegionId() ) );
-			return this.storeOnCacheLocation(
-					new SpaceLocationImplementation.Builder()
-							.withRegion( region )
-							.withConstellation( constellation )
-							.withSolarSystem( solarSystem )
-							.build() );
-		}
-		if ( locationId < 61000000 ) { // Can be a game station
-			final GetUniverseStationsStationIdOk station = NeoObjects.requireNonNull( this
-							.getUniverseStationById( locationId.intValue() ),
-					"ESI Station should not be null while creating Location." );
-			final GetUniverseSystemsSystemIdOk solarSystem = NeoObjects.requireNonNull( this
-							.getUniverseSystemById( station.getSystemId() ),
-					"ESI Solar System should not be null while creating Location." );
-			final GetUniverseConstellationsConstellationIdOk constellation = NeoObjects.requireNonNull( this
-							.getUniverseConstellationById( solarSystem.getConstellationId() ),
-					"ESI Constellation should not be null while creating Location." );
-			final GetUniverseRegionsRegionIdOk region = NeoObjects.requireNonNull( this
-							.getUniverseRegionById( constellation.getRegionId() ),
-					"ESI Region should not be null while creating Location." );
-			return this.storeOnCacheLocation(
-					new SpaceLocationImplementation.Builder()
-							.withRegion( region )
-							.withConstellation( constellation )
-							.withSolarSystem( solarSystem )
-							.withStation( station )
-							.build() );
-		}
-		return null;
-	}
+	//	@Deprecated
+	//	private Optional<SpaceLocation> buildUpLocation( final Long locationId ) {
+	//		try {
+	//			if ( locationId < 20000000 ) { // Can be a Region
+	//				return Optional.of( this.storeOnCacheLocation(
+	//						new SpaceLocationImplementation.Builder()
+	//								.withRegion( Objects.requireNonNull( this.getUniverseRegionById( locationId.intValue() ) ) )
+	//								.build() )
+	//				);
+	//			}
+	//			if ( locationId < 30000000 ) { // Can be a Constellation
+	//				final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
+	//						.getUniverseConstellationById( locationId.intValue() ) );
+	//				final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
+	//						.getUniverseRegionById( constellation.getRegionId() ) );
+	//				return Optional.of( this.storeOnCacheLocation(
+	//						new SpaceLocationImplementation.Builder()
+	//								.withRegion( region )
+	//								.withConstellation( constellation )
+	//								.build() )
+	//				);
+	//			}
+	//			if ( locationId < 40000000 ) { // Can be a system
+	//				final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull( this.getUniverseSystemById( locationId.intValue() ) );
+	//				final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull( this
+	//						.getUniverseConstellationById( solarSystem.getConstellationId() ) );
+	//				final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull( this
+	//						.getUniverseRegionById( constellation.getRegionId() ) );
+	//				return Optional.of( this.storeOnCacheLocation(
+	//						new SpaceLocationImplementation.Builder()
+	//								.withRegion( region )
+	//								.withConstellation( constellation )
+	//								.withSolarSystem( solarSystem )
+	//								.build() )
+	//				);
+	//			}
+	//			if ( locationId < 61000000 ) { // Can be a game station
+	//				final GetUniverseStationsStationIdOk station = NeoObjects.requireNonNull( this
+	//								.getUniverseStationById( locationId.intValue() ),
+	//						"ESI Station should not be null while creating Location." );
+	//				final GetUniverseSystemsSystemIdOk solarSystem = NeoObjects.requireNonNull( this
+	//								.getUniverseSystemById( station.getSystemId() ),
+	//						"ESI Solar System should not be null while creating Location." );
+	//				final GetUniverseConstellationsConstellationIdOk constellation = NeoObjects.requireNonNull( this
+	//								.getUniverseConstellationById( solarSystem.getConstellationId() ),
+	//						"ESI Constellation should not be null while creating Location." );
+	//				final GetUniverseRegionsRegionIdOk region = NeoObjects.requireNonNull( this
+	//								.getUniverseRegionById( constellation.getRegionId() ),
+	//						"ESI Region should not be null while creating Location." );
+	//				return Optional.of( this.storeOnCacheLocation(
+	//						new SpaceLocationImplementation.Builder()
+	//								.withRegion( region )
+	//								.withConstellation( constellation )
+	//								.withSolarSystem( solarSystem )
+	//								.withStation( station )
+	//								.build() )
+	//				);
+	//			}
+	//		} catch (final RuntimeException runtime) {
+	//			LogWrapper.error( runtime );
+	//			return Optional.empty();
+	//		}
+	//		return Optional.empty();
+	//	}
 
-	private SpaceLocation buildUpStructure( final Long locationId, final Credential credential ) {
-		final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull(
-				this.search200OkStructureById( locationId, credential )
-		);
-		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull(
-				this.getUniverseSystemById( locationId.intValue() )
-		);
-		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull(
-				this.getUniverseConstellationById( solarSystem.getConstellationId() )
-		);
-		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull(
-				this.getUniverseRegionById( constellation.getRegionId() )
-		);
-		return this.storeOnCacheLocation(
-				new Structure.Builder()
-						.withRegion( region )
-						.withConstellation( constellation )
-						.withSolarSystem( solarSystem )
-						.withStructure( locationId, structure )
-						.withCorporation( 1,"-TEST-CORPORATION-" )
-						.build() );
-	}
+	//	private SpaceLocation buildUpStructure( final Long locationId, final Credential credential ) {
+	//		final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull(
+	//				this.search200OkStructureById( locationId, credential )
+	//		);
+	//		final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull(
+	//				this.getUniverseSystemById( locationId.intValue() )
+	//		);
+	//		final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull(
+	//				this.getUniverseConstellationById( solarSystem.getConstellationId() )
+	//		);
+	//		final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull(
+	//				this.getUniverseRegionById( constellation.getRegionId() )
+	//		);
+	//		return this.storeOnCacheLocation(
+	//				new Structure.Builder()
+	//						.withRegion( region )
+	//						.withConstellation( constellation )
+	//						.withSolarSystem( solarSystem )
+	//						.withStructure( locationId, structure )
+	//						.withCorporation( 1, "-TEST-CORPORATION-" )
+	//						.build() );
+	//	}
 
 	private GetUniverseStructuresStructureIdOk search200OkStructureById( final Long structureId, final Credential credential ) {
 		try {

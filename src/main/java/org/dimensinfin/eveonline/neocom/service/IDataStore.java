@@ -32,5 +32,5 @@ public interface IDataStore {
 
 	Optional<SpaceLocation> accessLocation( final String locationCacheId );
 
-	void updateLocation(final  String locationCacheId, final SpaceLocation location );
+	SpaceLocation updateLocation(final  String locationCacheId, final SpaceLocation location );
 }

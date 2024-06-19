@@ -187,12 +187,14 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 	}
 
 	@Override
-	public void updateLocation( final String locationCacheId, final SpaceLocation location ) {
+	public SpaceLocation updateLocation( final String locationCacheId, final SpaceLocation location ) {
 		final RMapCache<String, SpaceLocation> BCIMap = this.redisClient.getMapCache( SPACE_LOCATIONS_CACHE_NAME, codec );
 		try {
 			BCIMap.put( SPACE_LOCATIONS_CACHE_NAME + REDIS_SEPARATOR + locationCacheId, location );
 		} catch (final RuntimeException rte) {
 			LogWrapper.error( rte );
+		} finally {
+			return location;
 		}
 	}
 

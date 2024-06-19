@@ -10,6 +10,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCa
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellationsConstellationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
+import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 
@@ -21,6 +22,9 @@ import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiType
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiTypeConstants.TEST_ESITYPE_VOLUME;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.EsiTypeConstants.TEST_GROUP_ID;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_ACCESIBLE_STRUCTURE_LOCATION_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_SOLAR_SYSTEM_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_STATION_ID;
+import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLocationConstants.TEST_STATION_NAME;
 
 public class InstanceGenerator {
 	public Credential getCredential() {
@@ -48,6 +52,10 @@ public class InstanceGenerator {
 
 	public GetUniverseGroupsGroupIdOk getGetUniverseGroupsGroupIdOk() {
 		return new GetUniverseGroupsGroupIdOk().groupId( TEST_GROUP_ID ).name( TEST_ESITYPE_GROUP_NAME ).categoryId( TEST_CATEGORY_ID );
+	}
+
+	public GetUniverseStationsStationIdOk getGetUniverseStationsStationIdOk() {
+		return new GetUniverseStationsStationIdOk().stationId( TEST_STATION_ID ).name( TEST_STATION_NAME ).systemId( TEST_SOLAR_SYSTEM_ID );
 	}
 
 	public GetUniverseTypesTypeIdOk getGetUniverseTypesTypeIdOk() {
