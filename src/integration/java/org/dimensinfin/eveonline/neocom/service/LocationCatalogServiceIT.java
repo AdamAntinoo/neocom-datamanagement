@@ -4,10 +4,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.testcontainers.containers.GenericContainer;
 
 import org.dimensinfin.eveonline.neocom.IntegrationNeoComServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
+import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.support.SBConfigurationService;
@@ -33,6 +35,7 @@ public class LocationCatalogServiceIT {
 	private LocationCatalogService locationCatalogService;
 	private IDataStore dataStore;
 	private ESIDataService esiDataService;
+	private ILocationFactoryPort locationFactory;
 
 	private GenericContainer<?> esiAuthenticationSimulator;
 	private GenericContainer<?> esiDataSimulator;
@@ -47,7 +50,8 @@ public class LocationCatalogServiceIT {
 		this.retrofitService = injector.getInstance( RetrofitService.class );
 		this.dataStore = injector.getInstance( IntegrationRedisDataStoreImplementation.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
-		this.locationCatalogService = new LocationCatalogService( this.retrofitService, this.dataStore );
+		this.locationFactory = Mockito.mock( ILocationFactoryPort.class );
+		this.locationCatalogService = new LocationCatalogService( this.retrofitService, this.dataStore ,this.locationFactory);
 		this.esiDataService = new ESIDataService(
 				this.configurationService,
 				this.fileSystem,

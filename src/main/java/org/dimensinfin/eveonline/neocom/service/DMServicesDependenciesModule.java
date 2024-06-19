@@ -23,6 +23,7 @@ public class DMServicesDependenciesModule extends AbstractModule {
 	public static final String ISDE_DATABASE_SERVICE = "ISDEDatabaseService";
 	public static final String INEOCOM_DATABASE_SERVICE = "INeoComDatabaseService";
 	public static final String REDIS_DATABASE_URL = "RedisDatabaseURL";
+	public static final String LOCATION_FACTORY = "LocationFactory";
 
 	@Override
 	protected void configure() {
@@ -53,6 +54,10 @@ public class DMServicesDependenciesModule extends AbstractModule {
 		this.bind( CharacterService.class )
 				.annotatedWith( Names.named( CHARACTER_SERVICE ) )
 				.to( CharacterService.class )
+				.in( Singleton.class );
+		this.bind( LocationFactory.class )
+				.annotatedWith( Names.named( LOCATION_FACTORY ) )
+				.to( LocationFactory.class )
 				.in( Singleton.class );
 	}
 }
