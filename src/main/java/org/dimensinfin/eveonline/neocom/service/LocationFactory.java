@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Optional;
-
 import javax.validation.constraints.NotNull;
 
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
@@ -34,6 +34,7 @@ import static org.dimensinfin.eveonline.neocom.provider.ESIDataProvider.DEFAULT_
 public class LocationFactory implements ILocationFactoryPort {
 	private final RetrofitService retrofitService;
 
+	@Inject
 	public LocationFactory( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService ) {this.retrofitService = retrofitService;}
 
 	@Override
@@ -99,19 +100,23 @@ public class LocationFactory implements ILocationFactoryPort {
 
 	@Override
 	public Optional<SpaceLocation> buildUpStructure4Pilot( final Long locationId, final Credential credential ) {
+		LogWrapper.enter("locationId->"+locationId);
 		try {
 			final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull(
 					this.search200OkStructureById( locationId, credential ),
 					"ESI Structure should not be null while creating Location."
 			);
 			final GetUniverseSystemsSystemIdOk solarSystem = Objects.requireNonNull(
-					this.getUniverseSystemById( locationId.intValue() )
+					this.getUniverseSystemById( structure.getSolarSystemId() ),
+					"ESI Structure should not be null while creating Location."
 			);
 			final GetUniverseConstellationsConstellationIdOk constellation = Objects.requireNonNull(
-					this.getUniverseConstellationById( solarSystem.getConstellationId() )
+					this.getUniverseConstellationById( solarSystem.getConstellationId() ),
+					"ESI Structure should not be null while creating Location."
 			);
 			final GetUniverseRegionsRegionIdOk region = Objects.requireNonNull(
-					this.getUniverseRegionById( constellation.getRegionId() )
+					this.getUniverseRegionById( constellation.getRegionId() ),
+					"ESI Structure should not be null while creating Location."
 			);
 			return Optional.of( new Structure.Builder()
 					.withRegion( region )
@@ -124,6 +129,8 @@ public class LocationFactory implements ILocationFactoryPort {
 		} catch (final RuntimeException runtime) {
 			LogWrapper.error( runtime );
 			return Optional.empty();
+		}finally {
+			LogWrapper.exit();
 		}
 	}
 
