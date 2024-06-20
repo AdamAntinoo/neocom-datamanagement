@@ -60,8 +60,8 @@ public class Structure extends SpaceLocationImplementation implements SpaceSyste
 
 	@Override
 	public boolean equals( final Object o ) {
-		if (this == o) return true;
-		if (!(o instanceof Structure)) return false;
+		if ( this == o ) return true;
+		if ( !(o instanceof Structure) ) return false;
 		final Structure structure = (Structure) o;
 		return new EqualsBuilder()
 				.appendSuper( super.equals( o ) )
@@ -133,7 +133,7 @@ public class Structure extends SpaceLocationImplementation implements SpaceSyste
 			this.onConstruction.constellationName = structure.getConstellationName();
 			this.onConstruction.solarSystemId = structure.getSolarSystemId();
 			this.onConstruction.solarSystemName = structure.getSolarSystemName();
-			this.onConstruction.stationId = Math.toIntExact( structure.getStationId() );
+			this.onConstruction.stationId = structure.getStationId();
 			this.onConstruction.stationName = structure.getStationName();
 			this.onConstruction.securityClass = structure.getSecurityClass();
 			this.onConstruction.securityStatus = structure.getSecurityStatus();
@@ -182,7 +182,7 @@ public class Structure extends SpaceLocationImplementation implements SpaceSyste
 			this.onConstruction.structureName = structure.getName();
 			this.onConstruction.ownerId = structure.getOwnerId();
 			this.onConstruction.structureTypeId = structure.getTypeId();
-			this.onConstruction.stationId = Math.toIntExact( structureId );
+			this.onConstruction.stationId = Objects.requireNonNull( structureId );
 			this.onConstruction.stationName = structure.getName();
 			return this;
 		}
