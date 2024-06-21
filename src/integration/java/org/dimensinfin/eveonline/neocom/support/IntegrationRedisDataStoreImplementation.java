@@ -29,7 +29,7 @@ import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.IDataStore;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -39,7 +39,7 @@ import static org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants.REDIS
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.20.0
  */
-public class IntegrationRedisDataStoreImplementation implements IDataStore {
+public class IntegrationRedisDataStoreImplementation implements IDataStorePort {
 	private static final ObjectMapper neocomObjectMapper = new ObjectMapper();
 	private static final JsonJacksonCodec codec = new JsonJacksonCodec( neocomObjectMapper );
 	private static final String LOWEST_SELL_ORDER_MAP = "LSO";

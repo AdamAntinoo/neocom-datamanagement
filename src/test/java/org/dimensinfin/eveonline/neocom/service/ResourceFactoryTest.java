@@ -11,6 +11,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseCategoriesCa
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_CATEGORY;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.ResourceConstants.TEST_RESOURCE_GROUP;
@@ -20,12 +21,12 @@ import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.Resourc
 
 public class ResourceFactoryTest {
 	private ESIDataService esiDataService;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 
 	@BeforeEach
 	public void beforeEach() {
 		this.esiDataService = Mockito.mock( ESIDataService.class );
-		this.dataStore = Mockito.mock( IDataStore.class );
+		this.dataStore = Mockito.mock( IDataStorePort.class );
 	}
 
 	@Test

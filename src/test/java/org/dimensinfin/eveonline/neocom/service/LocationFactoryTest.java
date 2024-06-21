@@ -15,6 +15,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.support.InstanceGenerator;
 import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
@@ -30,7 +31,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static okhttp3.mock.MediaTypes.MEDIATYPE_JSON;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_AGENT;
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.RetrofitFactoryConstants.TEST_RETROFIT_TIMEOUT;
-import static org.junit.jupiter.api.Assertions.*;
 
 class LocationFactoryTest {
 	public static final Converter.Factory GSON_CONVERTER_FACTORY =
@@ -44,7 +44,7 @@ class LocationFactoryTest {
 	private RetrofitService retrofitService;
 	private ILocationFactoryPort locationFactory;
 	private OkHttpClient.Builder universeClientBuilder;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 
 	private OkHttpClient httpClient;
 
@@ -60,7 +60,7 @@ class LocationFactoryTest {
 					return chain.proceed( builder.build() );
 				} )
 				.readTimeout( TEST_RETROFIT_TIMEOUT, TimeUnit.SECONDS );
-		this.dataStore = Mockito.mock( IDataStore.class );
+		this.dataStore = Mockito.mock( IDataStorePort.class );
 	}
 
 	@Test

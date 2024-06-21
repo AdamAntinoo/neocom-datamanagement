@@ -32,6 +32,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseConstellatio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegionIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
@@ -71,7 +72,7 @@ public class ESIDataServiceTest {
 	private IStoreCache storeCacheManager;
 	private RetrofitService retrofitService;
 	private LocationCatalogService locationCatalogService;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 	private ESIDataService esiDataService;
 
 	private OkHttpClient.Builder universeClientBuilder;
@@ -84,7 +85,7 @@ public class ESIDataServiceTest {
 		this.retrofitService = Mockito.mock( RetrofitService.class );
 		this.locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		this.storeCacheManager = Mockito.mock( IStoreCache.class );
-		this.dataStore = Mockito.mock( IDataStore.class );
+		this.dataStore = Mockito.mock( IDataStorePort.class );
 		this.esiDataService = new ESIDataService(
 				this.configurationService,
 				this.fileSystem,

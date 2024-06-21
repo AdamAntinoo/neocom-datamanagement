@@ -53,6 +53,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
@@ -72,7 +73,7 @@ public class ESIDataService extends ESIDataProvider {
 	private static final Map<Integer, GetUniverseAncestries200Ok> ancestriesCache = new HashMap<>();
 	private static final Map<Integer, GetUniverseBloodlines200Ok> bloodLinesCache = new HashMap<>();
 
-	private final IDataStore dataStore;
+	private final IDataStorePort dataStore;
 
 	// - C O N S T R U C T O R S
 	@Inject
@@ -81,7 +82,7 @@ public class ESIDataService extends ESIDataProvider {
 	                       @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) final RetrofitService retrofitService,
 	                       @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
 	                       @NotNull @Named(DMServicesDependenciesModule.ISTORE_CACHE) final IStoreCache storeCache,
-	                       @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) final IDataStore dataStore ) {
+	                       @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) final IDataStorePort dataStore ) {
 		this.configurationProvider = configurationService;
 		this.fileSystemAdapter = fileSystem;
 		this.retrofitService = retrofitService;

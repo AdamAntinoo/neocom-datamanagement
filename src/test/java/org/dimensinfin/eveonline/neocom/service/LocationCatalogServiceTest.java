@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.support.InstanceGenerator;
 import org.dimensinfin.eveonline.neocom.utility.LocationIdentifierType;
@@ -19,13 +20,13 @@ import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.SpaceLo
 public class LocationCatalogServiceTest {
 	private RetrofitService retrofitService;
 	private ILocationFactoryPort locationFactory;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 
 	@BeforeEach
 	public void beforeEach() {
 		this.retrofitService = Mockito.mock( RetrofitService.class );
 		this.locationFactory = Mockito.mock( ILocationFactoryPort.class );
-		this.dataStore = Mockito.mock( IDataStore.class );
+		this.dataStore = Mockito.mock( IDataStorePort.class );
 	}
 
 	@Test

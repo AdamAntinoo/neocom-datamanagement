@@ -16,6 +16,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
@@ -44,7 +45,7 @@ public class ESIDataServiceIT {
 	private IStoreCache storeCache;
 	private RetrofitService retrofitService;
 	private LocationCatalogService locationCatalogService;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 	private ESIDataService esiDataService;
 	private ILocationFactoryPort locationFactory;
 

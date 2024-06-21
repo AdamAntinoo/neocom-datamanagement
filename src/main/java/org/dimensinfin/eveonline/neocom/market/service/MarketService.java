@@ -20,7 +20,7 @@ import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.converter.GetMarketsRegionIdOrdersToMarketOrderConverter;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.IDataStore;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 
 /**
@@ -157,13 +157,13 @@ public class MarketService {
 		regionMarketHubReferenceTable.put( 13000001, 60003760L );
 	}
 
-	private final IDataStore dataStore;
+	private final IDataStorePort dataStore;
 	private final LocationCatalogService locationCatalogService;
 	private final ESIDataService esiDataService;
 
 	// - C O N S T R U C T O R S
 	@Inject
-	public MarketService( @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) final IDataStore dataStore,
+	public MarketService( @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) final IDataStorePort dataStore,
 	                      @NotNull @Named(DMServicesDependenciesModule.LOCATION_CATALOG_SERVICE) final LocationCatalogService locationCatalogService,
 	                      @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) final ESIDataService esiDataService ) {
 		this.dataStore = dataStore;

@@ -7,6 +7,7 @@ import org.dimensinfin.eveonline.neocom.domain.space.Station;
 import org.dimensinfin.eveonline.neocom.market.MarketData;
 import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
 import org.dimensinfin.eveonline.neocom.support.MarketServiceReconfigurer;
 import org.dimensinfin.logging.LogWrapper;
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Assertions;
  * @since 0.20.0
  */
 public class MarketServiceIT {
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 	private LocationCatalogService locationCatalogService;
 	private ESIDataService esiDataService;
 

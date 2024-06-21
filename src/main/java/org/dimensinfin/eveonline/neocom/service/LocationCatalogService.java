@@ -21,6 +21,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseRegionsRegio
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStationsStationIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseSystemsSystemIdOk;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.service.scheduler.domain.Job;
 import org.dimensinfin.eveonline.neocom.utility.AccessStatistics;
@@ -54,7 +55,7 @@ public class LocationCatalogService extends Job {
 	private static final Map<Long, SpaceLocation> locationCache = new HashMap<>();
 	// - C O M P O N E N T S
 	private final RetrofitService retrofitService;
-	private final IDataStore dataStore;
+	private final IDataStorePort dataStore;
 	private final ILocationFactoryPort locationFactory;
 
 	private final Map<String, Integer> locationTypeCounters = new HashMap<>();
@@ -62,7 +63,7 @@ public class LocationCatalogService extends Job {
 	// - C O N S T R U C T O R S
 	@Inject
 	public LocationCatalogService( final @NotNull @Named(DMServicesDependenciesModule.RETROFIT_SERVICE) RetrofitService retrofitService,
-	                               final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStore dataStore,
+	                               final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStorePort dataStore,
 	                               final @NotNull @Named(DMServicesDependenciesModule.LOCATION_FACTORY) ILocationFactoryPort locationFactory
 	) {
 		this.retrofitService = retrofitService;

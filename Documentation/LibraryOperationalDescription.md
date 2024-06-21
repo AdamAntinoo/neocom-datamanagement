@@ -77,68 +77,6 @@ classDiagram
 
 ```
 
-## 2. Redis Cache Management
-
-Data on the Redis persistence instance should be serialized and timed. So it will behave as a real
-cache and items stored on it will be expired. This functionality is not provided by Redes out of
-the box so I have to provision some timing registration.
-
-Since the data to be stored is a string data because the deserialization should be possible on
-the Typescript platform we can generalize the Redis data store to use generic pada storeage.
-
-Inside the Redis repository there are some sets of Maps. maps allow to contain inside a single key a set of data
-indexed by the map key. Then we have two keys. The Redis record key and the map key.
-
-Redis set of keys is defined as follows:
-
-* EBM - Enhanced Blueprint Map. This key has a second parameter that is the **pilot** identifier. There is a key for each pilot with all the EBs for that pilot.
-* LOC - The cache for all found and accessed locations.
-* TYP - The cache for all ESI item definitions. This should reduce access to ESI Data Source because this data is never changed.
-
-### EBM
-
-The EMB structure will store Extended Blueprints. One Extended Bluprint will have additional
-data about the blueprint, the possible output of the blueprint manufacture job
-and default market data records to do a comparative index profit evaluation.
-
-Data on this Map is expired so frontend accesses will get a correct list of blueprints and old
-blueprints moved or used will no longer be available on this list. Expiration is done on EB instance
-and not on the whole set of blueprints.
-
-The *BlueprintProcessorJob* will feed data into this Map scanning all the pilot available
-blueprints and packing and adding the additional data already commented. The data will then be
-available to the front end over the Typescript new backend service that will collect all or partial
-Map data to be sent to the frontend on request. At this point is where cache expiration rules should
-be applied.
-
-```mermaid
-requirementDiagram
-    element V2ExtendedBlueprint {
-        type: instance
-        docRef: region:100000:BPID:17464:600000645
-    }
-
-    element CacheMetadata {
-        type: metadata
-        docRef: "<timestamp>"
-    }
-    element EBMElement {
-        type: Redis Element
-        docRef: "<metadata>:<instance>"
-    }
-
-    EBMElement - contains -> CacheMetadata
-    EBMElement - contains -> V2ExtendedBlueprint
-```
-
-One EBM instance will then have a blueprint instance but for a blueprint pack (the **typeId** of the
-blueprint) and a secondary key for the **region** where that blueprint is located. The region
-key is added because identical blueprints located on different regions will use different
-MarketData sources and then can have a different profit ratio.
-
-EBM MarketData is referenced to the corresponding Region Market Hub that is a predefined list of
-stations.
-
 ## LOCATIONS
 
 Eve Online locations are a quite complex game element. Many things

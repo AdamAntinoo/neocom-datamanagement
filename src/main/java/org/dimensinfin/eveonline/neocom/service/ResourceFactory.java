@@ -10,15 +10,16 @@ import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseGroupsGroupIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
 import org.dimensinfin.eveonline.neocom.industry.domain.Resource;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 
 public class ResourceFactory {
 	private final ESIDataService esiDataService;
-	private final IDataStore dataStore;
+	private final IDataStorePort dataStore;
 
 	// - C O N S T R U C T O R S
 	@Inject
 	public ResourceFactory( final @NotNull @Named(DMServicesDependenciesModule.ESIDATA_SERVICE) ESIDataService esiDataService,
-	                        final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStore dataStore
+	                        final @NotNull @Named(DMServicesDependenciesModule.IDATA_STORE) IDataStorePort dataStore
 	) {
 		this.esiDataService = esiDataService;
 		this.dataStore = dataStore;
