@@ -48,7 +48,7 @@ public class GlobalWideConstants {
 		public static final Integer ESI_UNIVERSE_TYPE_KEY_TTL = -1;
 		// - ESI Types
 		public static final String ESI_TYPE_KEY_NAME="TYP";
-		public static final Integer ESI_TYPE_KEY_TTL = -1;
+		public static final Integer ESI_TYPE_KEY_TTL = 48;
 		// - Locations
 		public static final String SPACE_LOCATIONS_KEY_NAME = "SPL";
 		public static final Integer SPACE_LOCATIONS_CACHE_TTL = 12;

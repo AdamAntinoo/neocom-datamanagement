@@ -254,7 +254,6 @@ public class EsiType extends NeoComNode implements Serializable {
 			return this;
 		}
 
-		@Deprecated
 		public EsiType.Builder withTypeId( final Integer typeId ) {
 			this.onConstruction.typeId = Objects.requireNonNull( typeId );
 			return this;

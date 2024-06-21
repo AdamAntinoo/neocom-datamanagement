@@ -166,7 +166,6 @@ public class Resource extends EsiType implements IItemFacet {
 			return this;
 		}
 
-		@Deprecated
 		public Resource.Builder withTypeId( final Integer typeId ) {
 			this.onConstruction.typeId = Objects.requireNonNull( typeId );
 			return this;
