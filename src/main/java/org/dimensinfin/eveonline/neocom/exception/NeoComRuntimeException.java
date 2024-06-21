@@ -5,8 +5,6 @@ public class NeoComRuntimeException extends RuntimeException {
 	private String sourceClass;
 	private String sourceMethod;
 	private String errorCode = ErrorCodesData.NOT_INTERCEPTED_EXCEPTION;
-	//	private Exception rootException;
-	//	private ErrorInfoCatalog error;
 
 	// - C O N S T R U C T O R S
 	private NeoComRuntimeException() {
@@ -17,7 +15,7 @@ public class NeoComRuntimeException extends RuntimeException {
 		this.sourceClass = stackElement.getClassName();
 	}
 
-	public NeoComRuntimeException( final ErrorInfoCatalog error, final String... arguments ) {
+	public NeoComRuntimeException( final ErrorInfoCatalog error, final Object... arguments ) {
 		this( error.getErrorMessage( arguments ) );
 		this.errorCode = error.getErrorCode();
 	}
@@ -29,13 +27,6 @@ public class NeoComRuntimeException extends RuntimeException {
 	public NeoComRuntimeException( final Exception rootException ) {
 		this( rootException.getMessage() );
 	}
-
-	//	public String getMessage() {
-	//		String message = "";
-	//		if (null != super.getMessage()) message = super.getMessage();
-	//		if (null != this.rootException) message = message.concat( ":" ).concat( this.rootException.getMessage() );
-	//		return message;
-	//	}
 
 	// - G E T T E R S   &   S E T T E R S
 	public String getErrorCode() {
@@ -49,7 +40,4 @@ public class NeoComRuntimeException extends RuntimeException {
 	public String getSourceMethod() {
 		return this.sourceMethod;
 	}
-	//	public Exception getRootException() {
-	//		return this.rootException;
-	//	}
 }

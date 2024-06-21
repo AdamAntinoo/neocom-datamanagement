@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +21,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 
+import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
@@ -71,10 +73,10 @@ public class IntegrationRedisDataStoreImplementation implements IDataStorePort {
 		return Optional.empty();
 	}
 
-	@Override
-	public EsiType storeEsiType4Id( final EsiType target ) {
-		return target;
-	}
+//	@Override
+//	public EsiType storeEsiType4Id( final EsiType target ) {
+//		return target;
+//	}
 
 	@Override
 	@Nullable
@@ -196,6 +198,16 @@ public class IntegrationRedisDataStoreImplementation implements IDataStorePort {
 		} finally {
 			return location;
 		}
+	}
+
+	@Override
+	public Optional<EsiType> accessType4Id( final int typeId, final Function<Integer, EsiType> generatorEsiType ) {
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<SpaceLocation> accessLocation4Id( final Long locationId, final Credential credential, final Function<Long, SpaceLocation> generatorLocation ) {
+		return Optional.empty();
 	}
 
 	@Override
