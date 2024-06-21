@@ -19,8 +19,6 @@ public interface IDataStorePort {
 
 	Optional<EsiType> accessEsiType4Id( final int typeId );
 
-	EsiType storeEsiType4Id( final EsiType target );
-
 	GetUniverseTypesTypeIdOk accessEsiUniverseItem4Id( final int typeId, final ESIDataService.EsiItemPassThrough esiItemPassThrough );
 
 	MarketOrder accessLowestSellOrder( final Integer regionId, final Integer typeId, final MarketService.LowestSellOrderPassThrough lowestSellOrderReloadMethod );
@@ -39,6 +37,9 @@ public interface IDataStorePort {
 
 	Optional<EsiType> accessType4Id( int typeId, final @NotNull Function<Integer, EsiType> generatorEsiType );
 
-	Optional<SpaceLocation> accessLocation4Id( final @NotNull Long locationId, final @NotNull Credential credential );
+	Optional<SpaceLocation> accessLocation4Id(
+			final @NotNull Long locationId,
+			final @NotNull Credential credential,
+			final @NotNull Function<Long, SpaceLocation> generatorLocation );
 
 }

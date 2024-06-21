@@ -382,9 +382,74 @@ public class ESIDataService extends ESIDataProvider {
 		return new ArrayList<>();
 	}
 
-	// - L O C A T I O N   D E L E G A T I O N
+	// - L O C A T I O N S
 	public GetUniverseConstellationsConstellationIdOk getUniverseConstellationById( final Integer constellationId ) {
-		return this.locationCatalogService.getUniverseConstellationById( constellationId );
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<GetUniverseConstellationsConstellationIdOk> systemResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseConstellationsConstellationId( constellationId,
+							DEFAULT_ACCEPT_LANGUAGE,
+							DEFAULT_ESI_SERVER, null, null )
+					.execute();
+			if ( systemResponse.isSuccessful() )
+				return systemResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<GetUniverseRegionsRegionIdOk> systemResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseRegionsRegionId( regionId,
+							DEFAULT_ACCEPT_LANGUAGE,
+							DEFAULT_ESI_SERVER.toLowerCase(), null, null )
+					.execute();
+			if ( systemResponse.isSuccessful() ) return systemResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
+		LogWrapper.enter( MessageFormat.format( "stationId: {0, number, integer}", stationId ) );
+		try {
+			final Response<GetUniverseStationsStationIdOk> stationResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseStationsStationId( stationId, DEFAULT_ESI_SERVER, null )
+					.execute();
+			if ( stationResponse.isSuccessful() )
+				return stationResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
+	}
+
+	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
+		try {
+			// Create the request to be returned so it can be called.
+			final Response<GetUniverseSystemsSystemIdOk> systemResponse = this.retrofitService
+					.accessUniverseConnector()
+					.create( UniverseApi.class )
+					.getUniverseSystemsSystemId( systemId
+							, DEFAULT_ACCEPT_LANGUAGE
+							, DEFAULT_ESI_SERVER, null, null )
+					.execute();
+			if ( systemResponse.isSuccessful() )
+				return systemResponse.body();
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+		}
+		return null;
 	}
 
 	/**
@@ -423,19 +488,6 @@ public class ESIDataService extends ESIDataProvider {
 		}
 		return returnMarketOrderList;
 	}
-
-	public GetUniverseRegionsRegionIdOk getUniverseRegionById( final Integer regionId ) {
-		return this.locationCatalogService.getUniverseRegionById( regionId );
-	}
-
-	public GetUniverseStationsStationIdOk getUniverseStationById( final Integer stationId ) {
-		return this.locationCatalogService.getUniverseStationById( stationId );
-	}
-
-	public GetUniverseSystemsSystemIdOk getUniverseSystemById( final Integer systemId ) {
-		return this.locationCatalogService.getUniverseSystemById( systemId );
-	}
-
 	public GetUniverseTypesTypeIdOk searchEsiUniverseType4Id( final int typeId ) {
 		return this.dataStore.accessEsiUniverseItem4Id( typeId,
 				( tid ) -> this.downloadEsiType( typeId )

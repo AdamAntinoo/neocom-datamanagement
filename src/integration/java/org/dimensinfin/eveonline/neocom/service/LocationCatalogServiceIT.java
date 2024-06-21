@@ -52,7 +52,7 @@ public class LocationCatalogServiceIT {
 		this.dataStore = injector.getInstance( IntegrationRedisDataStoreImplementation.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
 		this.locationFactory = Mockito.mock( ILocationFactoryPort.class );
-		this.locationCatalogService = new LocationCatalogService( this.retrofitService, this.dataStore ,this.locationFactory);
+		this.locationCatalogService = new LocationCatalogService( this.locationFactory);
 		this.esiDataService = new ESIDataService(
 				this.configurationService,
 				this.fileSystem,

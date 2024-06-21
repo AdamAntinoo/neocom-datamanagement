@@ -92,5 +92,5 @@ test {
 // - I N T E G R A T I O N   T E S T I N G
 dependencies {
     integrationImplementation "com.j256.ormlite:ormlite-jdbc:$ormliteVersion"
-    integrationImplementation "org.xerial:sqlite-jdbc:3.46.0"
+    integrationImplementation "org.xerial:sqlite-jdbc:3.46.0.0"
 }
