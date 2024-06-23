@@ -100,7 +100,7 @@ public class LocationFactory implements ILocationFactoryPort {
 
 	@Override
 	public Optional<SpaceLocation> buildUpStructure4Pilot( final Long locationId, final Credential credential ) {
-		LogWrapper.enter("locationId->"+locationId);
+		LogWrapper.enter("locationId->"+locationId.toString());
 		try {
 			final GetUniverseStructuresStructureIdOk structure = Objects.requireNonNull(
 					this.search200OkStructureById( locationId, credential ),

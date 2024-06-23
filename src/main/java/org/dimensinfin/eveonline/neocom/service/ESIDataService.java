@@ -483,8 +483,6 @@ public class ESIDataService extends ESIDataProvider {
 			}
 		} catch (final IOException | RuntimeException rtex) {
 			LogWrapper.error( rtex );
-		} finally {
-			LogWrapper.exit();
 		}
 		return returnMarketOrderList;
 	}
