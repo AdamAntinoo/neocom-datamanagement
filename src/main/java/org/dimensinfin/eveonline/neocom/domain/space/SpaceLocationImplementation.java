@@ -23,7 +23,7 @@ public class SpaceLocationImplementation extends NeoComNode implements Station {
 	protected String constellationName;
 	protected Integer solarSystemId;
 	protected String solarSystemName;
-	protected Integer stationId;
+	protected Long stationId;
 	protected String stationName;
 	protected String securityClass;
 	protected Float securityStatus;
@@ -40,16 +40,16 @@ public class SpaceLocationImplementation extends NeoComNode implements Station {
 
 	// - V I R T U A L
 	public Long getLocationId() {
-		if (null != this.stationId) return this.stationId.longValue();
-		if (null != this.solarSystemId) return this.solarSystemId.longValue();
-		if (null != this.constellationId) return this.constellationId.longValue();
+		if ( null != this.stationId ) return this.stationId.longValue();
+		if ( null != this.solarSystemId ) return this.solarSystemId.longValue();
+		if ( null != this.constellationId ) return this.constellationId.longValue();
 		return this.regionId.longValue();
 	}
 
 	public LocationIdentifierType getLocationType() {
-		if (null != this.stationId) return LocationIdentifierType.STATION;
-		if (null != this.solarSystemId) return LocationIdentifierType.SOLAR_SYSTEM;
-		if (null != this.constellationId) return LocationIdentifierType.CONSTELLATION;
+		if ( null != this.stationId ) return LocationIdentifierType.STATION;
+		if ( null != this.solarSystemId ) return LocationIdentifierType.SOLAR_SYSTEM;
+		if ( null != this.constellationId ) return LocationIdentifierType.CONSTELLATION;
 		return LocationIdentifierType.REGION;
 	}
 
@@ -74,7 +74,7 @@ public class SpaceLocationImplementation extends NeoComNode implements Station {
 	public String getSolarSystemName() {return this.solarSystemName;}
 
 	public Long getStationId() {
-		return (long) this.stationId;
+		return this.stationId;
 	}
 
 	public String getStationName() {return this.stationName;}
@@ -98,8 +98,8 @@ public class SpaceLocationImplementation extends NeoComNode implements Station {
 
 	@Override
 	public boolean equals( final Object o ) {
-		if (this == o) return true;
-		if (!(o instanceof SpaceLocationImplementation)) return false;
+		if ( this == o ) return true;
+		if ( !(o instanceof SpaceLocationImplementation) ) return false;
 		final SpaceLocationImplementation that = (SpaceLocationImplementation) o;
 		return new EqualsBuilder().appendSuper( super.equals( o ) )
 				.append( this.regionId, that.regionId )
@@ -158,7 +158,7 @@ public class SpaceLocationImplementation extends NeoComNode implements Station {
 			this.onConstruction.solarSystemName = ((SpaceSystem) location).getSolarSystemName();
 			this.onConstruction.securityClass = ((SpaceSystem) location).getSecurityClass();
 			this.onConstruction.securityStatus = ((SpaceSystem) location).getSecurityStatus();
-			this.onConstruction.stationId = Math.toIntExact( ((Station) location).getStationId() );
+			this.onConstruction.stationId = ((Station) location).getStationId();
 			this.onConstruction.stationName = ((Station) location).getStationName();
 			return this.onConstruction;
 		}
@@ -189,7 +189,7 @@ public class SpaceLocationImplementation extends NeoComNode implements Station {
 		public SpaceLocationImplementation.Builder withStation( final GetUniverseStationsStationIdOk station ) {
 			Objects.requireNonNull( station );
 			this.onConstruction.stationName = station.getName();
-			this.onConstruction.stationId = station.getStationId();
+			this.onConstruction.stationId = Long.valueOf( station.getStationId() );
 			return this;
 		}
 	}

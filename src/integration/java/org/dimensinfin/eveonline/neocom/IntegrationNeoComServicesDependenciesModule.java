@@ -10,13 +10,15 @@ import org.dimensinfin.eveonline.neocom.database.core.ISDEDatabaseService;
 import org.dimensinfin.eveonline.neocom.loyalty.persistence.LoyaltyOffersRepository;
 import org.dimensinfin.eveonline.neocom.loyalty.service.LoyaltyService;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
+import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.IDataStore;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.service.IStoreCache;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
+import org.dimensinfin.eveonline.neocom.service.LocationFactory;
 import org.dimensinfin.eveonline.neocom.service.MemoryStoreCacheService;
 import org.dimensinfin.eveonline.neocom.service.ResourceFactory;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
@@ -109,9 +111,13 @@ public class IntegrationNeoComServicesDependenciesModule extends AbstractModule 
 				.to( MarketService.class )
 				.in( Singleton.class );
 
-		this.bind( IDataStore.class )
+		this.bind( IDataStorePort.class )
 				.annotatedWith( Names.named( DMServicesDependenciesModule.IDATA_STORE ) )
 				.to( IntegrationRedisDataStoreImplementation.class )
+				.in( Singleton.class );
+		this.bind( ILocationFactoryPort.class )
+				.annotatedWith( Names.named( DMServicesDependenciesModule.LOCATION_FACTORY ) )
+				.to( LocationFactory.class )
 				.in( Singleton.class );
 
 		this.bind( MarketServiceReconfigurer.class )

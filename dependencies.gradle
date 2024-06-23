@@ -4,9 +4,9 @@ ext {
     slf4jVersion = '1.7.30'
     jodaTimeVersion = '2.12.7'
     cacheVersion = '3.1.1'
-    jacksonVersion = '2.9.4'
+    jacksonVersion = '2.17.1'
     ormliteVersion = '4.48'
-    retrofitVersion = '2.9.0'
+    retrofitVersion = '2.11.0'
 }
 
 // - C O R E
@@ -14,12 +14,11 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     implementation "org.projectlombok:lombok:$lombokVersion"
     implementation "org.slf4j:slf4j-api:$slf4jVersion"
-    implementation "org.jetbrains:annotations:20.1.0"
+    implementation "org.jetbrains:annotations:24.1.0"
     implementation "joda-time:joda-time:$jodaTimeVersion" // Use this library for support on Android systems
     implementation 'org.apache.commons:commons-lang3:3.14.0'
     implementation 'com.annimon:stream:1.2.2' // Android compatible streams
-    implementation 'com.google.inject:guice:4.2.3' // Google injection library compatible with Android
-//    implementation 'org.redisson:redisson:3.15.0' // Redisson Redis client to implements second level cache
+    implementation 'com.google.inject:guice:5.1.0' // Google injection library compatible with Android
 }
 
 // - D I M E N S I N F I N
@@ -39,9 +38,9 @@ dependencies {
     implementation "com.nytimes.android:cache3:$cacheVersion"
     implementation "com.nytimes.android:middleware3:$cacheVersion"
     implementation "com.nytimes.android:filesystem3:$cacheVersion"
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     implementation 'com.jakewharton:disklrucache:2.0.2'
-    implementation 'com.jcabi:jcabi-aspects:0.22.6' // Useful annotations for methods
+    implementation 'com.jcabi:jcabi-aspects:0.26.0' // Useful annotations for methods
     implementation 'org.modelmapper:modelmapper:3.2.0' // Help mapping ESI Get200Ok classes to similar classes on the app model
     implementation 'org.redisson:redisson:3.27.2' // Redisson Redis client to implements second level cache
     // P A R S E R
@@ -51,7 +50,6 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-json-org:$jacksonVersion"
     // H T T P C L I E N T
-//    implementation "com.squareup.okhttp3:okhttp:4.9.1"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion" // HTTP encapsulation and swagger support
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1' // Retrofit logs
@@ -69,24 +67,22 @@ dependencies {
 // - U N I T   T E S T I N G
 dependencies {
     // C O R E
-//    implementation 'org.slf4j:slf4j-simple:1.7.26'
     testImplementation "joda-time:joda-time:$jodaTimeVersion"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.0'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.0'
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.16.1'
     // N E O C O M
     testImplementation 'com.github.AdamAntinoo:neocom-java-core:0.20.6'
-//    testImplementation 'org.bitbucket.evedimensinfin.neocom-java-core:neocom-annotations:0.20.0'
     // T E S T   F R A M E W O R K
     testImplementation "org.testcontainers:testcontainers:1.15.0-rc2"
     testImplementation "org.testcontainers:postgresql:1.9.1"
     testImplementation 'org.mockito:mockito-core:2.23.4'
     testImplementation 'com.openpojo:openpojo:0.9.1'
-    testImplementation 'org.awaitility:awaitility:4.0.2'
+    testImplementation 'org.awaitility:awaitility:4.2.1'
     testImplementation 'com.github.gmazzo:okhttp-mock:2.0.0'
     // D A T A B A S E
     testImplementation "com.j256.ormlite:ormlite-jdbc:$ormliteVersion"
-    testImplementation 'org.postgresql:postgresql:42.2.5'
+    testImplementation 'org.postgresql:postgresql:42.7.3'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
 }
 test {
@@ -95,9 +91,6 @@ test {
 
 // - I N T E G R A T I O N   T E S T I N G
 dependencies {
-//    integrationImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-//    integrationImplementation "org.slf4j:slf4j-log4j12:$slf4jVersion"
-//    testImplementation "org.slf4j:slf4j-log4j12:$slf4jVersion"
     integrationImplementation "com.j256.ormlite:ormlite-jdbc:$ormliteVersion"
-    integrationImplementation "org.xerial:sqlite-jdbc:3.25.2"
+    integrationImplementation "org.xerial:sqlite-jdbc:3.46.0.0"
 }

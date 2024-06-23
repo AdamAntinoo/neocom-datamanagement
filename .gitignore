@@ -15,13 +15,7 @@
 .idea/libraries/
 .idea/sonarlint/
 .idea/shelf/
-.idea/workspace.xml
-.idea/gradle.xml
-.idea/modules.xml
-.idea/sonarIssues.xml
-.idea/sonarlint-state.xml
-.idea/misc.xml
-.idea/uiDesigner.xml
+.idea/*.xml
 
 # - Build ignorable files
 .gradle

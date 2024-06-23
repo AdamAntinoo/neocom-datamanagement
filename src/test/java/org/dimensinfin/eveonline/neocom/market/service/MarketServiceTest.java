@@ -13,7 +13,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetMarketsRegionIdOrder
 import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.converter.GetMarketsRegionIdOrdersToMarketOrderConverter;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.IDataStore;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 
 import static org.dimensinfin.eveonline.neocom.support.TestDataConstants.MarketOrderConstants.TEST_MARKET_ORDER_ID;
@@ -28,11 +28,11 @@ public class MarketServiceTest {
 	private final List<GetMarketsRegionIdOrders200Ok> orderList = new ArrayList<>();
 	private LocationCatalogService locationCatalogService;
 	private ESIDataService esiDataService;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 
 	@BeforeEach
 	public void beforeEach() {
-		this.dataStore = Mockito.mock( IDataStore.class );
+		this.dataStore = Mockito.mock( IDataStorePort.class );
 		this.locationCatalogService = Mockito.mock( LocationCatalogService.class );
 		this.esiDataService = Mockito.mock( ESIDataService.class );
 		// Prepare the list of orders for the tests

@@ -16,6 +16,7 @@ import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdI
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetAlliancesAllianceIdOk;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdIndustryJobs200Ok;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetCharactersCharacterIdOk;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.support.IntegrationRedisDataStoreImplementation;
@@ -44,7 +45,7 @@ public class ESIDataServiceIT {
 	private IStoreCache storeCache;
 	private RetrofitService retrofitService;
 	private LocationCatalogService locationCatalogService;
-	private IDataStore dataStore;
+	private IDataStorePort dataStore;
 	private ESIDataService esiDataService;
 	private ILocationFactoryPort locationFactory;
 
@@ -63,7 +64,7 @@ public class ESIDataServiceIT {
 		this.dataStore = injector.getInstance( IntegrationRedisDataStoreImplementation.class );
 		this.storeCache = injector.getInstance( MemoryStoreCacheService.class );
 		this.locationFactory =Mockito.mock( ILocationFactoryPort.class );
-		this.locationCatalogService = new LocationCatalogService( this.retrofitService , this.dataStore, this.locationFactory);
+		this.locationCatalogService = new LocationCatalogService( this.locationFactory);
 		this.esiDataService = new ESIDataService(
 				this.configurationService,
 				this.fileSystem,

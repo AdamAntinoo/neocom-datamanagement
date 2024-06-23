@@ -8,7 +8,7 @@ import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.CHARACTE
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.INVALID_LOCATION_TYPE_ERRORCODE;
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.MINING_REPOSITORY_EXTRACTION_SQL_ERRORCODE;
 import static org.dimensinfin.eveonline.neocom.exception.ErrorCodesData.RETROFIT_CACHE_FILE_SYSTEM_ERRORCODE;
-@Deprecated
+
 public enum ErrorInfoCatalog {
 	AUTHENTICATION_FAILURE_ESI_SSO(
 			AUTHENTICATION_VERIFICATION_ERRORCODE,
@@ -38,7 +38,16 @@ public enum ErrorInfoCatalog {
 			"SQL exception while persisting mining extraction {0} - {1}" ),
 	INVALID_CREDENTIAL_IDENTIFIER(
 			AUTHENTICATION_VERIFICATION_ERRORCODE,
-			"The validation character response is not valid and then the unique character identifier is not found." );
+			"The validation character response is not valid and then the unique character identifier is not found." ),
+	ESITYPE_NOT_FOUND(
+			ErrorCodes.ESITYPE_NOT_FOUND_ERRORCODE.name(),
+			"The ESI type {0,number,#} is not found." ),
+	LOCATION_NOT_PRESENT(
+			ErrorCodes.BLUEPRINT_LOCATION_NOT_PRESENT_ERRORCODE.name(),
+			"Location is not valid or unreachable. Target location is {0,number,#}." ),
+	BLUEPRINT_LOCATION_NOT_PRESENT(
+			ErrorCodes.BLUEPRINT_LOCATION_NOT_PRESENT_ERRORCODE.name(),
+			"Blueprint {0,number,#} location is not valid or unreachable. Target location is {1,number,#}." );
 
 	public final String errorCode;
 	public final String errorMessage;
@@ -58,7 +67,7 @@ public enum ErrorInfoCatalog {
 		return this.errorMessage;
 	}
 
-	public String getErrorMessage( final String... arguments ) {
-		return MessageFormat.format( this.errorMessage, (Object[]) arguments );
+	public String getErrorMessage( final Object... arguments ) {
+		return MessageFormat.format( this.errorMessage, arguments );
 	}
 }

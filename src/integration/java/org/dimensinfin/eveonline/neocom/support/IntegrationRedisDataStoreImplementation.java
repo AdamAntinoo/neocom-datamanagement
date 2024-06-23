@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +21,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 
+import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.domain.EsiType;
 import org.dimensinfin.eveonline.neocom.domain.space.SpaceLocation;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseTypesTypeIdOk;
@@ -29,7 +31,7 @@ import org.dimensinfin.eveonline.neocom.market.MarketOrder;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
 import org.dimensinfin.eveonline.neocom.service.DMServicesDependenciesModule;
 import org.dimensinfin.eveonline.neocom.service.ESIDataService;
-import org.dimensinfin.eveonline.neocom.service.IDataStore;
+import org.dimensinfin.eveonline.neocom.ports.IDataStorePort;
 import org.dimensinfin.eveonline.neocom.utility.NeoObjects;
 import org.dimensinfin.logging.LogWrapper;
 
@@ -39,7 +41,7 @@ import static org.dimensinfin.eveonline.neocom.utility.GlobalWideConstants.REDIS
  * @author Adam Antinoo (adamantinoo.git@gmail.com)
  * @since 0.20.0
  */
-public class IntegrationRedisDataStoreImplementation implements IDataStore {
+public class IntegrationRedisDataStoreImplementation implements IDataStorePort {
 	private static final ObjectMapper neocomObjectMapper = new ObjectMapper();
 	private static final JsonJacksonCodec codec = new JsonJacksonCodec( neocomObjectMapper );
 	private static final String LOWEST_SELL_ORDER_MAP = "LSO";
@@ -71,10 +73,10 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 		return Optional.empty();
 	}
 
-	@Override
-	public EsiType storeEsiType4Id( final EsiType target ) {
-		return target;
-	}
+//	@Override
+//	public EsiType storeEsiType4Id( final EsiType target ) {
+//		return target;
+//	}
 
 	@Override
 	@Nullable
@@ -196,6 +198,16 @@ public class IntegrationRedisDataStoreImplementation implements IDataStore {
 		} finally {
 			return location;
 		}
+	}
+
+	@Override
+	public Optional<EsiType> accessType4Id( final int typeId, final Function<Integer, EsiType> generatorEsiType ) {
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<SpaceLocation> accessLocation4Id( final Long locationId, final Credential credential, final Function<Long, SpaceLocation> generatorLocation ) {
+		return Optional.empty();
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import com.google.inject.name.Names;
 import org.dimensinfin.eveonline.neocom.character.service.CharacterService;
 import org.dimensinfin.eveonline.neocom.loyalty.service.LoyaltyService;
 import org.dimensinfin.eveonline.neocom.market.service.MarketService;
+import org.dimensinfin.eveonline.neocom.ports.ILocationFactoryPort;
 
 public class DMServicesDependenciesModule extends AbstractModule {
 	public static final String RETROFIT_SERVICE = "RetrofitService";
@@ -55,7 +56,7 @@ public class DMServicesDependenciesModule extends AbstractModule {
 				.annotatedWith( Names.named( CHARACTER_SERVICE ) )
 				.to( CharacterService.class )
 				.in( Singleton.class );
-		this.bind( LocationFactory.class )
+		this.bind( ILocationFactoryPort.class )
 				.annotatedWith( Names.named( LOCATION_FACTORY ) )
 				.to( LocationFactory.class )
 				.in( Singleton.class );

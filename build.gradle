@@ -16,13 +16,8 @@ allprojects {
 }
 
 // - P R O J E C T   D E F I N I T I O N
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
 group = 'org.dimensinfin.neocom'
-version = '0.29.4'
+version = '0.29.5'
 archivesBaseName = 'neocom-datamanagement'
 description = 'Data management and processes that are common to all developments.'
 ext {
