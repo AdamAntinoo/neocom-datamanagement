@@ -99,7 +99,7 @@ public class ESIDataService extends ESIDataProvider {
 					.create( AllianceApi.class )
 					.getAlliancesAllianceId( identifier, DEFAULT_ESI_SERVER, null )
 					.execute();
-			if (allianceResponse.isSuccessful())
+			if ( allianceResponse.isSuccessful() )
 				return allianceResponse.body();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -114,7 +114,7 @@ public class ESIDataService extends ESIDataProvider {
 					.create( AllianceApi.class )
 					.getAlliancesAllianceIdIcons( identifier, DEFAULT_ESI_SERVER, null )
 					.execute();
-			if (allianceResponse.isSuccessful())
+			if ( allianceResponse.isSuccessful() )
 				return allianceResponse.body();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -132,7 +132,8 @@ public class ESIDataService extends ESIDataProvider {
 					.create( CharacterApi.class )
 					.getCharactersCharacterId( identifier, DEFAULT_ESI_SERVER, null )
 					.execute();
-			if (characterResponse.isSuccessful()) return characterResponse.body();
+			if ( characterResponse.isSuccessful() ) return characterResponse.body();
+			else LogWrapper.info( "Failure requesting getCharactersCharacterId " + characterResponse.errorBody().toString() );
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -158,9 +159,9 @@ public class ESIDataService extends ESIDataProvider {
 								credential.getDataSource().toLowerCase(),
 								null, pageCounter, null )
 						.execute();
-				if (assetsApiResponse.isSuccessful()) {
+				if ( assetsApiResponse.isSuccessful() ) {
 					// Check for out of page running.
-					if (Objects.requireNonNull( assetsApiResponse.body() ).isEmpty()) morePages = false;
+					if ( Objects.requireNonNull( assetsApiResponse.body() ).isEmpty() ) morePages = false;
 					else {
 						// Copy the assets to the result list.
 						returnAssetList.addAll( Objects.requireNonNull( assetsApiResponse.body() ) );
@@ -198,15 +199,15 @@ public class ESIDataService extends ESIDataProvider {
 								pageCounter,
 								null )
 						.execute();
-				if (blueprintResponse.isSuccessful()) {
+				if ( blueprintResponse.isSuccessful() ) {
 					// Check for out of page running.
-					if (Objects.requireNonNull( blueprintResponse.body() ).isEmpty()) morePages = false;
+					if ( Objects.requireNonNull( blueprintResponse.body() ).isEmpty() ) morePages = false;
 					else {
 						// Copy the assets to the result list.
 						returnBlueprintList.addAll( Objects.requireNonNull( blueprintResponse.body() ) );
 						pageCounter++;
 					}
-				}
+				} else LogWrapper.info( "Exception while requesting getCharactersCharacterIdBlueprints " + blueprintResponse.errorBody().toString() );
 			}
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
@@ -232,7 +233,7 @@ public class ESIDataService extends ESIDataProvider {
 							null, false, null
 					)
 					.execute();
-			if (industryJobsResponse.isSuccessful()) return industryJobsResponse.body();
+			if ( industryJobsResponse.isSuccessful() ) return industryJobsResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -251,7 +252,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterIdLocation( credential.getAccountId()
 							, credential.getDataSource(), null, null )
 					.execute();
-			if (locationResponse.isSuccessful()) return locationResponse.body();
+			if ( locationResponse.isSuccessful() ) return locationResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -276,7 +277,7 @@ public class ESIDataService extends ESIDataProvider {
 							null, null
 					)
 					.execute();
-			if (industryJobsResponse.isSuccessful()) return industryJobsResponse.body();
+			if ( industryJobsResponse.isSuccessful() ) return industryJobsResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -295,7 +296,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterIdShip( credential.getAccountId()
 							, credential.getDataSource(), null, null )
 					.execute();
-			if (shipResponse.isSuccessful()) return shipResponse.body();
+			if ( shipResponse.isSuccessful() ) return shipResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -314,7 +315,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterIdSkills( credential.getAccountId()
 							, credential.getDataSource(), null, null )
 					.execute();
-			if (skillsResponse.isSuccessful()) return skillsResponse.body();
+			if ( skillsResponse.isSuccessful() ) return skillsResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -333,7 +334,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterIdWallet( credential.getAccountId()
 							, credential.getDataSource(), null, null )
 					.execute();
-			if (walletApiResponse.isSuccessful()) return walletApiResponse.body();
+			if ( walletApiResponse.isSuccessful() ) return walletApiResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -353,7 +354,7 @@ public class ESIDataService extends ESIDataProvider {
 							corporationId, DEFAULT_ESI_SERVER, null
 					)
 					.execute();
-			if (loyaltyOffersResponse.isSuccessful()) return loyaltyOffersResponse.body();
+			if ( loyaltyOffersResponse.isSuccessful() ) return loyaltyOffersResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -373,7 +374,7 @@ public class ESIDataService extends ESIDataProvider {
 							regionId, typeId, DEFAULT_ESI_SERVER, null
 					)
 					.execute();
-			if (marketHistoryResponse.isSuccessful()) return marketHistoryResponse.body();
+			if ( marketHistoryResponse.isSuccessful() ) return marketHistoryResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -471,9 +472,9 @@ public class ESIDataService extends ESIDataProvider {
 						.create( MarketApiV2.class )
 						.getMarketsRegionIdOrders( regionId, "all", DEFAULT_ESI_SERVER, pageCounter, typeId, null )
 						.execute();
-				if (marketOrdersResponse.isSuccessful()) {
+				if ( marketOrdersResponse.isSuccessful() ) {
 					// Check for out of page running.
-					if (Objects.requireNonNull( marketOrdersResponse.body() ).isEmpty()) morePages = false;
+					if ( Objects.requireNonNull( marketOrdersResponse.body() ).isEmpty() ) morePages = false;
 					else {
 						// Copy the assets to the result list.
 						returnMarketOrderList.addAll( Objects.requireNonNull( marketOrdersResponse.body() ) );
@@ -486,6 +487,7 @@ public class ESIDataService extends ESIDataProvider {
 		}
 		return returnMarketOrderList;
 	}
+
 	public GetUniverseTypesTypeIdOk searchEsiUniverseType4Id( final int typeId ) {
 		return this.dataStore.accessEsiUniverseItem4Id( typeId,
 				( tid ) -> this.downloadEsiType( typeId )
@@ -494,21 +496,21 @@ public class ESIDataService extends ESIDataProvider {
 
 	@RequiresNetwork
 	public GetUniverseAncestries200Ok searchSDEAncestry( final int identifier ) {
-		if (ancestriesCache.isEmpty()) // First download the family data.
+		if ( ancestriesCache.isEmpty() ) // First download the family data.
 			this.downloadPilotFamilyData();
 		return ancestriesCache.get( identifier );
 	}
 
 	@RequiresNetwork
 	public GetUniverseBloodlines200Ok searchSDEBloodline( final int identifier ) {
-		if (bloodLinesCache.isEmpty()) // First download the family data.
+		if ( bloodLinesCache.isEmpty() ) // First download the family data.
 			this.downloadPilotFamilyData();
 		return bloodLinesCache.get( identifier );
 	}
 
 	@RequiresNetwork
 	public GetUniverseRaces200Ok searchSDERace( final int identifier ) {
-		if (bloodLinesCache.isEmpty()) // First download the family data.
+		if ( bloodLinesCache.isEmpty() ) // First download the family data.
 			this.downloadPilotFamilyData();
 		return racesCache.get( identifier );
 	}
@@ -523,7 +525,7 @@ public class ESIDataService extends ESIDataProvider {
 							ESIDataProvider.DEFAULT_ACCEPT_LANGUAGE,
 							ESIDataProvider.DEFAULT_ESI_SERVER, null, null )
 					.execute();
-			if (esiTypeResponse.isSuccessful()) return esiTypeResponse.body();
+			if ( esiTypeResponse.isSuccessful() ) return esiTypeResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
@@ -561,7 +563,7 @@ public class ESIDataService extends ESIDataProvider {
 							DEFAULT_ACCEPT_LANGUAGE,
 							datasource, null, EN_US )
 					.execute();
-			if (ancestriesList.isSuccessful()) return ancestriesList.body();
+			if ( ancestriesList.isSuccessful() ) return ancestriesList.body();
 			else return new ArrayList<>();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -580,7 +582,7 @@ public class ESIDataService extends ESIDataProvider {
 							DEFAULT_ACCEPT_LANGUAGE,
 							datasource, null, EN_US )
 					.execute();
-			if (bloodLinesList.isSuccessful()) return bloodLinesList.body();
+			if ( bloodLinesList.isSuccessful() ) return bloodLinesList.body();
 			else return new ArrayList<>();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
@@ -596,7 +598,7 @@ public class ESIDataService extends ESIDataProvider {
 					.create( UniverseApi.class )
 					.getUniverseRaces( DEFAULT_ACCEPT_LANGUAGE, datasource, null, EN_US )
 					.execute();
-			if (racesList.isSuccessful()) return racesList.body();
+			if ( racesList.isSuccessful() ) return racesList.body();
 			else return new ArrayList<>();
 		} catch (final IOException ioe) {
 			LogWrapper.error( ioe );
