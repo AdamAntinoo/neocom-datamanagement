@@ -133,6 +133,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterId( identifier, DEFAULT_ESI_SERVER, null )
 					.execute();
 			if (characterResponse.isSuccessful()) return characterResponse.body();
+			else LogWrapper.info ( "Failure requesting getCharactersCharacterId "+characterResponse.errorBody().toString());
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
 		} finally {
