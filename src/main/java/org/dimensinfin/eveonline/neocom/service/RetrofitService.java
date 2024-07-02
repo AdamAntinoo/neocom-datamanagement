@@ -1,13 +1,28 @@
 package org.dimensinfin.eveonline.neocom.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import javax.validation.constraints.NotNull;
+
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import net.troja.eve.esi.ApiClient;
 import net.troja.eve.esi.ApiClientBuilder;
 import net.troja.eve.esi.auth.OAuth;
+import org.jetbrains.annotations.NonNls;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import org.dimensinfin.annotation.LogEnterExit;
-import org.dimensinfin.eveonline.neocom.auth.*;
+import org.dimensinfin.eveonline.neocom.auth.HttpAuthenticatedClientFactory;
+import org.dimensinfin.eveonline.neocom.auth.HttpBackendClientFactory;
+import org.dimensinfin.eveonline.neocom.auth.HttpUniverseClientFactory;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
@@ -17,24 +32,32 @@ import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
 import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
 import org.dimensinfin.eveonline.neocom.utility.StorageUnits;
 import org.dimensinfin.logging.LogWrapper;
-import org.jetbrains.annotations.NonNls;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import javax.validation.constraints.NotNull;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-
 import static org.dimensinfin.eveonline.neocom.auth.HttpBackendClientFactory.DEFAULT_NEOCOM_BACKEND_HOST;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.*;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_NAME;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_SIZE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_STATE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_AGENT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_TIMEOUT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_CACHE_FILE_NAME;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_SERVER_LOCATION;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.CACHE_DIRECTORY_PATH;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_NAME;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_SIZE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_STATE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_AGENT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_LOCATION;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_SERVER_TIMEOUT;
 
 public class RetrofitService {
 	public static final Converter.Factory GSON_CONVERTER_FACTORY =
@@ -102,7 +125,7 @@ public class RetrofitService {
 							.baseUrl( esiDataServerLocation )
 							.addConverterFactory( GSON_CONVERTER_FACTORY )
 							.client( new HttpAuthenticatedClientFactory.Builder()
-									.withNeoComOAuth20( this.getConfiguredOAuth( credential ) )
+									.withTrojaOAuth20( this.getConfiguredOAuth( credential ) )
 									.withConfigurationProvider( this.configurationProvider )
 									.withCredential( credential )
 									.withAgent( agent )
@@ -116,7 +139,7 @@ public class RetrofitService {
 							.baseUrl( esiDataServerLocation )
 							.addConverterFactory( GSON_CONVERTER_FACTORY )
 							.client( new HttpAuthenticatedClientFactory.Builder()
-									.withNeoComOAuth20( this.getConfiguredOAuth( credential ) )
+									.withTrojaOAuth20( this.getConfiguredOAuth( credential ) )
 									.withConfigurationProvider( this.configurationProvider )
 									.withCredential( credential )
 									.withAgent( agent )
@@ -129,7 +152,7 @@ public class RetrofitService {
 						.baseUrl( esiDataServerLocation )
 						.addConverterFactory( GSON_CONVERTER_FACTORY )
 						.client( new HttpAuthenticatedClientFactory.Builder()
-								.withNeoComOAuth20( this.getConfiguredOAuth( credential ) )
+								.withTrojaOAuth20( this.getConfiguredOAuth( credential ) )
 								.withConfigurationProvider( this.configurationProvider )
 								.withCredential( credential )
 								.withAgent( agent )

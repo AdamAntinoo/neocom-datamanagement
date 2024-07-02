@@ -1,6 +1,7 @@
 package org.dimensinfin.eveonline.neocom.service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,10 @@ import com.google.inject.name.Named;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.aspects.Loggable;
+import net.troja.eve.esi.ApiClient;
+import net.troja.eve.esi.ApiClientBuilder;
+import net.troja.eve.esi.api.SsoApi;
+import net.troja.eve.esi.model.CharacterInfo;
 import org.jetbrains.annotations.NonNls;
 
 import org.dimensinfin.annotation.TimeElapsed;
@@ -60,6 +65,7 @@ import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
 
 public class ESIDataService extends ESIDataProvider {
 	public interface EsiItemPassThrough {
@@ -197,7 +203,8 @@ public class ESIDataService extends ESIDataProvider {
 								credential.getDataSource().toLowerCase(),
 								null,
 								pageCounter,
-								null )
+								// TODO - Token now should be informed ??. Check for the header instead.
+								credential.getAccessToken() )
 						.execute();
 				if ( blueprintResponse.isSuccessful() ) {
 					// Check for out of page running.
@@ -207,7 +214,12 @@ public class ESIDataService extends ESIDataProvider {
 						returnBlueprintList.addAll( Objects.requireNonNull( blueprintResponse.body() ) );
 						pageCounter++;
 					}
-				} else LogWrapper.info( "Exception while requesting getCharactersCharacterIdBlueprints " + blueprintResponse.errorBody().toString() );
+				} else {
+					final String errorMessage = blueprintResponse.errorBody().source().readString( Charset.defaultCharset() );
+					if ( errorMessage.toLowerCase().contains( "token is expired" ) ) this.refreshToken( credential );
+					LogWrapper.info( "Exception while requesting getCharactersCharacterIdBlueprints " + errorMessage );
+					morePages = false;
+				}
 			}
 		} catch (final IOException | RuntimeException ioe) {
 			LogWrapper.error( ioe );
@@ -215,6 +227,13 @@ public class ESIDataService extends ESIDataProvider {
 			LogWrapper.exit();
 		}
 		return returnBlueprintList;
+	}
+
+	private void refreshToken( final Credential credential ) {
+		final String CLIENT_ID = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
+		final ApiClient client = new ApiClientBuilder().clientID( CLIENT_ID ).refreshToken( credential.getRefreshToken() ).build();
+		final SsoApi api = new SsoApi( client );
+		CharacterInfo info = api.getCharacterInfo();
 	}
 
 	@TimeElapsed
@@ -230,7 +249,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterIdIndustryJobs(
 							credential.getAccountId(),
 							credential.getDataSource().toLowerCase(),
-							null, false, null
+							null, false, credential.getAccessToken()
 					)
 					.execute();
 			if ( industryJobsResponse.isSuccessful() ) return industryJobsResponse.body();
@@ -250,7 +269,7 @@ public class ESIDataService extends ESIDataProvider {
 					.accessAuthenticatedConnector( credential )
 					.create( LocationApi.class )
 					.getCharactersCharacterIdLocation( credential.getAccountId()
-							, credential.getDataSource(), null, null )
+							, credential.getDataSource(), null, credential.getAccessToken() )
 					.execute();
 			if ( locationResponse.isSuccessful() ) return locationResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
@@ -274,7 +293,7 @@ public class ESIDataService extends ESIDataProvider {
 					.getCharactersCharacterIdOrders(
 							credential.getAccountId(),
 							credential.getDataSource().toLowerCase(),
-							null, null
+							null, credential.getAccessToken()
 					)
 					.execute();
 			if ( industryJobsResponse.isSuccessful() ) return industryJobsResponse.body();
@@ -294,7 +313,7 @@ public class ESIDataService extends ESIDataProvider {
 					.accessAuthenticatedConnector( credential )
 					.create( LocationApi.class )
 					.getCharactersCharacterIdShip( credential.getAccountId()
-							, credential.getDataSource(), null, null )
+							, credential.getDataSource(), null, credential.getAccessToken() )
 					.execute();
 			if ( shipResponse.isSuccessful() ) return shipResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
@@ -313,7 +332,7 @@ public class ESIDataService extends ESIDataProvider {
 					.accessAuthenticatedConnector( credential )
 					.create( SkillsApi.class )
 					.getCharactersCharacterIdSkills( credential.getAccountId()
-							, credential.getDataSource(), null, null )
+							, credential.getDataSource(), null, credential.getAccessToken() )
 					.execute();
 			if ( skillsResponse.isSuccessful() ) return skillsResponse.body();
 		} catch (final IOException | RuntimeException ioe) {
