@@ -17,10 +17,6 @@ import com.google.inject.name.Named;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.aspects.Loggable;
-import net.troja.eve.esi.ApiClient;
-import net.troja.eve.esi.ApiClientBuilder;
-import net.troja.eve.esi.api.SsoApi;
-import net.troja.eve.esi.model.CharacterInfo;
 import org.jetbrains.annotations.NonNls;
 
 import org.dimensinfin.annotation.TimeElapsed;
@@ -65,7 +61,6 @@ import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.logging.LogWrapper;
 
 import retrofit2.Response;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
 
 public class ESIDataService extends ESIDataProvider {
 	public interface EsiItemPassThrough {
@@ -216,7 +211,7 @@ public class ESIDataService extends ESIDataProvider {
 					}
 				} else {
 					final String errorMessage = blueprintResponse.errorBody().source().readString( Charset.defaultCharset() );
-					if ( errorMessage.toLowerCase().contains( "token is expired" ) ) this.refreshToken( credential );
+//					if ( errorMessage.toLowerCase().contains( "token is expired" ) ) this.refreshToken( credential );
 					LogWrapper.info( "Exception while requesting getCharactersCharacterIdBlueprints " + errorMessage );
 					morePages = false;
 				}
@@ -229,12 +224,12 @@ public class ESIDataService extends ESIDataProvider {
 		return returnBlueprintList;
 	}
 
-	private void refreshToken( final Credential credential ) {
-		final String CLIENT_ID = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
-		final ApiClient client = new ApiClientBuilder().clientID( CLIENT_ID ).refreshToken( credential.getRefreshToken() ).build();
-		final SsoApi api = new SsoApi( client );
-		CharacterInfo info = api.getCharacterInfo();
-	}
+//	private void refreshToken( final Credential credential ) {
+//		final String CLIENT_ID = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
+//		final ApiClient client = new ApiClientBuilder().clientID( CLIENT_ID ).refreshToken( credential.getRefreshToken() ).build();
+//		final SsoApi api = new SsoApi( client );
+//		CharacterInfo info = api.getCharacterInfo();
+//	}
 
 	@TimeElapsed
 	@Loggable(Loggable.DEBUG)
