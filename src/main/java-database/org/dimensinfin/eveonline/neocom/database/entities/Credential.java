@@ -155,6 +155,11 @@ public class Credential extends UpdatableEntity {
 		return this.refreshToken;
 	}
 
+	public Credential setRefreshToken( final String refreshToken ) {
+		this.refreshToken = refreshToken;
+		return this;
+	}
+
 	public String getDataSource() {
 		return this.dataSource.toLowerCase();
 	}

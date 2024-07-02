@@ -59,10 +59,11 @@ public class CredentialRepository {
 		return this.credentialDao.queryForId( credentialId );
 	}
 
-	public void persist( final Credential record ) throws SQLException {
+	public Credential persist( final @NotNull Credential record ) throws SQLException {
 		if (null != record) {
 			record.timeStamp();
 			this.credentialDao.createOrUpdate( record );
 		}
+		return record;
 	}
 }

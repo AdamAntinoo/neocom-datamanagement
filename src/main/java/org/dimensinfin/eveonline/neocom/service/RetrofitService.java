@@ -82,7 +82,7 @@ public class RetrofitService {
 	// - C O M P O N E N T S
 	private final IConfigurationService configurationProvider;
 	private final @NonNls IFileSystem fileSystemAdapter;
-	private final Map<String, Retrofit> connectors = new HashMap<>();
+	protected final Map<String, Retrofit> connectors = new HashMap<>();
 
 	// - C O N S T R U C T O R S
 	@Inject
@@ -98,8 +98,12 @@ public class RetrofitService {
 	 * Each one of the connectors has a cache that it is unique and specific for each credential so no cross requests should occur at the cache
 	 * level for identical ESI backend requests.
 	 *
+	 * The request for a new Retrofit connector received their particular <code>Credential</code> and uses a external configuration service to configure the Http Client.
+	 * It will also use an external <code>Function</code> to persist the updated authentication token when the refresh feature is activated to any expiration for an
+	 * authentication token will update the token for the Credential and persist their values into the Credential Persistence service.
+	 *
 	 * @param credential the credential that should be used on the authenticated ESI backend service.
-	 * @return the configured and ready to use retrofit instance. If it wes already created and found on the cache it can be reused.
+	 * @return the configured and ready to use retrofit instance. If it was already created and found on the cache it can be reused.
 	 */
 	@LogEnterExit
 	public Retrofit accessAuthenticatedConnector( final Credential credential ) {

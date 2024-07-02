@@ -68,8 +68,8 @@ public class NeoComOAuth2Flow {
 	}
 
 	/**
-	 * Validates the encoded values of the state received to verify that the calling application is on the NeoCom set. There is
-	 * a fixed value and in future implementations a variable value to improve security.
+	 * Validates the encoded values of the state received to verify that the calling application is on the NeoCom set. There is a fixed value and in
+	 * future implementations a variable value to improve security.
 	 *
 	 * @param encodedState the state data received encoded in Base64. Needs to match the state generated locally.
 	 */
@@ -78,6 +78,41 @@ public class NeoComOAuth2Flow {
 				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE ).getBytes()
 		).replaceAll( "\n", "" );
 		return encodedState.equals( checkState );
+	}
+
+	public TokenTranslationResponse updateAccessToken( final String refreshToken, final String scope ) {
+		final String authorizationServer = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL );
+		final String authorizationContentType = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE );
+		final String authorizationClientid = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
+		final PostRefreshAccessToken serviceRefreshAccessToken = new Retrofit.Builder()
+				.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
+				.addConverterFactory( JacksonConverterFactory.create() )
+				.build()
+				.create( PostRefreshAccessToken.class );
+		final String grantType = "refresh_token";
+		final Call<TokenTranslationResponse> request = serviceRefreshAccessToken.getNewAccessToken(
+				authorizationContentType,
+				ACCESS_TOKEN_HOST_HEADER, // This is the esi login server for /oauth/token call. WARNING do not add the protocol.
+				grantType,
+				authorizationClientid,
+				refreshToken,
+				new TokenRefreshBody().setRefreshToken( refreshToken )
+		);
+		try {
+			final Response<TokenTranslationResponse> response = request.execute();
+			if ( response.isSuccessful() ) {
+				LogWrapper.info( "Response is 200 OK." );
+				return response.body();
+			} else {
+				LogWrapper.info( MessageFormat.format( "Response is {0} - {1}.",
+						response.code(),
+						response.errorBody().string() ) );
+				throw new NeoComRuntimeException( AUTHENTICATION_FAILURE_ESI_SSO.getErrorMessage( response.errorBody().string() ) );
+			}
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+			throw new NeoComRuntimeException( ioe );
+		}
 	}
 
 	private TokenTranslationResponse getTokenTranslationResponse( final TokenVerification store ) {
@@ -90,7 +125,7 @@ public class NeoComOAuth2Flow {
 		// Get the request.
 		GetAccessToken serviceGetAccessToken;
 		try {
-			if (tlsAuthentication)
+			if ( tlsAuthentication )
 				serviceGetAccessToken = new Retrofit.Builder()
 						.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
 						.addConverterFactory( JacksonConverterFactory.create() )
@@ -125,7 +160,7 @@ public class NeoComOAuth2Flow {
 		// Getting the request response to be stored if valid.
 		try {
 			final Response<TokenTranslationResponse> response = request.execute();
-			if (response.isSuccessful()) {
+			if ( response.isSuccessful() ) {
 				LogWrapper.info( "Response is 200 OK." );
 				return response.body();
 			} else {
@@ -168,7 +203,7 @@ public class NeoComOAuth2Flow {
 			final Response<VerifyCharacterResponse> verificationResponse = verificationService
 					.getVerification( "Bearer " + accessToken )
 					.execute();
-			if (verificationResponse.isSuccessful()) {
+			if ( verificationResponse.isSuccessful() ) {
 				NeoComLogger.info( "Character verification OK." );
 				return verificationResponse.body();
 			} else {
@@ -197,7 +232,8 @@ public class NeoComOAuth2Flow {
 		}
 
 		public NeoComOAuth2Flow.Builder withConfigurationService( final IConfigurationService configurationService ) {
-			this.onConstruction.configurationService = Objects.requireNonNull( configurationService );
+			// TODO - This dependency should be removed and replaced by a configuration data set.
+//			this.onConstruction.configurationService = Objects.requireNonNull( configurationService );
 			return this;
 		}
 	}
