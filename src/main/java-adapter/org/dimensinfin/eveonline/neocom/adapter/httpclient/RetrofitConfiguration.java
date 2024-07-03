@@ -23,6 +23,7 @@ import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsCon
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
@@ -48,10 +49,13 @@ public class RetrofitConfiguration {
 	private Integer cacheSize;
 	private File cacheDataFile;
 	private String serverLoginBase;
+	private String authorizationContentType;
 	private String clientId;
 	private String secretKey;
 	private String callback;
 	private String state;
+	private String authorizationAccessToken=DEFAULT_AUTHORIZATION_ACCESS_TOKEN;
+	private String authorizationAuthorizePath=DEFAULT_AUTHORIZATION_AUTHORIZE;
 
 	public RetrofitConfiguration( final @NotNull IConfigurationService configurationProvider,
 	                              final @NotNull IFileSystem fileSystemAdapter,
@@ -87,6 +91,7 @@ public class RetrofitConfiguration {
 		//		final String scopes = Objects.requireNonNull( credential.getScope() );
 		this.serverLoginBase = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL,
 				DEFAULT_ESI_OAUTH_LOGIN_SERVER );
+		this.authorizationContentType=this.configurationProvider.getResourceString(ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE);
 		this.clientId = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
 		this.secretKey = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY );
 		this.callback = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CALLBACK );
