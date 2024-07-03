@@ -5,7 +5,6 @@ import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import java.util.function.UnaryOperator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import org.dimensinfin.eveonline.neocom.auth.NeoComOAuth20;
@@ -17,13 +16,13 @@ import lombok.Builder;
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_LOGIN_HOST;
 
 @Builder(setterPrefix = "with")
 public class UpgradedHttpAuthenticatedClientFactory {
 	private static final long EXPIRE_LIMIT = 30L;
+	@Deprecated
 	private NeoComOAuth20 neoComOAuth20;
 	private RetrofitConfiguration configuration;
 	private Credential credential;
@@ -37,10 +36,12 @@ public class UpgradedHttpAuthenticatedClientFactory {
 				.addInterceptor( chain -> { // Add headers
 					final Request.Builder builder = chain.request().newBuilder()
 							.addHeader( "User-Agent", this.configuration.getAgent() )
-							.addHeader( "Content/Type", "application/json" );
+							.addHeader( "Content/Type", "application/json" )
+							.addHeader( "Authorization", "Bearer " + this.credential.getAccessToken() );
 					return chain.proceed( builder.build() );
 				} )
-				.addInterceptor( logInterceptor )
+				// TODO - The addition of this line break the request with no exception.
+				//				.addInterceptor( logInterceptor )
 				.addInterceptor( chain -> { // Check that access token is not expired
 					final String token = this.credential.getAccessToken();
 					final long timeToExpire = this.timeToExpire( token );
@@ -57,18 +58,18 @@ public class UpgradedHttpAuthenticatedClientFactory {
 					builder.addHeader( "Authorization", "Bearer " + this.credential.getAccessToken() );
 					return chain.proceed( builder.build() );
 				} )
-				.addInterceptor( chain -> {
-					if ( StringUtils.isBlank( this.credential.getRefreshToken() ) )
-						return chain.proceed( chain.request() );
-					Response r = chain.proceed( chain.request() );
-					if ( r.isSuccessful() )
-						return r;
-					if ( r.body().string().contains( "invalid_token" ) ) {
-						this.neoComOAuth20.fromRefresh( this.credential.getRefreshToken() );
-						r = chain.proceed( chain.request() );
-					}
-					return r;
-				} )
+				//				.addInterceptor( chain -> {
+				//					if ( StringUtils.isBlank( this.credential.getRefreshToken() ) )
+				//						return chain.proceed( chain.request() );
+				//					Response r = chain.proceed( chain.request() );
+				//					if ( r.isSuccessful() )
+				//						return r;
+				//					if ( r.body().string().contains( "invalid_token" ) ) {
+				//						this.neoComOAuth20.fromRefresh( this.credential.getRefreshToken() );
+				//						r = chain.proceed( chain.request() );
+				//					}
+				//					return r;
+				//				} )
 				.readTimeout( this.configuration.getTimeout(), TimeUnit.SECONDS )
 				.certificatePinner(
 						new CertificatePinner.Builder()
@@ -90,7 +91,9 @@ public class UpgradedHttpAuthenticatedClientFactory {
 
 	private TokenTranslationResponse refreshAccessToken() {
 		// TODO - Create a new special flow that will not use the Configuration until this is solved.
-		final NeoComOAuth2Flow flow = new NeoComOAuth2Flow.Builder().build();
+		final NeoComOAuth2Flow flow = new NeoComOAuth2Flow.Builder()
+				.withConfigurationService( this.configuration )
+				.build();
 		final TokenTranslationResponse token = flow.updateAccessToken( this.credential.getRefreshToken(), this.credential.getScope() );
 		return token;
 	}

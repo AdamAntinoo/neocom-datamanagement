@@ -22,8 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Builder(setterPrefix = "with")
-//@NoArgsConstructor
-public class UpgradedRetrofitService /*extends RetrofitService*/ {
+public class UpgradedRetrofitService {
 	private static final String DEFAULT_AUTHORIZATION_ACCESS_TOKEN = "oauth/token";
 	private static final String DEFAULT_AUTHORIZATION_AUTHORIZE = "oauth/authorize";
 	protected static final Converter.Factory GSON_CONVERTER_FACTORY =
@@ -85,12 +84,6 @@ public class UpgradedRetrofitService /*extends RetrofitService*/ {
 							.withNeoComOAuth20( this.getConfiguredOAuth( credential ) )
 							.withConfiguration( this.configuration )
 							.withCredential( credential )
-
-							//							.withConfigurationProvider( this.configurationProvider )
-							//							.withAgent( this.configuration.getAgent() )
-							//							.withTimeout( this.configuration.getTimeout() )
-							//							.withCacheFile( this.configuration.getCacheDataFile() )
-							//							.withCacheSize( this.configuration.getCacheSize(), StorageUnits.GIGABYTES )
 							.build()
 							.generate() )
 					.build();
@@ -100,10 +93,9 @@ public class UpgradedRetrofitService /*extends RetrofitService*/ {
 					.addConverterFactory( GSON_CONVERTER_FACTORY )
 					.client( UpgradedHttpAuthenticatedClientFactory.builder()
 							.withNeoComOAuth20( this.getConfiguredOAuth( credential ) )
-							//							.withConfigurationProvider( this.configurationProvider )
-							//							.withCredential( credential )
-							//							.withAgent( this.configuration.getAgent() )
-							//							.withTimeout( this.configuration.getTimeout() )
+							.withConfiguration( this.configuration )
+							.withCredential( credential )
+							.withCredentialPersistenceFunction( this.credentialPersistenceFunction )
 							.build()
 							.generate() )
 					.build();
