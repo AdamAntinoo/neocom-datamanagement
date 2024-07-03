@@ -2,7 +2,6 @@ package org.dimensinfin.eveonline.neocom.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
+import org.dimensinfin.eveonline.neocom.database.repositories.CredentialRepository;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 
@@ -32,6 +32,7 @@ public class RetrofitServiceTest {
 
 	private IConfigurationService configurationService;
 	private IFileSystem fileSystem;
+	private CredentialRepository credentialRepository;
 
 	@Test
 	public void accessAuthenticatedConnector() {
@@ -43,7 +44,7 @@ public class RetrofitServiceTest {
 		Mockito.when( this.configurationService.getResourceString( Mockito.anyString() ) ).thenReturn( "-CONFIGURATION-VALUE-" );
 		Mockito.when( this.configurationService.getResourceString( Mockito.anyString(), Mockito.anyString() ) ).thenReturn( "http://localhost/" );
 		// Test
-		final RetrofitService retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
+		final RetrofitService retrofitService = this.getRetrofitService();
 		final Retrofit obtained = retrofitService.accessAuthenticatedConnector( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
@@ -56,7 +57,7 @@ public class RetrofitServiceTest {
 		final String DEFAULT_ESI_DATA_SERVER = "https://esi.evetech.net/latest/";
 		final String DEFAULT_RETROFIT_AGENT = "Default agent";
 		final Integer DEFAULT_CACHE_SIZE_1GB = 1;
-		 final String DEFAULT_ESI_OAUTH_LOGIN_SERVER = "https://login.eveonline.com/";
+		final String DEFAULT_ESI_OAUTH_LOGIN_SERVER = "https://login.eveonline.com/";
 		final Credential credential = Mockito.mock( Credential.class );
 		final String scopes = "-SCOPES-";
 		// When
@@ -76,21 +77,21 @@ public class RetrofitServiceTest {
 				.thenReturn( "./" );
 		Mockito.when( this.fileSystem.checkWritable( Mockito.anyString() ) ).thenReturn( true );
 
-		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL, DEFAULT_ESI_OAUTH_LOGIN_SERVER) )
+		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL, DEFAULT_ESI_OAUTH_LOGIN_SERVER ) )
 				.thenReturn( DEFAULT_ESI_OAUTH_LOGIN_SERVER );
-		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID) )
+		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID ) )
 				.thenReturn( "-CLIENT-ID-" );
-		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY) )
+		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY ) )
 				.thenReturn( "-SECRET-KEY-" );
-		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CALLBACK) )
+		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CALLBACK ) )
 				.thenReturn( "-CALLBACK-" );
-		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_AGENT, DEFAULT_RETROFIT_AGENT) )
+		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_AGENT, DEFAULT_RETROFIT_AGENT ) )
 				.thenReturn( DEFAULT_RETROFIT_AGENT );
-		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE) )
+		Mockito.when( this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE ) )
 				.thenReturn( "-STATE-" );
 
 		// Test
-		final RetrofitService retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
+		final RetrofitService retrofitService = this.getRetrofitService();
 		final Retrofit obtained = retrofitService.accessAuthenticatedConnector( credential );
 		// Assertions
 		Assertions.assertNotNull( obtained );
@@ -99,7 +100,7 @@ public class RetrofitServiceTest {
 
 	@AfterEach
 	public void tearDown() {
-		new File("testfile").delete();
+		new File( "testfile" ).delete();
 	}
 
 	@Test
@@ -108,7 +109,7 @@ public class RetrofitServiceTest {
 		Mockito.when( this.configurationService.getResourceString( Mockito.anyString() ) ).thenReturn( "-CONFIGURATION-VALUE-" );
 		Mockito.when( this.configurationService.getResourceString( Mockito.anyString(), Mockito.anyString() ) ).thenReturn( "http://localhost/" );
 		// Test
-		final RetrofitService retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
+		final RetrofitService retrofitService = this.getRetrofitService();
 		final Retrofit obtained = retrofitService.accessUniverseConnector();
 		// Assertions
 		Assertions.assertNotNull( obtained );
@@ -123,7 +124,11 @@ public class RetrofitServiceTest {
 
 	@Test
 	public void constructorContract() {
-		final RetrofitService retrofitService = new RetrofitService( this.configurationService, this.fileSystem );
+		final RetrofitService retrofitService = this.getRetrofitService();
 		Assertions.assertNotNull( retrofitService );
+	}
+
+	private RetrofitService getRetrofitService() {
+		return new RetrofitService( this.configurationService, this.fileSystem, this.credentialRepository );
 	}
 }
