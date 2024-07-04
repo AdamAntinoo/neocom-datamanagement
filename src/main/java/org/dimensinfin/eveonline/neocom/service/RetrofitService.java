@@ -20,6 +20,9 @@ import retrofit2.Retrofit;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_STATE;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.UNIVERSE_RETROFIT_CACHE_STATE;
 
+/**
+ * This version uses the trojan library to do the requests.
+ */
 public class RetrofitService extends RetrofitServiceOld {
 	private static final String UNIVERSE_CONNECTOR_IDENTIER = "UNIVERSE";
 	private final IConfigurationService configurationProvider;

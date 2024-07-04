@@ -33,13 +33,13 @@ public class UpgradedHttpAuthenticatedClientFactory {
 		//		final String CLIENT_ID = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
 		logInterceptor.level( HttpLoggingInterceptor.Level.BASIC );
 		final OkHttpClient.Builder authenticatedClientBuilder = new OkHttpClient.Builder()
-				.addInterceptor( chain -> { // Add headers
-					final Request.Builder builder = chain.request().newBuilder()
-							.addHeader( "User-Agent", this.configuration.getAgent() )
-							.addHeader( "Content/Type", "application/json" )
-							.addHeader( "Authorization", "Bearer " + this.credential.getAccessToken() );
-					return chain.proceed( builder.build() );
-				} )
+//				.addInterceptor( chain -> { // Add headers
+//					final Request.Builder builder = chain.request().newBuilder()
+//							.addHeader( "User-Agent", this.configuration.getAgent() )
+//							.addHeader( "Content/Type", "application/json" )
+//							.addHeader( "Authorization", "Bearer " + this.credential.getAccessToken() );
+//					return chain.proceed( builder.build() );
+//				} )
 				// TODO - The addition of this line break the request with no exception.
 				//				.addInterceptor( logInterceptor )
 				.addInterceptor( chain -> { // Check that access token is not expired

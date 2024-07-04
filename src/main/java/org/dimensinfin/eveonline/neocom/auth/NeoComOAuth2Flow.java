@@ -77,6 +77,8 @@ public class NeoComOAuth2Flow {
 		final String authorizationServer = this.configuration.getServerLoginBase();
 		final String authorizationContentType = this.configuration.getAuthorizationContentType();
 		final String authorizationClientid = this.configuration.getClientId();
+		final String authorizationSecret = this.configuration.getSecretKey();
+		final String authorizationBasic = Base64.encodeBytes( String.join( ":", authorizationClientid, authorizationSecret ).getBytes() );
 		final PostRefreshAccessToken serviceRefreshAccessToken = new Retrofit.Builder()
 				.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
 				.addConverterFactory( JacksonConverterFactory.create() )
@@ -85,10 +87,9 @@ public class NeoComOAuth2Flow {
 		final String grantType = "refresh_token";
 		final Call<TokenTranslationResponse> request = serviceRefreshAccessToken.getNewAccessToken(
 				authorizationContentType,
-				ACCESS_TOKEN_HOST_HEADER, // This is the esi login server for /oauth/token call. WARNING do not add the protocol.
-				grantType,
-				authorizationClientid,
-				refreshToken,
+//				"Basic "+authorizationBasic,
+//				authorizationClientid,
+//				refreshToken
 				new TokenRefreshBody().setRefreshToken( refreshToken )
 		);
 		try {

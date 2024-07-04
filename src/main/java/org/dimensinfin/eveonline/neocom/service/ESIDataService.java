@@ -199,7 +199,7 @@ public class ESIDataService extends ESIDataProvider {
 								null,
 								pageCounter,
 								// TODO - Token now should be informed ??. Check for the header instead.
-								null )
+								credential.getAccessToken() )
 						.execute();
 				if ( blueprintResponse.isSuccessful() ) {
 					// Check for out of page running.

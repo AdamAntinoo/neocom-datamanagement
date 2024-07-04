@@ -23,8 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Builder(setterPrefix = "with")
 public class UpgradedRetrofitService {
-	private static final String DEFAULT_AUTHORIZATION_ACCESS_TOKEN = "oauth/token";
-	private static final String DEFAULT_AUTHORIZATION_AUTHORIZE = "oauth/authorize";
+	private static final String DEFAULT_AUTHORIZATION_ACCESS_TOKEN = "v2/oauth/token";
+	private static final String DEFAULT_AUTHORIZATION_AUTHORIZE = "v2/oauth/authorize";
 	protected static final Converter.Factory GSON_CONVERTER_FACTORY =
 			GsonConverterFactory.create(
 					new GsonBuilder()
@@ -60,6 +60,10 @@ public class UpgradedRetrofitService {
 		}
 	}
 
+	public Retrofit accessAuthenticatedConnector( final Credential credential ) {
+		return this.accessAuthenticatedConnectorNeoCom( credential );
+	}
+
 	/**
 	 * Creates a unique retrofit connector for each unique credential found on the request. Connectors are cached indefinitely and are Retrofit
 	 * instances that have their own http connector and its own configuration for the authenticated ESI backend services. Each one of the connectors
@@ -75,7 +79,7 @@ public class UpgradedRetrofitService {
 	 * @return the configured and ready to use retrofit instance. If it was already created and found on the cache it can be reused.
 	 */
 	@LogEnterExit
-	public Retrofit accessAuthenticatedConnector( final Credential credential ) {
+	public Retrofit accessAuthenticatedConnectorNeoCom( final Credential credential ) {
 		if ( this.configuration.isUsesCache() ) {
 			return new Retrofit.Builder()
 					.baseUrl( this.configuration.getEsiDataServerLocation() )
@@ -100,6 +104,22 @@ public class UpgradedRetrofitService {
 							.generate() )
 					.build();
 	}
+
+//	public Retrofit accessAuthenticatedConnectorTrojan( final Credential credential ) {
+//		return new Retrofit.Builder()
+//				.baseUrl(  this.configuration.getEsiDataServerLocation() )
+//				.addConverterFactory( GSON_CONVERTER_FACTORY )
+//				.client( new HttpAuthenticatedClientFactory.Builder()
+//						.withTrojaOAuth20( this.getConfiguredOAuth( credential ) )
+//						.withConfigurationProvider( this.configurationProvider )
+//						.withCredential( credential )
+//						.withAgent( agent )
+//						.withTimeout( timeout )
+//						.withCacheFile( cacheDataFile )
+//						.withCacheSize( cacheSize, StorageUnits.GIGABYTES )
+//						.generate() )
+//				.build();
+//	}
 
 	protected NeoComOAuth20 getConfiguredOAuth( final Credential credential ) {
 		final String scopes = Objects.requireNonNull( credential.getScope() );
