@@ -69,10 +69,11 @@ public class NeoComOAuth2FlowTest {
 	@Test
 	public void verifyState() {
 		// Given
+		final String stateData = "-STATE-";
 		final NeoComOAuth2Flow neoComOAuth2Flow = this.getNeoComOAuth2Flow();
-		final String state = Base64.encodeBytes( "-STATE-".getBytes() ).replaceAll( "\n", "" );
+		final String state = Base64.encodeBytes( stateData.getBytes() ).replaceAll( "\n", "" );
 		// When
-		Mockito.when(this.configuration.getState()).thenReturn( "-TEST-STRING-" );
+		Mockito.when(this.configuration.getState()).thenReturn( stateData );
 		// Assertions
 		Assertions.assertTrue( neoComOAuth2Flow.verifyState( state ) );
 		Assertions.assertFalse( neoComOAuth2Flow.verifyState( "-INVALID-STATE-" ) );

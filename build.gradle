@@ -21,7 +21,7 @@ version = '0.29.8'
 archivesBaseName = 'neocom-datamanagement'
 description = 'Data management and processes that are common to all developments.'
 ext {
-    SDEDatabaseVersion = 'sde-20210223-TRANQUILITY'
+    SDEDatabaseVersion = 'sde-20240628-TRANQUILITY'
 }
 
 repositories {
@@ -112,4 +112,8 @@ dockerCompose {
         useComposeFiles = ["${projectDir}/src/integration/scripts/dm-docker-integration/docker-compose.yml"]
         isRequiredBy(integrationTest)
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.release = 17
 }
