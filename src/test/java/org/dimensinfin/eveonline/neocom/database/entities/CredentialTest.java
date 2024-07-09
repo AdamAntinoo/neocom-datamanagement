@@ -113,7 +113,7 @@ public class CredentialTest {
 		credential.setJwtToken("-JWT-TOKEN-");
 		Assertions.assertEquals( "-JWT-TOKEN-" ,credential.getJwtToken());
 		credential.setUniqueCredential("-UNIQUE-CREDENTIAL-");
-		Assertions.assertEquals( "tranquility.123456" ,credential.getUniqueCredential());
+		Assertions.assertEquals( "-UNIQUE-CREDENTIAL-" ,credential.getUniqueCredential());
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class CredentialTest {
 				.setWalletBalance( 876567.54 )
 				.setRaceName( "TEST RACE" );
 		Assertions.assertNotNull( credential );
-		final String expected = "{\"jsonClass\":\"Credential\",\"uniqueCredential\":\"tranquility.123456\",\"walletBalance\":876567.54,\"assetsCount\":98,\"miningResourcesEstimatedValue\":0.0,\"accountId\":123456,\"accountName\":\"TEST CREDENTIAL\",\"raceName\":\"TEST RACE\"}";
+		final String expected = "{\"jsonClass\":\"Credential\",\"uniqueCredential\":\"testing.123456\",\"walletBalance\":876567.54,\"assetsCount\":98,\"miningResourcesEstimatedValue\":0.0,\"accountId\":123456,\"accountName\":\"TEST CREDENTIAL\",\"raceName\":\"TEST RACE\"}";
 		final String obtained = credential.toString();
 		Assertions.assertEquals( expected, obtained );
 	}
