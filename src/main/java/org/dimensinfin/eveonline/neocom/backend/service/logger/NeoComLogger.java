@@ -56,7 +56,7 @@ public class NeoComLogger {
 	public static void exit( String message ) {
 		if ( null != message ) {
 			String header = header();
-			logger.info( "<<  {}> {}", header, message );
+			logger.info( "<< {}> {}", header, message );
 		}
 
 	}

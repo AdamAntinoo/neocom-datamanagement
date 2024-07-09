@@ -88,9 +88,9 @@ public class NeoComOAuth2Flow {
 		final Call<TokenTranslationResponse> request = serviceRefreshAccessToken.getNewAccessToken(
 				authorizationContentType,
 //				"Basic "+authorizationBasic,
-//				authorizationClientid,
-//				refreshToken
-				new TokenRefreshBody().setRefreshToken( refreshToken )
+				authorizationClientid,
+				refreshToken
+//				new TokenRefreshBody().setRefreshToken( refreshToken )
 		);
 		try {
 			final Response<TokenTranslationResponse> response = request.execute();

@@ -201,7 +201,7 @@ public class ESIDataService extends ESIDataProvider {
 								// TODO - Token now should be informed ??. Check for the header instead.
 								credential.getAccessToken() )
 						.execute();
-				if ( blueprintResponse.isSuccessful() ) {
+					if ( blueprintResponse.isSuccessful() ) {
 					// Check for out of page running.
 					if ( Objects.requireNonNull( blueprintResponse.body() ).isEmpty() ) morePages = false;
 					else {
