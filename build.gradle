@@ -16,7 +16,7 @@ allprojects {
 
 // - P R O J E C T   D E F I N I T I O N
 group = 'org.dimensinfin.neocom'
-version = '0.29.8'
+version = '0.29.9'
 archivesBaseName = 'neocom-datamanagement'
 description = 'Data management and processes that are common to all developments.'
 ext {
