@@ -1,8 +1,16 @@
 package org.dimensinfin.eveonline.neocom.integration;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.GsonBuilder;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import org.dimensinfin.eveonline.neocom.adapter.httpclient.RetrofitConfiguration;
 import org.dimensinfin.eveonline.neocom.auth.ESIStore;
 import org.dimensinfin.eveonline.neocom.auth.NeoComOAuth20;
 import org.dimensinfin.eveonline.neocom.auth.NeoComOAuth2Flow;
@@ -10,23 +18,25 @@ import org.dimensinfin.eveonline.neocom.auth.TokenVerification;
 import org.dimensinfin.eveonline.neocom.esiswagger.api.UniverseApi;
 import org.dimensinfin.eveonline.neocom.esiswagger.model.GetUniverseStructuresStructureIdOk;
 import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
+import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
+import org.dimensinfin.eveonline.neocom.support.SupportFileSystem;
 import org.dimensinfin.eveonline.neocom.utility.GSONDateTimeDeserializer;
 import org.dimensinfin.eveonline.neocom.utility.GSONLocalDateDeserializer;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.*;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_CACHE_STATE;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AGENT;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CALLBACK;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
+import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
 
 public class AuthenticatedRequestIT {
 	private static final String CURRENT_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5IiwidHlwIjoiSldUIn0" +
@@ -40,12 +50,13 @@ public class AuthenticatedRequestIT {
 							.create() );
 
 	private IConfigurationService configurationProvider;
+	private IFileSystem fileSystem;
+	private RetrofitConfiguration configuration;
 	private NeoComOAuth2Flow flow;
 	private String STATE;
 
 	private List<String> constructScopes( final String data ) {
 		final List<String> resultScopes = new ArrayList<>();
-//		resultScopes.add( "publicData" );
 		final String[] scopes = data.split( " " );
 		for (int i = 0; i < scopes.length; i++)
 			resultScopes.add( scopes[i] );
@@ -55,12 +66,16 @@ public class AuthenticatedRequestIT {
 	private void setupAuthentication( final String code ) {
 		STATE = this.configurationProvider.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE );
 		final String dataSource = "Tranquility".toLowerCase();
-		this.flow = new NeoComOAuth2Flow.Builder().withConfigurationService( this.configurationProvider ).build();
+		this.flow = new NeoComOAuth2Flow.Builder().withConfigurationService( this.configuration ).build();
 		this.flow.onStartFlow( code, STATE, dataSource );
 	}
 
 	private void setupEnvironment() throws IOException {
 		this.configurationProvider = new TestConfigurationService("/src/test/resources/properties.unittest");
+		this.fileSystem= new SupportFileSystem.Builder()
+				.optionalApplicationDirectory( "support/filesystem/" )
+				.build();
+		this.configuration = new RetrofitConfiguration( this.configurationProvider, this. fileSystem, AUTHENTICATED_RETROFIT_CACHE_STATE);
 	}
 @Disabled
 		@Test

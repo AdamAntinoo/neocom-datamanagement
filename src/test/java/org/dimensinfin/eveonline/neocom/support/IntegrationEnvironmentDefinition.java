@@ -136,7 +136,7 @@ public class IntegrationEnvironmentDefinition {
 //		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
 //				.optionalApplicationDirectory( "./out/test/NeoCom.IntegrationTest/" )
 //				.build();
-		this.itRetrofitService = new RetrofitService( this.itConfigurationProvider, this.itFileSystemAdapter );
+		this.itRetrofitService = new RetrofitService( this.itConfigurationProvider, this.itFileSystemAdapter ,null);
 		this.itStoreCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )

@@ -5,8 +5,8 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.dimensinfin.eveonline.neocom.adapter.httpclient.RetrofitConfiguration;
 import org.dimensinfin.eveonline.neocom.exception.NeoComRuntimeException;
-import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 import org.dimensinfin.eveonline.neocom.utility.Base64;
 import org.dimensinfin.logging.LogWrapper;
@@ -20,30 +20,23 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import static org.dimensinfin.eveonline.neocom.exception.ErrorInfoCatalog.AUTHENTICATION_FAILURE_ESI_SSO;
 import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_LOGIN_HOST;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CLIENTID;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.ESI_TRANQUILITY_AUTHORIZATION_STATE;
 
 public class NeoComOAuth2Flow {
 	private static final String ACCESS_TOKEN_HOST_HEADER = "login.eveonline.com";
 	protected TokenVerification tokenVerificationStore;
 	// - C O M P O N E N T S
-	private IConfigurationService configurationService;
+	private RetrofitConfiguration configuration;
 
 	// - C O N S T R U C T O R S
 	private NeoComOAuth2Flow() {}
 
 	public String generateLoginUrl() {
-		final String state = Base64.encodeBytes(
-				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE ).getBytes() );
-		final String clientId = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
+		final String state = Base64.encodeBytes( this.configuration.getState().getBytes() );
+		final String clientId = this.configuration.getClientId();
 		return "https://" +
-				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL ) +
+				this.configuration.getServerLoginBase() +
 				"/" +
-				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_AUTHORIZE ) +
+				this.configuration.getAuthorizationAuthorizePath() +
 				"?response_type=code" +
 				"&redirect_uri=eveauth-neocom%3A%2F%2Fesiauthentication" +
 				"&scope=publicData esi-location.read_location.v1 esi-location.read_ship_type.v1 esi-mail.read_mail.v1 esi-skills.read_skills.v1 " +
@@ -68,29 +61,65 @@ public class NeoComOAuth2Flow {
 	}
 
 	/**
-	 * Validates the encoded values of the state received to verify that the calling application is on the NeoCom set. There is
-	 * a fixed value and in future implementations a variable value to improve security.
+	 * Validates the encoded values of the state received to verify that the calling application is on the NeoCom set. There is a fixed value and in
+	 * future implementations a variable value to improve security.
 	 *
 	 * @param encodedState the state data received encoded in Base64. Needs to match the state generated locally.
 	 */
 	public boolean verifyState( final String encodedState ) {
 		final String checkState = Base64.encodeBytes(
-				this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_STATE ).getBytes()
+				this.configuration.getState().getBytes()
 		).replaceAll( "\n", "" );
 		return encodedState.equals( checkState );
 	}
 
+	public TokenTranslationResponse updateAccessToken( final String refreshToken, final String scope ) {
+		final String authorizationServer = this.configuration.getServerLoginBase();
+		final String authorizationContentType = this.configuration.getAuthorizationContentType();
+		final String authorizationClientid = this.configuration.getClientId();
+		final String authorizationSecret = this.configuration.getSecretKey();
+		final String authorizationBasic = Base64.encodeBytes( String.join( ":", authorizationClientid, authorizationSecret ).getBytes() );
+		final PostRefreshAccessToken serviceRefreshAccessToken = new Retrofit.Builder()
+				.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
+				.addConverterFactory( JacksonConverterFactory.create() )
+				.build()
+				.create( PostRefreshAccessToken.class );
+		final String grantType = "refresh_token";
+		final Call<TokenTranslationResponse> request = serviceRefreshAccessToken.getNewAccessToken(
+				authorizationContentType,
+//				"Basic "+authorizationBasic,
+				authorizationClientid,
+				refreshToken
+//				new TokenRefreshBody().setRefreshToken( refreshToken )
+		);
+		try {
+			final Response<TokenTranslationResponse> response = request.execute();
+			if ( response.isSuccessful() ) {
+				LogWrapper.info( "Response is 200 OK." );
+				return response.body();
+			} else {
+				LogWrapper.info( MessageFormat.format( "Response is {0} - {1}.",
+						response.code(),
+						response.errorBody().string() ) );
+				throw new NeoComRuntimeException( AUTHENTICATION_FAILURE_ESI_SSO.getErrorMessage( response.errorBody().string() ) );
+			}
+		} catch (final IOException ioe) {
+			LogWrapper.error( ioe );
+			throw new NeoComRuntimeException( ioe );
+		}
+	}
+
 	private TokenTranslationResponse getTokenTranslationResponse( final TokenVerification store ) {
 		// Preload configuration variables.
-		final String authorizationServer = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL );
-		final String authorizationClientid = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CLIENTID );
-		final String authorizationSecretKey = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SECRETKEY );
-		final String authorizationContentType = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_CONTENT_TYPE );
+		final String authorizationServer = this.configuration.getServerLoginBase();
+		final String authorizationClientid = this.configuration.getClientId();
+		final String authorizationSecretKey = this.configuration.getSecretKey();
+		final String authorizationContentType = this.configuration.getAuthorizationContentType();
 		final boolean tlsAuthentication = false;
 		// Get the request.
 		GetAccessToken serviceGetAccessToken;
 		try {
-			if (tlsAuthentication)
+			if ( tlsAuthentication )
 				serviceGetAccessToken = new Retrofit.Builder()
 						.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
 						.addConverterFactory( JacksonConverterFactory.create() )
@@ -125,7 +154,7 @@ public class NeoComOAuth2Flow {
 		// Getting the request response to be stored if valid.
 		try {
 			final Response<TokenTranslationResponse> response = request.execute();
-			if (response.isSuccessful()) {
+			if ( response.isSuccessful() ) {
 				LogWrapper.info( "Response is 200 OK." );
 				return response.body();
 			} else {
@@ -156,7 +185,7 @@ public class NeoComOAuth2Flow {
 										.build() ) );
 		// Verify the character authenticated.
 		NeoComLogger.info( "Creating character verification." );
-		final String authorizationServer = this.configurationService.getResourceString( ESI_TRANQUILITY_AUTHORIZATION_SERVER_URL );
+		final String authorizationServer = this.configuration.getServerLoginBase();
 		final VerifyCharacter verificationService = new Retrofit.Builder()
 				.baseUrl( authorizationServer ) // This should be the URL with protocol configured on the tranquility server
 				.addConverterFactory( JacksonConverterFactory.create() )
@@ -168,7 +197,7 @@ public class NeoComOAuth2Flow {
 			final Response<VerifyCharacterResponse> verificationResponse = verificationService
 					.getVerification( "Bearer " + accessToken )
 					.execute();
-			if (verificationResponse.isSuccessful()) {
+			if ( verificationResponse.isSuccessful() ) {
 				NeoComLogger.info( "Character verification OK." );
 				return verificationResponse.body();
 			} else {
@@ -192,12 +221,12 @@ public class NeoComOAuth2Flow {
 		}
 
 		public NeoComOAuth2Flow build() {
-			Objects.requireNonNull( this.onConstruction.configurationService );
+			Objects.requireNonNull( this.onConstruction.configuration );
 			return this.onConstruction;
 		}
 
-		public NeoComOAuth2Flow.Builder withConfigurationService( final IConfigurationService configurationService ) {
-			this.onConstruction.configurationService = Objects.requireNonNull( configurationService );
+		public NeoComOAuth2Flow.Builder withConfigurationService( final RetrofitConfiguration configuration ) {
+			this.onConstruction.configuration = Objects.requireNonNull( configuration );
 			return this;
 		}
 	}

@@ -14,20 +14,18 @@ import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
-import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.adapter.StoreCacheManager;
 import org.dimensinfin.eveonline.neocom.database.entities.Credential;
 import org.dimensinfin.eveonline.neocom.database.repositories.AssetRepository;
 import org.dimensinfin.eveonline.neocom.database.repositories.CredentialRepository;
 import org.dimensinfin.eveonline.neocom.provider.ESIDataProvider;
 import org.dimensinfin.eveonline.neocom.provider.ESIUniverseDataProvider;
+import org.dimensinfin.eveonline.neocom.provider.IConfigurationService;
 import org.dimensinfin.eveonline.neocom.provider.IFileSystem;
+import org.dimensinfin.eveonline.neocom.service.LocationCatalogService;
 import org.dimensinfin.eveonline.neocom.service.RetrofitService;
 import org.dimensinfin.eveonline.neocom.service.logger.NeoComLogger;
 
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.AUTHENTICATED_RETROFIT_SERVER_LOCATION;
-import static org.dimensinfin.eveonline.neocom.provider.PropertiesDefinitionsConstants.BACKEND_RETROFIT_SERVER_LOCATION;
 @Deprecated
 public class IntegrationEnvironmentDefinitionTCLocal {
 	protected static final Logger logger = LoggerFactory.getLogger( IntegrationEnvironmentDefinitionTCLocal.class );
@@ -77,7 +75,7 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 				+ "/" + "postgres" +
 				"?user=" + "neocom" +
 				"&password=" + "01.Alpha";
-		NeoComLogger.info( MessageFormat.format("Postgres SQL URL: {0}", connectionUrl ));
+		NeoComLogger.info( MessageFormat.format( "Postgres SQL URL: {0}", connectionUrl ) );
 		try {
 			connectionSource1 = new JdbcConnectionSource( connectionUrl, new PostgresDatabaseType() );
 		} catch (final SQLException sqle) {
@@ -109,42 +107,42 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 		Mockito.when( credential4Test.getDataSource() ).thenReturn( "tranquility" );
 		Mockito.when( credential4Test.setMiningResourcesEstimatedValue( Mockito.anyDouble() ) ).thenReturn( credential4Test );
 
-//		this.itConfigurationProvider = new TestConfigurationService.Builder()
-//				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
-//		this.itConfigurationProvider.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
-//				"http://" +
-//						esisimulator.getContainerIpAddress() +
-//						":" +
-//						esisimulator.getMappedPort( ESI_UNITTESTING_PORT ) );
-//		this.itConfigurationProvider.setProperty( BACKEND_RETROFIT_SERVER_LOCATION,
-//				"http://" +
-//						backendSimulator.getContainerIpAddress() +
-//						":" +
-//						backendSimulator.getMappedPort( BACKEND_UNITTESTING_PORT ) );
+		//		this.itConfigurationProvider = new TestConfigurationService.Builder()
+		//				.optionalPropertiesDirectory( "/src/test/resources/properties.unittest" ).build();
+		//		this.itConfigurationProvider.setProperty( AUTHENTICATED_RETROFIT_SERVER_LOCATION,
+		//				"http://" +
+		//						esisimulator.getContainerIpAddress() +
+		//						":" +
+		//						esisimulator.getMappedPort( ESI_UNITTESTING_PORT ) );
+		//		this.itConfigurationProvider.setProperty( BACKEND_RETROFIT_SERVER_LOCATION,
+		//				"http://" +
+		//						backendSimulator.getContainerIpAddress() +
+		//						":" +
+		//						backendSimulator.getMappedPort( BACKEND_UNITTESTING_PORT ) );
 		final String databaseHostName = this.itConfigurationProvider.getResourceString( "P.database.neocom.databasehost" );
 		final String databasePath = this.itConfigurationProvider.getResourceString( "P.database.neocom.databasepath" );
 		final String databaseUser = this.itConfigurationProvider.getResourceString( "P.database.neocom.databaseuser" );
 		final String databasePassword = this.itConfigurationProvider.getResourceString( "P.database.neocom.databasepassword" );
-//		final String connectionUrl = databaseHostName +
-//				"/" + databasePath +
-//				"?user=" + databaseUser +
-//				"&password=" + databasePassword;
+		//		final String connectionUrl = databaseHostName +
+		//				"/" + databasePath +
+		//				"?user=" + databaseUser +
+		//				"&password=" + databasePassword;
 		this.itNeoComIntegrationDBAdapter = new IntegrationNeoComDBAdapter.Builder()
 				.withDatabaseURLConnection( connectionUrl )
 				.build();
 		this.connectionSource = new JdbcConnectionSource( connectionUrl, new PostgresDatabaseType() );
-		this.itAssetRepository = new AssetRepository(this.itNeoComIntegrationDBAdapter);
-//				.withAssetDao( this.itNeoComIntegrationDBAdapter.getAssetDao() )
-//				.withConnection4Transaction( this.itNeoComIntegrationDBAdapter.getConnectionSource() )
-//				.build();
+		this.itAssetRepository = new AssetRepository( this.itNeoComIntegrationDBAdapter );
+		//				.withAssetDao( this.itNeoComIntegrationDBAdapter.getAssetDao() )
+		//				.withConnection4Transaction( this.itNeoComIntegrationDBAdapter.getConnectionSource() )
+		//				.build();
 		this.itCredentialRepository = Mockito.mock( CredentialRepository.class );
 		Mockito.doAnswer( ( credential ) -> {
 			return null;
 		} ).when( this.itCredentialRepository ).persist( Mockito.any( Credential.class ) );
-//		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
-//				.optionalApplicationDirectory( "./out/test/NeoCom.UnitTest/" )
-//				.build();
-		this.itRetrofitService = new RetrofitService( this.itConfigurationProvider , this.itFileSystemAdapter );
+		//		this.itFileSystemAdapter = new SBFileSystemAdapter.Builder()
+		//				.optionalApplicationDirectory( "./out/test/NeoCom.UnitTest/" )
+		//				.build();
+		this.itRetrofitService = new RetrofitService( this.itConfigurationProvider, this.itFileSystemAdapter, this.itCredentialRepository );
 		this.itStoreCacheManager = new StoreCacheManager.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
@@ -156,12 +154,12 @@ public class IntegrationEnvironmentDefinitionTCLocal {
 				.withStoreCacheManager( this.itStoreCacheManager )
 				.withRetrofitFactory( this.itRetrofitService )
 				.build();
-//		this.itLocationCatalogService = new LocationCatalogService.Builder()
-//				.withConfigurationProvider( this.itConfigurationProvider )
-//				.withFileSystemAdapter( this.itFileSystemAdapter )
-//				.withESIUniverseDataProvider( this.itEsiUniverseDataProvider )
-//				.withRetrofitFactory( this.itRetrofitFactory )
-//				.build();
+		//		this.itLocationCatalogService = new LocationCatalogService.Builder()
+		//				.withConfigurationProvider( this.itConfigurationProvider )
+		//				.withFileSystemAdapter( this.itFileSystemAdapter )
+		//				.withESIUniverseDataProvider( this.itEsiUniverseDataProvider )
+		//				.withRetrofitFactory( this.itRetrofitFactory )
+		//				.build();
 		this.esiDataProvider = new ESIDataProvider.Builder()
 				.withConfigurationProvider( this.itConfigurationProvider )
 				.withFileSystemAdapter( this.itFileSystemAdapter )
