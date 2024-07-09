@@ -113,7 +113,3 @@ dockerCompose {
         isRequiredBy(integrationTest)
     }
 }
-
-tasks.withType(JavaCompile) {
-    options.release = 17
-}
