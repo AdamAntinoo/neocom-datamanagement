@@ -89,7 +89,6 @@ sonar {
         property "sonar.projectDescription", project.description
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.token", "aeafe3ae7dfcfb921307e591685479723eddc776"
-        sonar.coverage.exclusions "src/test/*"
     }
 }
 
